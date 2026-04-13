@@ -63,7 +63,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 | Area | Detail | Status |
 |---|---|---|
-| Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Day 70 / 100 |
+| Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Day 74 / 100 |
 | SQL | Window Functions · CTEs · Subqueries | 🔄 In Progress |
 | Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
 | AWS | Account · Free Tier · $120 credits configured | ✅ Ready |

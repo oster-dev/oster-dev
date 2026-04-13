@@ -1,7 +1,7 @@
 # Today I Learned! Daily Log
 
 A running log of things learned on the journey to becoming an
-ML Platform & Data Feature Infrastructure Engineer.
+ML Platform | Data and Feature Infrastructure Engineer.
 
 TIL Started: April 13, 2026.
 

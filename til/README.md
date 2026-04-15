@@ -9,7 +9,7 @@ TIL Started: April 13, 2026.
 
 ## April 15, 2026
 
-**Python · NumPy & N-Dimensional Arrays**
+**Python | NumPy & N-Dimensional Arrays**
 - Created arrays manually with `np.array()`, as a number sequence with `np.arange()`,
   with random values using `np.random()`, and with evenly spaced values using `np.linspace()`
 - Read array dimensions with `.shape` to understand structure before operations
@@ -21,7 +21,7 @@ TIL Started: April 13, 2026.
 - Loaded an image with `Image.open()` from PIL and confirmed every image is a
   3D array with shape `(height, width, 3)` representing RGB channels
 
-**Python · Seaborn & Linear Regression**
+**Python | Seaborn & Linear Regression**
 - Cleaned currency strings across multiple columns using nested loops with
   `.astype(str)` before `.str.replace()` to avoid `AttributeError`
 - Ran quick data quality checks with `data.duplicated().sum()` and `data.dtypes`
@@ -36,10 +36,10 @@ TIL Started: April 13, 2026.
 - Read regression coefficients to quantify how much revenue increases per dollar of budget
 - Concluded that higher budgets correlate with higher revenue but with significant spread
 
-**SQL · Date & Time Functions**
+**SQL | Date & Time Functions**
 - Got an overview of all available date and time functions in SQL
 
-**SQL · Data Types**
+**SQL | Data Types**
 - Learned how SQL categorises data into types: numeric, text, date/time, boolean
 - Understood why correct data types matter for storage efficiency and query performance
 

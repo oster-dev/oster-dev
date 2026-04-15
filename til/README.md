@@ -36,6 +36,22 @@ TIL Started: April 13, 2026.
 - Read regression coefficients to quantify how much revenue increases per dollar of budget
 - Concluded that higher budgets correlate with higher revenue but with significant spread
 
+**Python | Capstone Data Analysis Project**
+- Investigated and handled NaN values across a large real-world dataset
+- Converted object and string columns to numeric types for analysis
+- Applied `.value_counts()`, `.groupby()`, `.merge()`, `.sort_values()` and `.agg()` in a full analysis pipeline
+- Created a rolling average to smooth time-series data and surface underlying trends
+- Used `sns.lmplot()` with `row`, `hue`, and `lowess` parameters to show best-fit lines across multiple categories
+- Visualised data distribution and descriptive statistics using a Seaborn histogram
+- Compared box plots vs time-series analysis to understand how the same data tells different stories depending on the view
+
+**NOTE | Data Visualisation (lower priority for core goal):**
+> Plotly, Matplotlib and Seaborn visualisation techniques 
+> are not a primary focus for the path toward Data & Feature Infrastructure
+> and ML Platform Engineering. Charts and visual tooling play a minor role
+> in production data systems compared to pipeline engineering, distributed processing,
+> and feature store architecture. Covered out of completeness and general data literacy.
+
 **SQL | Date & Time Functions**
 - Got an overview of all available date and time functions in SQL
 

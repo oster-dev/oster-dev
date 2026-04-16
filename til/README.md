@@ -7,6 +7,56 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 16, 2026
+
+**Python | Statistical Analysis & Hypothesis Testing**
+- Visualised data distributions using histograms and superimposed multiple histograms
+  with different sample sizes on the same chart
+- Smoothed histogram data with a Kernel Density Estimate (KDE) to reveal the
+  underlying distribution shape
+- Improved KDE accuracy by specifying boundary constraints on the estimate
+- Tested for statistical significance using `scipy` and interpreted p-values to
+  determine whether an observed effect is real or due to chance
+- Highlighted specific time periods on a Matplotlib time series chart to draw
+  attention to key events in the data
+- Added and configured a legend in Matplotlib for multi-series charts
+- Used `np.where()` to conditionally process array elements without loops
+
+**Python | Multivariable Regression**
+- Used `sns.pairplot()` to quickly scan for relationships and correlations
+  across all variable pairs in a dataset
+- Split data into training and testing sets to evaluate model performance
+  on unseen data
+- Ran a multivariable regression to model a target variable using
+  multiple input features simultaneously
+- Evaluated the model by inspecting the sign and magnitude of its coefficients
+  to confirm they match real-world logic
+- Analysed residuals to detect patterns that indicate model weaknesses
+  or violated assumptions
+- Applied a log transformation to skewed data to improve regression
+  model performance and linearity
+- Made predictions by feeding custom input values into the trained model
+
+> **NOTE | Data Visualisation (lower priority for core goal):**
+> Plotly, Matplotlib and Seaborn visualisation techniques covered across Day 73–81
+> are not a primary focus for the path toward Data & Feature Infrastructure
+> and ML Platform Engineering. Charts and visual tooling play a minor role
+> in production data systems compared to pipeline engineering, distributed processing,
+> and feature store architecture. Covered out of completeness and general data literacy.
+
+**SQL | Tables & Columns**
+- Reviewed the role of primary keys and foreign keys in relational database design
+- Defined column-level constraints to enforce data integrity rules at the schema level
+- Created new tables from scratch using `CREATE TABLE` with defined columns and types
+- Practiced table creation with real examples in `CREATE TABLE — Praxis`
+- Inserted new records into tables using `INSERT INTO`
+- Updated existing records conditionally using `UPDATE ... SET ... WHERE`
+- Deleted specific rows from a table using `DELETE FROM ... WHERE`
+- Modified an existing table structure with `ALTER TABLE` — adding, renaming and dropping columns
+- Practiced `ALTER TABLE` operations hands-on in `ALTER TABLE — Praxis` ✅
+
+---
+
 ## April 15, 2026
 
 **Python | NumPy & N-Dimensional Arrays**

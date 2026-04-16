@@ -38,7 +38,7 @@ TIL Started: April 13, 2026.
 - Made predictions by feeding custom input values into the trained model
 
 > **NOTE | Data Visualisation (lower priority for core goal):**
-> Plotly, Matplotlib and Seaborn visualisation techniques covered across Day 73–81
+> Plotly, Matplotlib and Seaborn visualisation techniques 
 > are not a primary focus for the path toward Data & Feature Infrastructure
 > and ML Platform Engineering. Charts and visual tooling play a minor role
 > in production data systems compared to pipeline engineering, distributed processing,

@@ -1,7 +1,7 @@
 <h1 align="center">Nico Ostermann</h1>
 
 <p align="center">
-  Aspiring ML Platform & Data Infrastructure Engineer<br>
+  Aspiring ML Platform, Data and Feature Infrastructure Engineer<br>
   <sub>Building production-grade ML systems from first principles — publicly documented, relentlessly executed.</sub>
 </p>
 

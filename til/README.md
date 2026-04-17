@@ -9,6 +9,25 @@ TIL Started: April 13, 2026.
 
 ## April 17, 2026
 
+**Python | Requests & APIs / Jikan Feature Pipeline**
+- Built a full Python data pipeline split into three clear layers
+- Used `requests.get()`, `raise_for_status()`, and `response.json()` to ingest data from the Jikan REST API, which provides top anime data from MyAnimeList
+- Validated the structure of the API response and cleaned individual anime records
+- Normalised missing or incorrectly typed fields by converting them to `None` or fallback values
+- Built derived features from the cleaned raw data:
+  - `is_high_score` → boolean flag for score >= 8
+  - `popularity_bucket` → categorisation into `very_popular`, `popular`, `mid_popular`, or `niche` using `if/elif/else`
+  - `is_long_running` → boolean flag for episode counts greater than 24
+  - `genre_count` → number of genres using `len()`
+  - `has_multiple_genres` → boolean flag for more than one genre
+- Added `None` protection across all feature logic because external APIs do not always return complete data
+- Saved the transformed feature records as `feature_records.json` in the project folder using `Path(__file__).resolve().parent`
+
+**First Public GitHub Project**
+- Published a first public project on GitHub for the first time
+- Combined API fundamentals, feature engineering, JSON output, and GitHub publishing in one day
+- Finished the day with a strong sense of progress and a concrete public artifact
+
 **Python | HTTP Requests, APIs & Environment Management**
 - Built a PDF-to-Audio pipeline using `PyPDF2` to extract text and the
   ElevenLabs SDK to convert it to speech

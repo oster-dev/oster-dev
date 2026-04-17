@@ -59,6 +59,12 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 <br>
 
+## Projects
+
+**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
+
+**[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
+
 ## **Current Status · Month 1 of 8**
 
 | Area | Detail | Status |
@@ -114,7 +120,7 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 
 ## **Monthly Updates & Learning Log**
 
-[Month 1 · April 2026](./monthly-updates/month-01.md) 🔄 In Progress
+[Month 1 · April 2026](./monthly-updates/month-01.md) | 🔄 In Progress
 
 [Today I Learned — Daily Log](./til/README.md)
 

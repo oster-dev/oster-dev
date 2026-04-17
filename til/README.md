@@ -7,6 +7,35 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 17, 2026
+
+**Python | HTTP Requests, APIs & Environment Management**
+- Built a PDF-to-Audio pipeline using `PyPDF2` to extract text and the
+  ElevenLabs SDK to convert it to speech
+- Managed API keys securely using `python-dotenv` and a `.env` file —
+  keeping secrets out of source code
+- Used `Path(__file__).parent` to load `.env` relative to the script location,
+  making the path independent of the working directory
+- Debugged a series of 401 API errors by distinguishing between
+  `needs_authorization` (key not received) and `invalid_api_key` (wrong key)
+- Resolved a mismatched virtual environment by identifying the active `.venv`
+  path via `which python`
+- Installed `ffmpeg` via Homebrew to enable audio playback through the
+  ElevenLabs `play()` function
+- Generated test PDFs programmatically using `fpdf` to validate the full
+  pipeline end-to-end
+- Configured VS Code workspace settings to correctly inject environment
+  variables into the terminal
+
+**NOTE | Relevance to Core Goal:**
+> Proper environment isolation (`venv`), secret management (`.env`) and API
+> error handling are foundational skills for any cloud or data engineering workflow.
+> Understanding the difference between authentication and authorisation errors
+> is directly applicable to working with cloud APIs, AWS SDKs and
+> infrastructure tooling at scale.
+
+---
+
 ## April 16, 2026
 
 **Python | Statistical Analysis & Hypothesis Testing**

@@ -34,6 +34,17 @@ TIL Started: April 13, 2026.
 > is directly applicable to working with cloud APIs, AWS SDKs and
 > infrastructure tooling at scale.
 
+**Python | Image Processing & Color Extraction**
+- Loaded images as NumPy arrays using PIL and inspected array dimensions to understand height, width, and RGB channels
+- Reshaped 3D image arrays `(height, width, 3)` into 2D pixel tables `(total_pixels, 3)` using `reshape(-1, 3)`
+- Applied KMeans clustering with `n_clusters=10` to extract the top 10 dominant colors from pixel data
+- Converted RGB cluster centers into HEX color codes using string formatting for web-friendly output
+- Treated images as feature matrices where each pixel is a data point with 3 features: R, G, and B
+
+**NOTE | Relevance to Core Goal:**
+> This follows a useful feature engineering pattern: raw image → pixel feature extraction → clustering → dominant features.
+> That pattern is directly relevant to production ML pipelines for dimensionality reduction and feature compression.
+
 ---
 
 ## April 16, 2026

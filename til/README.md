@@ -10,6 +10,7 @@ TIL Started: April 13, 2026.
 ## April 18, 2026
 
 **Python | Auto Feature Pipeline Project Prototype**
+
 Today I built and completed the first working version of my `auto-feature-pipeline` project. It now runs end-to-end: it fetches product data from an external API, validates selected fields against a config-driven schema, generates derived features, and exports the final output to both JSON and CSV. For now, the pipeline uses a fallback feature generation path, which still allowed me to test the full architecture successfully even without a live OpenAI API key.
 
 The project is structured in a modular way with separate files for fetching, validation, feature engineering, registry/export, and orchestration. What matters most to me is that this is not just a random script — it is my first small step toward thinking like a Data & Feature Infrastructure / ML Platform Engineer: modular code, reproducible flow, configuration-driven logic, and outputs that can later evolve into a real feature pipeline.

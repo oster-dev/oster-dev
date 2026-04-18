@@ -9,6 +9,42 @@ TIL Started: April 13, 2026.
 
 ## April 18, 2026
 
+**Python | Auto Feature Pipeline Project Prototype**
+Today I built and completed the first working version of my `auto-feature-pipeline` project. It now runs end-to-end: it fetches product data from an external API, validates selected fields against a config-driven schema, generates derived features, and exports the final output to both JSON and CSV. For now, the pipeline uses a fallback feature generation path, which still allowed me to test the full architecture successfully even without a live OpenAI API key.
+
+The project is structured in a modular way with separate files for fetching, validation, feature engineering, registry/export, and orchestration. What matters most to me is that this is not just a random script — it is my first small step toward thinking like a Data & Feature Infrastructure / ML Platform Engineer: modular code, reproducible flow, configuration-driven logic, and outputs that can later evolve into a real feature pipeline.
+
+At this stage, the project is intentionally simple. I am still in Month 1 of my roadmap, so my current focus remains on Python, SQL, Git, and Linux fundamentals. The more advanced infrastructure and ML platform topics are planned for later stages, not ignored. This project is simply the foundation.
+
+>**Disclaimer:**  
+>The inspiration for this project came from yesterday’s `jikan-feature-pipeline`, which effectively marked the starting point for this direction. That project has already been published on GitHub. If this `auto-feature-pipeline` continues to meet my expectations as I refine it, it will also be released publicly.
+
+>**What this project currently demonstrates**
+>- API data ingestion
+>- Config-driven validation
+>- Modular Python project structure
+>- Fallback-based feature generation
+>- JSON and CSV export
+>- Basic debugging of environment, import, and request issues
+
+>**What I want to improve next**
+>- Expand the pipeline to use more input fields such as `title`, `description`, `brand`, `rating`, and `stock`
+>- Improve feature generation quality so derived features reflect more than only price and category patterns
+>- Add stronger logging and better exception handling
+>- Add unit tests for each module
+>- Improve documentation and architecture notes
+>- Make the pipeline easier to extend for other APIs and schemas
+
+>**Roadmap-aligned future improvements**
+>- Docker for reproducible local execution and environment consistency
+>- AWS for storage, deployment, and infrastructure thinking
+>- Spark for scaling feature computation beyond small local datasets
+>- Kafka and Airflow for streaming and orchestration patterns
+>- Feast for feature store concepts
+>- MLflow and Metaflow for experiment tracking and ML workflow management
+>- CI/CD for automated testing and deployment
+>- Better data quality checks, schema evolution handling, and performance optimization
+
 **Python | Data Cleaning, Feature Engineering & Time-Series Analysis**
 - Cleaned and explored a real dataset with Pandas by handling missing values, duplicates, datetime parsing, and feature creation
 - Built a robust `Year` feature from mixed-format date strings and used it for time-based analysis

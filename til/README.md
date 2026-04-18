@@ -86,6 +86,17 @@ At this stage, the project is intentionally simple. I am still in Month 1 of my 
     - Historical datasets need domain-aware cleaning, not blind automation
     - Reusable analysis patterns are more valuable than one-off notebook tricks
 
+**SQL | DROP TABLE, CHECK Constraints & Views**
+- Learned how to use `DROP TABLE` to remove database tables when they are no longer needed
+- Understood how `CHECK` constraints enforce data rules directly inside the database
+- Practiced `CREATE TABLE` in an exercise to define structure and constraints from the start
+- Reviewed import and export workflows for moving data in and out of SQL systems
+- Explored the concept of views as reusable virtual tables for simplified querying
+- Learned how to create a view with `CREATE VIEW`
+- Learned how to update a view with `ALTER VIEW` or `REPLACE VIEW`
+- Learned how to remove a view with `DROP VIEW`
+
+
 ---
 
 ## April 17, 2026

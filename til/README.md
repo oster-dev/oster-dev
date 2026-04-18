@@ -7,6 +7,50 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 18, 2026
+
+**Python | Data Cleaning, Feature Engineering & Time-Series Analysis**
+- Cleaned and explored a real dataset with Pandas by handling missing values, duplicates, datetime parsing, and feature creation
+- Built a robust `Year` feature from mixed-format date strings and used it for time-based analysis
+- Learned that mixed date formats often require more careful parsing than a single strict datetime format
+- Used `groupby()`, `value_counts()`, and `size()` to answer practical analysis questions from the dataset
+- Created descriptive statistics for both numeric and categorical columns to understand the data structure before visualisation
+- Analysed launch activity by organisation, country, year, month, and mission status
+- Compared total launches, successful launches, and failed launches over time
+- Calculated failure rates over time and added a rolling average to smooth short-term fluctuations
+- Built a country-level feature from messy location data and normalised historical or non-standard place names
+- Converted country data into ISO-3 codes to enable choropleth mapping
+- Created Plotly visualisations including line charts, bar charts, histograms, sunburst charts, pie charts, and choropleth maps
+- Explored seasonal patterns in launch activity by month and identified the most and least active months
+- Compared launch dominance across organisations over time, including the leading organisation in each year
+- Analysed Cold War-era launch competition between the USA and the USSR
+- Included former Soviet launch locations like Kazakhstan when analysing historical USSR totals
+    
+    **Most Relevant for My L5 Data & Feature Infrastructure ML Path**
+    - Data cleaning and feature engineering from messy raw data
+    - Building reliable time-based features from inconsistent date formats
+    - Aggregation logic with `groupby()` for metrics, trends, and comparisons
+    - Country normalisation and categorical mapping for analytical consistency
+    - Time-series analysis with rolling averages and year-on-year trends
+    - Interpreting data quality issues before building metrics or dashboards
+    - Using domain context to define correct grouping logic, especially for historical datasets
+    - Creating reusable analysis patterns that can be applied in future data and ML infrastructure work
+    
+    **Less Relevant for My L5 Data & Feature Infrastructure ML Path**
+    - Exact Plotly syntax for every chart type
+    - The specific styling details of each visualisation
+    - Building a choropleth map mainly as a visualisation exercise
+    - Memorising all country-code mappings by hand
+    - Notebook-specific formatting details that are useful now but less important long term
+    
+    **What This Taught Me**
+    - Data engineering thinking matters more than just plotting
+    - Correct feature definitions are often more important than the chart itself
+    - Historical datasets need domain-aware cleaning, not blind automation
+    - Reusable analysis patterns are more valuable than one-off notebook tricks
+
+---
+
 ## April 17, 2026
 
 **Python | Requests & APIs / Jikan Feature Pipeline**

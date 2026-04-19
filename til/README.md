@@ -7,6 +7,43 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 19, 2026
+
+**Milestone · Month 1 of the L5 Roadmap: COMPLETED ✓**
+Month 1 (April 2026) — Python · SQL Basics · Git · Linux — is done.
+Month 2 starts tomorrow: SQL Window Functions · Docker · AWS CLF-C02.
+
+---
+
+**Python | Angela Yu Bootcamp — Day 100 · Final Project**
+The final notebook of Angela Yu's 100-Days-of-Code Python Bootcamp was a complete data analysis project using real US education statistics datasets.
+
+**Data Loading & Exploration**
+- Loaded multiple CSV files with `pd.read_csv()`
+- Inspected structure using `.head()`, `.shape`, `.dtypes`, and `.describe()`
+- Renamed columns and reviewed them for relevance
+
+**Data Cleaning — L5 Core Skill**
+- Detected missing values with `isna().sum()`
+- Applied `fillna()` and `dropna()` based on context rather than blindly
+- Checked for and removed duplicates using `duplicated()` and `drop_duplicates()`
+- Converted dirty numeric columns using the standard pipeline:
+  `astype(str)` → `.str.replace()` → `pd.to_numeric(errors='coerce')`
+
+**Aggregation & Ranking**
+- Aggregated data by state with `groupby()` and `.mean()`
+- Used `sort_values()` ascending and descending to produce rankings
+- Retrieved best and worst performing states using `iloc[0]` and `iloc[-1]`
+- Identified the highest and lowest high school completion rates per state
+
+**What I understood**
+- The `astype(str)` → `.str.replace()` → `pd.to_numeric()` pattern is the standard approach for messy numeric columns in real-world datasets
+- `groupby().mean().sort_values()` is a clean aggregation pipeline for group-level insights
+- These patterns apply directly to feature engineering in data pipelines
+
+>**What I deliberately skipped**
+>- All visualisations including barplots, scatterplots, and heatmaps — not relevant for Data & Feature Infrastructure work at L5. Time better spent on pipeline logic.
+
 ## April 18, 2026
 
 **Python | Auto Feature Pipeline Project Prototype**

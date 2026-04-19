@@ -65,15 +65,16 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 **[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
 
-## **Current Status · Month 1 of 8**
+## **Current Status · Month 2 of 8**
 
 | Area | Detail | Status |
 |---|---|---|
-| Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Day 98 / 100 |
-| SQL | Window Functions · CTEs · Subqueries | 🔄 In Progress |
+| Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Completed |
+| SQL | Window Functions · CTEs · Query Optimization | 🔄 In Progress |
 | Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
-| AWS | Account · Free Tier · $120 credits configured | ✅ Ready |
-| Docker | Containerization fundamentals | 📅 Month 2 |
+| AWS CLF-C02 | Cloud Practitioner Certification Prep | 🔄 In Progress |
+| Docker | Dockerfile · Compose · Networking · Volumes | 🔄 In Progress |
+| Functional Programming | map · filter · reduce · Pure Functions | 🔄 In Progress |
 | Spark + Scala literacy | Distributed computing · Reading JVM code | 📅 Month 3 |
 | Kafka · Airflow · Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 3–6 |
 
@@ -120,7 +121,7 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 
 ## **Monthly Updates & Learning Log**
 
-[Month 1 · April 2026](./monthly-updates/month-01.md) | 🔄 In Progress
+[Month 1 · April 2026](./monthly-updates/month-01.md) 
 
 [Today I Learned — Daily Log](./til/README.md)
 

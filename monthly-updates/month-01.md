@@ -5,10 +5,9 @@
 
 **Month 1 is officially complete.**
 What started on March 21, 2026 with Angela Yu's Python Bootcamp — the very first time
-in my life I had any real contact with programming — ended today with two published
+in my life I had any real contact with programming — ended today with two 
 pipeline projects, a structured L5 roadmap, and a skillset I am genuinely proud of.
-To be fair: I only had my first real contact with programming in mid-March 2026.
-That context makes everything below feel even more meaningful.
+To be fair: I only had my first real contact with programming in mid-March 2026!!
 
 ---
 

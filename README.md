@@ -18,7 +18,7 @@
 
 I'm Nico Ostermann, 24 years old, originally from Germany, now based in Pitești, Romania.
 
-Earlier this year I made a deliberate decision: leave everything comfortable behind and go all in on building a career in ML Platform and Data Infrastructure engineering. No CS degree. No prior industry experience. Just a structured roadmap, daily discipline, and the belief that what you can prove matters more than what you claim.
+Earlier this year I made a deliberate decision: leave everything comfortable behind and go all in on building a career in ML Platform and Data & Feature Infrastructure engineering. No CS degree. No prior industry experience. Just a structured roadmap, daily discipline, and the belief that what you can prove matters more than what you claim.
 
 I document everything here! The roadmap, the projects, the certifications, the honest failures, and the incremental wins. If you're a recruiter, an engineer, or someone on a similar path: this repository is the most accurate picture of who I am and what I'm building.
 

@@ -18,7 +18,7 @@ To be fair: I only had my first real contact with programming in mid-March 2026!
 | Angela Yu Python Bootcamp (Day 100) | ✅ Done | Completed today |
 | Python OOP, Functions, JSON, APIs | ✅ Done | Jikan pipeline as proof |
 | SQL Basics  | ✅ Foundation | Window Functions start in Month 2 |
-| Git / GitHub — Commits, Branching | ✅ Active | Two live repos on GitHub |
+| Git / GitHub — Commits, Branching | ✅ Active | Daily repos on GitHub |
 | Linux Terminal — Navigation, Basics | ✅ Active | Used daily |
 | GitHub Profile — Bio and README | ⚠️ Open | Still in progress |
 | AWS Free Tier account created | ✅ Done | |

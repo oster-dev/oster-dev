@@ -91,7 +91,6 @@ and to share honest progress updates toward the L5 goal.
 **What Starts Tomorrow — Month 2**
 
 - SQL Window Functions — `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, `PARTITION BY`
-- Resource: Mode SQL Tutorial (free)
 - Docker fundamentals
 - AWS CLF-C02 preparation begins
 - First LeetCode SQL problem

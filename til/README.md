@@ -7,6 +7,54 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 20, 2026
+
+**Advanced SQL | Month 2 Started**
+- Officially started Month 2 of the L5 roadmap today
+- Chose Maven Advanced SQL Querying as the main SQL course for this month
+- Confirmed that Maven is the better fit for my L5 goal because it focuses on advanced querying, data analysis, subqueries, CTEs, window functions, and core SQL syntax
+- The course being in MySQL is not a problem, because the concepts transfer directly to PostgreSQL and other relational databases
+
+**SQL Environment Setup**
+- Set up my main SQL environment with TablePlus + Docker + PostgreSQL
+- Started a local PostgreSQL container successfully
+- Connected to the container through TablePlus
+- Imported the Maven course SQL setup into the containerized PostgreSQL database
+- Verified that the `create_statements.sql` import worked correctly
+- Confirmed that the `students` table exists and contains data
+
+**SQL Learning Insight**
+- Ran into an issue when trying to use a `SELECT` alias inside `HAVING`
+- Learned that aliases from the `SELECT` clause are not available directly inside `HAVING`
+- Fixed the problem by rewriting the query with a CTE
+- Understood that the content inside the CTE parentheses is evaluated first
+- That made my alias `avg_gpa` available outside the CTE for later filtering
+- This made the execution order of SQL much clearer to me
+
+**Why This Matters for My L5 Path**
+- PostgreSQL, Docker, TablePlus, advanced querying, and CTEs are all part of building a strong data engineering foundation
+- The goal is not just to learn SQL syntax, but to build the ability to query and work with real structured data in a clean, reproducible environment
+- This setup is for now more directly aligned with my path toward Data & Feature Infrastructure / ML Platform Engineering
+
+**Next Steps**
+- Continue the Maven Advanced SQL course
+- Use the Docker + PostgreSQL + TablePlus setup for all exercises
+- Import course datasets step by step, only when needed for the current lesson
+
+---
+
+>## Month 2 TIL ⬆️
+
+>*Entries above this line belong to Month 2 starting April 20, 2026.*
+
+---
+
+>## Month 1 TIL ⬇️
+
+>*All entries below this line belong to Month 1.*
+
+---
+
 ## April 19, 2026
 
 **Milestone · Month 1 of the L5 Roadmap: COMPLETED ✓**

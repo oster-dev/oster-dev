@@ -44,6 +44,21 @@ The final notebook of Angela Yu's 100-Days-of-Code Python Bootcamp was a complet
 >**What I deliberately skipped**
 >- All visualisations including barplots, scatterplots, and heatmaps — not relevant for Data & Feature Infrastructure work at L5. Time better spent on pipeline logic.
 
+**SQL | Basics Completed ✓**
+Today I finished the remaining SQL sections and closed out the full SQL basics chapter.
+
+- Completed Views: `CREATE VIEW`, `ALTER VIEW`, `DROP VIEW`
+- Completed `CASE WHEN` practice and challenge exercises
+- Completed `COALESCE` — essential for NULL handling in feature pipelines
+- Completed `NULLIF` — useful for safe division and NULL conversion patterns
+- Completed `SUB-SELECT` / Subqueries — important for complex queries in Spark SQL
+- Completed `SELF-JOIN`, `CROSS JOIN`, and `NATURAL JOIN` — full JOIN coverage done
+- Reviewed SQL Best Practices section in full
+- 
+The gap that remains — `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`,
+`PARTITION BY`, `LAG/LEAD`, and CTEs — is exactly what Month 2 is for.
+That work begins tomorrow with MODE SQL.
+
 ## April 18, 2026
 
 **Python | Auto Feature Pipeline Project Prototype**

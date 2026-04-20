@@ -15,6 +15,20 @@ TIL Started: April 13, 2026.
 - Confirmed that Maven is the better fit for my L5 goal because it focuses on advanced querying, data analysis, subqueries, CTEs, window functions, and core SQL syntax
 - The course being in MySQL is not a problem, because the concepts transfer directly to PostgreSQL and other relational databases
 
+**SQL | Multi-Table Analysis — Review**
+- Reviewed all JOIN types as a knowledge refresh: `INNER JOIN` and `LEFT JOIN` are the most practical, while `RIGHT JOIN` and `FULL JOIN` are less common in day-to-day work
+- Revisited joining on multiple columns and joining more than two tables in a single query
+- Revisited Self Joins and Cross Joins
+- Reviewed `UNION` vs `UNION ALL`
+- Completed Quiz 2 to validate the full section
+>This was a deliberate review session, not new material.
+Tomorrow: Subqueries and CTEs — which I already applied today to fix the `HAVING` alias issue.
+
+**Why this matters for my L5 path**
+- JOINs are Non-Negotiable for Spark SQL, Feature Stores, ETL pipelines, and any real multi-table data work
+- `UNION` and `UNION ALL` are used constantly when merging data sources in pipelines
+- Multi-table joining is a daily pattern in production data infrastructure
+
 **SQL Environment Setup**
 - Set up my main SQL environment with TablePlus + Docker + PostgreSQL
 - Started a local PostgreSQL container successfully

@@ -7,6 +7,57 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 21, 2026
+
+**SQL | Subqueries & CTEs**
+Today I completed the most conceptually challenging chapter of the Maven Advanced SQL course. Subqueries and CTEs are the foundation of every real-world data engineering query pattern.
+
+**Subqueries**
+- A subquery is a query inside another query — the inner query always runs first
+- Scalar Subquery in `SELECT`: returns exactly one value, used to compare each row against a global aggregate
+- Derived Table in `FROM`: treats a subquery result as a temporary table — always needs an alias
+- Subquery in `WHERE` / `HAVING`: filters rows based on a dynamically calculated value
+- `HAVING` cannot reference `SELECT` aliases — always repeat the aggregate function directly
+- `ANY`: condition must be true for at least one value — equivalent to `> MIN()`
+- `ALL`: condition must be true for every value — equivalent to `< MIN()`
+- `EXISTS`: returns `TRUE` or `FALSE` based on whether a subquery returns any rows at all
+- Correlated Subquery: inner query references the outer row — runs once per row, important for performance awareness
+
+**CTEs**
+- A CTE is a named temporary result set defined with `WITH name AS (...)` before the main query
+- The CTE block is evaluated first — the outer query reads from it like a real table
+- Direct equivalent of a Derived Table but far more readable and modular
+- A single CTE can be referenced multiple times in the same query — avoids repeating logic
+- Multiple CTEs can be chained with commas — each one can build on the previous
+
+```sql
+WITH step_one AS (
+  SELECT factory, COUNT(*) AS product_count
+  FROM products
+  GROUP BY factory
+),
+step_two AS (
+  SELECT factory, product_count
+  FROM step_one
+  WHERE product_count > 2
+)
+SELECT * FROM step_two
+ORDER BY product_count DESC;
+```
+
+**Subqueries vs CTEs**
+- Subqueries: inline, one-time use, harder to read when nested
+- CTEs: named, reusable, easy to debug step by step
+- Performance is similar — CTEs win on readability and maintainability
+- Rule of thumb: subquery for simple one-liners, CTE for anything more complex
+
+**Why this matters for my L5 path**
+- CTEs are the standard query pattern in Spark SQL, dbt, Feast Feature Store, and every modern data pipeline
+- Multiple CTEs map directly to pipeline stages — each CTE is one transformation step
+- This is not just SQL theory — this is how production Feature Engineering queries are written
+
+---
+
 ## April 20, 2026
 
 **Advanced SQL | Month 2 Started**

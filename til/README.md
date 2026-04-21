@@ -9,7 +9,17 @@ TIL Started: April 13, 2026.
 
 ## April 21, 2026
 
+**SQL | Hands-on Practice — Subqueries, CTEs & LeetCode**
+- Practiced writing SQL queries independently for the first time without following a course
+- Applied CTEs hands-on to solve real query problems — not just watching, but writing
+- Practiced LeetCode SQL problems to validate understanding outside of course material
+- Understood the concepts behind Subqueries and CTEs clearly — the logic makes sense
+- Noticed that translating the concept into actual written SQL is still challenging at this stage — which is completely normal for day 2 of advanced SQL
+
+> Writing SQL from scratch is harder than understanding it — and that gap closes only through repetition and use. This is exactly where I am right now, and it is the right place to be.
+
 **SQL | Subqueries & CTEs**
+
 Today I completed the most conceptually challenging chapter of the Maven Advanced SQL course. Subqueries and CTEs are the foundation of every real-world data engineering query pattern.
 
 **Subqueries**

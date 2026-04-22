@@ -24,6 +24,9 @@ TIL Started: April 13, 2026.
 - Covered the available function types for Window Functions
 - Learned `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()` — and the key difference between them
 - Completed the Row Numbering assignment
+- Learned `FIRST_VALUE()` to capture the first value in a partition
+- Learned `LAST_VALUE()` to capture the last value in a partition, with careful attention to the window frame
+- Learned `NTH_VALUE()` to retrieve the nth row value from within a partition
 
 >Window Functions felt immediately more intuitive at first glance.
 >`PARTITION BY` is just grouping without losing rows. `ORDER BY` inside `OVER` controls rank, not output order.

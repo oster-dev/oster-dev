@@ -7,6 +7,29 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 22, 2026
+
+**SQL | Subqueries & CTEs — Completed ✓**
+- Completed Recursive CTEs — anchor member defines the start, recursive part loops until the stop condition is met
+- Completed Subqueries vs CTEs vs Temp Tables vs Views, understood when each pattern is appropriate
+- Reviewed Key Takeaways and passed Quiz 3: Subqueries & CTEs
+
+>By the end of today, the concepts behind Subqueries and CTEs are fully understood and clear.
+>Writing them from scratch is still developing, but the logic and structure already make complete sense.
+
+**SQL | Window Functions — Section 6 started**
+- Covered Window Function Basics — the core rule: rows are never collapsed, every row is preserved
+- Broke down the full anatomy of a Window Function with `OVER (PARTITION BY ... ORDER BY ...)`
+- Completed the Window Functions assignment
+- Covered the available function types for Window Functions
+- Learned `ROW_NUMBER()`, `RANK()`, and `DENSE_RANK()` — and the key difference between them
+- Completed the Row Numbering assignment
+
+>Window Functions felt immediately more intuitive at first glance.
+>`PARTITION BY` is just grouping without losing rows. `ORDER BY` inside `OVER` controls rank, not output order.
+
+---
+
 ## April 21, 2026
 
 **SQL | Hands-on Practice — Subqueries, CTEs & LeetCode**
@@ -19,8 +42,6 @@ TIL Started: April 13, 2026.
 > Writing SQL from scratch is harder than understanding it — and that gap closes only through repetition and use. This is exactly where I am right now, and it is the right place to be.
 
 **SQL | Subqueries & CTEs**
-
-Today I completed the most conceptually challenging chapter of the Maven Advanced SQL course. Subqueries and CTEs are the foundation of every real-world data engineering query pattern.
 
 **Subqueries**
 - A subquery is a query inside another query — the inner query always runs first
@@ -65,6 +86,8 @@ ORDER BY product_count DESC;
 - CTEs are the standard query pattern in Spark SQL, dbt, Feast Feature Store, and every modern data pipeline
 - Multiple CTEs map directly to pipeline stages — each CTE is one transformation step
 - This is not just SQL theory — this is how production Feature Engineering queries are written
+
+>Today I completed the most conceptually challenging chapter of the Maven Advanced SQL course. Subqueries and CTEs are the foundation of every real-world data engineering query pattern.
 
 ---
 
@@ -177,8 +200,8 @@ Today I finished the remaining SQL sections and closed out the full SQL basics c
 - Completed `SUB-SELECT` / Subqueries — important for complex queries in Spark SQL
 - Completed `SELF-JOIN`, `CROSS JOIN`, and `NATURAL JOIN` — full JOIN coverage done
 - Reviewed SQL Best Practices section in full
-- 
-The gap that remains — `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`,
+  
+>The gap that remains — `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`,
 `PARTITION BY`, `LAG/LEAD`, and CTEs — is exactly what Month 2 is for.
 That work begins tomorrow with MODE SQL.
 

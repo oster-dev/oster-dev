@@ -9,8 +9,18 @@ TIL Started: April 13, 2026.
 
 ## April 23, 2026
 
+**SQL | Functions by Data Type — Section 7 Started**
+- Covered Function Basics and Numeric Functions
+- Learned `CAST()` and `CONVERT()` for type conversion
+- Completed the Numeric Functions assignment and solution
+- Covered DateTime Functions and completed the assignment and solution
+- Started String Functions and completed the assignment
+- Learned how to apply SQL functions based on the underlying data type
+
+>Today I strengthened the foundations for working with real-world data types in SQL.
+Numeric, DateTime, and String functions are all directly relevant for cleaning and transforming structured data in pipelines.
+
 **SQL | Window Functions — Section 6 Completed ✓**
-Today I completed Section 6 in full. All Window Function types are done — from Value Functions to LEAD & LAG, NTILE, Statistical Functions, and Moving Averages. Passed Quiz 4.
 
 **FIRST_VALUE, LAST_VALUE & NTH_VALUE**
 - `FIRST_VALUE()` grabs the first value within a partition — e.g. cheapest product per category
@@ -52,6 +62,9 @@ SELECT
   LAG(session_count) OVER (PARTITION BY user_id ORDER BY event_date) AS prev_session_count
 FROM sessions;
 ```
+
+>Today I completed Section 6 in full. All Window Function types are done — from Value Functions to LEAD & LAG, NTILE, Statistical Functions, and Moving Averages. Passed Quiz 4.
+
 
 **Why this matters for my L5 path**
 - `LAG` and `LEAD` are Non-Negotiable for time-based Feature Engineering in production ML pipelines

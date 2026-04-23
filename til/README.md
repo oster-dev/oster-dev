@@ -7,6 +7,59 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 23, 2026
+
+**SQL | Window Functions — Section 6 Completed ✓**
+Today I completed Section 6 in full. All Window Function types are done — from Value Functions to LEAD & LAG, NTILE, Statistical Functions, and Moving Averages. Passed Quiz 4.
+
+**FIRST_VALUE, LAST_VALUE & NTH_VALUE**
+- `FIRST_VALUE()` grabs the first value within a partition — e.g. cheapest product per category
+- `LAST_VALUE()` requires an explicit frame — without it, the window only runs up to the current row, not the end of the partition
+- Correct frame definition for `LAST_VALUE()`:
+
+```sql
+LAST_VALUE(unit_price) OVER (
+  PARTITION BY factory
+  ORDER BY unit_price
+  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+)
+```
+
+- `NTH_VALUE(column, n)` retrieves the nth value within a partition — e.g. second most expensive item
+- Key distinction: `FIRST_VALUE` is frame-safe, `LAST_VALUE` and `NTH_VALUE` always require an explicit frame
+
+**What I understood**
+- `LAST_VALUE()` without a frame almost always returns wrong results — one of the most common Window Function bugs in production
+- `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING` means the entire partition, regardless of current row position
+
+**LEAD & LAG — L5 Critical**
+- `LAG(column, offset, default)` accesses the value n rows before the current row
+- `LEAD(column, offset, default)` accesses the value n rows after the current row
+- Default offset is 1 if not specified — `LAG(revenue)` = previous row
+- The optional default value prevents `NULL` for the first or last row:
+
+```sql
+LAG(revenue, 1, 0) OVER (ORDER BY order_date)
+```
+
+- Period-over-Period is the most used Feature Engineering pattern with `LAG`:
+
+```sql
+SELECT
+  user_id,
+  event_date,
+  session_count,
+  LAG(session_count) OVER (PARTITION BY user_id ORDER BY event_date) AS prev_session_count
+FROM sessions;
+```
+
+**Why this matters for my L5 path**
+- `LAG` and `LEAD` are Non-Negotiable for time-based Feature Engineering in production ML pipelines
+- Period-over-Period comparisons are used daily in Feature Stores, event tracking, and user behaviour analysis - more Data Analysis on Section 8!
+- Correct frame definitions are critical — `LAST_VALUE` without a frame is a silent bug that produces wrong output
+
+---
+
 ## April 22, 2026
 
 **SQL | Subqueries & CTEs — Completed ✓**

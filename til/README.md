@@ -9,16 +9,19 @@ TIL Started: April 13, 2026.
 
 ## April 23, 2026
 
-**SQL | Functions by Data Type — Section 7 Started**
+**SQL | Functions by Data Type — Section 7 Completed ✓**
 - Covered Function Basics and Numeric Functions
-- Learned `CAST()` and `CONVERT()` for type conversion
+- Learned `CAST()` and `CONVERT()` for explicit type conversion
 - Completed the Numeric Functions assignment and solution
 - Covered DateTime Functions and completed the assignment and solution
-- Started String Functions and completed the assignment
-- Learned how to apply SQL functions based on the underlying data type
+- Covered String Functions and completed the assignment and solution
+- Covered Pattern Matching, including a full demo, assignment, and solution
+- Covered NULL Functions and completed the assignment and solution
+- Reviewed Key Takeaways and passed Quiz 5: Functions by Data Type
 
->Today I strengthened the foundations for working with real-world data types in SQL.
-Numeric, DateTime, and String functions are all directly relevant for cleaning and transforming structured data in pipelines.
+>Numeric, DateTime, String, Pattern Matching, and NULL handling are all directly
+relevant for cleaning and transforming real-world structured data in pipelines.
+These are the functions that appear daily in Feature Engineering and ETL work.
 
 **SQL | Window Functions — Section 6 Completed ✓**
 

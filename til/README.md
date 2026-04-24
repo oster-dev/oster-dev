@@ -9,7 +9,7 @@ TIL Started: April 13, 2026.
 
 ## April 24, 2026
 
-**Advanced SQL | Theory Complete: Personal Reflection**
+**Advanced SQL | Theory + Final Project Complete: Personal Reflection**
 
 At the start, Subqueries and CTEs felt genuinely complicated. The syntax is long,
 the nesting can be hard to read at first, and the mental model takes time to build.
@@ -21,6 +21,11 @@ practice — LeetCode SQL problems and other hands-on platforms will be the focu
 going forward to make SQL truly job-ready. Query performance decisions, meaning
 choosing the most efficient method for a given problem to avoid unnecessary
 computation, is also an area I plan to deepen over time.
+
+I also completed the final course project, which helped connect all the covered
+concepts in one practical exercise. Some gaps remain, particularly around writing
+complex queries independently from scratch, but I am confident these will close
+over the coming weeks through consistent practice and real-world application.
 
 The [Maven Advanced SQL](https://www.udemy.com/course/sql-advanced-queries/) course was an excellent choice for building this foundation.
 It covered every relevant concept clearly, and I would fully recommend it for anyone

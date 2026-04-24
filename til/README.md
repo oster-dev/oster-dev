@@ -7,6 +7,70 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 24, 2026
+
+**Advanced SQL | Theory Complete: Personal Reflection**
+
+At the start, Subqueries and CTEs felt genuinely complicated. The syntax is long,
+the nesting can be hard to read at first, and the mental model takes time to build.
+After completing the full theory section however, the concepts feel significantly
+more logical and approachable than initially expected.
+
+The theoretical foundation is now set. What remains is consolidating this through
+practice — LeetCode SQL problems and other hands-on platforms will be the focus
+going forward to make SQL truly job-ready. Query performance decisions, meaning
+choosing the most efficient method for a given problem to avoid unnecessary
+computation, is also an area I plan to deepen over time.
+
+The [Maven Advanced SQL](https://www.udemy.com/course/sql-advanced-queries/) course was an excellent choice for building this foundation.
+It covered every relevant concept clearly, and I would fully recommend it for anyone
+targeting a similar career path. The practical side will continue to develop throughout the roadmap, especially once
+Spark SQL begins in Month 3.
+
+
+
+**SQL | Data Analysis Applications — Section 8 Completed ✓**
+
+Today I started and fully completed Section 8 — the final practical chapter of the
+Maven Advanced SQL course. These are real data analysis workflow patterns, directly
+transferable to Feature Engineering and data infrastructure work.
+
+**Duplicate Detection & Removal**
+- Identified and removed duplicates using `ROW_NUMBER()` — the cleanest pattern in production
+- `GROUP BY` + `HAVING COUNT(*) > 1` surfaces duplicates — `ROW_NUMBER()` removes them
+- Completed the assignment and solution
+
+```sql
+WITH ranked AS (
+  SELECT *,
+    ROW_NUMBER() OVER (
+      PARTITION BY customer_id, order_date, product_id
+      ORDER BY transaction_id
+    ) AS rn
+  FROM orders
+)
+SELECT * FROM ranked WHERE rn = 1;
+```
+
+**Min / Max Value Filtering**
+- Filtered rows containing the min or max value per group using both subquery and window function patterns
+- Window Functions are more efficient when filtering across multiple groups simultaneously
+- Completed the assignment and solution
+
+**Pivoting**
+- Learned how to reshape data from rows to columns using pivot logic in SQL
+- Completed the assignment and solution
+
+**Rolling Calculations**
+- Covered rolling calculations including running totals and moving averages using window frames
+- Completed the full demo, assignment, and solution
+
+**Imputing NULL Values**
+- Learned how to handle and replace NULL values in analytical datasets using `COALESCE` and window-based imputation
+- Completed the full demo
+
+---
+
 ## April 23, 2026
 
 **SQL | Functions by Data Type — Section 7 Completed ✓**
@@ -234,7 +298,8 @@ Month 2 starts tomorrow: SQL Window Functions · Docker · AWS CLF-C02.
 ---
 
 **Python | Angela Yu Bootcamp — Day 100 · Final Project**
-The final notebook of Angela Yu's 100-Days-of-Code Python Bootcamp was a complete data analysis project using real US education statistics datasets.
+
+>The final notebook of Angela Yu's 100-Days-of-Code Python Bootcamp was a complete data analysis project using real US education statistics datasets.
 
 **Data Loading & Exploration**
 - Loaded multiple CSV files with `pd.read_csv()`

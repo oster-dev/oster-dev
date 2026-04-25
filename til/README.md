@@ -7,6 +7,48 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 25, 2026
+
+**AWS | CLF-C02 Course Started**
+
+
+Today I officially started AWS CLF-C02 preparation. Worked through Sections 1–6 of 17
+in a single day and completed a first practice exam with 65% — a solid baseline for
+Day 1 with no prior AWS knowledge.
+
+**What I covered today**
+- Core cloud concepts: what Cloud Computing is, why companies migrate, and the advantages over On-Premise
+- The three cloud deployment models: Public Cloud, Private Cloud, and Hybrid Cloud
+- The three service models: IaaS, PaaS, and SaaS — the difference and when each is used
+- AWS Global Infrastructure: Regions, Availability Zones, and Edge Locations and why they matter for resilience and latency
+- Shared Responsibility Model: what AWS owns (Security **of** the Cloud) vs. what the customer owns (Security **in** the Cloud)
+- First overview of core AWS services: EC2, S3, RDS, Lambda, VPC, IAM, CloudWatch
+
+**What I understood**
+- The Shared Responsibility Model is the single most important concept for the exam — almost every security question revolves around it
+- Regions and AZs are not academic concepts — they are the foundation of every cloud architecture I will build later on this roadmap
+- IaaS = EC2 (you manage everything), PaaS = Elastic Beanstalk (AWS manages infrastructure), SaaS = ready-to-use software — this model helps classify every AWS service instantly
+
+**First AWS CLF-C02 Practice Exam | Result: 65%**
+- Completed a full CLF-C02 practice simulation with 20 questions on Day 1
+- Result: 65% with no prior AWS study — shows that existing cloud and API context already provides a baseline
+- Gaps are expected in service-specific details, pricing logic, and compliance topics
+- Target: consistently 80%+ on practice tests before booking the real exam
+
+**What I understood**
+- 65% on Day 1 means the foundation is there — the details come with the remaining course sections
+- Pricing and Billing is its own learning block and the most common source of errors for beginners
+- The exam tests recognition and classification, not deep engineering knowledge
+
+**Progress so far | AWS CLF-C02**
+- Course: René Fürst AWS CLF-C02
+- Today: Sections 1–6 of 17 completed
+- Practice exam baseline: 65%
+- Next: Complete Sections 7–17 → push practice tests to 80%+ → book the exam
+- Target exam date: mid-May 2026
+
+---
+
 ## April 24, 2026
 
 **Advanced SQL | Theory + Final Project Complete: Personal Reflection**

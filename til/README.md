@@ -7,6 +7,72 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 26, 2026
+
+**AWS | CLF-C02 — Day 2: Sections 6–7 completed**
+
+Continued the René Fürst AWS CLF-C02 course. Finished Section 6 (AWS Products & Services)
+and Section 7 (AWS Container) — covering Compute services in depth, all major EC2 concepts,
+and the full container ecosystem on AWS.
+
+**AWS Products & Services**
+
+- **EC2 deep dive:** instance types, pricing models (On-Demand, Reserved, Spot, Dedicated),
+  and core EC2 features — the foundation of IaaS on AWS
+- **AWS Elastic Beanstalk:** PaaS layer on top of EC2 — you deploy code, AWS manages
+  the underlying infrastructure automatically
+- **AWS Outposts:** AWS infrastructure physically installed in your own data center —
+  extends AWS into on-premise environments
+- **AWS Lightsail:** simplified compute for small workloads and beginners —
+  fixed pricing, no need to configure VPCs or EC2 manually
+- **AWS Batch:** fully managed batch processing — runs large-scale compute jobs
+  without managing the underlying servers
+- **AWS Wavelength:** brings AWS compute and storage to the edge of 5G networks —
+  ultra-low latency for mobile and IoT use cases
+
+**What I understood**
+- EC2 pricing models are a guaranteed exam topic — On-Demand is flexible but expensive,
+  Reserved saves up to 72% for predictable workloads, Spot is cheapest but can be interrupted
+- Elastic Beanstalk, Lightsail, and Outposts all sit on top of EC2 — understanding EC2 first
+  makes every other compute service easier to classify
+- Wavelength and Outposts exist for edge and hybrid scenarios — not standard cloud deployments,
+  but the exam tests whether you can distinguish them
+
+**AWS Container**
+
+- **Container vs. VM:** containers share the host OS kernel and are lightweight;
+  VMs include a full OS per instance — containers start faster and consume fewer resources
+- **Amazon ECS (Elastic Container Service):** AWS-native container orchestration —
+  run and manage Docker containers at scale without managing the control plane
+- **Amazon EKS (Elastic Kubernetes Service):** managed Kubernetes on AWS —
+  for teams already using Kubernetes who want AWS to manage the control plane
+- **AWS Fargate:** serverless compute engine for containers — no EC2 instances to manage,
+  you only define CPU and memory and AWS runs the container
+- **Amazon ECR (Elastic Container Registry):** private Docker image registry on AWS —
+  stores, versions, and secures container images before deployment
+- **AWS App2Container (A2C):** tool to containerize existing Java and .NET applications
+  without rewriting code — lift-and-shift to containers
+- **AWS Copilot:** CLI tool to deploy and operate containerized apps on ECS and Fargate —
+  simplifies the full container deployment workflow
+
+**What I understood**
+- ECS vs. EKS is a classic exam question: ECS = AWS-native, EKS = Kubernetes — choose EKS
+  when the team already has Kubernetes expertise, ECS when starting fresh on AWS
+- Fargate removes the need to think about EC2 at all for containers — it is the serverless
+  path for container workloads and pairs with both ECS and EKS
+- ECR is to container images what S3 is to files — a managed, secure storage layer
+  that sits before every container deployment
+
+**Progress | AWS CLF-C02**
+- Course: René Fürst AWS CLF-C02
+- Today: Sections 6–7 of 17 completed (Lectures 34–51)
+- Sections remaining: 8–17
+- Next: Section 8 — AWS Serverless
+- Target exam date: mid-May 2026
+
+
+---
+
 ## April 25, 2026
 
 **AWS | CLF-C02 Course Started**

@@ -7,6 +7,113 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 27, 2026
+
+**AWS | CLF-C02 — Day 3: Sections 8–11 completed + LeetCode SQL 50**
+
+Continued the René Fürst AWS CLF-C02 course. Worked through Sections 8–11 covering
+Serverless, Security & IAM, Management & Governance, and Storage Services — the most
+exam-heavy blocks of the entire CLF-C02 curriculum. Supplemented the day with LeetCode
+SQL 50 problems to keep SQL fundamentals sharp alongside AWS prep.
+
+**AWS Serverless**
+
+- **AWS Lambda:** event-driven compute — functions trigger on events (API calls, S3 uploads,
+  DynamoDB streams) and you pay only per execution, not for idle time
+- **AWS Fargate (Serverless):** serverless compute engine for containers — revisited here
+  to confirm that Fargate bridges the container and serverless worlds
+- **Serverless Pricing Model:** Lambda is billed per number of requests and execution
+  duration in milliseconds — scales to zero when idle, no minimum fee
+
+>**What I understood**
+>- Lambda is the core of AWS serverless — almost every event-driven architecture on AWS
+  connects through Lambda at some point
+>- Serverless does not mean "no servers" — it means AWS manages them invisibly;
+  the CLF-C02 exam tests whether you understand this distinction
+>- Lambda + Fargate cover two serverless paths: code-only (Lambda) vs. container-based (Fargate)
+
+**AWS Security, Identität & Compliance**
+
+- **Amazon IAM:** users, groups, roles, and policies — the permission model that enforces
+  least privilege across every AWS service; the most important security layer on AWS
+- **IAM Inspector, Certificate Manager, Directory Service:** Inspector scans for
+  vulnerabilities; ACM manages SSL/TLS certificates; Directory Service connects AWS
+  to Microsoft Active Directory
+- **IAM Setup & User Creation (Hands-On):** practical walkthrough of creating users,
+  assigning policies, and enabling MFA — the operational side of access control
+- **IAM Cost Control:** using IAM policies and AWS Budgets to prevent unauthorized
+  or accidental spending — cost governance starts with access governance
+
+>**What I understood**
+>- IAM is the single most important security service on AWS — every exam question about
+  "who can access what" routes through IAM
+>- The difference between IAM users (humans), roles (services), and groups (permission sets)
+  is a guaranteed multi-question topic on CLF-C02
+>- Inspector and Certificate Manager are supporting security services — know what they do
+  but do not confuse them with IAM's core access control function
+
+**Management & Governance**
+
+- **CloudWatch:** monitoring and observability — metrics, logs, and alarms for every
+  AWS resource; the operational dashboard of an AWS account
+- **CloudTrail:** records every API call made in an AWS account — the forensic audit log
+  for "who did what and when"
+- **CloudFormation:** infrastructure as code on AWS — define resources in templates,
+  deploy repeatable and version-controlled environments automatically
+- **Trusted Advisor:** automated recommendations across cost, security, performance,
+  and fault tolerance — the built-in best practice checker
+- **API Gateway + Step Functions:** API Gateway exposes Lambda and backends as REST or
+  WebSocket APIs; Step Functions orchestrates multi-step serverless workflows
+
+>**What I understood**
+>- CloudTrail is the standard CLF-C02 answer for any question about auditing or accountability —
+  it logs every action taken in the account
+>- CloudFormation is the AWS-native equivalent of Terraform — infrastructure as code is
+  foundational for every production-grade deployment on this roadmap
+>- API Gateway + Lambda is the default serverless API pattern — understanding this pairing
+  matters for both the exam and real-world architecture
+
+**Amazon Storage Services**
+
+- **Amazon S3:** object storage — the default storage layer for files, backups, static
+  websites, and data lakes; globally accessible via HTTP
+- **Amazon Glacier:** long-term archival storage — significantly cheaper than S3 Standard
+  but with retrieval times ranging from minutes to hours
+- **Amazon EBS:** persistent block storage attached to a single EC2 instance — survives
+  instance stops, scoped to one Availability Zone
+- **Amazon EFS:** shared file storage accessible across multiple EC2 instances —
+  scales automatically, no capacity planning required
+- **Storage Gateway:** connects on-premise infrastructure to AWS storage — the bridge
+  for hybrid cloud storage without full cloud migration
+- **S3 Storage Classes & Cost Awareness:** Standard, Intelligent-Tiering, Glacier —
+  choosing the right class based on access frequency is a direct cost optimization lever
+
+>**What I understood**
+>- S3 is the backbone of AWS storage — almost every AWS service reads from or writes
+  to S3 at some point; storage classes and pricing are guaranteed exam topics
+>- EBS vs. EFS vs. S3 is a classic CLF-C02 question: EBS = one EC2 one AZ;
+  EFS = shared across many EC2; S3 = object storage globally accessible via HTTP
+>- Storage Gateway is the answer whenever an exam question mentions "hybrid cloud + storage" —
+  it is the dedicated bridge between on-premise and AWS
+
+**LeetCode | SQL 50 — Continued SQL Practice**
+
+- Completed a set of LeetCode SQL 50 problems to maintain SQL fluency alongside AWS prep
+- Problem types: SELECT with filtering, GROUP BY with aggregation, JOIN across multiple
+  tables, subqueries and nested SELECT
+- Goal: keep query writing instinctive so SQL feels automatic when data engineering
+  projects begin in Month 2
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02
+- Today: Sections 8–11 completed (Lectures 52–68)
+- Sections remaining: 12–17
+- Next: Section 12 onwards → push practice tests to 80%+ → book exam
+- Target exam date: mid-May 2026
+```
+
+---
+
 ## April 26, 2026
 
 **AWS | CLF-C02 — Day 2: Sections 6–7 completed**
@@ -30,12 +137,12 @@ and the full container ecosystem on AWS.
 - **AWS Wavelength:** brings AWS compute and storage to the edge of 5G networks —
   ultra-low latency for mobile and IoT use cases
 
-**What I understood**
-- EC2 pricing models are a guaranteed exam topic — On-Demand is flexible but expensive,
+>**What I understood**
+>- EC2 pricing models are a guaranteed exam topic — On-Demand is flexible but expensive,
   Reserved saves up to 72% for predictable workloads, Spot is cheapest but can be interrupted
-- Elastic Beanstalk, Lightsail, and Outposts all sit on top of EC2 — understanding EC2 first
+>- Elastic Beanstalk, Lightsail, and Outposts all sit on top of EC2 — understanding EC2 first
   makes every other compute service easier to classify
-- Wavelength and Outposts exist for edge and hybrid scenarios — not standard cloud deployments,
+>- Wavelength and Outposts exist for edge and hybrid scenarios — not standard cloud deployments,
   but the exam tests whether you can distinguish them
 
 **AWS Container**
@@ -55,21 +162,21 @@ and the full container ecosystem on AWS.
 - **AWS Copilot:** CLI tool to deploy and operate containerized apps on ECS and Fargate —
   simplifies the full container deployment workflow
 
-**What I understood**
-- ECS vs. EKS is a classic exam question: ECS = AWS-native, EKS = Kubernetes — choose EKS
+>**What I understood**
+>- ECS vs. EKS is a classic exam question: ECS = AWS-native, EKS = Kubernetes — choose EKS
   when the team already has Kubernetes expertise, ECS when starting fresh on AWS
-- Fargate removes the need to think about EC2 at all for containers — it is the serverless
+>- Fargate removes the need to think about EC2 at all for containers — it is the serverless
   path for container workloads and pairs with both ECS and EKS
-- ECR is to container images what S3 is to files — a managed, secure storage layer
+>- ECR is to container images what S3 is to files — a managed, secure storage layer
   that sits before every container deployment
-
-**Progress | AWS CLF-C02**
+```
+Progress | AWS CLF-C02
 - Course: René Fürst AWS CLF-C02
 - Today: Sections 6–7 of 17 completed (Lectures 34–51)
 - Sections remaining: 8–17
 - Next: Section 8 — AWS Serverless
 - Target exam date: mid-May 2026
-
+```
 
 ---
 
@@ -90,10 +197,10 @@ Day 1 with no prior AWS knowledge.
 - Shared Responsibility Model: what AWS owns (Security **of** the Cloud) vs. what the customer owns (Security **in** the Cloud)
 - First overview of core AWS services: EC2, S3, RDS, Lambda, VPC, IAM, CloudWatch
 
-**What I understood**
-- The Shared Responsibility Model is the single most important concept for the exam — almost every security question revolves around it
-- Regions and AZs are not academic concepts — they are the foundation of every cloud architecture I will build later on this roadmap
-- IaaS = EC2 (you manage everything), PaaS = Elastic Beanstalk (AWS manages infrastructure), SaaS = ready-to-use software — this model helps classify every AWS service instantly
+>**What I understood**
+>- The Shared Responsibility Model is the single most important concept for the exam — almost every security question revolves around it
+>- Regions and AZs are not academic concepts — they are the foundation of every cloud architecture I will build later on this roadmap
+>- IaaS = EC2 (you manage everything), PaaS = Elastic Beanstalk (AWS manages infrastructure), SaaS = ready-to-use software — this model helps classify every AWS service instantly
 
 **First AWS CLF-C02 Practice Exam | Result: 65%**
 - Completed a full CLF-C02 practice simulation with 20 questions on Day 1
@@ -101,17 +208,18 @@ Day 1 with no prior AWS knowledge.
 - Gaps are expected in service-specific details, pricing logic, and compliance topics
 - Target: consistently 80%+ on practice tests before booking the real exam
 
-**What I understood**
-- 65% on Day 1 means the foundation is there — the details come with the remaining course sections
-- Pricing and Billing is its own learning block and the most common source of errors for beginners
-- The exam tests recognition and classification, not deep engineering knowledge
-
-**Progress so far | AWS CLF-C02**
+>**What I understood**
+>- 65% on Day 1 means the foundation is there — the details come with the remaining course sections
+>- Pricing and Billing is its own learning block and the most common source of errors for beginners
+>- The exam tests recognition and classification, not deep engineering knowledge
+```
+Progress so far | AWS CLF-C02
 - Course: René Fürst AWS CLF-C02
 - Today: Sections 1–6 of 17 completed
 - Practice exam baseline: 65%
 - Next: Complete Sections 7–17 → push practice tests to 80%+ → book the exam
 - Target exam date: mid-May 2026
+```
 
 ---
 

@@ -82,6 +82,14 @@ and on the CLF-C02 exam.
   different use cases
 >- SNS + SQS together is the standard decoupled architecture pattern on AWS —
   SNS fans out, SQS buffers; combining both enables resilient, scalable pipelines
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02
+- Today: Sections 12–14 completed (Lectures 69–79)
+- Sections remaining: 15–17
+- Next: Sections 15–17 → final practice tests → book exam
+- Target exam date: mid-May 2026
+```
 
 ---
 

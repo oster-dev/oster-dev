@@ -7,6 +7,84 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 28, 2026
+
+**AWS | CLF-C02 — Day 4: Sections 12–14 completed**
+
+Continued the René Fürst AWS CLF-C02 course. Worked through Sections 12–14 covering
+Amazon Databases, Networking & Content Delivery, and Application Integration —
+three sections that are heavily represented in real-world cloud architectures
+and on the CLF-C02 exam.
+
+**AWS Databases**
+
+- **Amazon RDS:** managed relational database service — supports MySQL, PostgreSQL,
+  MariaDB, Oracle, and SQL Server; AWS handles backups, patching, and failover
+- **Amazon Aurora:** AWS-native relational database — up to 5x faster than MySQL,
+  fully managed, with automatic replication across multiple AZs
+- **SQL vs. NoSQL:** SQL = structured, schema-based, relational (RDS, Aurora);
+  NoSQL = flexible, schema-less, for high-scale unstructured data (DynamoDB)
+- **Backup & Replicas:** automated backups and read replicas in RDS reduce
+  recovery time and distribute read traffic across instances
+- **Amazon DynamoDB:** fully managed NoSQL key-value and document database —
+  single-digit millisecond latency at any scale, serverless and auto-scaling
+- **Amazon Redshift & Redshift Spectrum:** columnar data warehouse for analytics
+  at petabyte scale; Spectrum extends queries directly to S3 data
+- **Amazon Neptune:** managed graph database — optimized for highly connected
+  datasets like social networks, fraud detection, and knowledge graphs
+- **ElastiCache:** in-memory caching layer — Redis or Memcached; used to reduce
+  database load and serve frequently accessed data in microseconds
+- **AWS Database Migration Service (DMS):** migrates databases to AWS with minimal
+  downtime — supports homogeneous and heterogeneous migrations
+
+>**What I understood**
+>- RDS vs. DynamoDB is a guaranteed CLF-C02 question: RDS = relational, structured,
+  SQL; DynamoDB = NoSQL, flexible schema, built for massive scale
+>- Aurora is not just RDS with a different name — it is a re-architected database
+  with higher performance and availability, still using SQL
+>- Redshift is not a transactional database — it is an analytical warehouse;
+  knowing when to use Redshift vs. RDS separates exam-ready answers from guesses
+
+**Networking & Content Delivery**
+
+- **Amazon VPC (Virtual Private Cloud):** logically isolated network within AWS —
+  you define subnets, routing tables, internet gateways, and security groups;
+  every AWS deployment lives inside a VPC
+- **Amazon VPC — Deep Dive:** public vs. private subnets, NAT Gateway for outbound
+  internet access from private subnets, VPC Peering for cross-VPC communication
+- **Amazon Route 53:** managed DNS service — translates domain names to IP addresses;
+  supports routing policies like latency-based, failover, and geolocation
+- **Route 53 Hands-On — Domain Registration:** practical walkthrough of registering
+  a domain and configuring DNS records — connects networking theory to real deployment
+- **Amazon CloudFront:** global Content Delivery Network — caches content at Edge
+  Locations worldwide to reduce latency and serve users from the nearest location
+
+>**What I understood**
+>- VPC is not optional — every resource on AWS lives inside one; understanding
+  public vs. private subnets and security groups is foundational for any architecture
+>- Route 53 + CloudFront is the standard pattern for globally distributed, low-latency
+  web applications — know this pairing for both the exam and real projects
+>- CloudFront is the answer whenever an exam question mentions "reduce latency for
+  global users" — it pulls content to the edge, not from the origin on every request
+
+**Application Integration**
+
+- **Amazon SNS (Simple Notification Service):** managed pub/sub messaging —
+  one message published to a topic fans out to multiple subscribers
+  (email, Lambda, SQS, HTTP endpoints) simultaneously
+- **Amazon SQS (Simple Queue Service):** managed message queue — decouples
+  producers and consumers; messages wait in the queue until a consumer processes them;
+  guarantees at-least-once delivery
+
+>**What I understood**
+>- SNS vs. SQS is a classic exam question: SNS = fan-out to many subscribers at once;
+  SQS = one consumer processes each message from a queue — different patterns,
+  different use cases
+>- SNS + SQS together is the standard decoupled architecture pattern on AWS —
+  SNS fans out, SQS buffers; combining both enables resilient, scalable pipelines
+
+---
+
 ## April 27, 2026
 
 **AWS | CLF-C02 — Day 3: Sections 8–11 completed + LeetCode SQL 50**

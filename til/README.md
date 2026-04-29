@@ -84,12 +84,28 @@ The full course curriculum is now done. Next step: practice tests to 80%+ and bo
   for processing, Kinesis Firehose for delivery; know the difference for the exam
 >- EMR is for large-scale batch processing with Spark or Hadoop — heavier than Athena
   but necessary when transformation logic is complex or data volumes are extreme
+
+**CLF-C02 | Exam Prep — Compute Category**
+
+- Built a complete CLF-C02 cheat sheet covering 85 AWS services — one memory sentence
+  per service, organized by category; the single reference doc for final exam review
+- Scored 85% on the Compute category quiz first attempt! — 3 rounds of 20 questions each,
+  generated with Perplexity Pro (Claude)
+- Rule established: 80%+ = category cleared, move on; below 70% = repeat the category
+- Exam target date locked in: May 7–10, 2026
+
+>**What I understood**
+>- 85% on Compute on the first quiz attempt confirms the course content landed —
+  EC2 pricing models, instance types, and the serverless distinctions are solid
+>- The cheat sheet with one sentence per service is the most efficient recall tool —
+  it forces distillation of each service down to its single defining characteristic
+>- Tomorrow: Storage + Database category — 3 x 20 questions to validate or expose gaps
 ```
 Progress | AWS CLF-C02
 - Course: René Fürst AWS CLF-C02 — COMPLETED ✅ (All 17 Sections, Lectures 1–83)
 - Course completed: April 29, 2026
 - Next: Full practice exam sessions → push to 80%+ consistently → book exam
-- Target exam date: mid-May 2026
+- Target exam date: May 7–10, 2026
 ```
 
 ---

@@ -7,6 +7,93 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 29, 2026
+
+**AWS | CLF-C02 — Day 5: Sections 15–17 completed — René Fürst Course Finished ✅**
+
+Completed the final three sections of the René Fürst AWS CLF-C02 course today.
+Sections 15–17 covered Developer Tools, AWS Migration, and AWS Analytics —
+the last building blocks before moving into full exam practice mode.
+The full course curriculum is now done. Next step: practice tests to 80%+ and book the exam.
+
+**Developer Tools**
+
+- **AWS CodeStar:** unified interface to manage software development activities —
+  brings together CodeCommit, CodeBuild, CodeDeploy, and CodePipeline in one place
+- **AWS CodeCommit:** managed Git-based source control repository on AWS —
+  the AWS-native alternative to GitHub for storing and versioning code
+- **AWS CodeBuild:** fully managed build service — compiles source code, runs tests,
+  and produces deployable artifacts without managing build servers
+- **AWS CodeDeploy:** automated deployment service — deploys applications to EC2,
+  Lambda, or on-premise servers with rollback support on failure
+- **AWS CodePipeline:** continuous delivery service — orchestrates the full
+  build → test → deploy pipeline end to end, triggered on every code change
+- **AWS X-Ray:** distributed tracing service — visualizes requests as they travel
+  through microservices and identifies performance bottlenecks and errors
+
+>**What I understood**
+>- CodePipeline is the orchestrator — it calls CodeBuild to build and CodeDeploy to deploy;
+  understanding which tool does what in the CI/CD chain is a guaranteed exam question
+>- X-Ray is the answer whenever an exam question asks about tracing, debugging, or
+  performance visibility across microservices — it maps the full request path
+>- These tools together form the complete AWS-native DevOps stack — relevant not just
+  for the exam but directly applicable to pipeline work on this roadmap
+
+**AWS Migration**
+
+- **AWS Application Discovery Service:** scans on-premise infrastructure to collect
+  server configurations, usage data, and dependencies — maps what needs to migrate
+  before the migration starts
+- **AWS Server Migration Service (SMS):** automates the migration of on-premise
+  virtual machines to AWS — incremental replication minimizes downtime
+- **AWS Snowball:** physical data transfer device — ships petabyte-scale data
+  to AWS when network transfer is too slow or expensive; Snowball Edge adds
+  compute capability on the device itself
+- **AWS Migration Hub:** central dashboard to track the status of all migrations
+  across multiple AWS and partner tools in one place
+
+>**What I understood**
+>- Snowball is the answer whenever an exam question mentions large data volumes and
+  slow or limited network connectivity — physical transfer beats network transfer at scale
+>- Application Discovery Service comes before migration; SMS and Migration Hub manage
+  the migration itself — the sequence matters for exam questions
+>- Migration is a real roadmap topic: understanding how data moves into AWS is
+  foundational for any data engineering pipeline that starts from on-premise sources
+
+**AWS Analytics**
+
+- **Amazon Athena:** serverless interactive query service — runs SQL queries directly
+  on data stored in S3; no infrastructure to manage, pay per query
+- **Amazon EMR (Elastic MapReduce):** managed big data platform — runs Apache Spark,
+  Hadoop, and Hive on scalable EC2 clusters for large-scale data processing
+- **Amazon Elasticsearch (OpenSearch):** managed search and analytics engine —
+  indexes and queries log data, metrics, and full-text content in near real time
+- **Amazon Kinesis:** real-time data streaming — ingest, process, and analyze
+  streaming data from IoT devices, application logs, and clickstreams at scale
+- **Amazon QuickSight:** cloud-native business intelligence tool — creates
+  interactive dashboards and visualizations from data stored in AWS services
+- **AWS Data Pipeline:** managed ETL service — moves and transforms data between
+  AWS compute and storage services on a defined schedule
+- **AWS Kinesis — Deep Dive:** Kinesis Data Streams for custom real-time processing,
+  Kinesis Data Firehose for zero-code delivery to S3, Redshift, or Elasticsearch
+
+>**What I understood**
+>- Athena + S3 is the serverless analytics pattern — no cluster to spin up,
+  no database to load; query raw files in S3 directly with SQL; critical for this roadmap
+>- Kinesis is the AWS answer for real-time streaming data — Kinesis Data Streams
+  for processing, Kinesis Firehose for delivery; know the difference for the exam
+>- EMR is for large-scale batch processing with Spark or Hadoop — heavier than Athena
+  but necessary when transformation logic is complex or data volumes are extreme
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅ (All 17 Sections, Lectures 1–83)
+- Course completed: April 29, 2026
+- Next: Full practice exam sessions → push to 80%+ consistently → book exam
+- Target exam date: mid-May 2026
+```
+
+---
+
 ## April 28, 2026
 
 **AWS | CLF-C02 — Day 4: Sections 12–14 completed**

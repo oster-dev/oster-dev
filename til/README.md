@@ -7,6 +7,70 @@ TIL Started: April 13, 2026.
 
 ---
 
+## April 30, 2026
+
+**AWS | CLF-C02 — Day 6: Storage, Databases & First Full Mock Test**
+
+Continued CLF-C02 exam prep with category quizzes on Storage and Databases,
+then completed the first official 65-question AWS practice test — not to pass,
+but to map exactly where the gaps are before the exam on May 7.
+
+**CLF-C02 | Exam Prep — Storage & Database Category**
+
+- **Storage & Database Basics quiz:** 85% on first attempt — same threshold as Compute,
+  confirming that core storage and database concepts from the course have landed
+- **S3 Object Lock (WORM):** Write Once Read Many — objects cannot be modified or deleted
+  for a defined retention period; used for compliance and regulatory data protection
+- **CRR vs. SRR:** Cross-Region Replication copies S3 objects to a bucket in a different
+  AWS region; Same-Region Replication copies within the same region — different use cases,
+  same mechanism
+- **Aurora vs. RDS:** both are relational managed databases — Aurora is re-architected
+  for higher performance and availability; RDS is the standard managed SQL option
+- **Snow Family:** Snowcone = small, portable, 8TB; Snowball Edge = mid-range with
+  compute capability; Snowmobile = truck-scale, exabyte migration — size determines choice
+- **ElastiCache vs. RDS Read Replicas:** ElastiCache is an in-memory cache for
+  microsecond reads; RDS Read Replicas distribute SQL query load — different layers,
+  both reduce primary database pressure
+
+>**What I understood**
+>- The Snow Family size ladder is a guaranteed exam question — memorize Snowcone →
+  Snowball Edge → Snowmobile as small → medium → massive
+>- ElastiCache and RDS Read Replicas both improve read performance but at different
+  layers — ElastiCache bypasses the database entirely, Read Replicas scale within it
+>- Quiz tool errors on the Details round exposed a real lesson: when the tool contradicts
+  known correct answers, switch methods — manual chat-based Q&A is more reliable
+
+**CLF-C02 | First Full Mock Test — 65 Questions**
+
+- **Result: 35% (23/65) in 50 minutes** — first full official practice test,
+  taken before all topic areas were reviewed; the score is a diagnostic, not a grade
+- **Billing & Pricing: 9%** — Priority #1; almost no correct answers,
+  this is the biggest lever before the exam
+- **Security & Compliance: 33%** — Priority #2; IAM fundamentals are solid
+  but compliance-specific services need targeted study
+- **Technology: 41%** — mid-range; service-level details need sharpening
+- **Cloud Concepts: 47%** — closest to passing threshold; foundational knowledge
+  from the course is present, execution needs refinement under exam conditions
+
+>**What I understood**
+>- 35% on a full mock test is not a failure — it is the most honest map of exactly
+  where time should go between now and May 7; without this test, those gaps stay hidden
+>- Billing & Pricing at 9% means it needs to be treated as a standalone subject, not an afterthought
+>- 50 minutes for 65 questions is on pace — time management is not the issue;
+  knowledge gaps in Billing and Compliance are the only thing to fix
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅
+- Compute quiz: 85% ✅
+- Storage & Database Basics quiz: 85% ✅
+- First full mock test: 35% (23/65) — gaps mapped
+- Priority #1: Billing & Pricing (9%) → tonight: 40 questions
+- Priority #2: Security & Compliance (33%) → tomorrow: 40  questions → next mock test 65 questions for new gap mapping. 
+- Target exam date: May 7, 2026
+```
+
+---
+
 ## April 29, 2026
 
 **AWS | CLF-C02 — Day 5: Sections 15–17 completed — René Fürst Course Finished ✅**

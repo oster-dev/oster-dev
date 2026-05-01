@@ -7,6 +7,109 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 1, 2026
+
+**AWS | CLF-C02 — Exam Sprint Day 1: Patterns Recognized, Strategy Built**
+
+Today was Day 1 of the final 7-day sprint toward the AWS Certified Cloud Practitioner
+exam on May 7, 2026. The day consisted of two full practice exams from the Stéphane Maarek
+course format and the development of a concrete study strategy for the remaining days.
+
+**Practice Simulations — Maarek (Practice Test 1 & 2)**
+
+Both tests were completed in full. Time was not a limiting factor on either simulation —
+both were finished well under the 90-minute limit.
+
+| Test | Score | Note |
+|---|---|---|
+| Practice Test 1 — Attempt 2 | **64%** (42/65) | Previously seen questions — time no issue |
+| Practice Test 2 — Attempt 1 | **40%** (26/65) | New services not covered in the René Fürst course |
+
+The weak result on the second test had a concrete cause: the René Fürst course used to start
+CLF-C02 prep is outdated and does not cover many of the services currently tested on the exam.
+It consumed more time than it delivered knowledge. Switching to Maarek simulations and
+an independent keyword-based strategy was the right call.
+
+>**What I understood**
+>- The René Fürst course built a foundation but left real gaps — the exam tests services
+  the course never mentioned; Maarek simulations are the correct benchmark
+>- 64% on a repeat test and 40% on a fresh test is not a contradiction — it shows
+  that familiarity with questions inflates scores, and new material exposes real gaps
+>- Time is not the problem at this exam — finishing well under 90 minutes on both tests
+  confirms that the only variable left to optimize is knowledge depth
+
+**Core Problem Identified: CLF-C02 Is Not Rushable**
+
+The exam does not test memorized facts. Nearly all answer options are technically correct —
+what is evaluated is which answer best fits the described use case.
+
+- Almost every question has multiple plausible answers — the difference is always in the detail
+- Example: SQS, SNS, and EventBridge all do "messaging" — but for entirely different scenarios
+- Classical memorization is ineffective; the exam demands conceptual understanding
+  of where each service ends and the next one begins
+
+>**What I understood**
+>- "Which service does X?" is never the real question — "Which service fits this specific
+  scenario best?" is; that distinction changes how every study session should be structured
+>- Recognizing the boundary conditions between similar services is the skill the exam tests —
+  not the ability to list what a service does in isolation
+>- This is actually good news: once the keyword patterns click, the same logic applies
+  to every question category across the entire exam
+
+**Strategy Built: Keyword Mapping**
+
+The most effective pattern identified today: every exam question contains one or more
+**keywords** that point directly to the correct service.
+
+| Keyword in the question | Service |
+|---|---|
+| `"decouple"`, `"queue"`, `"async"`, `"one receiver"` | **Amazon SQS** |
+| `"broadcast"`, `"many receivers"`, `"push"`, `"fan-out"` | **Amazon SNS** |
+| `"event-driven"`, `"trigger between services"` | **Amazon EventBridge** |
+| `"who did what?"`, `"audit log"`, `"API calls"` | **AWS CloudTrail** |
+| `"suspicious activity"`, `"threat detection"` | **Amazon GuardDuty** |
+| `"scan vulnerabilities"`, `"CVE"`, `"vulnerability"` | **Amazon Inspector** |
+| `"PII in S3"`, `"GDPR"`, `"detect sensitive data"` | **Amazon Macie** |
+| `"TAM"`, `"Technical Account Manager"` | **Enterprise Support only** |
+| `"budget alert"`, `"cost limit"` | **AWS Budgets** (not Cost Explorer) |
+| `"analyze costs"`, `"spending over last months"` | **AWS Cost Explorer** |
+
+The same keyword logic resolves the most common service confusions:
+
+- **CloudTrail vs. CloudWatch vs. Config:** "Who did what?" → CloudTrail · "Metrics/performance?" → CloudWatch · "Configuration changes?" → Config
+- **Shield vs. WAF:** "DDoS Layer 3/4?" → Shield · "SQL injection / XSS / HTTP attacks?" → WAF
+- **Direct Connect vs. VPN:** "Dedicated physical line?" → Direct Connect · "Secure internet tunnel?" → VPN
+
+>**What I understood**
+>- Keyword mapping converts ambiguous multi-choice questions into pattern recognition —
+  once the signal words are internalized, the correct answer surfaces before finishing the question
+>- Managed services are patched by AWS (RDS); EC2 OS is patched by the customer —
+  this is the Shared Responsibility Model applied to the most common exam scenario
+>- TAM exists exclusively in the Enterprise Support Plan — Business Support has no TAM;
+  this distinction appears on almost every Support Plan question
+
+**Roadmap Context**
+
+The CLF-C02 exam was originally planned for the end of May.
+The course started April 25, 2026 — the exam is May 7, 2026.
+That is under two weeks from zero to certified.
+
+This puts me significantly ahead of the original roadmap schedule. With the right
+approach — keyword signals, use-case differentiation, error review over blind clicking —
+passing on May 7 is realistic, and the next step toward AWS Certified Data Engineer – Associate
+can begin earlier than planned.
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅
+- Practice Test 1 (Maarek, Attempt 2): 64% (42/65)
+- Practice Test 2 (Maarek, Attempt 1): 40% (26/65) — new services, gaps mapped
+- Strategy: keyword mapping per service category — cheat sheet built
+- Next: Practice Test 3 + Billing & Pricing deep dive
+- Target exam date: May 7, 2026
+```
+
+---
+
 ## April 30, 2026
 
 **AWS | CLF-C02 — Day 6: Storage, Databases & First Full Mock Test**

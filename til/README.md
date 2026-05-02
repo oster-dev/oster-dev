@@ -7,6 +7,48 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 2, 2026
+
+**AWS | CLF-C02 — Exam Sprint Day 2: Practice Tests 3 & 4**
+
+Two more full Maarek practice tests completed today — both first attempts on fresh
+question sets. Scores are trending in the right direction heading into exam week.
+
+**Practice Simulations — Maarek (Practice Test 3 & 4)**
+
+| Test | Score | Note |
+|---|---|---|
+| Practice Test 3 — Attempt 1 | **67%** | First attempt, new questions |
+| Practice Test 4 — Attempt 1 | **62%** | First attempt, new questions |
+
+>**What I understood**
+>- The upward trend from 40% → 62–67% on first attempts reflects real consolidation,
+  not score inflation from re-exposure to the same questions
+>- Being confronted with unseen questions and immediate feedback is deliberately harder
+  than re-reading material — but it is the only method that gives an honest picture
+  of what is actually retained; from experience with theory exams, this approach
+  consistently outperforms passive review
+>- The AWS service scope is broader than expected — but each test surfaces fewer
+  new unknowns than the one before, which means the gaps are closing
+
+**Exam Date: Personal Challenge**
+
+The roadmap allows until May 30 for CLF-C02. The exam is booked for May 7 —
+under two weeks from course start to certified. May 30 is the backup, May 7 is the target.
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅
+- Practice Test 1 (Maarek, Attempt 2): 64% (42/65)
+- Practice Test 2 (Maarek, Attempt 1): 40% (26/65) — new services, gaps mapped
+- Practice Test 3 (Maarek, Attempt 1): 67% ✅
+- Practice Test 4 (Maarek, Attempt 1): 62%
+- Strategy: keyword mapping + unseen question exposure for honest feedback
+- Next: Practice Tests 5 & 6 → close remaining gaps → exam May 7
+- Target exam date: May 7, 2026
+```
+
+---
+
 ## May 1, 2026
 
 **AWS | CLF-C02 — Exam Sprint Day 1: Patterns Recognized, Strategy Built**

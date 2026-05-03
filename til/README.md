@@ -7,6 +7,50 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 3, 2026
+
+**AWS | CLF-C02 — Exam Sprint Day 3: Practice Tests 5 & 6**
+
+Two more Maarek practice tests completed today. Test 6 crossed the 70% passing
+threshold for the first time — a meaningful milestone four days out from the exam.
+
+**Practice Simulations — Maarek (Practice Test 5 & 6)**
+
+| Test | Score | Note |
+|---|---|---|
+| Practice Test 5 — Attempt 1 | **59%** | Dip — new service clusters exposed |
+| Practice Test 6 — Attempt 1 | **71%** ✅ | First test above passing threshold |
+
+>**What I understood**
+>- Test 5 dipping to 59% before Test 6 hitting 71% is not a contradiction —
+  each test covers a different service distribution; the overall trend is upward
+>- With each additional test it becomes clearer how outdated the René Fürst course was —
+  a fair estimate is that it covers roughly 60% of what the current CLF-C02 actually tests;
+  it cannot be recommended as a standalone prep resource for this exam
+>- 71% above the 70% passing line confirms the keyword strategy and feedback-driven
+  approach are working — the remaining days are about consistency, not new methods
+
+**Plan to May 7**
+
+Continuous practice tests from here until exam day — no new theory, no re-reading notes.
+Every remaining session is a full 65-question simulation, reviewed for gaps immediately after.
+The exam gets attempted when the pattern feels consistent, not when every service is memorized.
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅
+- Practice Test 1 (Maarek, Attempt 2): 64% (42/65)
+- Practice Test 2 (Maarek, Attempt 1): 40% (26/65)
+- Practice Test 3 (Maarek, Attempt 1): 67% 
+- Practice Test 4 (Maarek, Attempt 1): 62%
+- Practice Test 5 (Maarek, Attempt 1): 59%
+- Practice Test 6 (Maarek, Attempt 1): 71%
+- Next: continuous practice tests until May 7 → consistent 80%+ → sit the exam
+- Target exam date: May 7, 2026
+```
+
+
+---
+
 ## May 2, 2026
 
 **AWS | CLF-C02 — Exam Sprint Day 2: Practice Tests 3 & 4**
@@ -39,8 +83,8 @@ under two weeks from course start to certified. May 30 is the backup, May 7 is t
 Progress | AWS CLF-C02
 - Course: René Fürst AWS CLF-C02 — COMPLETED ✅
 - Practice Test 1 (Maarek, Attempt 2): 64% (42/65)
-- Practice Test 2 (Maarek, Attempt 1): 40% (26/65) — new services, gaps mapped
-- Practice Test 3 (Maarek, Attempt 1): 67% ✅
+- Practice Test 2 (Maarek, Attempt 1): 40% (26/65)
+- Practice Test 3 (Maarek, Attempt 1): 67% 
 - Practice Test 4 (Maarek, Attempt 1): 62%
 - Strategy: keyword mapping + unseen question exposure for honest feedback
 - Next: Practice Tests 5 & 6 → close remaining gaps → exam May 7

@@ -7,6 +7,55 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 4, 2026
+
+**AWS | CLF-C02 — Exam Sprint Day 4: Tests 1 & 2 Repeated**
+
+Three full runs each through Practice Tests 1 and 2 today — focusing on locking in
+the patterns behind previously missed questions before exam day on May 7.
+
+**Practice Simulations — Maarek (Tests 1 & 2 Repeated)**
+
+| Test | Best Score | Note |
+|---|---|---|
+| Practice Test 1 — Attempt 3 | **88%** | Best result to date |
+| Practice Test 2 — Attempt 3 | **85%** | Consistent above passing threshold |
+
+>**What I understood**
+>- Repeating tests with known questions is a valid method when the goal is pattern
+  reinforcement — the CLF-C02 draws from a finite service set and similar scenario
+  framings appear on the real exam; recognizing the pattern matters as much as
+  knowing the answer cold
+>- 88% and 85% on repeated runs show that the keyword-to-service mapping is now
+  instinctive for the majority of question types — the remaining gaps are edge cases,
+  not foundational blind spots
+>- The Udemy CLF-C02 exam purchase includes a 'free' second attempt — that removes pressure completely;
+  the goal is to pass on May 7, but if not, the backup attempt is already paid for
+
+**Mindset Going Into May 7**
+
+The priority is simple: pass the exam and move forward on the roadmap.
+With a free retake already secured, May 7 is an attempt with no downside.
+Passing CLF-C02 ahead of schedule extends the roadmap buffer significantly —
+more time for the AWS Solutions Architect Associate and the production-grade
+projects that matter most for the L5 target.
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅
+- Practice Test 1 (Maarek, Attempt 2): 64% (42/65)
+- Practice Test 2 (Maarek, Attempt 1): 40% (26/65)
+- Practice Test 3 (Maarek, Attempt 1): 67%
+- Practice Test 4 (Maarek, Attempt 1): 62%
+- Practice Test 5 (Maarek, Attempt 1): 59%
+- Practice Test 6 (Maarek, Attempt 1): 71%
+- Practice Test 1 (Maarek, Attempt 3): 88% ✅
+- Practice Test 2 (Maarek, Attempt 3): 85% ✅
+- Next: final practice runs May 5–6 → sit the exam May 7
+- Target exam date: May 7, 2026 (free retake secured)
+```
+
+---
+
 ## May 3, 2026
 
 **AWS | CLF-C02 — Exam Sprint Day 3: Practice Tests 5 & 6**

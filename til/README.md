@@ -7,6 +7,69 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 5, 2026
+
+**AWS | CLF-C02 — Exam Sprint Day 5: Peak Scores + Language Decision**
+
+Three practice tests completed today — all three above 80%, with Test 1 hitting 93%.
+Two days out from the exam, scores are at their highest point of the entire sprint.
+The exam will be taken in English.
+
+**Practice Simulations — Maarek**
+
+| Test | Score | Note |
+|---|---|---|
+| Practice Test 1 — Attempt 4 | **93%** ✅ | Highest score of the sprint |
+| Practice Test 2 — Attempt 4 | **88%** ✅ | Consistent above threshold |
+| Practice Test 3 — Attempt 3 | **84%** ✅ | Third run, solidly above passing |
+
+>**What I understood**
+>- 93%, 88%, and 84% across three tests in a single day is the clearest signal yet
+  that the patterns are locked in — not just for familiar questions but for the
+  reasoning process behind them
+>- All three scores are well above the 70% passing threshold; the keyword-to-service
+  mapping that was built on Day 1 of the sprint is now running automatically
+>- Two days of consistent practice remain before May 7 — the goal is maintenance,
+  not cramming
+
+**Language Decision: Exam in English**
+
+The German exam slots are only available between 00:00 and 05:00 — not a viable option.
+The exam will be taken in English, and all remaining practice tests will be done in English.
+
+Beyond scheduling, English is genuinely the better choice for this exam:
+German AWS terminology makes questions visually dense and harder to parse quickly —
+long compound words create the same readability problem as deeply nested SQL subqueries.
+English keeps each question clean and scannable, which matters under exam conditions.
+
+>**What I understood**
+>- Language affects cognitive load under time pressure — even as a native German speaker,
+  English reads faster for technical content because the terms are shorter and unambiguous
+>- Switching practice tests to English two days before the exam is the right call;
+  consistency between practice format and exam format removes one variable on test day
+```
+Progress | AWS CLF-C02
+- Course: René Fürst AWS CLF-C02 — COMPLETED ✅
+- Practice Test 1 (Maarek, Attempt 2): 64% (42/65)
+- Practice Test 2 (Maarek, Attempt 1): 40% (26/65)
+- Practice Test 3 (Maarek, Attempt 1): 67%
+- Practice Test 4 (Maarek, Attempt 1): 62%
+- Practice Test 5 (Maarek, Attempt 1): 59%
+- Practice Test 6 (Maarek, Attempt 1): 71%
+- Practice Test 1 (Maarek, Attempt 3): 88% ✅
+- Practice Test 2 (Maarek, Attempt 3): 85% ✅
+- Practice Test 1 (Maarek, Attempt 4): 93% ✅
+- Practice Test 2 (Maarek, Attempt 4): 88% ✅
+- Practice Test 3 (Maarek, Attempt 3): 84% ✅
+- Exam language: English
+- Next: final practice runs May 6 → sit the exam May 7
+- Target exam date: May 7, 2026 (free retake secured)
+```
+---
+
+
+---
+
 ## May 4, 2026
 
 **AWS | CLF-C02 — Exam Sprint Day 4: Tests 1 & 2 Repeated**

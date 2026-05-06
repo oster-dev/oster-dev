@@ -7,6 +7,47 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 6, 2026
+
+**AWS | CLF-C02 — PASSED ✅ Certified Cloud Practitioner**
+
+Unexpected end to the sprint... in the best possible way!!
+After 11 days from course start to exam day, the AWS Certified Cloud Practitioner
+CLF-C02 exam was passed today at 08:56pm, completed in 40 minutes.
+
+**The Final Day**
+
+After days of Maarek practice simulations, today brought a different move:
+discovered **[EXAM REVIEWER] AWS Certified Cloud Practitioner CLF-C02 by Neal Davis on Udemy**
+— a focused, clean review of all CLF-C02 topics that covered the full scope in exactly
+the right format for a final pass before exam day, spontainiously booked the exam today. Full shoutout to Neal Davis —
+it was the perfect capstone review resource.
+
+The decision to stop simulating and just sit the exam came from a simple feeling:
+the material was solid, the patterns were locked in, and another practice test
+would not have added anything. That instinct was right.
+
+>**What I understood**
+>- Knowing when to stop preparing and just go is a skill — more repetition past a
+  certain point adds anxiety, not knowledge; today was the right moment to pull the trigger
+>- The CLF-C02 is broad by design — it maps the entire AWS ecosystem at a conceptual level;
+  it was the necessary foundation for everything that comes next on this roadmap,
+  even if the content felt general rather than deeply technical
+>- 40 minutes for a 65-question exam that allows 90 minutes confirms what the
+  practice tests showed all along — time was never the variable, knowledge depth was
+
+**Roadmap Context**
+
+April 25 → May 6: **11 days from zero to AWS Certified.**
+The roadmap originally allocated significantly more time for this certification.
+That buffer now flows forward into the Data & Feature Infrastructure work —
+the parts of the roadmap that actually matter for the L5 target.
+
+The pace on this roadmap is insane. That does not change... it accelerates!
+
+
+---
+
 ## May 5, 2026
 
 **AWS | CLF-C02 — Exam Sprint Day 5: Peak Scores + Language Decision**

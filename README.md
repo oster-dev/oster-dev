@@ -61,7 +61,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 ## Projects
 
-**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
+**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
 
 **[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
 

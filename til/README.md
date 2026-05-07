@@ -7,6 +7,86 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 7, 2026
+
+**Docker | Sections 2 & 3 + Jikan Feature Pipeline Containerized**
+
+First day of Docker. Completed Section 2 fully and worked
+through Section 3 up to Lecture 50, then immediately applied everything by containerizing
+the Jikan Feature Pipeline built in Month 1.
+
+**Section 2 — Docker Images & Containers**
+
+- **Images vs. Containers:** images are read-only blueprints; containers are running
+  instances — you never modify an image, you run a container from it
+- **Dockerfile basics:** `FROM`, `WORKDIR`, `COPY`, `RUN`, `CMD` — the full build
+  sequence to go from source code to a runnable image
+- **Image Layers & Caching:** each Dockerfile instruction creates a layer — Docker
+  caches unchanged layers on rebuild; layer order directly impacts build speed
+- **Container lifecycle:** pull, run, stop, restart, delete — plus attached vs.
+  detached mode (`-d`) and interactive mode (`-it`) for debugging
+- **Naming & Tagging:** `--name` for containers, `-t name:tag` for images —
+  essential for managing multiple versions and pushing to DockerHub
+- **DockerHub:** `docker push` and `docker pull` — images are portable artifacts
+  that run identically on any machine with Docker installed
+
+>**What I understood**
+>- Layer caching is the first real performance concept in Docker — putting `COPY requirements.txt`
+  before `COPY . .` means dependency installation only reruns when requirements change,
+  not on every code change
+>- The difference between attached and detached mode matters immediately in practice —
+  detached is the production default, attached is for debugging
+>- DockerHub is to Docker images what GitHub is to code — same mental model, same workflow
+
+**Section 3 — Managing Data & Volumes**
+
+- **Data categories:** Application Data (baked into the image), Temporary Data
+  (in-memory during runtime), Persistent Data (must survive container stop)
+- **The core problem:** by default all container data is lost when the container stops —
+  volumes are the solution
+- **Anonymous vs. Named Volumes:** anonymous volumes are managed by Docker and not
+  reusable; named volumes (`-v name:/app/path`) persist across container runs
+  and are the standard approach for persistent data
+
+>**What I understood**
+>- Every container is ephemeral by default — this is a feature, not a bug;
+  volumes are the explicit decision to make specific data persistent
+>- Named volumes are the correct default for any data that needs to outlive a container —
+  anonymous volumes exist but should not be relied on for anything important
+
+**Project | Jikan Feature Pipeline — Containerized**
+
+Took the Jikan REST API pipeline from Month 1 and fully containerized it today —
+applying every concept from Sections 2 & 3 immediately in a real project.
+
+- **Dockerfile:** Python 3.11-slim base, `requirements.txt` install, pipeline execution via `CMD`
+- **Pipeline:** fetches Top Anime from the Jikan API, validates all records with
+  None-protection, applies feature engineering — score flags, popularity buckets, genre metrics
+- **Timestamped output:** every `docker run` produces a new JSON file
+  (`feature_records_20260507_140022.json`) — no overwrites, full run history
+- **Volume mount:** output lands directly in the local `output/` folder via `-v`
+
+```bash
+docker build -t jikan-feature-pipeline .
+docker run -v "/Users/nicoostermann/Documents/Professional Projekte/jikan-feature-pipeline/output":/app/output jikan-feature-pipeline
+```
+
+>**What I understood**
+>- `requirements.txt` contains only external libraries (`requests`) — `json`, `pathlib`,
+  and `datetime` are Python built-ins and do not belong there
+>- Colons in folder names break `$(pwd)` in Docker volume mounts — absolute path
+  is the reliable workaround when `$(pwd)` fails
+>- Building and running a real pipeline in Docker on Day 1 of the Docker section
+  is exactly the right pace — theory without immediate application does not stick
+
+**GitHub**
+
+Pipeline pushed to `github.com/oster-dev/projects` under `jikan-feature-pipeline/`.
+README updated with full Docker documentation. `.gitignore` configured for
+`output/`, `.venv/`, and `__pycache__/`.
+
+---
+
 ## May 6, 2026
 
 **AWS | CLF-C02 — PASSED ✅ Certified Cloud Practitioner**

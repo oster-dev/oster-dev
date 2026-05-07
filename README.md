@@ -70,9 +70,9 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | Area | Detail | Status |
 |---|---|---|
 | Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Completed |
-| SQL | Window Functions · CTEs · Query Optimization | 🔄 In Progress |
+| SQL | Window Functions · CTEs · Query Optimization | ✅ Completed |
 | Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
-| AWS CLF-C02 | Cloud Practitioner Certification Prep | 🔄 In Progress |
+| AWS CLF-C02 | Cloud Practitioner Certification Prep | ✅ Passed |
 | Docker | Dockerfile · Compose · Networking · Volumes | 🔄 In Progress |
 | Functional Programming | map · filter · reduce · Pure Functions | 🔄 In Progress |
 | Spark + Scala literacy | Distributed computing · Reading JVM code | 📅 Month 3 |
@@ -112,7 +112,7 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 
 | Certification | Target | Status |
 |---|---|---|
-| Cloud Practitioner · CLF-C02 | Month 2 · May 2026 | 📅 Upcoming |
+| Cloud Practitioner · CLF-C02 | Month 2 · May 2026 | ✅ [Passed](https://www.credly.com/badges/2c2b32e6-4bc9-4e60-ad56-3cf7bc2775bd/public_url) |
 | Data Engineer Associate · DEA-C01 | Month 3–4 · June/July 2026 | 📅 Upcoming |
 | Solutions Architect Associate · SAA-C03 | Month 5–6 · Aug/Sep 2026 | 📅 Upcoming |
 | ML Engineer Associate · MLA-C01 | Month 7 · October 2026 | 📅 Upcoming |

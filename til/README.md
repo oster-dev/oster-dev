@@ -7,6 +7,105 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 8, 2026
+
+**Docker | Sections 3–6 completed — Volumes, Networking, Multi-Container & Compose**
+
+Four sections completed in a single day!!
+Volumes, networking, multi-container architecture, and Docker Compose are all done.
+Applied Docker Compose immediately to the Jikan pipeline.
+
+**Section 3 — Volumes & Bind Mounts**
+
+- **Bind Mounts:** mount a local folder directly into a container (`-v $(pwd):/app`) —
+  code changes reflect instantly without rebuilding the image; development standard
+- **Read-Only Volumes:** `:ro` flag prevents the container from writing back to the
+  mounted folder — used when the container should only read, never modify
+- **COPY vs. Bind Mount:** COPY bakes files into the image at build time for production;
+  Bind Mount shares live files from the host at runtime for development
+- **Environment Variables & ARG:** `ENV` sets runtime variables; `ARG` is build-time only —
+  both can be injected via `--env-file .env` or `--build-arg` without hardcoding values
+- **.dockerignore:** prevents `node_modules`, `.git`, and other noise from being
+  copied into the image — as essential as `.gitignore` is for Git
+
+>**What I understood**
+>- The mental model is simple: Bind Mount = live connection to host; Named Volume =
+  persistent storage managed by Docker; Anonymous Volume = temporary, never rely on it
+>- `.dockerignore` is not optional in real projects — copying `node_modules` into an
+  image bloats it and overrides the clean dependency install from `RUN npm install`
+>- ARG vs. ENV is a build-time vs. runtime distinction — ARG values do not exist
+  inside the running container, only during `docker build`
+
+**Section 4 — Networking & Container Communication**
+
+- **Three communication cases:** Container → WWW works out of the box;
+  Container → Host requires `host.docker.internal` instead of `localhost`;
+  Container → Container requires a Docker Network
+- **Docker Networks:** containers on the same network communicate using container
+  names as hostnames — Docker resolves them automatically, no IP management needed
+- **Network Drivers:** `bridge` is the default for single-host setups; `host` removes
+  network isolation; `overlay` connects containers across multiple hosts
+
+>**What I understood**
+>- `host.docker.internal` is the fix for every "connection refused" error when a
+  containerized app tries to reach a service running on the host machine
+>- Container names as DNS hostnames inside a network is one of Docker's most
+  practically useful features — it makes service discovery in multi-container
+  setups completely configuration-free
+
+**Section 5 — Multi-Container Apps**
+
+- Separated MongoDB, Node API, and React frontend into three independent containers —
+  each with a single responsibility, each replaceable without touching the others
+- Named Volume for MongoDB ensures data persists across container restarts
+- Bind Mounts on Node and React containers enable live code updates during development
+- All three containers connected via a shared Docker Network — communication by name
+
+>**What I understood**
+>- Single Responsibility per container is not just good practice — it is what makes
+  the entire architecture testable, scalable, and replaceable piece by piece
+>- A multi-container setup without a shared network is just isolated processes;
+  the network is what makes them a system
+
+**Section 6 — Docker Compose**
+
+- **Docker Compose** orchestrates multiple containers from a single `docker-compose.yml` —
+  one file replaces every long `docker run` command with flags
+- `docker compose up` builds images if needed and starts all services;
+  `docker compose down` stops and removes containers and networks cleanly
+- Compose automatically creates a shared network for all defined services —
+  container names become DNS hostnames within that network by default
+
+>**What I understood**
+>- Docker Compose is the production-ready way to manage multi-container setups —
+  everything that was done manually with `docker run` flags is now declarative and
+  version-controlled in a single file
+>- `docker compose up --build` is the correct habit during development — it ensures
+  the image always reflects the latest code, not a cached layer from hours ago
+
+**Project | Jikan Pipeline — Docker Compose Applied**
+
+Converted the Jikan Feature Pipeline from a manual `docker run` command to a
+full Docker Compose setup:
+
+```yaml
+version: "3.8"
+services:
+  jikan-pipeline:
+    build: .
+    volumes:
+      - ./output:/app/output
+```
+
+```bash
+docker compose up
+```
+
+One command replaces the full `docker run -v ...` string — cleaner, reproducible,
+and ready to extend with additional services when the pipeline grows.
+
+---
+
 ## May 7, 2026
 
 **Docker | Sections 2 & 3 + Jikan Feature Pipeline Containerized**

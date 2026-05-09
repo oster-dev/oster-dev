@@ -74,7 +74,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
 | AWS CLF-C02 | Cloud Practitioner Certification Prep | ✅ Passed |
 | Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
-| Functional Programming | map · filter · reduce · Pure Functions | 🔄 In Progress |
+| Functional Programming | map · filter · reduce · Pure Functions | ✅ Completed |
 | Spark + Scala literacy | Distributed computing · Reading JVM code | 📅 Month 3 |
 | Kafka · Airflow · Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 3–6 |
 

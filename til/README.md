@@ -9,10 +9,11 @@ TIL Started: April 13, 2026.
 
 ## May 9, 2026
 
-**Python | Functional Programming + Jikan Pipeline Refactor + ML Platform Concept**
+**Python | Functional Programming + Pure Functions + Jikan Refactor + ML Platform Concept**
 
-Two more Python concepts locked in today! Functional programming patterns applied directly
-to the Jikan pipeline, plus the first real ML Platform concept: feature immutability.
+Two Python concepts locked in today! Functional programming patterns and pure functions,
+both applied directly to the Jikan pipeline, plus the first real ML Platform concept:
+feature immutability.
 
 **Python | Functional Programming — map(), filter(), reduce()**
 
@@ -33,6 +34,27 @@ to the Jikan pipeline, plus the first real ML Platform concept: feature immutabi
   behind aggregations that collapse a collection into one value
 >- Functional style does not mean lambdas everywhere — complex branching logic belongs
   in named functions; `map()` and `filter()` just call them more cleanly
+
+**Python | Pure Functions**
+
+- A Pure Function follows exactly two rules:
+  1. Same input → always same output (deterministic, no randomness, no external dependency)
+  2. No side effects — nothing outside the function is changed (no global mutation,
+     no file writes, no API calls, no `print()`)
+- `build_feature_record()` and `validate_anime()` in the Jikan pipeline are already
+  Pure Functions — same anime dict in, always same feature record out, nothing mutated outside
+- Pure Functions are trivial to unit test because the output is always predictable —
+  no mocks, no setup, just input → assert output
+- Netflix requires this explicitly: ML pipelines must guarantee that the same input data
+  always produces the same features — determinism at scale is non-negotiable
+
+>**What I understood**
+>- Purity is not an abstract concept — it is what makes a function safe to run in parallel,
+  safe to cache, and safe to test without infrastructure
+>- The Jikan pipeline functions were already pure without explicitly naming them as such —
+  understanding the principle now means it gets applied consciously going forward
+>- Side effects do not disappear — they get pushed to the edges of the pipeline
+  (API fetch, file write) so the transformation core stays pure and predictable
 
 **Python | Jikan Feature Pipeline — Functional Refactor**
 
@@ -81,8 +103,8 @@ feature_records = list(map(build_feature_record, validated_anime))
   everything before that point can be changed; everything after is frozen by design
 >- Immutability is not a constraint, it is a guarantee — it is what makes
   large-scale ML systems reproducible and trustworthy at any point in time
->- Understanding this principle now shapes how the pipeline is structured today —
-  the output JSON per run is already immutable by design via timestamped filenames
+>- The Jikan pipeline output is already immutable by design via timestamped filenames —
+  understanding the principle now makes that an intentional architectural decision
 
 ---
 

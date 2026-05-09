@@ -65,19 +65,20 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 **[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
 
-## **Current Status · Month 2 of 8**
+## **Current Status · Month 3 of 8**
 
 | Area | Detail | Status |
 |---|---|---|
 | Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Completed |
 | SQL | Window Functions · CTEs · Query Optimization | ✅ Completed |
 | Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
-| AWS CLF-C02 | Cloud Practitioner Certification Prep | ✅ Passed |
+| AWS CLF-C02 | Cloud Practitioner Certification | ✅ Passed |
 | Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
-| Functional Programming | map · filter · reduce · Pure Functions | ✅ Completed |
-| Spark + Scala literacy | Distributed computing · Reading JVM code | 📅 Month 3 |
-| Kafka · Airflow · Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 3–6 |
-
+| Functional Programming | map · filter · reduce · Pure Functions · Immutability | ✅ Completed |
+| AWS DEA-C01 | Maarek Course · Data Engineering Associate Prep · Exam | 🔄 In Progress |
+| Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | 🔄 In Progress |
+| Scala literacy | Read + adapt Spark-Scala code · No writing required | 🔄 In Progress |
+| Kafka · Airflow · Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 4–6 |
 <br>
 
 ## **The Roadmap · 8 Months**
@@ -121,7 +122,7 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 
 ## **Monthly Updates & Learning Log**
 
-[Month 1 · April 2026](./monthly-updates/month-01.md) 
+[Month 2 · May 2026](./monthly-updates/month-02.md) 
 
 [Today I Learned — Daily Log](./til/README.md)
 

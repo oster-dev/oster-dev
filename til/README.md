@@ -7,6 +7,85 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 9, 2026
+
+**Python | Functional Programming + Jikan Pipeline Refactor + ML Platform Concept**
+
+Two more Python concepts locked in today! Functional programming patterns applied directly
+to the Jikan pipeline, plus the first real ML Platform concept: feature immutability.
+
+**Python | Functional Programming — map(), filter(), reduce()**
+
+- **`map()`:** applies a function to every element of an iterable — replaces a manual
+  `for` loop with a single declarative expression
+- **`filter()`:** selects elements matching a condition — replaces `for` + `if` + `.append()`
+  with a clean one-liner
+- **`reduce()`:** from `functools` — accumulates an iterable down to a single value;
+  useful for aggregations like total episode count across a dataset
+- **Imperative vs. Functional:** imperative code describes *how* to do something
+  (loop, append, mutate); functional code describes *what* to produce — less state,
+  less room for bugs
+
+>**What I understood**
+>- `map()` + `filter()` together replace the most common data transformation pattern
+  in pipelines — iterate, validate, transform — in a single composable line
+>- `reduce()` is less common in day-to-day pipeline code but explains the mental model
+  behind aggregations that collapse a collection into one value
+>- Functional style does not mean lambdas everywhere — complex branching logic belongs
+  in named functions; `map()` and `filter()` just call them more cleanly
+
+**Python | Jikan Feature Pipeline — Functional Refactor**
+
+Refactored the validation and feature engineering loops in the Jikan pipeline
+from imperative to functional style:
+
+*Before:*
+```python
+validated_anime = []
+for anime in anime_list:
+    cleaned = validate_anime(anime)
+    if cleaned is not None:
+        validated_anime.append(cleaned)
+
+feature_records = []
+for anime in validated_anime:
+    feature_records.append(build_feature_record(anime))
+```
+
+*After:*
+```python
+validated_anime = list(filter(lambda x: x is not None, map(validate_anime, anime_list)))
+feature_records = list(map(build_feature_record, validated_anime))
+```
+
+>**What I understood**
+>- The refactor does not change what the pipeline does — it changes how it reads;
+  declarative code communicates intent immediately without tracing loop state
+>- `validate_anime()` and `build_feature_record()` stay as named functions —
+  they contain branching logic that does not belong in a lambda
+>- This is exactly the kind of incremental improvement that separates a script
+  from production-quality pipeline code
+
+**ML Platform Concept | Immutable Features**
+
+- The pipeline has two distinct phases:
+  - **Phase 1 — Mutable:** raw data → cleaning → validation → feature engineering
+  - **Phase 2 — Immutable:** validated features are written to storage and never overwritten
+- Immutability enables full reproducibility — a model trained on Feature Version 42
+  can always be debugged with the exact same data, even months later
+- This is a core principle of production ML Platform engineering at L5 —
+  without immutable features, model debugging and experiment tracking become unreliable
+
+>**What I understood**
+>- The boundary between mutable and immutable is the moment features enter the Feature Store —
+  everything before that point can be changed; everything after is frozen by design
+>- Immutability is not a constraint, it is a guarantee — it is what makes
+  large-scale ML systems reproducible and trustworthy at any point in time
+>- Understanding this principle now shapes how the pipeline is structured today —
+  the output JSON per run is already immutable by design via timestamped filenames
+
+---
+
 ## May 8, 2026
 
 **Docker | Sections 3–6 completed — Volumes, Networking, Multi-Container & Compose**

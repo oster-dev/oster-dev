@@ -7,6 +7,75 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 10, 2026
+
+**AWS DEA-C01 | Month 3 Started — Data Engineering Fundamentals + S3 Storage**
+
+Month 3 of the L5 Roadmap begins! 
+Sections 1 and 2 of the AWS DEA-C01 course completed in full, Section 3 (Storage) started
+and worked through to S3 Event Notifications.
+
+**AWS DEA-C01 | Section 2 — Data Engineering Fundamentals**
+
+- **Types of Data:** Structured (tables, schemas), Semi-Structured (JSON, XML),
+  Unstructured (images, logs, free text) — each requires a different storage and
+  processing strategy
+- **The 3 Vs:** Volume (how much), Velocity (how fast), Variety (what shape) —
+  the three dimensions that define every data engineering problem
+- **Data Warehouse vs. Data Lake vs. Lakehouse:** Warehouse = structured, query-optimized;
+  Lake = raw, schema-on-read, cheap storage; Lakehouse = combines both — structured
+  query performance on top of raw lake storage
+- **Data Mesh:** decentralized data ownership at scale — domain teams own and serve
+  their own data products instead of a central team owning everything
+- **ETL Pipeline Orchestration:** managing dependencies, scheduling, and failure
+  recovery across multi-step data pipelines — foundational for Airflow and Spark
+- **Schema Evolution:** how pipelines handle changes to data structure over time
+  without breaking downstream consumers — critical for long-running ML feature pipelines
+- **Data Skew:** imbalanced data distribution across partitions in distributed systems —
+  directly relevant to Spark optimization later in Month 3
+- **SQL Review:** aggregations, GROUP BY, sorting, pivoting, all JOIN types,
+  and intro to Regular Expressions — reinforced across multiple lectures and Quiz 1 ✅
+
+>**What I understood**
+>- The Lakehouse pattern is the architecture that Feature Stores are built on —
+  raw feature data lives in a lake, served features are query-optimized like a warehouse;
+  understanding this distinction now makes Feature Store design intuitive later
+>- Schema Evolution and Data Skew are not theoretical topics — they are the two most
+  common sources of silent failures in production ML pipelines at scale
+>- Data Mesh directly maps to how Netflix organizes data ownership — domain teams
+  owning their feature pipelines is the L5 organizational pattern, not a central data team
+
+**AWS DEA-C01 | Section 3 — Storage (S3)**
+
+- **Amazon S3 fundamentals:** object storage with buckets and keys — the backbone
+  of every ML data storage pattern on AWS; everything in the stack eventually touches S3
+- **S3 Security:** Bucket Policies control access at the bucket and object level —
+  the primary mechanism for cross-account and public access management
+- **S3 Versioning:** every object write creates a new version — delete markers preserve
+  history; maps directly to feature data immutability concepts from Month 2
+- **S3 Replication:** Cross-Region Replication (CRR) for disaster recovery and
+  compliance; Same-Region Replication (SRR) for log aggregation and environment sync
+- **S3 Storage Classes:** Standard for frequent access; Intelligent-Tiering for
+  unpredictable access patterns; Glacier for archival — choosing the right class
+  is direct cost optimization for large feature datasets
+- **S3 Lifecycle Rules:** automatically transition objects between storage classes
+  or expire them after a defined period — essential for managing feature dataset costs at scale
+- **S3 Express One Zone:** single-AZ, ultra-low latency storage class for
+  performance-sensitive workloads — trades availability for speed
+- **S3 Event Notifications:** trigger Lambda, SQS, or SNS on object-level events
+  (PUT, DELETE) — the entry point for event-driven pipeline architectures on AWS
+
+>**What I understood**
+>- S3 Versioning is feature immutability at the infrastructure level — every write
+  creates a new version, nothing is ever silently overwritten; this is the storage
+  primitive that makes reproducible ML pipelines possible
+>- S3 Event Notifications + Lambda is the serverless trigger pattern for data pipelines —
+  a file lands in S3 and the entire downstream processing chain starts automatically
+>- Storage class selection is not a detail — for petabyte-scale feature datasets,
+  the difference between Standard and Intelligent-Tiering is a significant cost lever
+
+---
+
 ## May 9, 2026
 
 **Python | Functional Programming + Pure Functions + Jikan Refactor + ML Platform Concept**

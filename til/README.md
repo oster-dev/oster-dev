@@ -7,6 +7,83 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 11, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 1**
+
+First real DEA-C01 practice exam day. Three full tests back to back — cold start,
+no prior exam-format preparation. Same method as CLF-C02: practice first, analyze errors,
+study gaps. That approach took CLF-C02 from 42% to 88% in 11 days.
+
+**Practice Test Results**
+
+| Test | Score | Domain 1 | Domain 2 | Domain 3 | Domain 4 |
+|---|---|---|---|---|---|
+| PT 1 | 48% | 40% | 60% | 50% | 33% |
+| PT 2 | 56% | 67% | 75% | 40% | 33% |
+| PT 3 | 48% | 40% | 45% | 57% | 50% |
+
+>**What I understood**
+>- Three cold tests in one day gives the most honest baseline possible — no score
+  inflation from familiarity, just raw knowledge mapped against the actual exam domains
+>- Domain 4 (Security & Governance) is the consistent weak point across all three tests —
+  IAM Policies, KMS, Lake Formation, Macie, and CloudTrail need targeted study
+>- Domain 3 (Data Operations & Support) is the most stable domain — monitoring and
+  troubleshooting questions land consistently across all three tests
+
+**DEA-C01 vs. CLF-C02 — First Impressions**
+
+The DEA-C01 is a different class of exam. Questions are longer, scenario-based, and
+frequently present multiple technically correct answers that must be weighed against
+each other. There is no obviously wrong option to eliminate — these are real data
+engineering decisions in concrete AWS scenarios.
+
+What helped immediately: the CLF-C02 foundation means S3, IAM, Kinesis, Glue, and
+Redshift are not unknown — the baseline is already there. SQL-based questions were
+clearly the strongest area across all three tests: JOINs, aggregations, Window Functions,
+GROUP BY, PARTITION BY — all handled confidently. PostgreSQL study from Month 1
+is paying off directly right now.
+
+>**What I understood**
+>- Practically oriented questions sit better than purely theoretical ones 
+>- The DEA-C01 does not test service recognition the way CLF-C02 did —
+  it tests the ability to choose the right architecture for a specific engineering constraint
+>- SQL fluency is a direct advantage on this exam — every hour spent on LeetCode SQL 50
+  and PostgreSQL is converting into correct answers today
+
+**Gap Analysis — 3 Tests**
+
+- **Domain 4 — Security & Governance (33–50%):** IAM Policies, KMS encryption,
+  Lake Formation permissions, S3 Bucket Policies, Macie, CloudTrail — Priority #1
+- **Domain 1 — Ingestion & Transformation (40–67%):** Glue, Kinesis, DMS,
+  Step Functions need more depth — high variance across tests
+- **Domain 2 — Data Store Management (45–75%):** S3 Storage Classes and
+  Redshift concepts still inconsistent depending on question framing
+- **Domain 3 — Data Operations & Support (40–57%):** most stable domain —
+  monitoring and troubleshooting questions are the strongest area
+
+**Mindset | Course vs. Practice-First**
+
+Paused the Maarek video course deliberately today. Consuming hours of video content
+passively is not the most efficient way to learn — being confronted with real exam
+questions, failing, and understanding why is. The feedback loop from a practice test
+is faster and more honest than any lecture.
+
+The DEA-C01 officially assumes 2 to 3 years of Data Engineering experience to pass.
+That is the expectation. The goal here is to prove the opposite — that the right
+learning method, applied with enough intensity, beats years of passive experience.
+CLF-C02 in 11 days was the first proof. DEA-C01 is next.
+
+>**What I understood**
+>- Video courses are a reference, not a method — they work best when used to fill
+  specific gaps identified by practice tests, not as a linear watch-through
+>- The DEA-C01 experience requirement exists because most people learn slowly and
+  passively; deliberate practice with immediate feedback compresses that timeline significantly
+>- This is the same approach that worked for CLF-C02 — there is no reason to change
+  a method that already delivered results
+
+---
+
 ## May 10, 2026
 
 **AWS DEA-C01 | Month 3 Started — Data Engineering Fundamentals + S3 Storage**

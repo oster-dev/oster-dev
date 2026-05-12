@@ -7,6 +7,55 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 12, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 2: Passing Score Hit**
+
+4 tests today, 8 tests across 2 days. Started the day at 68% and hit 72% —
+the official DEA-C01 passing score — on a completely fresh exam set, first attempt, cold.
+That is 1.5 days from a 48% cold start to passing-level performance.
+
+**Practice Test Results — May 12**
+
+| Test | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| PT 2 — Attempt 2 | 68% | 83% | 88% | 40% | 50% |
+| PT 3 — Attempt 2 | 64% | 60% | 45% | 86% | 100% |
+| PT 4 — Attempt 1 | **72% ✅** | 67% | 71% | 67% | 83% |
+| PT 5 — Attempt 1 | 68% | — * | 64% | 100% | 67% |
+
+*D1 had only 2 questions in PT5, i had both false.
+
+>**What I understood**
+>- 72% on PT4 is not a warm-up score — it is a fresh set, first attempt, no prior
+  exposure to those questions; passing-level performance confirmed in 1.5 days
+>- Domain 3 went from 40% to 86% and 100% in one day — targeted gap study after
+  a practice test converts directly and immediately into correct answers;
+  CloudWatch, Glue Job Monitoring, and Step Functions Error Handling are now solid
+>- Domain 4 hit 100% once today — IAM, KMS, and Lake Formation clicked after
+  deliberate review yesterday evening; the method works exactly as expected
+
+**Why This Exam Is Actually Enjoyable**
+
+The DEA-C01 is genuinely interesting in a way CLF-C02 was not. Every question is a real
+data engineering decision. These are not abstract
+AWS service facts. They are the concepts that will be applied directly on this roadmap
+when building Feature Stores and streaming pipelines. Learning them under exam pressure
+makes them stick faster than any course could.
+
+The prediction: this exam gets passed significantly faster than CLF-C02 did —
+and CLF-C02 only took 11 days from zero to certified.
+
+>**What I understood**
+>- Depth of interest accelerates learning — when the material connects directly to what
+  comes next on the roadmap, every correct answer feels like progress on two fronts at once
+>- The practice-first method is confirmed again: 48% → 72% in 1.5 days with no linear
+  course consumption; the same loop that worked for CLF-C02 is working faster here
+>- Passing the DEA-C01 without 2 to 3 years of Data Engineering experience is the point —
+  the right method compresses that timeline; this is the second proof after CLF-C02
+
+---
+
 ## May 11, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 1**

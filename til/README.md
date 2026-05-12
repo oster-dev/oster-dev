@@ -11,8 +11,8 @@ TIL Started: April 13, 2026.
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 2: Passing Score Hit**
 
-4 tests today, 8 tests across 2 days. Started the day at 68% and hit 72% —
-the official DEA-C01 passing score — on a completely fresh exam set, first attempt, cold.
+2 cold tests today and 2 second trys, 8 tests across 2 days. First cold test hit 72%! —
+the official DEA-C01 passing score.
 That is 1.5 days from a 48% cold start to passing-level performance.
 
 **Practice Test Results — May 12**
@@ -60,8 +60,8 @@ and CLF-C02 only took 11 days from zero to certified.
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 1**
 
-First real DEA-C01 practice exam day. Three full tests back to back — cold start,
-no prior exam-format preparation. Same method as CLF-C02: practice first, analyze errors,
+First real DEA-C01 practice exam day. 3 cold full tests back to back!
+No prior exam-format preparation. Same method as CLF-C02: practice first, analyze errors,
 study gaps. That approach took CLF-C02 from 42% to 88% in 11 days.
 
 **Practice Test Results**
@@ -71,6 +71,7 @@ study gaps. That approach took CLF-C02 from 42% to 88% in 11 days.
 | PT 1 | 48% | 40% | 60% | 50% | 33% |
 | PT 2 | 56% | 67% | 75% | 40% | 33% |
 | PT 3 | 48% | 40% | 45% | 57% | 50% |
+| PT 1 V2 | 64% | 80% | 40% | 75% | 83% |
 
 >**What I understood**
 >- Three cold tests in one day gives the most honest baseline possible — no score

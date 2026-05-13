@@ -7,6 +7,59 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 13, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 3: 88% Stable**
+
+Three tests today — all above 84%. Last day of Neal Davis practice sets.
+Tomorrow: Maarek practice exams (65 questions, closest format to the real exam).
+
+**Practice Test Results — May 13**
+
+| Test | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| PT 4 — Attempt 2 | 88% ✅ | 100% | 86% | 83% | 83% |
+| PT 5 — Attempt 2 | 84% ✅ | 100% | 100% | 83% | 50% |
+| PT 6 — Attempt 1 | 88% ✅ | 67% | 100% | 100% | 100% |
+
+**Full Sprint Progression — May 11–13**
+
+| Day | Tests | Score Range | Highlight |
+|---|---|---|---|
+| Day 1 — May 11 | 4 tests | 48% → 56% | Cold start, first orientation |
+| Day 2 — May 12 | 4 tests | 64% → 72% | Passing score hit for the first time |
+| Day 3 — May 13 | 3 tests | 84% → 88% | Stable above 84%, three times in a row |
+
+48% → 88% in 3 days. Identical pattern to CLF-C02 (42% → 88%).
+
+>**What I understood**
+>- Domain 2 was the most persistent blocker of the entire sprint — today it hit 100%
+  twice; Redshift, S3 Storage Classes, DynamoDB, and Glue Catalog are now solid
+>- Domain 3 and Domain 4 each hit 100% once today — CloudWatch, IAM Policies,
+  and Lake Formation are reproducible at a high level
+>- Domain 1 remains the only variable: at larger sample sizes (9 questions) it dropped
+  to 67% — Kinesis Sharding, Glue Streaming ETL, and MSK vs. Kinesis decision logic
+  need one targeted review before Maarek PT1 tomorrow
+
+**Neal Davis vs. Maarek | What Changes Tomorrow**
+
+Neal Davis runs 25 questions per test across 6 sets — useful for daily gap-finding
+but statistically limited; a domain with 2 questions can read 0% or 100% without
+saying much. Maarek runs 65 questions per test across 4 sets — that is the actual
+exam length, and the first real picture of exam readiness.
+
+The Neal Davis scores are genuine, but Maarek is the honest benchmark.
+Tomorrow is the first real readiness check.
+
+>**What I understood**
+>- Small sample sizes in domain scoring are noise — the 67% in D1 today with 3 questions
+  is less meaningful than a 67% across 15 questions; Maarek removes that ambiguity
+>- The sprint method is confirmed for the second time: same feedback loop, same progression
+  curve as CLF-C02 — the only difference is the DEA-C01 took 3 days to reach 88%
+  where CLF-C02 took 11; the material is harder, the method is faster
+
+---
+
 ## May 12, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 2: Passing Score Hit**

@@ -43,7 +43,7 @@ Multiple people report 40–50% on Nex Arc then passing the real exam comfortabl
 |---|---|---|---|
 | Neal Davis | 25/test, 6 sets | Moderate | Early sprint, daily gap-finding |
 | Maarek | 65/test, 4 sets | Exam-realistic | Full-length simulation before booking |
-| Nex Arc | 65/test | Harder than real exam | Deep knowledge building, L5-level prep |
+| Nex Arc | 65/test, 6 sets | Harder than real exam | Deep knowledge building, L5-level prep |
 
 >**What I understood**
 >- Neal Davis builds momentum, Maarek measures readiness, Nex Arc builds depth —

@@ -7,6 +7,53 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 14, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 4: The Real Challenge**
+
+First Nex Arc practice exam completed. 43% on the surface — best learning signal
+of the entire sprint underneath. Nex Arc is intentionally harder than the real DEA-C01
+and the gaps it exposes are exactly what L5-level preparation requires.
+
+**Nex Arc PT1 Results**
+
+| Domain | Score | Questions |
+|---|---|---|
+| D1 Data Ingestion & Transformation | 59% | 22 |
+| D2 Data Store Management | 29% | 17 |
+| D3 Data Operations & Support | 40% | 15 |
+| D4 Data Security & Governance | 27% | 11 |
+
+**Overall: 43%** — on the hardest available DEA-C01 prep material.
+Multiple people report 40–50% on Nex Arc then passing the real exam comfortably.
+
+>**What I understood**
+>- 43% on Nex Arc is not a score — it is a precise gap map; every wrong answer is
+  a concept the real exam will test at a shallower level, which means understanding
+  it deeply removes any hesitation on exam day
+>- D2 and D4 are the priority targets: OpenSearch Serverless collection types,
+  Redshift Spectrum vs. Athena decision logic, Lake Formation fine-grained access,
+  and KMS key policies are the concrete gaps
+>- The OpenSearch collection type question (search vs. time-series vs. vector-search)
+  is a perfect example of Nex Arc's depth — got it wrong once, will never get it wrong again
+
+**Practice Provider Comparison — Final Assessment**
+
+| Provider | Questions | Difficulty | Best Use |
+|---|---|---|---|
+| Neal Davis | 25/test, 6 sets | Moderate | Early sprint, daily gap-finding |
+| Maarek | 65/test, 4 sets | Exam-realistic | Full-length simulation before booking |
+| Nex Arc | 65/test | Harder than real exam | Deep knowledge building, L5-level prep |
+
+>**What I understood**
+>- Neal Davis builds momentum, Maarek measures readiness, Nex Arc builds depth —
+  all three serve a different purpose in the sprint
+>- This is not about passing the DEA-C01 at minimum score — the target is to think like a L5 Data
+  and Feature Infrastructure Engineer; Nex Arc aligns with that ambition better
+  than any other available prep material
+
+---
+
 ## May 13, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 3: 88% Stable**

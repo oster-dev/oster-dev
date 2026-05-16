@@ -7,6 +7,67 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 15, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 5: Nex Arc 41% → 81% in One Day**
+
+Three attempts on Nex Arc PT1 today with full wrong-answer review between each session.
++40 percentage points in a single day on material harder than the real exam.
+
+**Nex Arc PT1 — Full Progression**
+
+| Attempt | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| V1 (May 14) | 43% | 59% | 29% | 40% | 27% |
+| V2 (May 15) | 64% | 77% | 41% | 73% | 64% |
+| V3 (May 15) | 81% | 95% | 71% | 73% | 82% |
+
+>**What I understood**
+>- D4 Security went from 27% to 82% in two review sessions — the review loop
+  converts wrong answers into locked knowledge faster than any passive study method
+>- D1 Ingestion hit 95% by V3 — Kinesis, Glue Streaming ETL, and MSK decision logic
+  are now fully internalized after being the main gap on Day 1
+>- D2 Data Store at 71% on Nex Arc translates to well above passing on the real exam —
+  it is the last remaining variable but no longer a blocker
+
+**Key Concepts Locked In Today**
+
+- **OpenSearch Serverless collection types:** search = full-text, millisecond response;
+  time-series = log analytics, metrics, time-based data; vector-search = ML embeddings,
+  semantic similarity, RAG pipelines — got this wrong in V1, will never miss it again
+- **Lake Formation fine-grained access:** column-level security via LF-Tags applied
+  at the table level; row-level filtering through data filters — operates at the catalog
+  layer, not at S3 storage; entirely different from bucket policies
+- **DynamoDB Streams vs. Kinesis Data Streams for CDC:** DynamoDB Streams = 24h
+  retention, native integration, free; Kinesis = up to 365 days, more consumers,
+  costs extra — choose Kinesis when downstream consumers need extended replay or fan-out
+- **Step Functions error handling:** Retry = same state, exponential backoff with
+  MaxAttempts and IntervalSeconds; Catch = different fallback state when all retries
+  exhausted; ResultPath preserves error info — never confuse the two
+- **Redshift WLM:** Automatic WLM lets Redshift allocate memory dynamically;
+  Manual WLM uses fixed queues and concurrency slots; Short Query Acceleration (SQA)
+  separates short queries from long-running ones to prevent queue blocking
+
+>**What I understood**
+>- Every concept above was a wrong answer in V1 — the review loop does not just
+  improve the score on the next attempt, it builds the exact knowledge the real exam tests
+>- OpenSearch collection types and Lake Formation access control are the two most
+  commonly missed DEA-C01 topics; locking them in now means zero hesitation on exam day
+>- Redshift WLM is a scenario question on almost every DEA-C01 practice set —
+  the distinction between Automatic, Manual, and SQA is now fully clear
+
+**Score Translation — Nex Arc vs. Real Exam**
+
+81% on Nex Arc after full review loop. 88% on Neal Davis. Real exam passing score: 72%.
+Nex Arc is harder by design — people scoring 65–75% on Nex Arc routinely pass the real
+DEA-C01 comfortably. At 81% on the hardest available material, exam readiness is high.
+
+>**What I understood**
+>- The review loop is the method: take cold, accept the score, review every wrong answer,
+  repeat — it compounds fast and it works on any difficulty level of material
+
+---
+
 ## May 14, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 4: The Real Challenge**

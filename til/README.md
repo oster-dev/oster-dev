@@ -7,6 +7,66 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 16, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 6: Nex Arc PT2 41% → 73%**
+
+Two full attempts on Nex Arc PT2 today — completely new questions, no overlap with PT1.
+Cold start at 41%, closed the day at 73% after the review loop. +32 percentage points
+in one day, consistent with every previous session in this sprint.
+
+**Nex Arc PT2 — Full Progression**
+
+| Attempt | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| V1 — Cold | 41% | 55% | 29% | 27% | 55% |
+| V2 — After Review | 73% | 95% | 65% | 60% | 64% |
+
+**Delta V1 → V2**
+
+| Domain | V1 | V2 | Delta |
+|---|---|---|---|
+| D1 Ingestion | 55% | 95% | +40% |
+| D2 Store | 29% | 65% | +36% |
+| D3 Ops | 27% | 60% | +33% |
+| D4 Security | 55% | 64% | +9% |
+
+>**What I understood**
+>- PT2 is a completely different question set from PT1 — knowledge does not transfer
+  automatically between sets; it has to be locked in domain by domain through review
+>- D3 Operations & Support at 27% in V1 was the new weak point — different from PT1
+  where D3 was the most stable domain; Nex Arc deliberately rotates the hard questions
+  across domains to prevent pattern-matching without real understanding
+>- D1 Ingestion hitting 95% in V2 confirms that Kinesis, Glue ETL, and DMS are now
+  fully solid — the same domain that caused the most variance in the early sprint days
+
+**Concept Locked In — CloudTrail Log File Integrity Validation**
+
+Scenario from PT2: a financial company must cryptographically verify that CloudTrail
+logs stored in S3 have not been tampered with.
+
+- **Solution:** enable Log File Integrity Validation on the trail
+- **Mechanism:** SHA-256 hashing + SHA-256 with RSA digital signature on every log file
+- AWS delivers hourly **Digest Files** to the S3 bucket — each digest covers all
+  log files delivered in that hour
+- **Verification:** `aws cloudtrail validate-logs --trail-arn <arn> --start-time <time>`
+- Detects deletion, modification, and forgery of log files
+
+Keyword map:
+- `"cryptographically verify logs"` → CloudTrail log file integrity validation
+- `"tamper-evident logs"` → CloudTrail log file integrity validation
+- `"regulatory audit log files"` → `validate-logs` CLI command
+
+>**What I understood**
+>- Log File Integrity Validation is a D4 scenario question that appears in multiple
+  forms — the keyword triggers are always around cryptographic proof and tamper detection
+>- The digest file mechanism is what makes this different from simply storing logs in S3 —
+  S3 alone does not prove the logs were not modified; the digest + signature chain does
+>- This concept maps directly to data integrity requirements in production ML pipelines —
+  audit trails for feature data transformations follow the same tamper-evidence principle
+
+---
+
 ## May 15, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 5: Nex Arc 41% → 81% in One Day**

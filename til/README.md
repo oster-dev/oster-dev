@@ -7,6 +7,79 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 17, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 7: Nex Arc PT3 47% → 73%**
+
+Two full attempts on Nex Arc PT3 today — completely fresh questions again.
+Cold baseline at 47% (already above PT1 and PT2 cold starts), closed at 73% after review.
+The review loop is compressing faster with every new test set.
+
+**Nex Arc PT3 — Full Progression**
+
+| Attempt | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| V1 — Cold | 47% | 64% | 35% | 47% | 36% |
+| V2 — After Review | 73% | 77% | 65% | 87% | 64% |
+
+**Delta V1 → V2**
+
+| Domain | V1 | V2 | Delta |
+|---|---|---|---|
+| D1 Ingestion | 64% | 77% | +13% |
+| D2 Store | 35% | 65% | +30% |
+| D3 Ops | 47% | 87% | +40% |
+| D4 Security | 36% | 64% | +28% |
+
+>**What I understood**
+>- PT3 cold start at 47% is already above PT1 and PT2 (both 41% cold) — knowledge
+  from previous sets is transferring across test sessions, not just within them
+>- D3 Operations & Support from 47% to 87% in one day confirms the review loop works
+  even on domains that felt unstable — the pattern is consistent across every session
+>- D2 and D4 are the only remaining blockers before the 75% passing threshold;
+  both need one more targeted review session before PT3 V3 tomorrow
+
+**Concept Locked In — DynamoDB GSI vs. LSI**
+
+Scenario from PT3: gaming company stores session data with SessionID as Partition Key
+and Timestamp as Sort Key. Only 2% of sessions are ACTIVE. How to query active sessions
+efficiently with minimal cost?
+
+- **Wrong answer:** LSI with SessionID as Partition Key and Status as Sort Key
+- **Why wrong:** an LSI uses the same Partition Key as the base table — querying by
+  Status across all SessionIDs is impossible because you would need to know the
+  SessionID first; LSI only enables alternative sort key patterns *within* a partition
+- **Correct answer:** GSI with Status as Partition Key — enables a direct table-wide
+  query for Status = 'ACTIVE' without knowing SessionID; since only 2% of items have
+  Status = 'ACTIVE', the index is small and cost-efficient (Sparse Index principle)
+
+Keyword map:
+- `"query across all partitions"` → always **GSI**
+- `"alternative sort key within a partition"` → **LSI**
+- `"sparse index on low-cardinality attribute"` → **GSI** (cost-efficient when few items carry the attribute)
+
+>**What I understood**
+>- The GSI vs. LSI trap is one of the most common wrong answers on DEA-C01 —
+  the key is whether the query needs to cross partition boundaries; if yes, LSI cannot help
+>- Sparse Index is a cost optimization pattern, not just a data model concept —
+  when only a small percentage of items carry an attribute, a GSI on that attribute
+  stays small and cheap; this is the correct framing for the exam scenario
+>- This concept maps directly to Feature Store design: sparse feature attributes
+  should use selective indexes, not full-table scans
+
+**Full Sprint Progression — All Practice Tests**
+
+| Test | V1 Cold | V2 | V3 | Best |
+|---|---|---|---|---|
+| PT1 | 43% | 64% | 81% | **81%** |
+| PT2 | 41% | 73% | — | 73% |
+| PT3 | 47% | 73% | — | **73%** |
+
+The plateau at 73% across PT2 V2 and PT3 V2 is a clear signal — D2 Store Management
+and D4 Security are the two remaining gaps before consistent 80%+ on fresh material.
+
+---
+
 ## May 16, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 6: Nex Arc PT2 41% → 73%**

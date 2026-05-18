@@ -7,6 +7,41 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 18, 2026
+
+**AWS DEA-C01 | PT1 / PT2 / PT3 Review Day**
+
+Today focused on reviewing all wrong answers from the V2 attempts of PT1, PT2,
+and PT3. The main takeaway was not a new topic gap, but a pattern of small,
+exam-critical details getting overlooked.
+
+**What I learned**
+
+- **Keyword sensitivity:** a single word in the question or answer choice can change
+  the correct answer completely
+- **Reading speed vs. precision:** rushing through practice exams is costing points;
+  slower reading is producing better results than trying to finish fast
+- **Decision words:** terms like maximum, least cost, best, most efficient,
+  within a partition, across all partitions, incremental, and full crawl
+  are often the entire exam signal
+
+>**What I understood**
+>- The biggest mistakes right now are not knowledge gaps — they are careless reading
+  errors caused by moving too quickly through the question
+>- DEA-C01 is deliberately designed around small wording differences, so the real skill
+  is not just knowing AWS services but spotting the exact phrase that changes the answer
+>- Slowing down is currently more productive than pushing for speed;
+  precision is the highest-leverage improvement for the next practice exams
+
+**Current focus**
+
+- Read every question twice!
+- Check every answer option for the one decisive word
+- Do not jump to the first plausible answer under time pressure
+- Prioritize precision over speed
+
+---
+
 ## May 17, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 7: Nex Arc PT3 47% → 73%**

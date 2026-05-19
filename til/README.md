@@ -7,6 +7,61 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 19, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 9: PT4 Cold Start 64%**
+
+One full attempt today — PT4 V1 cold. Strongest cold baseline of the entire sprint.
+The review day on May 18 had a direct and measurable impact on today's score.
+
+**Nex Arc PT4 V1 — Cold Results**
+
+| Domain | Score |
+|---|---|
+| D1 Data Ingestion and Transformation (22 questions) | 68% |
+| D2 Data Store Management (17 questions) | 59% |
+| D3 Data Operations and Support (15 questions) | 73% |
+| D4 Data Security and Governance (11 questions) | 55% |
+| **Total** | **64%** |
+
+**Cold-Start Progression — All Practice Tests**
+
+| Test | V1 Cold | Delta vs PT1 |
+|---|---|---|
+| PT1 | 43% | — |
+| PT2 | 41% | -2% |
+| PT3 | 47% | +4% |
+| PT4 | **64%** | **+21%** |
+
+>**What I understood**
+>- The +21% jump from PT1 to PT4 cold is entirely attributable to the May 18 review day —
+  systematic wrong-answer review across three test sets transferred directly into
+  a stronger cold baseline on brand new questions
+>- D2 Data Store Management went from 29–35% cold across PT1–PT3 to 59% cold today —
+  that is the review system working exactly as intended
+>- D4 Security at 55% is the only domain consistently below the pass line;
+  Lake Formation fine-grained access, KMS key policies, and S3 Object Lock modes
+  are the three remaining concrete gaps
+
+**Reading Precision — Confirmed as the Highest Lever**
+
+Slowing down and reading every keyword before selecting an answer made a bigger
+difference today than any single new topic studied. The cold score improvement from
+41% to 64% is not only new knowledge — it is more deliberate reading under exam conditions.
+
+At 64% cold, the pass threshold of 75% is 11 points away — and PT4 V2 after full
+wrong-answer review should push into the 78–82% range based on the consistent
+V1 → V2 delta across every previous test.
+
+>**What I understood**
+>- Precision reading is now the single highest-leverage skill remaining before exam day —
+  the knowledge is largely there, the margin is in reading every question completely
+  before locking in an answer
+>- 64% cold on the hardest available practice material is not a gap — it is a confirmation
+  that the exam is ready to be booked; PT4 V2 will confirm the final readiness level
+
+---
+
 ## May 18, 2026
 
 **AWS DEA-C01 | PT1 / PT2 / PT3 Review Day**

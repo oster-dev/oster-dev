@@ -7,6 +7,30 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 20, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 10: PT5 V1 + PT4 V2**
+
+Two tests today — a cold start on a brand new set and a review attempt on PT4.
+D2 Data Store hit 82% cold for the first time. D4 Security remains the consistent gap.
+
+**Nex Arc PT5 V1 — Cold + PT4 V2 Results**
+
+| Test | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| PT5 V1 — Cold | 60% | 59% | 82% | 43% | 50% |
+| PT4 V2 — Review | 70% | 73% | 71% | 73% | 64% |
+
+>**What I understood**
+>- D2 Data Store at 82% cold is the clearest sign yet that Redshift, DynamoDB,
+  and OpenSearch concepts have consolidated — this domain was at 29% cold on Day 4
+>- D3 Operations dropping to 43% on a fresh set is a reminder that Nex Arc rotates
+  traps across domains — stability on one set does not guarantee stability on another
+>- D4 Security at 50% cold and 64% after review is the last consistent blocker;
+  Lake Formation, KMS, and S3 Object Lock edge cases are the remaining precision gaps
+
+---
+
 ## May 19, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 9: PT4 Cold Start 64%**

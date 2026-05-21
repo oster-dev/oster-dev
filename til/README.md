@@ -7,6 +7,46 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 21, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 11: Nikolai Schuler 70% + TutorialsDojo 57%**
+
+Two new exam sources added to the prep stack today. First contact with TutorialsDojo —
+widely considered the closest match to the real DEA-C01 difficulty and question style.
+
+**Nikolai Schuler Course-Internal Exam + TutorialsDojo — Results**
+
+| Source | Score | D1 Ingestion | D2 Store | D3 Ops | D4 Security |
+|---|---|---|---|---|---|
+| Nikolai Schuler — Cold | 70% | 58% | 86% | 76% | 71% |
+| TutorialsDojo — First 23 questions | 57% | — | — | — | — |
+
+**What Each Source Is Worth**
+
+| Source | Difficulty | Exam Proximity | Current Score |
+|---|---|---|---|
+| Nex Arc | Very Hard | Harder than real exam | 73–81% best |
+| Nikolai Schuler (course-internal) | Medium | Easier than real exam | 70% cold |
+| TutorialsDojo | Hard | Closest to real exam | 57% Day 1 |
+| Real DEA-C01 | Hard | — | — |
+
+>**What I understood**
+>- 70% cold on Nikolai Schuler is a positive signal but not a reliable readiness
+  indicator — the community consensus is that it is more conceptual and less
+  trap-heavy than the actual exam; it confirms foundation, not exam readiness
+>- 57% on first TutorialsDojo contact is not a step back — it is the most honest
+  calibration available; new question style, new trap patterns, first attempt
+>- TutorialsDojo + Nex Arc in parallel is the correct final stack — one mirrors
+  real exam style, the other builds depth beyond what the exam requires
+
+**Plan to Exam Day**
+
+Both stacks run in parallel from here — TutorialsDojo for realistic calibration,
+Nex Arc for depth. The review loop stays the same: cold attempt, full wrong-answer
+review, repeat. At this pace the exam gets booked by end of May.
+
+---
+
 ## May 20, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 10: PT5 V1 + PT4 V2**

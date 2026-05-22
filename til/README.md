@@ -7,6 +7,70 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 22, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 12: TutorialsDojo Set 1 Cold 51%**
+
+First complete TutorialsDojo exam — 65 questions cold. Closest source to the real
+DEA-C01 difficulty and style. 51% is the honest baseline on the most representative
+material available.
+
+**TutorialsDojo Set 1 — Cold Results**
+
+| Domain | Score |
+|---|---|
+| D3 Data Operations & Support | 71% ✅ |
+| D1 Data Ingestion & Transformation | 55% |
+| D4 Data Security & Governance | 42% |
+| D2 Data Store Management | 35% |
+| **Total** | **51%** |
+
+**Exam Source Comparison**
+
+| Source | Score | Exam Proximity |
+|---|---|---|
+| Nex Arc (best) | 81% | Harder than real exam |
+| Nikolai Schuler V1 | 70% cold | Easier than real exam |
+| TutorialsDojo Set 1 | 51% cold | Closest to real exam |
+| Booking target | 75%+ (twice in a row) | — |
+
+>**What I understood**
+>- 51% cold on the most exam-representative source available is a clear and honest
+  signal — the foundation is there but precision on AWS-specific decision points is not
+>- The pattern across 32 wrong answers is not a knowledge gap — it is a reading
+  precision problem; the right area gets identified, then the most similar answer gets
+  chosen instead of the most precise one
+>- D2 and D4 are the same consistent blockers: DynamoDB partitioning logic, Redshift
+  node types, KMS key type distinctions, and Lake Formation governance
+
+**Two Concepts Locked In From Review**
+
+**Redshift KMS Encryption — Compliance always means CMK**
+- Chose: default Redshift KMS key with periodic rotation via console
+- Correct: Customer-managed KMS key (CMK)
+- Why: the default Redshift key is AWS-managed — the customer does not control rotation;
+  compliance requirements always require CMK because only CMK puts control in the customer's hands
+- Keyword map: `"compliance"` + `"encryption"` → always CMK, never AWS-managed or default key
+
+**DynamoDB Hot Partitions — Index is not the fix**
+- Chose: LSI on PRODUCT_ID
+- Correct: new DynamoDB table with PRODUCT_ID as partition key
+- Why: LSI and GSI provide alternative query paths but use the same physical partitions —
+  hot partitions stay hot regardless of indexes; only a higher-cardinality partition key
+  distributes load across more physical partitions
+- Keyword map: `"hot partition"` → better partition key, not an index
+
+>**What I understood**
+>- Both mistakes follow the same pattern: the correct domain was identified but the
+  most similar answer was chosen instead of the most precise one — one extra step
+  is needed before clicking: *"which keyword in the question eliminates my answer?"*
+>- Compliance + encryption is a one-answer scenario on DEA-C01 — CMK every time;
+  AWS-managed keys exist for convenience, not compliance control
+>- DynamoDB indexes solve query patterns, not partition pressure — this distinction
+  is tested in multiple forms across every practice set
+
+---
+
 ## May 21, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 11: Nikolai Schuler 70% + TutorialsDojo 57%**

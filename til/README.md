@@ -7,6 +7,60 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 23, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 13: TutorialsDojo Set 1 Deep Review**
+
+No new exam today — full deep review instead. All 32 wrong answers from Set 1
+re-attempted, fully read with explanations, and the hardest ones converted to flashcards.
+Not moving forward until the mistakes are understood.
+
+**Two Concepts Locked In Today**
+
+**EKS + EC2 Nodes — Lowest Latency Storage**
+- Question: containers on EKS EC2 nodes process distinct datasets, no sharing between
+  containers — which storage has the LOWEST latency?
+- Answer: ephemeral RAM-backed volume (emptyDir with `medium: Memory` in Kubernetes)
+- Why: RAM storage has zero network hops and no disk I/O — it is physically on the node;
+  since no sharing or persistence is required, EBS, EFS, and S3 are all overkill
+- Keyword map: `"LOWEST latency"` + `"no sharing"` + `"EKS on EC2"` → ephemeral RAM volume;
+  as soon as "sharing" or "persistence" appears, the answer changes
+
+**SageMaker Canvas — Least Operational Overhead for Churn Prediction**
+- Question: video streaming company has a dataset with nulls, duplicates, and irrelevant
+  data; needs binary classification model with LEAST operational overhead
+- Answer: SageMaker Canvas automated data cleansing + built-in binary classification
+- Why: Canvas is a no-code ML tool — no infrastructure management, no Glue jobs,
+  no custom training pipelines; it handles data prep and model training in one place
+- Keyword map: `"LEAST overhead"` + `"data cleaning"` + `"binary classification"` → SageMaker Canvas;
+  as soon as "custom model" or "existing pipeline" appears, Canvas is wrong
+
+>**What I understood**
+>- Both questions follow the exact same pattern identified yesterday — one keyword in
+  the question eliminates every other answer if actively searched for before clicking
+>- The keyword-elimination step is not automatic yet — it has to be a deliberate conscious
+  check before locking in any answer; today's review confirmed this is the last gap
+
+**Keyword Elimination Pattern — Confirmed Across 4 Questions**
+
+| Question | Decisive Keyword | Eliminates |
+|---|---|---|
+| EKS Storage | `"LOWEST latency"` + `"no sharing"` | EBS, EFS, S3 — all have network latency |
+| SageMaker Churn | `"LEAST operational overhead"` | Glue jobs, custom training, manual pipelines |
+| Redshift KMS | `"compliance"` | Default and AWS-managed keys |
+| DynamoDB Hot Partition | `"hot partition"` | LSI and GSI — indexes do not fix partition distribution |
+
+>**What I understood**
+>- DEA-C01 is a different exam category from CLF-C02 — CLF tests concepts,
+  DEA tests architecture decisions under constraints; every question has 2–4 plausible
+  answers and the exam systematically penalizes half-knowledge
+>- Flashcards for hard questions are the correct next step — multi-service AWS
+  combinations are not retained through reading, only through repeated retrieval with context
+>- The method is confirmed: deep review before moving to the next set produces more
+  durable knowledge than stacking new cold attempts on unreviewed mistakes
+
+---
+
 ## May 22, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 12: TutorialsDojo Set 1 Cold 51%**

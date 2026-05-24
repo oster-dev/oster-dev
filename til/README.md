@@ -7,6 +7,62 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 24, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 14: TutorialsDojo Set 2 Cold 63%**
+
+Second cold TutorialsDojo exam completed — 63% on 65 fresh questions.
++12 points from Set 1. D1 Ingestion is now stable above threshold.
+D2, D3, and D4 are the remaining three domains to close before booking.
+
+**TutorialsDojo Set 2 — Cold Results**
+
+| Domain | Score |
+|---|---|
+| D1 Data Ingestion & Transformation | 73% ✅ |
+| D2 Data Store Management | 59% |
+| D3 Data Operations & Support | 57% |
+| D4 Data Security & Governance | 58% |
+| **Total** | **63%** |
+
+**TutorialsDojo Progression**
+
+| Set | Score | Delta |
+|---|---|---|
+| Set 1 — Cold | 51% | — |
+| Set 2 — Cold | 63% | +12% |
+
+>**What I understood**
+>- The +12 point jump is a direct result of the Set 1 deep review and flashcards —
+  D1 went from 55% cold to 73% cold; the review-to-next-set transfer is working
+>- D2, D3, and D4 all sitting between 57–59% means no single domain is collapsing —
+  they are all close to threshold and all need the same precision work, not new topics
+>- The 30-minute pause during today's session means the 63% is solid but not yet
+  tested under full 130-minute continuous exam pressure; that stamina needs to be
+  built before exam day
+
+**Honest Assessment**
+
+63% is not "almost there" and not "a problem" — it is an honest intermediate level.
+The last 7 points to the 70% TutorialsDojo pass threshold are not a volume problem.
+They are a precision problem: D2, D3, and D4 each have specific sub-topics where its 
+crucial to have deep knowledge about the DEA-C01 relevant topics.
+
+DEA-C01 is a 65-question, 130-minute exam with a passing score of 720/1000.
+TutorialsDojo is generally considered exam-representative at a 70–72% pass level.
+The gap between today's result and exam readiness is measurable and closeable —
+Set 2 deep review, flashcards for D2/D3/D4, and one full uninterrupted 130-minute
+session are the three concrete next steps.
+
+>**What I understood**
+>- Fine tuning is the correct description of where the prep is right now — the
+  foundation is solid across all four domains, the variance is in edge cases and
+  multi-service decision points that require one more deliberate review pass
+>- Continuous 130-minute exam stamina is a separate skill from knowing the content —
+  it needs to be practiced explicitly before sitting the real exam
+
+---
+
 ## May 23, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 13: TutorialsDojo Set 1 Deep Review**

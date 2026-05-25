@@ -7,6 +7,43 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 25, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 15: TutorialsDojo Deep Review — 71 Questions**
+
+No new cold exam today — 71 questions from the TutorialsDojo DEA-C01 question bank
+reviewed in full. Every explanation read completely. No question skipped.
+
+**What today built**
+
+- 71 questions across the full TutorialsDojo DEA-C01 pool (204 total questions)
+  re-attempted and reviewed end to end
+- Every explanation read in full — not just what is correct, but why every
+  other option fails to meet all constraints simultaneously
+- Tangible improvement in decision-framework clarity across all four domains
+
+>**What I understood**
+>- TutorialsDojo explanations are more valuable than the score — they explain the
+  single constraint that makes exactly one answer correct and all others almost-correct;
+  that is the precise skill DEA-C01 tests on every question
+>- Active error context builds faster retention than passive reading — reviewing a
+  question where the wrong choice was made creates a stronger memory trace than
+  reading the same material without a concrete mistake attached to it
+>- The review-to-cold-transfer proved on Set 2 (51% → 63%); working through the
+  broader question bank today should produce the same lift on the next cold attempt
+
+**TutorialsDojo Sprint — Full Progression**
+
+| Date | Activity | Result |
+|---|---|---|
+| May 22 | Set 1 Cold | 51% |
+| May 22 | Set 1 wrong-answer review | 32 questions analyzed |
+| May 23 | Set 1 re-attempt + flashcards | Keyword pattern confirmed |
+| May 24 | Set 2 Cold | 63% (+12%) |
+| May 25 | 71 questions from TD question bank — full review | Framework depth built |
+
+---
+
 ## May 24, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 14: TutorialsDojo Set 2 Cold 63%**

@@ -7,6 +7,39 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 26, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 16: TutorialsDojo 73% — First Pass Threshold Hit**
+
+96 questions from the TutorialsDojo pool completed today — 73% correct.
+First time crossing the 70% TutorialsDojo pass threshold. 51% → 63% → 73% in 5 days.
+
+**TutorialsDojo Full Progression**
+
+| Date | Questions | Result | Type |
+|---|---|---|---|
+| May 22 | 65 | 51% | Set 1 Cold |
+| May 23 | — | Deep Review | Set 1 full explanation review |
+| May 24 | 65 | 63% | Set 2 Cold |
+| May 25 | 71 | Deep Review | TD question bank full review |
+| **May 26** | **96** | **73% ✅** | **Mixed / review-supported** |
+| **Cumulative** | **204** | | |
+
+>**What I understood**
+>- 73% is meaningful but not yet the booking signal — it is review-supported,
+  meaning previous exposure to overlapping questions contributed to the score;
+  Set 3 cold (130 minutes, no pause, no prior exposure) is the real readiness test
+>- The 51% → 63% → 73% progression in 5 days is a direct result of three things:
+  understanding every mistake instead of just marking it, reading TD explanations
+  in full for why wrong options fail, and applying keyword elimination before clicking
+>- If Set 3 cold holds above 70% with no domain below 65%, the exam gets booked
+
+Two consecutive cold sets above 70%, no domain below 65%.
+Set 3 cold is the next test — 130 minutes uninterrupted, no review boost.
+That result will determine whether the exam gets booked immediately.
+
+---
+
 ## May 25, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 15: TutorialsDojo Deep Review — 71 Questions**

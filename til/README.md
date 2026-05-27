@@ -7,6 +7,49 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 27, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 17: TutorialsDojo Set 3 — 75% PASSED ✅**
+
+Third complete TutorialsDojo exam — 75% on 65 questions. Three domains above 79%.
++24 percentage points across three cold sets in 5 days of active work.
+
+**TutorialsDojo Set 3 — Results**
+
+| Domain | Score |
+|---|---|
+| D4 Data Security & Governance | 83% ✅ |
+| D2 Data Store Management | 82% ✅ |
+| D3 Data Operations & Support | 79% ✅ |
+| D1 Data Ingestion & Transformation | 64% ⚠️ |
+| **Total** | **75% ✅** |
+
+**Full TutorialsDojo Progression**
+
+| Date | Set | Score | Delta |
+|---|---|---|---|
+| May 22 | Set 1 Cold | 51% | — |
+| May 24 | Set 2 Cold | 63% | +12% |
+| May 27 | Set 3 | 75% ✅ | +12% |
+
+>**What I understood**
+>- D4 Security at 83% and D2 Store at 82% are the clearest proof that deep review
+  works — both were the main blockers in Set 1 and are now the two strongest domains
+>- D1 Ingestion dropped back to 64% after briefly hitting 73% in Set 2 — it is not
+  stably anchored yet; Kinesis Streams vs. Firehose vs. Analytics, Glue trigger logic,
+  and DMS nuances need one more targeted review cycle
+>- The warm-up session of 47 questions before the exam activated the keyword
+  elimination pattern — mental operating temperature matters under exam conditions
+
+**Booking Status**
+
+Booking trigger was: 2 consecutive cold sets above 70%.
+Set 2 came in at 63% — below threshold. Set 3 at 75% — passed.
+That is not yet two consecutive results above 70%. Set 4 is the decision point:
+70%+ on Set 4 with D1 above 65% means the exam gets booked immediately.
+
+---
+
 ## May 26, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 16: TutorialsDojo 73% — First Pass Threshold Hit**

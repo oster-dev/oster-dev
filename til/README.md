@@ -7,6 +7,46 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 28, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 18: TutorialsDojo Missed Questions Review**
+
+No new exam today — targeted work on the weakest points only.
+TutorialsDojo automatically tracks all questions answered incorrectly across every set.
+54 of those flagged questions re-attempted and reviewed in full today.
+
+**Why this review format is the most precise available**
+
+After three complete sets, TutorialsDojo has automatically built a profile of the real
+gaps — not a random sample, but the exact questions where the decision pattern is not
+yet stable. Reviewing only these 54 questions removes all noise from already-known
+material and targets exclusively the concepts that have cost points across multiple sessions.
+
+This is the difference between practicing a lot and practicing correctly.
+
+>**What I understood**
+>- Missed Questions mode is more efficient than a full set at this stage —
+  every minute goes toward a confirmed gap, not toward questions that are already solid
+>- The questions that appear in the missed list across multiple sets are the ones the
+  real exam will most likely test in a similar form; locking them in now removes
+  the highest-probability error sources before Set 4
+>- Tomorrow's Set 4 cold (130 minutes uninterrupted) will be the cleanest readiness
+  signal of the entire sprint — no review boost, no warm-up, just stable knowledge
+
+**Full TutorialsDojo Progression**
+
+| Date | Activity | Result |
+|---|---|---|
+| May 22 | Set 1 Cold | 51% |
+| May 22–23 | Set 1 deep review (32 questions) | Error pattern analysis |
+| May 24 | Set 2 Cold | 63% |
+| May 25 | 71 questions deep review | Framework depth built |
+| May 26 | 96 questions mixed | 73% ✅ |
+| May 27 | 47 warm-up + Set 3 | 75% ✅ PASSED |
+| **May 28** | **54 Missed Questions deep review** | **Gaps targeted directly** |
+
+---
+
 ## May 27, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 17: TutorialsDojo Set 3 — 75% PASSED ✅**

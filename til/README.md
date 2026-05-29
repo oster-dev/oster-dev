@@ -7,6 +7,56 @@ TIL Started: April 13, 2026.
 
 ---
 
+## May 29, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 19: TutorialsDojo Set 4 Cold — 68%**
+
+Fourth complete TutorialsDojo exam — no pauses, full exam conditions, 90 minutes timer.
+68% — two points below the passing threshold. D1 Ingestion is now stable.
+D3 Operations is the remaining main blocker. Exam moved to May 31, review day tomorrow.
+
+**TutorialsDojo Set 4 — Cold Results**
+
+| Domain | Score |
+|---|---|
+| D1 Data Ingestion & Transformation | 77% ✅ |
+| D4 Data Security & Governance | 67% ⚠️ |
+| D2 Data Store Management | 65% ⚠️ |
+| D3 Data Operations & Support | 57% |
+| **Total** | **68%** |
+
+**Full TutorialsDojo Progression**
+
+| Date | Set | Score |
+|---|---|---|
+| May 22 | Set 1 Cold | 51% |
+| May 24 | Set 2 Cold | 63% |
+| May 27 | Set 3 | 75% ✅ |
+| May 29 | Set 4 Cold | 68% |
+
+>**What I understood**
+>- D1 Ingestion at 77% is now stable — the Kinesis stack, Glue triggers, and DMS
+  nuances that were the main gap two days ago have consolidated after the missed
+  questions review
+>- D3 Operations at 57% is the clearest remaining blocker — CloudWatch alarms,
+  Glue job monitoring, EMR troubleshooting, and Redshift WLM are the specific gaps
+>- The 68% under full uninterrupted exam conditions is a more honest signal than
+  any previous result — two points from threshold with one targeted review day
+  remaining is a realistic and closeable gap
+
+**Decision: Exam on May 31**
+
+68% under real conditions is close but not stable enough to walk in without one more
+consolidation pass. A review-only day tomorrow targeting D3, D2, and D4 specifically
+is the right call. One extra day of precision review is better than an unnecessary
+risk on an exam that is clearly within reach.
+
+Tomorrow: D3 Operations (CloudWatch, Glue Monitoring, EMR), D2 Store (RA3 vs DC2,
+DynamoDB partitioning, Aurora vs RDS vs Redshift), D4 Security (KMS key types,
+Lake Formation, Glue IAM roles).
+
+---
+
 ## May 28, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 18: TutorialsDojo Missed Questions Review**

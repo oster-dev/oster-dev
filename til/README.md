@@ -3,7 +3,46 @@
 A running log of things learned on the journey to becoming an
 ML Platform | Data and Feature Infrastructure Engineer.
 
-TIL Started: April 13, 2026.
+TIL Started: April 13, 2026
+
+---
+
+## May 30, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 20: Final Review Before Exam**
+
+Last prep day before the real thing. 52 missed questions reviewed in full.
+Confidence reading: at least 70% of the errors were recognized as known material on
+re-attempt — not knowledge gaps, but pressure-induced mistakes. Exam booking confirmed
+for tomorrow.
+
+**What the missed questions review revealed**
+
+The majority of errors across the TutorialsDojo sets trace back to one structural factor:
+TutorialsDojo's default timer runs at 90 minutes for 65 questions — significantly tighter
+than the real DEA-C01 format of 130 minutes for 65 questions. That gap created artificial
+time pressure that pushed snap decisions on questions where the correct reasoning was
+already available. Under real exam conditions, that pressure disappears.
+
+>**What I understood**
+>- 70%+ of the reviewed missed questions were answered correctly on re-attempt without
+  hints — the knowledge is there; the errors were execution errors under compressed time,
+  not conceptual gaps
+>- The real DEA-C01 gives 2 minutes per question vs. roughly 83 seconds on TutorialsDojo
+  default — that extra time per question is the exact buffer needed for the Kinesis stack
+  and IAM role elimination patterns that caused the most damage
+>- D3 Operations, D2 Store, and D4 Security were today's focus; after this review cycle
+  all four domains have now had at least one dedicated consolidation pass
+
+**Full Sprint — Final Snapshot**
+
+| Date | Activity | Result |
+|---|---|---|
+| May 22 | Set 1 Cold | 51% |
+| May 24 | Set 2 Cold | 63% |
+| May 27 | Set 3 | 75% ✅ |
+| May 29 | Set 4 Cold | 68% |
+| **May 30** | **52 Missed Questions — final review** | **Exam booked ✅** |
 
 ---
 

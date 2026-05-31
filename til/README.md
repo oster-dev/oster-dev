@@ -7,6 +7,45 @@ TIL Started: April 13, 2026
 
 ---
 
+## May 31, 2026
+
+**AWS DEA-C01 | Practice Exam Sprint — Day 21: Final Repetition — Exam Tomorrow**
+
+Last day before the real exam. Same 52 missed questions from yesterday — repeated in
+full. Exam booked for June 1, 2026. Tomorrow it counts.
+
+**What today was about**
+
+This was not a new session — it was a deliberate second pass over the exact same 52
+questions reviewed yesterday. The goal was not discovery but consolidation: confirm that
+the patterns locked in yesterday are still accessible today without re-reading
+explanations. Repetition on the day before an exam is not cramming — it is making sure
+the right mental pathways are the last ones activated before the real thing.
+
+>**What I understood**
+>- Repeating the same missed questions on back-to-back days targets active recall
+  over passive re-reading — the brain retrieves the reasoning rather than just
+  recognizing it, which is exactly the mechanism the real exam will test
+>- The 90-minute TutorialsDojo timer created artificial pressure that does not exist
+  in the real 130-minute DEA-C01 — tomorrow's exam gives roughly 2 minutes per
+  question, enough space to apply the elimination patterns that were compressed in
+  the practice sets
+>- The sprint covered every major domain gap across 21 days: D1 Ingestion stabilized,
+  D3 Operations reviewed twice, D4 Security consolidated — the knowledge is there
+
+**Full Sprint — Final State**
+
+| Date | Activity | Result |
+|---|---|---|
+| May 22 | Set 1 Cold | 51% |
+| May 24 | Set 2 Cold | 63% |
+| May 27 | Set 3 | 75% ✅ |
+| May 29 | Set 4 Cold | 68% |
+| May 30 | 52 Missed Questions review | Exam booked |
+| **May 31** | **52 Missed Questions — second pass** | **Ready ✅** |
+
+---
+
 ## May 30, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 20: Final Review Before Exam**

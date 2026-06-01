@@ -7,6 +7,58 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 1, 2026
+
+**AWS DEA-C01 | Exam Day ✓ — Result Pending**
+
+The exam is done. 65 questions, real conditions, no practice buffer.
+Result pending — AWS takes up to 5 business days for scoring.
+Everything that could be prepared has been prepared. Now it waits.
+
+**Pre-Exam Last-Minute Review**
+
+Final session focused on the highest-density differentiation patterns:
+
+- **Kinesis Streams** = control + replay; **Firehose** = managed delivery, no replay
+- Sliding and tumbling windows → always **Managed Flink (Kinesis Data Analytics)**,
+  never Firehose or Lambda alone
+- **MSK** when the requirement mentions Kafka compatibility or existing Kafka ecosystem
+- **Glue Schema Registry** for schema management and evolution in streaming pipelines
+- Passing threshold: approximately 36 of 50 scored questions correct
+  (15 of 65 are unscored pilot questions and do not count toward the result)
+
+**What the Real Exam Taught**
+
+Several questions covered topics that appeared in none of the major practice tools —
+not NexArc, not TutorialsDojo, not Neal Davis.
+
+>**What I understood**
+>- DEA-C01 has been live since 2024 and its question pool evolves faster than
+  third-party prep providers can update their material — recycled questions with
+  surface-level rewording are not a reliable map of the current exam
+>- Providers have no insider access to the active pool; their coverage reflects
+  what was documented at launch, not what AWS has added since
+>- The questions that were unfamiliar today were solvable through first-principles
+  reasoning — knowing *why* a service exists and what problem it solves beats
+  memorizing which answer a practice tool marks correct
+
+The clearest takeaway from today: conceptual understanding is the only prep strategy
+that transfers to questions no practice set has ever seen. Memorization has a ceiling.
+Understanding does not.
+
+**Sprint — Complete**
+
+| Date | Activity | Result |
+|---|---|---|
+| May 22 | Set 1 Cold | 51% |
+| May 24 | Set 2 Cold | 63% |
+| May 27 | Set 3 | 75% ✅ |
+| May 29 | Set 4 Cold | 68% |
+| May 30–31 | 52 + 52 Missed Questions | Consolidated |
+| **Jun 1** | **DEA-C01 Real Exam** | **⏳ Result pending** |
+
+---
+
 ## May 31, 2026
 
 **AWS DEA-C01 | Practice Exam Sprint — Day 21: Final Repetition — Exam Tomorrow**

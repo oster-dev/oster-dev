@@ -59,6 +59,14 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 <br>
 
+## **Monthly Updates & Learning Log**
+
+[Month 2 · May 2026](./monthly-updates/month-02.md) 
+
+[Today I Learned — Daily Log](./til/README.md)
+
+<br>
+
 ## Projects
 
 **[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
@@ -117,14 +125,6 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 | Data Engineer Associate · DEA-C01 | Month 3–4 · June/July 2026 | 📅 Upcoming |
 | Solutions Architect Associate · SAA-C03 | Month 5–6 · Aug/Sep 2026 | 📅 Upcoming |
 | ML Engineer Associate · MLA-C01 | Month 7 · October 2026 | 📅 Upcoming |
-
-<br>
-
-## **Monthly Updates & Learning Log**
-
-[Month 2 · May 2026](./monthly-updates/month-02.md) 
-
-[Today I Learned — Daily Log](./til/README.md)
 
 <br>
 

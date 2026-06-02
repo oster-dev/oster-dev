@@ -7,6 +7,50 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 2, 2026
+
+Received the DEA-C01 exam result today: **708/1000** — 12 points below the passing threshold of 720. The retake was booked at the earliest possible date: **June 16, 2026**.
+
+**AWS | DEA-C01 Exam Result Analysis**
+
+- Score: **708** — fail by 12 points.
+- Context: the exam was attempted **one full month ahead of roadmap schedule**, originally planned for Month 4 and taken in Month 3.
+- The biggest lesson from this result is that the major third-party prep tools used so far — TutorialsDojo, NexArc, and Neal Davis — did not reflect the current exam pool well enough.
+- Conclusion: for a newer AWS certification, **official AWS Skill Builder** is now the primary and most trustworthy prep source.
+
+**Domain Breakdown**
+
+| Domain | Weight | Status |
+|---|---:|---|
+| D1: Data Ingestion & Transformation | 34% | Needs Improvement |
+| D2: Data Store Management | 26% | Needs Improvement |
+| D3: Data Operations & Support | 22% | Needs Improvement |
+| D4: Data Security & Governance | 18% | Needs Improvement |
+
+**Retake Strategy — started immediately**
+
+No cooldown, no self-pity, no wasted day. The recovery plan started the same day the score arrived.
+
+- Switched fully to **AWS Skill Builder** as the only prep source for the retake.
+- Started **Domain 1 Review: AWS Certified Data Engineer – Associate (DEA-C01)**.
+- Covered:
+  - Lesson 1: **Perform data ingestion**
+  - Lesson 2: **Transform and process data**
+
+The signal is clear: the miss was small, the gap is fixable, and the strategy is now cleaner than before.
+
+**SQL | Exam Reflection — Copy Schema Without Data**
+
+A useful SQL concept from today's exam reflection:
+
+```sql
+CREATE TABLE new_table AS
+SELECT *
+FROM old_table
+WHERE 1 = 0;
+
+---
+
 ## June 1, 2026
 
 **AWS DEA-C01 | Exam Day ✓ — Result Pending**

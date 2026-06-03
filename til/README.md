@@ -7,6 +7,61 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 3, 2026
+
+**AWS DEA-C01 Retake Prep — Day 1: Domain 1 Review + Official Practice + TutorialsDojo Sprint**
+
+First full retake prep day. Three sources, three signals. AWS Skill Builder confirmed
+as the right primary strategy — the official framing alone improved answer precision
+measurably by end of day.
+
+**AWS Skill Builder | Domain 1 Review — Videos**
+
+- **Lesson 1 — Perform data ingestion**: Kinesis Data Streams vs. Firehose, batch vs.
+  streaming patterns, ingestion source types
+- **Lesson 2 — Transform and process data**: Glue ETL, Lambda transformations, data
+  format conversion (Parquet, ORC)
+
+Key distinction locked in:
+- **Firehose** = managed delivery + optional Lambda transformation, least operational
+  overhead for streaming-to-S3 pipelines, no replay
+- **Kinesis Data Streams** = control + replay + fan-out — use when consumers need
+  independent read positions or reprocessing
+
+**AWS Skill Builder | Official Practice Question Set DEA-C01 v2 — 20 Questions**
+
+Score: **13/20 — 65%** · Duration: 18:08 min · Avg. answer time: 54s
+
+| Topic | Mistake | Correct Pattern |
+|---|---|---|
+| IAM Policy S3 + Lambda | Chose to append `s3:GetObject` to existing policy | Replace `s3:*` with `s3:GetObject` + specific ARN `/prefix/*` — Least Privilege |
+| Metadata store + fine-grained permissions | Chose Glue Data Catalog | Lake Formation = DB / Table / Column / Row / Cell level control |
+| Redshift + S3 cost-effective 3/12-month retention | Chose wrong tiering | Redshift Spectrum for yearly analysis on S3 + Glacier Deep Archive for >12 months |
+| Kinesis + Lambda IteratorAgeMilliseconds high | Chose provisioned concurrency | Reshard + Parallelization Factor + Enhanced Fan-Out — all three together |
+| Streaming logs → Parquet → S3 least overhead | Chose Kinesis + EC2 + KCL | Firehose + Lambda transformation → S3 directly |
+| Scanned documents full-text search performance | Chose Athena + Parquet | OpenSearch Service = most performance-optimized for full-text search |
+| SQS downtime data loss (Select TWO) | Chose delay queue | Increase retention period (up to 14 days) + attach DLQ |
+
+**3 core error patterns from this session:**
+
+- **IAM Least Privilege**: `s3:*` is always wrong when only `s3:GetObject` is needed
+- **Service differentiation**: Lake Formation vs. Glue Catalog, OpenSearch vs. Athena, Firehose vs. Kinesis+EC2
+- **Multi-select questions**: first instinct lands one correct answer but misses the second
+
+**TutorialsDojo | 40 Questions Sprint**
+
+Score: **86%** — strongest single-session result since retake prep began.
+
+>**What I understood**
+>- Official Skill Builder questions use AWS-native framing that is less forgiving;
+  TD questions are more pattern-recognizable — both are needed
+>- 86% on TD after a focused Skill Builder session confirms the official material
+  transfers directly to question performance — strategy working on Day 1
+>- Skill Builder doesn't just teach facts; it trains the specific reasoning language
+  AWS uses when writing exam questions — that is the retake edge
+
+---
+
 ## June 2, 2026
 
 Received the DEA-C01 exam result today: **708/1000** — 12 points below the passing threshold of 720. The retake was booked at the earliest possible date: **June 16, 2026**.

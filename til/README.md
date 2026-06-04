@@ -9,7 +9,7 @@ TIL Started: April 13, 2026
 
 ## June 4, 2026
 
-**AWS DEA-C01 Retake Prep — Deep Practice Day**
+**AWS DEA-C01 Retake Prep — Day 2: Deep Practice Day**
 
 Today was about refinement, not fundamentals. Two TutorialsDojo 65-question runs and one official Skill Builder practice exam confirmed that the core AWS knowledge is already in place — the remaining gap is sharper decision-making between very similar service patterns.
 

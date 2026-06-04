@@ -7,6 +7,27 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 4, 2026
+
+**AWS DEA-C01 Retake Prep — Deep Practice Day**
+
+Today was about refinement, not fundamentals. Two TutorialsDojo 65-question runs and one official Skill Builder practice exam confirmed that the core AWS knowledge is already in place — the remaining gap is sharper decision-making between very similar service patterns.
+
+**Practice Results**
+
+- TutorialsDojo first cold run: **83%**
+- TutorialsDojo second cold run: **87%**
+- AWS Skill Builder practice exam: **100%** on 20 questions
+
+The wrong answers were not random guesses. In most cases, the correct option had already been considered, which shows that the knowledge is stable but still needs tighter elimination under exam pressure.
+
+>**What I understood**
+>- The exam is now less about learning new basics and more about distinguishing close AWS service patterns quickly and accurately
+>- The knowledge is already strong enough to eliminate distractors consistently; the remaining work is polishing the small differences that matter most
+>- Taking the exam later in Month 4, as planned in my roadmap, would likely have made me even more comfortable. But today already showed that the foundation is in place
+
+---
+
 ## June 3, 2026
 
 **AWS DEA-C01 Retake Prep — Day 1: Domain 1 Review + Official Practice + TutorialsDojo Sprint**

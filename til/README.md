@@ -7,6 +7,39 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 5, 2026
+
+**AWS DEA-C01 Retake Prep — Day 3: Domain 1 Reinforcement Day**
+
+Today was a pure reinforcement session. All **Domain 1** TutorialsDojo practice questions
+were answered again, and every wrong answer was reviewed by reading the explanation
+**twice**. The result was clear: the knowledge is getting sharper, the patterns are
+sticking faster, and the retake is moving in the right direction.
+
+**What I did today**
+
+- Reworked all **Domain 1** TutorialsDojo practice questions
+- Reviewed every missed answer with **two full explanation passes**
+- Focused on locking in the decision patterns instead of just checking whether an answer was right
+
+The strongest signal from today is not just repetition volume, but the feeling of
+progressive clarity. More and more questions are being solved from understanding,
+not hesitation.
+
+**Performance signal**
+
+- **95 questions** completed today
+- **80% correct** on the day
+- Score trend now marked as **improving**
+- Latest weighted score shown in the app: **74%**
+
+>**What I understood**
+>- Domain 1 is becoming more stable because repeated exposure plus deep explanation review is reducing confusion between similar AWS service patterns
+>- Reading the wrong-answer explanations twice forces the difference between “almost knew it” and “actually know it”
+>- The retake attempt no longer feels like a hope-based try — it feels like the version that will earn the DEA-C01 certification
+
+---
+
 ## June 4, 2026
 
 **AWS DEA-C01 Retake Prep — Day 2: Deep Practice Day**

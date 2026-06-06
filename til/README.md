@@ -26,7 +26,7 @@ above the pass line and marked as **improving**. Latest weighted score: **79%**.
 
 - Latest weighted score (last 30d): **79%** — above the pass threshold
 - Trend: **Improving**
-- 3 active study days tracked · 250 total questions completed
+- 3 active study days tracked since reseting TutorialDojos statistics · 250 total questions completed
 
 >**What I understood**
 >- 97% on 60 domain questions is not a fluked result — it reflects that core AWS service

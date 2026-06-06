@@ -7,6 +7,37 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 6, 2026
+
+**AWS DEA-C01 Retake Prep — Day 4: Domain 2 Deep Dive Day**
+
+60 questions today across two domains — 97% correct. The score trend is now clearly
+above the pass line and marked as **improving**. Latest weighted score: **79%**.
+
+**Session Breakdown**
+
+| Domain | Questions | Result |
+|---|---:|---|
+| D1 Data Ingestion & Transformation | 7 | ✅ Reinforcement pass |
+| D2 Data Store Management | 53 | ✅ Deep dive complete |
+| **Total** | **60** | **97% correct** |
+
+**Score Trend**
+
+- Latest weighted score (last 30d): **79%** — above the pass threshold
+- Trend: **Improving**
+- 3 active study days tracked · 250 total questions completed
+
+>**What I understood**
+>- 97% on 60 domain questions is not a fluked result — it reflects that core AWS service
+  decision patterns are now genuinely stable and accessible under realistic practice conditions
+>- Domain 2 at 53 questions deep means data store concepts — Redshift node types, DynamoDB
+  partitioning, S3 lifecycle, Aurora vs RDS — are now in a reliable state for exam day
+>- The retake on June 16 is not a gamble; the preparation is doing exactly what it was
+  designed to do
+
+---
+
 ## June 5, 2026
 
 **AWS DEA-C01 Retake Prep — Day 3: Domain 1 Reinforcement Day**

@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 7, 2026
+
+**AWS DEA-C01 Retake Prep — Day 5: Domain 3 & 4 Deep Review Day**
+
+54 questions across the two remaining domains — 94% correct. Score trend now at **81%**.
+All four domains have now completed at least one dedicated deep review pass since the retake strategy began.
+
+**Session Breakdown**
+
+| Domain | Status |
+|---|---|
+| D3 Data Operations & Support | ✅ Deep review complete |
+| D4 Data Security & Governance | ✅ Deep review complete |
+| **Total questions** | **54** |
+| **Correctness** | **94%** |
+
+**Score Trend**
+
+- Latest weighted score (last 30d): **81%** — comfortably above the pass threshold
+- 4 active study days since reset · all 4 domains reviewed
+
+>**What I understood**
+>- D3 and D4 completing at 94% confirms that the weakest domains from the first exam
+  attempt are no longer the weak spots — the targeted review strategy closed exactly
+  the gaps that cost points on June 1
+>- With all four domains deep-reviewed, the remaining prep work before June 16 is
+  consolidation and full-exam simulation, not gap-filling
+>- 81% trend score on domain-specific practice — where questions are harder to game by
+  context — is the strongest signal yet that the retake will land above 720
+
+---
+
 ## June 6, 2026
 
 **AWS DEA-C01 Retake Prep — Day 4: Domain 2 Deep Dive Day**

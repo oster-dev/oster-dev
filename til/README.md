@@ -7,6 +7,43 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 8, 2026
+
+**AWS DEA-C01 Retake Prep — Day 6: Full TutorialsDojo Question Bank Completed**
+
+Today was a milestone session: **204 questions** completed in one push, covering the
+remaining TutorialsDojo catalog until every single question in the bank had been answered
+at least once. It took nearly **3 hours**, but the result says everything — **85% correct**
+on the day, with the latest weighted score now at **81%**.
+
+**What happened today**
+
+- Completed **204 TutorialsDojo questions**
+- Finished the **entire TutorialsDojo question catalog**
+- Study activity since the reset now shows **5 active study days** and **554 total questions**
+- Score trend remains above the pass line and is currently marked **stable**
+
+This is the strongest possible confirmation that the preparation is no longer partial.
+There are no more untouched TutorialsDojo questions left.
+
+**Why this matters**
+
+- Finishing every TD question means the full provider coverage has now been exhausted
+- **85%** across 204 questions is not a lucky burst — it reflects real endurance,
+  pattern recognition, and domain familiarity over a large sample
+- From tomorrow onward, a **Nex Arc 65-question practice exam** will be the cleanest
+  external benchmark to measure the most honest current level before the retake
+
+>**What I understood**
+>- Completing the full TutorialsDojo bank removes uncertainty about whether any major
+  practice topic was still untouched — now the focus shifts from coverage to validation
+>- An 85% result over 204 questions shows that the knowledge holds not only in short
+  bursts, but across long-form fatigue and repetition
+>- Tomorrow's Nex Arc set matters because it is the best way to test how much of this
+  progress transfers outside the question style that has now become fully familiar
+
+---
+
 ## June 7, 2026
 
 **AWS DEA-C01 Retake Prep — Day 5: Domain 3 & 4 Deep Review Day**

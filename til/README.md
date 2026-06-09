@@ -7,6 +7,39 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 9, 2026
+
+**AWS DEA-C01 Retake Prep — Day 7: Nex Arc Practice Exam 6/6: 84%**
+
+The final Nex Arc practice exam — the one that was too complex to finish before the first
+real attempt back in May — completed today with **84% correct on 65 questions**.
+This is the clearest confidence signal of the entire retake prep phase.
+
+**Context that makes this result significant**
+
+Before the first exam attempt, Nex Arc PT6 was briefly attempted and immediately
+abandoned. The question complexity was the direct trigger for purchasing the TutorialsDojo
+subscription at the time. Coming back to that exact same test today and scoring 84%
+is a measurable, concrete demonstration of how much the knowledge has grown.
+
+**Why Nex Arc PT6 is a strong signal**
+
+- Nex Arc practice questions are noticeably harder and more complex than the real DEA-C01 exam
+- The actual exam uses more straightforward framing — Nex Arc deliberately tests deeper
+  edge cases and service nuances that go beyond what the exam typically covers
+- Scoring **84% on a harder-than-real-exam set** means the buffer going into the retake
+  is substantial
+
+>**What I understood**
+>- The test that was too difficult to finish before the first attempt is now a clean 84% —
+  that is not a coincidence, that is 3 weeks of targeted retake preparation making itself visible
+>- If the hardest available practice set yields 84%, the real exam — which is less complex —
+  should be well within passing range with comfortable margin
+>- The retake on June 16 is no longer a question of whether the knowledge is there;
+  it is a formality that the preparation has earned
+
+---
+
 ## June 8, 2026
 
 **AWS DEA-C01 Retake Prep — Day 6: Full TutorialsDojo Question Bank Completed**

@@ -7,6 +7,41 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 10, 2026
+
+**AWS DEA-C01 Retake Prep — Day 8: Nex Arc PT5 81% + Full TD Bank 97%**
+
+Two full practice sessions today — one hard, one familiar. Both passed with authority.
+6 days until the retake.
+
+**Session Results**
+
+| Source | Questions | Correct |
+|---|---:|---:|
+| Nex Arc Practice Test 5/6 | 65 | 81% |
+| TutorialsDojo full bank (all domains) | 204 | 97% |
+| **Total today** | **269** | — |
+
+**What these numbers mean**
+
+- **Nex Arc PT5 at 81%** — back-to-back Nex Arc sets above 80% confirms that the
+  hardest available practice material is now consistently solvable, not just occasionally
+- **TutorialsDojo 204 questions at 97%** — every single question in the TD catalog
+  answered in one session with near-perfect correctness; the domain knowledge is fully
+  saturated at this provider's level
+- The two sources together cover both extremes: the hardest available questions and the
+  broadest available coverage — both at a high level on the same day
+
+>**What I understood**
+>- Two consecutive Nex Arc exams above 80% (PT6: 84%, PT5: 81%) is a stronger signal
+  than any single result — it proves the performance is stable, not fluked
+>- 97% on 204 TD questions in one session means the entire provider question pool is
+  now effectively solved; no question in that bank can surprise the retake
+>- At this point the retake on June 16 is not a gamble — it is the confirmation of work
+  that has already been done
+
+---
+
 ## June 9, 2026
 
 **AWS DEA-C01 Retake Prep — Day 7: Nex Arc Practice Exam 6/6: 84%**

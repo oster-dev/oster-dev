@@ -7,6 +7,37 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 11, 2026
+
+**AWS DEA-C01 Retake Prep — Day 9: Nex Arc PT4: 91% ✅ + Exam Booked for June 15**
+
+**91% on 65 questions.** Three consecutive Nex Arc sets: 84% → 81% → 91%.
+The retake is no longer booked for June 16 — it was moved up to **June 15, 2026 at 10:45 CET**.
+
+**Nex Arc PT4 — 65 Questions — 91% Correct**
+
+Nex Arc practice questions are known to be harder and more complex than the real DEA-C01
+exam, and the material is not always fully up to date with the current question pool.
+That context matters — and it makes 91% an even stronger signal. This was not a test of
+memorized answers. This was a test of whether the underlying AWS reasoning is solid
+enough to solve questions that go beyond the scope of the actual exam. It is.
+
+>**What I understood**
+>- Three Nex Arc sets in a row above 80%, peaking at 91%, confirms that the knowledge is
+  not only stable but actively improving across the hardest available practice material
+>- The Nex Arc pool is deliberately harder and partially outdated relative to the real
+  DEA-C01 — 91% on that benchmark means the real exam has a comfortable margin built in
+>- Booking the exam one day earlier than planned is the right call: the preparation is
+  ready, and there is no benefit in waiting
+
+**Exam Booking**
+
+- **Retake exam: June 15, 2026 — 10:45 CET**
+- Booked today — one day earlier than originally planned
+- 4 days of focused final consolidation remain
+
+---
+
 ## June 10, 2026
 
 **AWS DEA-C01 Retake Prep — Day 8: Nex Arc PT5 81% + Full TD Bank 97%**

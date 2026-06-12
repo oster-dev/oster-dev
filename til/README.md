@@ -7,6 +7,32 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 12, 2026
+
+**AWS DEA-C01 Retake Prep — Day 10: Mixed Practice Day**
+
+Today was about variety and deeper anchoring. Different practice sources, different wording,
+same result: the core AWS service patterns are holding up under pressure.
+
+**Practice Results**
+
+| Source | Questions | Result |
+|---|---:|---:|
+| Nex Arc PT3 | 65 | **87%** |
+| Neal Davis PT1 | 25 | **95%** |
+| Neal Davis PT2 | 25 | **91%** |
+
+Mixing sources before the June 15 retake is doing exactly what it should: reinforcing the
+same concepts through different phrasing so the services are anchored more deeply, not
+just recognized from one provider's style.
+
+>**What I understood**
+>- Rotating between Nex Arc, TutorialsDojo, and Neal Davis is strengthening the same service patterns from multiple angles, which makes recall more durable
+>- 87% on Nex Arc PT3 confirms that the hardest-style questions are still being solved cleanly even without repeating the same provider format every day
+>- 95% and 91% on Neal Davis sets show that the fundamentals are stable enough to survive a different question style entirely
+
+---
+
 ## June 11, 2026
 
 **AWS DEA-C01 Retake Prep — Day 9: Nex Arc PT4: 91% ✅ + Exam Booked for June 15**

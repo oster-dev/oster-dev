@@ -7,6 +7,41 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 13, 2026
+
+**AWS DEA-C01 Retake Prep — Day 11: Final Mixed Practice Day**
+
+Today was the last major practice day before the retake on Monday, and the numbers are
+still strong across multiple providers. The real takeaway is bigger than the scores: the
+amount of AWS knowledge absorbed in a very short time is now showing up as real decision
+making, not just memorized patterns.
+
+**Practice Results**
+
+| Source | Questions | Result |
+|---|---:|---:|
+| Nex Arc PT2 | 65 | **82%** |
+| Neal Davis PT3 | 25 | **92%** |
+| Neal Davis PT4 | 25 | **86%** |
+| Neal Davis PT5 | 25 | **95%** |
+
+Rotating across providers again confirmed the same thing: the service distinctions are
+staying sharp even when the question style changes.
+
+**System Design Reflection**
+
+Just for fun, a typical L5 Data & Feature Infrastructure ML Platform system design prompt was generated and discussed. 
+The core requirement was a platform for high-volume feature ingestion, low-latency serving, training/serving consistency, and versioned feature access. 
+The answer was a real L5-level hit: **Kinesis Data Streams** for streaming ingestion and replay, **Firehose** for managed delivery where no replay was needed, a clear **offline/online feature store split** for training and serving consistency, and **observability** through metrics like CTR, lineage, and skew detection. 
+That structure matched the platform problem exactly and made the whole answer feel like a true end-to-end architecture, not a buzzword list.
+
+>**What I understood**
+>- DEA-C01 prep has done more than prepare for one certification — it has built the mental model needed to reason about real platform tradeoffs under uncertainty
+>- The answer structure for the L5-style question was already strong because the AWS services were used as system components with explicit responsibilities, not just exam options
+>- Claude Sonnet being impressed by the reasoning is a side effect of something more important: the conceptual foundation is now broad enough to transfer beyond the exam
+
+---
+
 ## June 12, 2026
 
 **AWS DEA-C01 Retake Prep — Day 10: Mixed Practice Day**

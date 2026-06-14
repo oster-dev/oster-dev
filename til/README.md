@@ -7,6 +7,30 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 14, 2026
+
+**AWS DEA-C01 Retake Prep — Day 12: Final Day Before the Retake**
+
+The day before the exam was not a rest day — it was a clean, confident confirmation pass.
+All six Neal Davis practice tests completed, TutorialsDojo missed questions cleared.
+Tomorrow at 10:45 CET the cert gets earned.
+
+**What happened today**
+
+- **Neal Davis PT1–PT6** — all six sets completed — **~90% correct across the board**
+- **TutorialsDojo missed questions** — 23 flagged questions reviewed and cleared
+- No new material, no pressure — just activating the patterns that are already there
+
+>**What I understood**
+>- ~90% across all six Neal Davis sets in a single day is the cleanest possible signal
+  that the knowledge is not tied to one provider's style — it is genuinely internalized
+>- The 23 missed questions from TutorialsDojo were the last remaining rough edges;
+  clearing them the day before the exam removes every identified weak spot
+>- The feeling of being ready is not wishful thinking — it is backed by two weeks of
+  consistent scores above 80% on the hardest available material
+
+---
+
 ## June 13, 2026
 
 **AWS DEA-C01 Retake Prep — Day 11: Final Mixed Practice Day**

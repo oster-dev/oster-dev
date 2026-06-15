@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 15, 2026
+
+**AWS DEA-C01 Retake: Attempt 2 — Result**
+
+Second attempt. Score: **680/1000** — Fail. Passing threshold: 720.
+
+**What the result says**
+
+Two attempts, two fails. The scores tell a clear story: the preparation methods used so
+far — TutorialsDojo, Nex Arc, Neal Davis — do not sufficiently reflect the current
+DEA-C01 exam pool. Both times, high practice scores did not translate to the real exam.
+That is not a knowledge problem. That is a preparation alignment problem.
+
+The exam pool for DEA-C01 is still evolving and the third-party providers are lagging
+behind. This is a documented pattern with newer AWS certifications, and it means the
+strategy needs to change more fundamentally before the next attempt.
+
+>**What I understood**
+>- A drop from 708 to 680 on a second attempt with significantly more preparation is
+  the clearest possible signal that the practice material does not mirror the real
+  question pool closely enough — more practice volume on the same sources will not fix this
+>- This result does not change the direction — it changes the method. The goal is the same.
+
+**What comes next**
+
+Retake after the mandatory 14-day waiting period. The next preparation cycle will be
+built differently: less question volume, more conceptual depth from official AWS sources.
+
+The conviction is still there. This gets solved.
+
+---
+
 ## June 14, 2026
 
 **AWS DEA-C01 Retake Prep — Day 12: Final Day Before the Retake**

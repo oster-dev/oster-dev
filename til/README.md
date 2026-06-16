@@ -7,6 +7,46 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 16, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 1**
+
+Today marked the shift from question volume to deep service understanding. The official DEA-C01
+results made the real gap obvious: Domain 2 and Domain 3 still need the most work, while
+Domain 1 and Domain 4 are already at **Meets Competencies**. That changed the prep strategy
+immediately.
+
+**What changed today**
+
+The focus moved away from endless practice exams and into a structured YouTube deep-dive
+series with service explanations, keyword mapping, and real exam traps. That format is
+finally making the AWS services click in the right context instead of just being recognized
+from memorized answer patterns.
+
+Key DEA-C01 traps reinforced today:
+
+- Crawler modes: `CRAWL_EVERYTHING` vs. `CRAWL_EVENT_MODE`
+- `DynamicFrame` vs. `DataFrame`
+- `DataBrew` vs. `Lake Formation`
+- `Kinesis Data Streams` vs. `Firehose` vs. `MSK`
+
+>**What I understood**
+>- The main problem was not lack of volume — it was not enough deep knowledge in the
+  deciding topics
+>- Lambda is only the right fit for short, event-driven Glue work; longer jobs belong to
+  Glue or EMR
+>- Step Functions Standard and Express are fundamentally different and fixed at creation
+>- High `IteratorAge` needs more throughput, not more Lambda concurrency
+>- For sub-second or millisecond latency, Data Streams is the correct choice, not Firehose
+
+**New exam date**
+
+The next exam is already booked: **June 29, 2026 at 20:15 Seattle local time**.
+The trip to Seattle from **June 24 to July 5** also makes the timing useful for getting a
+first real look at the future relocation area.
+
+---
+
 ## June 15, 2026
 
 **AWS DEA-C01 Retake: Attempt 2 — Result**

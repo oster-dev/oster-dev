@@ -7,6 +7,68 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 17, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 2: Redshift, Athena, Lake Formation, S3 & Data Formats**
+
+Second day with the StackLession YouTube course. Today covered the two heaviest blocks —
+Redshift and Athena — not as a recap, but at real architectural exam depth.
+First checkpoint result: **12/12 ✅** — every question correct.
+
+**Redshift**
+
+- `COPY` uses every slice in parallel — `INSERT` goes through the Leader Node row by row;
+  never use `INSERT` for bulk loading
+- Multiple concurrent `COPY`s into the same table force serialized load + `VACUUM` after —
+  one `COPY` with many files is always the better pattern
+- Manifest files are idempotent and deterministic; `mandatory: true` prevents silent partial loads
+- `UNLOAD` with Parquet: every slice writes in parallel — Parquet is ~2x faster and ~6x smaller than CSV
+- **Distribution styles**: KEY for large table joins on high-cardinality columns, ALL for
+  small dimension tables (<3M rows), EVEN when no join key exists, AUTO as default
+- `COMPOUND SORTKEY` = 90% of cases, cheap `VACUUM`; `INTERLEAVED` = brutally expensive
+  `VACUUM REINDEX`, never for frequent loads
+- Spectrum **cannot** read Glacier Flexible Retrieval or Deep Archive — restore to Standard first, then query
+- **Streaming Ingestion**: `CREATE EXTERNAL SCHEMA FROM KINESIS` + Materialized View with
+  `AUTO REFRESH YES` — no S3 staging, no Firehose, lowest latency path
+
+**Athena**
+
+- Price = $5 per TB scanned — every optimization saves money directly; Parquet + Snappy +
+  Partition Projection brings the same query to ~$0.10
+- `CTAS` = cheapest CSV→Parquet conversion without Glue or EMR, but max 100 partitions —
+  larger jobs need batched `INSERT INTO`
+- **Partition Projection** eliminates `MSCK REPAIR TABLE` entirely — Athena computes
+  partitions at query time, zero Catalog lookups
+- **Workgroups**: team isolation, `BytesScannedCutoffPerQuery` as cost guardrail, dedicated CloudWatch metrics
+- **Federated Query**: Lambda Connectors connect Athena SQL to DynamoDB, RDS, Redshift — no ETL needed
+- Keyword map:
+  - "Avoid MSCK REPAIR TABLE" → Partition Projection
+  - "Cheapest CSV→Parquet" → CTAS
+  - "Isolate teams + cap cost" → Workgroups + `BytesScannedCutoffPerQuery`
+
+**Lake Formation, S3 Storage Classes & Data Formats**
+
+- Lake Formation = fine-grained access control at column and row level; not DataBrew (transforms), not Glue (catalogs)
+- **Readable by Spectrum**: Standard, Standard-IA, One Zone-IA, Intelligent-Tiering, Glacier Instant Retrieval
+- **NOT readable without restore**: Glacier Flexible Retrieval, Deep Archive
+- Parquet vs CSV: columnar → reads only needed columns + predicate pushdown;
+  strong compression (Snappy/GZIP); 1 TB CSV = $5, 1 TB Parquet ≈ $0.50
+
+**Checkpoint 1: 12/12 ✅**
+
+First objective proof that the new learning approach is working. The StackLession format
+translates service mechanics directly into exam-ready decision patterns.
+
+>**What I understood**
+>- The difference between the current approach and all previous prep is architectural
+  framing — understanding why Redshift distributes data a certain way makes the exam
+  questions lose their trick entirely
+>- Partition Projection and `CTAS` are the kind of specifics that third-party practice
+  tools rarely explain at this depth — this is exactly the layer that the real exam tests
+>- 12/12 on day 2 is an early signal, not a guarantee, but it confirms the direction is right
+
+---
+
 ## June 16, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 1**

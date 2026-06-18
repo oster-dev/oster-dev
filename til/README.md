@@ -7,6 +7,72 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 18, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 3: DynamoDB, DMS, EMR, Security, CloudWatch & Glue Data Quality**
+
+Third deep-dive day with the StackLession YouTube course. Six service blocks covered,
+each with exam traps and keyword maps. The pattern is clear: every video reveals exactly
+the kind of nuance the real exam tests that practice questions never explain.
+
+**DynamoDB**
+
+- **Partition Key** = must be unique; **Sort Key** = optional, enables range queries
+- `GetItem` = single item by PK; `Query` = items by PK + optional SK filter; `Scan` = full table, expensive
+- **GSI** (Global Secondary Index): new PK + SK, eventually consistent, separate RCU/WCU
+- **LSI** (Local Secondary Index): same PK, different SK — must be defined at table creation, strongly consistent
+- DAX = in-memory cache, microsecond latency, write-through; for read-heavy workloads
+- **On-Demand** vs **Provisioned**: on-demand for unpredictable traffic, provisioned for consistent load + cost control
+- DynamoDB Streams + Lambda = event-driven triggers for downstream processing
+- Keyword map: "millisecond → microsecond latency" → DAX; "flexible schema + massive scale" → DynamoDB; "cross-region replication" → Global Tables
+
+**DMS & EMR**
+
+- DMS = ongoing replication + one-time migration; source stays live during migration
+- SCT (Schema Conversion Tool) = converts schema when source ≠ target engine
+- DMS replication instance = separate EC2 running the migration engine — size it appropriately
+- **EMR**: master node manages jobs, core nodes store HDFS + run tasks, task nodes compute only (no HDFS, spot-friendly)
+- EMR on EC2 vs EMR Serverless: serverless for variable workloads, EC2 for persistent clusters with tuning control
+- Bootstrap actions = run scripts at cluster launch before applications start
+- Keyword map: "heterogeneous migration" → DMS + SCT; "Hadoop / Spark managed cluster" → EMR; "cost-optimized compute workers" → EMR task nodes on Spot
+
+**Data Security: IAM, KMS & Encryption**
+
+- IAM Policy evaluation order: explicit Deny → Explicit Allow → implicit Deny
+- **KMS CMK**: AWS-managed key vs Customer-managed key — customer-managed = full rotation + audit control
+- SSE-S3 = AWS manages keys; SSE-KMS = customer controls key policy + CloudTrail audit; SSE-C = customer provides key per request
+- VPC Endpoint for S3 = data never leaves AWS network; no NAT gateway needed
+- Macie = detects PII and sensitive data in S3 automatically — not a firewall, not an encryptor
+- Exam trap: **Macie identifies only** — it does not block or encrypt; action must come from separate policy/workflow
+
+**CloudWatch, CloudTrail & Monitoring**
+
+- CloudWatch Logs = collect; CloudWatch Metrics = measure; CloudWatch Alarms = react
+- CloudWatch Logs Insights = ad-hoc query over log data with its own query syntax
+- CloudTrail = API call audit log, every AWS action recorded; not real-time monitoring
+- `IteratorAge` high → consumer is falling behind → increase shards or Parallelization Factor, not Lambda concurrency
+- Exam trap: CloudTrail is **not** for real-time monitoring — use CloudWatch Events / EventBridge for that
+
+**Glue Data Quality — DQDL Rules**
+
+- DQDL = Data Quality Definition Language — declarative rules inside Glue ETL jobs
+- Rule types: `Completeness`, `Uniqueness`, `ColumnValues`, `RowCount`, `Freshness`
+- Results can be written to S3 or sent to CloudWatch for alerting
+- Exam trap: DataBrew = visual profiling + transformation; Glue Data Quality = programmatic rule enforcement
+
+**Amazon Macie — PII Detection**
+
+- Macie scans S3 for PII: names, SSNs, credit card numbers, passport data
+- Generates findings → EventBridge → SNS or Lambda for automated response
+- Does **not** encrypt, does **not** block — detection only
+- Keyword map: "find sensitive data in S3" → Macie; "automatically classify S3 objects" → Macie; "respond to PII finding" → EventBridge + Lambda
+
+>**What I understood**
+>- Every StackLession video delivers the exact layer that the real exam tests: not what a service does, but when it does it and what the trap is when you confuse it with the next closest option
+>- The DynamoDB LSI vs GSI distinction, Macie's detection-only role, and CloudTrail vs CloudWatch confusion are all high-probability exam traps that were never explained at this depth in any practice tool
+
+---
+
 ## June 17, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 2: Redshift, Athena, Lake Formation, S3 & Data Formats**

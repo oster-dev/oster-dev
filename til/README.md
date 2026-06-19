@@ -7,6 +7,69 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 19, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 4: Exam Traps, Cost Optimization & Pipeline Architectures**
+
+Broadest content day so far with the StackLession YouTube course: six videos plus a second
+checkpoint video across all domains. Result: **15/15 ✅**. The pattern is now undeniable —
+Checkpoint 1 was 12/12, Checkpoint 2 was 15/15, and the new learning format is clearly working.
+
+**Exam Traps**
+
+- Macie identifies PII, never modifies it; redaction belongs to Glue transformations or S3 Object Lambda
+- Real-time means `KDS + Managed Flink`; eliminate Firehose, S3-as-a-hop, and SPICE from choices
+- Spectrum cannot read any Glacier class; restore/copy to Standard first
+- Known access pattern → S3 Lifecycle; unknown or changing → Intelligent-Tiering
+- Glue runs on DPUs, not EC2; Glue FLEX is the cost lever, never Spot
+- High `IteratorAge` = more shards + higher ParallelizationFactor; Lambda concurrency alone does nothing
+- DataBrew prepares/transforms, Lake Formation governs access
+- "Manually" is usually a trap when AWS offers a managed or event-driven alternative
+
+**Cost Optimization**
+
+- Glue: FLEX execution class for cheaper runs with spare capacity
+- Redshift: Serverless for intermittent workloads, Reserved Nodes for steady baselines
+- Athena: Parquet first, then partitioning, then compression; `BytesScannedCutoffPerQuery` is a guardrail, not a cost lever
+- S3: Lifecycle for known access, Intelligent-Tiering for unknown; beware per-object monitoring on tiny files
+- EMR: Spot only on Task nodes; Master/Core stay On-Demand
+- Lambda: tune memory first, then ARM/Graviton2, then Provisioned Concurrency only when utilization is high
+- DynamoDB: On-Demand for spiky/unpredictable, Provisioned + Auto Scaling for sustained load
+
+**Reference Architectures**
+
+1. Batch analytics: `S3 → Glue Crawler → Glue Catalog → Glue ETL → S3 Parquet → Athena/Redshift`
+2. Real-time streaming: `KDS → Managed Flink → DynamoDB + Firehose → S3`
+3. Near-real-time: `Firehose → S3 Parquet → Athena + Partition Projection`
+4. Database migration: `SCT → DMS full-load + CDC → S3 staging → Glue ETL → Redshift`
+5. Governed data lake: `S3 zones → Lake Formation + Glue Catalog → Athena/Spectrum/EMR/Glue ETL`
+
+**Secondary Services + Apache on AWS**
+
+| Apache / Open-Source | AWS Service |
+|---|---|
+| Spark | EMR / Glue |
+| Flink | Managed Service for Apache Flink |
+| Kafka | Amazon MSK |
+| Hive Metastore | Glue Data Catalog |
+| Airflow DAGs | Amazon MWAA |
+| Cassandra / CQL | Amazon Keyspaces |
+| Ranger | Apache Ranger on EMR |
+| Iceberg | S3 / Athena / EMR / Glue |
+
+Additional mappings: AppFlow for SaaS ingestion, Neptune for graph workloads, EventBridge Pipes for filtered point-to-point flows, OpenSearch UltraWarm for queryable older logs, and AWS Batch for highly parallel jobs.
+
+**Checkpoint 2: 15/15 ✅**
+
+Two checkpoints, zero wrong answers. Keyword-to-answer recognition is now fully locked in.
+
+>**What I understood**
+>- The shift is no longer just about knowing services — it is about instantly matching the problem to the right AWS pattern under time pressure
+>- The traps are becoming easier to eliminate because the learning material now focuses on boundaries, not memorized answers
+>- 15/15 on a six-domain checkpoint is the strongest proof yet that the new learning approach is deeply embedding the architecture logic
+
+---
+
 ## June 18, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 3: DynamoDB, DMS, EMR, Security, CloudWatch & Glue Data Quality**

@@ -7,6 +7,72 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 20, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 5: 20-Question Final Walkthrough — StackLessions Course Complete**
+
+Day 5 and the last day of the StackLessions course. The final video was a 20-question
+walkthrough across all four domains. Score: **18/20 ✅**. Course complete.
+The two wrong answers are the most valuable content of the entire walkthrough.
+
+**Score: 18/20 — Q4 and Q19 wrong**
+
+**Q4 — Athena CTAS vs Firehose Record Format Conversion:**
+The mistake was logical: CTAS also converts JSON→Parquet, so it seemed valid. The
+critical distinction: CTAS is a downstream step that creates a second job with extra
+DPU costs, while Firehose Record Format Conversion happens **in-flight** — directly
+at delivery, on a stream that is already running, with no extra pipeline.
+Keyword: "cheapest ongoing conversion" + "stream" → always Firehose, never CTAS.
+
+**Q19 — Gateway VPC Endpoint vs Interface VPC Endpoint for KMS:**
+The classic VPC Endpoint trap. **Gateway Endpoints exist only for S3 and DynamoDB** —
+these are the only two services, no exceptions. Everything else (KMS, Glue, Kinesis,
+Secrets Manager, STS) uses **Interface Endpoints via PrivateLink**. The rule is absolute.
+
+| Keyword | Answer |
+|---|---|
+| "cheapest ongoing conversion" + "stream" | Firehose in-flight conversion, not CTAS |
+| VPC Endpoint for KMS / Glue / Kinesis | Interface Endpoint (PrivateLink), never Gateway |
+| Gateway Endpoint = free + only two services | Gateway → S3 + DynamoDB only |
+
+**Exam-Day Rules — Locked In**
+
+1. Read the last sentence of the stem first — the qualifier lives there
+2. Eliminate "manually" immediately — the automated option almost always wins
+3. Prefer serverless and managed: Athena, Glue, Firehose, Lambda, Redshift Serverless unless ruled out
+4. Match retrieval SLA to tier: minutes = Expedited, hours = Standard; Deep Archive has no Expedited
+5. Flag and move on — never burn 5 minutes on one question
+
+**Keyword → Answer Final Map**
+
+- "Real-time" → KDS; "Near-real-time / deliver to S3" → Firehose
+- "Row/column/cell-level access" → Lake Formation; "Unknown access pattern" → Intelligent-Tiering
+- "Audit who decrypted" → SSE-KMS; "Cheapest private S3 access" → Gateway VPC Endpoint
+- "Existing Kafka producers" → MSK; "Python DAG / Airflow" → MWAA; "CQL / Cassandra" → Keyspaces
+- "Schema evolution / time travel on S3" → Apache Iceberg; "Exactly-once + streaming" → Managed Flink
+
+**Full Checkpoint History**
+
+| Checkpoint | Score |
+|---|---|
+| Checkpoint 1 | 12/12 ✅ |
+| Checkpoint 2 | 15/15 ✅ |
+| Final Walkthrough | 18/20 ✅ |
+
+Zero wrong answers in the first two checkpoints. Two precision-level errors in the final
+walkthrough — both identified, both understood, both closed. The shift is from "pass"
+to maximum score.
+
+>**What I understood**
+>- 18/20 with both errors being precision-level distinctions is not a knowledge problem —
+  it is the gap between 720 and 850+, and closing it requires this exact level of detail
+>- The Firehose in-flight conversion vs CTAS and the Gateway vs Interface VPC Endpoint
+  rules are now absolute; no exam question can land these as traps anymore
+>- After 12/12, 15/15, and 18/20 in the final walkthrough, the target for June 29 is
+  not 720 — it is the maximum possible score
+
+---
+
 ## June 19, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 4: Exam Traps, Cost Optimization & Pipeline Architectures**

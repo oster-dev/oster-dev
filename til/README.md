@@ -7,6 +7,98 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 21, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 6: Full Content Analysis + 8-Day Battle Plan**
+
+The most intensive planning day of the entire retake prep. The complete 484-page DEA-C01
+compendium was analyzed and distilled across three iterations into a structured premium
+study document. This was not reading — this was surgical content mapping.
+
+**Domain 1 — Data Ingestion & Transformation (34%)**
+
+**Glue**
+- Glue Data Catalog: exactly 1 per account per region, metadata only, shared with Athena/EMR/Spectrum
+- Crawler modes: `CRAWL_EVERYTHING` vs `CRAWL_EVENT_MODE` (S3 Events → standard SQS, no FIFO, hard cap 100k messages)
+- `DynamicFrame` vs Spark `DataFrame`: DynamicFrame for messy/semi-structured data with choice types, no fixed schema required
+- 5 ResolveChoice strategies: `cast` (silent data loss), `make_cols`, `make_struct`, `project`, `match_catalog`
+- Bookmark modes: Enable / Disable (default) / Pause — state only saved after `job.commit()`
+- FLEX: ~34% cheaper, not Spot (Glue = DPUs, never EC2)
+- DQDL: declarative quality rules on DeeQu basis directly in the job
+- Schema Registry: BACKWARD is default — for streaming payload schemas (≠ Data Catalog = table metadata)
+- FindMatches: fuzzy deduplication without a common key
+- VPC trick: S3 Gateway Endpoint in Route Table + Self-Referencing SG Inbound Rule
+
+**DataBrew vs Lake Formation — the #1 Trap**
+- DataBrew = **modifies data** (no-code, 250+ transforms, PII masking recipes) — "the Sous-Chef"
+- Lake Formation = **controls access** (fine-grained, row/column/cell, cross-account) — "the Maître d'"
+
+**Kinesis**
+- Hard rule: Real-time → KDS; Near-real-time → Firehose. No exceptions.
+- Latency: KDS + EFO ~70ms / KDS classic ~200ms / Firehose zero-buffering ~5s / standard ~60s
+- Enhanced Fan-Out: Data Streams only, dedicated 2MB/s per consumer per shard
+- `IteratorAge` fix: Shards + ParallelizationFactor (1→10) + EFO — never Lambda concurrency
+- Firehose Format Conversion: in-flight JSON→Parquet, requires Glue Catalog schema, min buffer 64MB, set `CompressionFormat` to UNCOMPRESSED
+- Kinesis Data Analytics = Managed Service for Apache Flink (renamed August 2023)
+
+**S3 & VPC**
+- Glacier Deep Archive: NO Expedited, min 180 days, Standard ≤12h
+- Gateway VPC Endpoint = S3 + DynamoDB only, free
+- Interface VPC Endpoint = everything else (KMS, Glue, Kinesis, SSM…)
+
+**Data Formats**
+- Priority order: Parquet FIRST (10x win) → Partition → Compress
+- Cost per 1 TB: CSV $5 → GZip $1.50 → Parquet+Snappy $0.50 → Parquet+Partitions+Projection $0.10
+- Three paths JSON→Parquet: CTAS (one-shot, serverless) / Glue ETL (recurring, transformations) / Firehose Conversion (streaming, zero ETL)
+
+**Domain 2 — Data Store Management (26%)**
+
+**Redshift**
+- Distribution styles: KEY (high-cardinality joins), ALL (small dims <3M rows), EVEN (no good key), AUTO (default)
+- Sort keys: COMPOUND = default, 90% of cases; INTERLEAVED = ad-hoc multi-column, `VACUUM REINDEX` is expensive
+- `VACUUM REINDEX` = interleaved keys only; `ANALYZE` = statistics only; `VACUUM FULL` = space + re-sort
+- `COPY` > `INSERT`: COPY is parallel across all slices; INSERT is a Leader Node bottleneck
+- Manifest + `mandatory:true` = deterministic, fails if file is missing
+- Spectrum reads: Standard/IA/One Zone-IA/Intelligent-Tiering/Glacier Instant — NOT Glacier Flexible/Deep Archive
+- Kinesis→Redshift: Materialized View + `AUTO REFRESH YES` = lowest latency without S3 staging
+- Data Sharing: RA3 or Serverless only, zero copy, matching encryption required
+
+**Athena**
+- Partition Projection = #1 exam concept, eliminates `MSCK REPAIR TABLE`
+- CTAS max 100 partitions, then batched `INSERT INTO`
+- Workgroups: `BytesScannedCutoffPerQuery` = cost guardrail, not a cost lever
+
+**DynamoDB**
+- GSI Throttling Trap: low-cardinality GSI partition key → hot partition → base table throttling
+- Fix: redesign the GSI key — not increase base WCU, not switch to On-Demand, not add DAX
+
+**Domain 3 — Data Operations (22%)**
+
+- `IteratorAge` metric: `GetRecords.IteratorAgeMilliseconds` uses **Maximum**, not Average
+- Glue Bookmark silent failure: Disabled/Reset Bookmark reprocesses everything without throwing an error
+- EMR node strategy: Master + Core = On-Demand; Task = Spot (no HDFS)
+- MWAA: most expensive option, only choose when "existing Airflow DAGs" or "no refactoring" appears in the stem
+- Step Functions Standard: exactly-once, up to 1 year, `.sync` and `.waitForTaskToken`
+- Step Functions Express: at-least-once, max 5 min, Request-Response only — **fixed at creation**
+
+**Domain 4 — Data Security & Governance (18%)**
+
+- Lake Formation is built **on top of** Glue Data Catalog — both IAM and LF checks must pass
+- LF-Tags: scales from n×n to n+n, new resources inherit tags automatically
+- Setup gotchas: register S3 location, revoke `IAMAllowedPrincipals`, Column Filter on Partition Key is not allowed → use Row Filter instead
+- Canonical PII pattern: Macie finds, DataBrew masks
+- EMR PHI: SSE-KMS at rest + TLS in transit via EMR Security Configuration
+
+>**What I understood**
+>- The 484-page compendium surfaced depth that no practice tool or YouTube video covered
+  fully — especially the Glue Bookmark silent failure, the GSI hot partition trap, and the
+  LF-Tag scaling math
+>- The canonical patterns (Macie + DataBrew for PII, Gateway = S3 + DynamoDB only,
+  IteratorAge → shards not Lambda) are now internalized as absolute rules, not exam tips
+>- The goal for June 29 is not 720 — it is the maximum possible score
+
+---
+
 ## June 20, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 5: 20-Question Final Walkthrough — StackLessions Course Complete**

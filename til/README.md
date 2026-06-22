@@ -7,6 +7,55 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 22, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 7: Domain 1 + 2 Deep Study: Active Recall with the Master Battle Plan**
+
+Today was a strong focus day in the DEA-C01 retake prep. Domain 1 and Domain 2 were
+worked through three times from the Master Battle Plan PDF, and on the third pass the
+keyword tables were used actively by hiding the answer and saying it out loud before
+revealing it.
+
+**Study method of the day**
+
+This was not passive reading. The approach was stepwise active recall:
+- first pass for structure,
+- second pass for reinforcement,
+- third pass for hidden-answer retrieval.
+
+That third pass is much closer to real exam conditions because it forces the brain to
+retrieve the answer instead of just recognizing it.
+
+**Topics covered today**
+
+**Domain 1 — Data Ingestion & Transformation (34%)**
+
+- Glue Data Catalog, crawler modes, DynamicFrames vs DataFrames
+- ResolveChoice strategies, job bookmarks, Glue FLEX, and DQDL
+- Glue Schema Registry, FindMatches, and VPC setup
+- Kinesis Data Streams vs Firehose, Enhanced Fan-Out, IteratorAge, Firehose format conversion
+- S3 event notifications, storage classes, Parquet, Snappy, and streaming-to-Parquet paths
+
+**Domain 2 — Data Store Management (26%)**
+
+- Redshift distribution styles, sort keys, VACUUM/ANALYZE, and COPY with manifest
+- Spectrum and its Glacier limits
+- Athena Partition Projection, CTAS, Workgroups, and Federated Query
+- DynamoDB capacity modes and the classic GSI throttling trap
+
+**Why this worked**
+
+Three passes plus active self-questioning is a very effective mix of repetition and
+retrieval training. Hiding the solution and answering out loud turns trigger phrases into
+real recall patterns instead of simple recognition.
+
+>**What I understood**
+>- The third pass is the important one, because it forces active memory retrieval rather than passive familiarity
+>- Domain 1 and Domain 2 are now being re-anchored through structure, not just through volume
+>- This method is better aligned with the exam than another round of pure reading or passive review
+
+---
+
 ## June 21, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 6: Full Content Analysis + 8-Day Battle Plan**

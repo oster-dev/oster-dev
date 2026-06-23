@@ -7,6 +7,61 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 23, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 8: Domain 3 + 4 Deep Study, Active Recall Complete**
+
+The third day of the 8-day battle plan was completed successfully. Domain 3 and Domain 4
+were studied with the same method as the previous days: three passes, active recall on the
+third pass, answers hidden, spoken out loud.
+
+**Why the method works**
+
+This is not a new discovery — it has already proven effective in school for vocabulary
+tests in French and English, and in history for memorizing events. Active recall is one
+of the strongest long-term learning methods because the brain is forced to retrieve
+information rather than just recognize it. Doing three repetitions and speaking the
+answer aloud adds a second sensory channel, which strengthens retention even more.
+
+**Topics covered today**
+
+**Domain 3 — Data Operations & Support (22%)**
+
+- Kinesis monitoring: `GetRecords.IteratorAgeMilliseconds` with Statistic `Maximum`, not Average
+- IteratorAge fixes: shards, Parallelization Factor, Enhanced Fan-Out — never Lambda concurrency
+- Glue Bookmark silent failure: disabled bookmark reprocesses everything without an error
+- EMR node strategy: Master + Core On-Demand, Task nodes on Spot
+- Orchestration: MWAA only when existing Airflow DAGs exist, Glue Workflows for Glue-only chains, Step Functions for multi-service pipelines
+- Step Functions Standard vs Express: fixed at creation, not changeable later
+
+**VPC Endpoints — now fully anchored**
+
+- Gateway Endpoint = only S3 and DynamoDB, free, added in the route table
+- Interface Endpoint = all other services (KMS, Glue, Kinesis, Athena, SSM, CloudWatch…)
+- Key realization: the Gateway Endpoint belongs to the target service, not the caller. Glue, Athena, and Lambda are callers; S3 and DynamoDB are the only Gateway targets
+- Metaphor: one lighthouse per island — every service needs its own lighthouse, Gateway only for S3 and DynamoDB
+
+**Domain 4 — Data Security & Governance (18%)**
+
+- Lake Formation setup order: register S3 location → revoke `IAMAllowedPrincipals` → set grants
+- LF-Tags: scales from n×n to n+n, new resources inherit automatically
+- Column Filter on Partition Key is not allowed — use Row Filter instead
+- Macie + DataBrew: canonical PII pattern, Macie discovers and DataBrew masks
+- EMR PHI encryption: SSE-KMS at rest + TLS in transit via EMR Security Configuration
+
+**Personal note**
+
+Tomorrow morning is the flight to Seattle. The heat in Germany has been a real productivity
+killer in the last few days, so Seattle will at least be better from a climate perspective.
+The flight will be used for a light review of the marked gaps.
+
+>**What I understood**
+>- Active recall is working because it converts passive familiarity into real retrieval, which is much closer to the exam than rereading
+>- Domain 3 and Domain 4 are now being anchored through repeated recall rather than quick recognition
+>- The VPC Endpoint rule is now locked in: Gateway only for S3 and DynamoDB, everything else Interface
+
+---
+
 ## June 22, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 7: Domain 1 + 2 Deep Study: Active Recall with the Master Battle Plan**

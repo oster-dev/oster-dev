@@ -7,6 +7,67 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 25, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 10: Quiz Training in Seattle**
+
+First prep day in Seattle. Instead of structured reading, knowledge was
+tested in two quiz rounds under real exam conditions — one at Pocket Beach on a log, one
+on a bench at the Seattle Museum of History & Industry.
+
+**Method of the day**
+
+Active recall under real conditions: no looking things up, qualifier in the last sentence
+read first, two options eliminated immediately, then answer. Environment: relaxed but
+focused — exactly the combination that matters before an exam.
+
+**Quiz Round 1 — Standard Quiz (Pocket Beach)**
+
+- 15 questions across all 4 domains
+- Result: **15/15 ✅** 
+
+**Quiz Round 2 — Trap Quiz (Seattle Museum of History & Industry)**
+
+- 15 pure trap questions from the hardest DEA-C01 pitfalls
+- Result: **13/15 ✅**
+- Wrong: GSI question + one additional trap question
+
+**New insight today: GSI independent capacity**
+
+GSIs have their own provisioned capacity, independent of the base table. That means:
+
+- A GSI with a low-cardinality partition key (e.g. `order_status` with 4 values) creates hot partitions in the GSI
+- GSI throttling propagates back to the base table
+- The only real fix is redesigning the GSI partition key to a high-cardinality column
+- Increasing base WCU, switching to On-Demand, or adding DAX do not fix the root cause
+
+**Glue FLEX language precision**
+
+Today's quiz had a misleading phrasing using "Spot Capacity" for Glue FLEX. The correct exam language is: Glue FLEX uses **spare capacity / flexible execution class**, not EC2 Spot Instances. Glue runs on DPUs, never on EC2 — this remains an absolute exam rule.
+
+**All checkpoints and quiz results**
+
+| Session | Result |
+|---|---|
+| Checkpoint 1 | 12/12 ✅ |
+| Checkpoint 2 | 15/15 ✅ |
+| StackLessions Final Walkthrough | 18/20 ✅ |
+| Standard Quiz today | 15/15 ✅ |
+| Trap Quiz today | 13/15 ✅ |
+
+**Personal note**
+
+Seattle has turned out to be the ideal study location. Pocket Beach and the Museum of
+History & Industry as spontaneous study spots — relaxed, focused, productive. After the
+unbearable heat in Germany, Seattle is exactly the right climate and mental environment
+for the final days before the exam.
+
+>**What I understood**
+>- The GSI independent capacity rule is now fully anchored: hot partition on GSI propagates to base table, fix is always key redesign
+>- Glue FLEX = spare capacity / flexible execution class — the phrase "Spot" in that context is the trap
+
+---
+
 ## June 24, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 9: Flight to Seattle: 9 Hours of Airborne Active Recall**

@@ -39,7 +39,6 @@ what decides whether an answer is only "kind of right" or truly the safe exam an
 
 | Session | Result |
 |---|---|
-| Standard Quiz | 15/15 content correct, 1 click error |
 | Trap Quiz | 13/15, but the wrong questions were recognized and rejected logically |
 | Overall takeaway | Exam-trap understanding confirmed |
 

@@ -7,6 +7,44 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 26, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 11: Trap Training with Flashcards and Quiz Verification**
+
+Today was fully about active knowledge testing instead of passive review. First the worst exam
+traps were drilled with flashcards, then a hard quiz with new questions tested whether the
+understanding really held up under pressure.
+
+**What helped most today**
+
+The combination of flashcards and quiz worked well because it covered two layers: first
+clean recognition of traps, then recall under pressure. Some quiz questions were
+intentionally or accidentally flawed, and that actually helped — it forced AWS rules to be
+verified actively instead of being accepted blindly.
+
+**Key lessons of the day**
+
+- Redshift Spectrum can read Glacier Instant Retrieval, but not Glacier Flexible Retrieval
+  or Deep Archive
+- Step Functions Express does not accept `.sync` or `.waitForTaskToken`; that belongs to
+  Standard workflows
+
+**Why this matters**
+
+Today was the real proof that DEA-C01 is not just about memorization, but about correctly
+recognizing wording traps, service boundaries, and incorrect AWS language. That skill is
+what decides whether an answer is only "kind of right" or truly the safe exam answer.
+
+**Checkpoint status**
+
+| Session | Result |
+|---|---|
+| Standard Quiz | 15/15 content correct, 1 click error |
+| Trap Quiz | 13/15, but the wrong questions were recognized and rejected logically |
+| Overall takeaway | Exam-trap understanding confirmed |
+
+---
+
 ## June 25, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 10: Quiz Training in Seattle**

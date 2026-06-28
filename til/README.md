@@ -7,6 +7,67 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 27, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 12: First Cold Quiz on untested Material**
+
+Day 12 was about one thing: verifying that known material holds up under real quiz pressure.
+The full study PDF had been worked through — today was the first time that exact content
+got tested in a cold, unseen 20-question quiz format. Completed on a bench directly outside
+**William H. Gates Hall at the University of Washington, Seattle**.
+
+Result: **18/20**.
+
+The distinction matters: this was not new material. This was a verification that what
+was studied actually converted into reliable recall under exam conditions. It did.
+
+**Topics verified under quiz pressure for the first time**
+
+- SNS + SQS Fan-out pattern vs EventBridge Rules vs Pipes
+- S3 Event Notifications — SQS FIFO trap via EventBridge
+- LSI vs GSI — creation-time constraint, consistency difference
+- DynamoDB Streams, DAX, TTL, and hot partition fixes
+- OpenSearch UltraWarm vs Cold — Cold is not directly queryable
+- AWS Batch, Neptune, Amazon Keyspaces, AppFlow
+- Step Functions Standard vs Express — no `.sync` / `.waitForTaskToken` in Express
+- Firehose Parquet compression — GZIP not supported for columnar formats in Athena
+- Lake Formation LF-Tags, Cell-Level Security, IAMAllowedPrincipals
+- Redshift Distribution Styles, COPY vs INSERT, Concurrency Scaling
+- Glue Bookmark Pause Mode, `CRAWL_EVENT_MODE`, FLEX execution class
+
+**Two misses — precision-level traps, not knowledge gaps**
+
+**Q1 — SNS+SQS vs EventBridge:**
+Knew both options. Chose the wrong one under pressure. Rule now locked:
+fan-out with per-consumer DLQ and filter = SNS + SQS, not EventBridge Rule.
+
+**Q15 — GZIP vs Snappy for Parquet in Athena:**
+Knew Snappy was supported, got briefly confused by GZIP.
+Rule now locked: GZIP is not supported for columnar formats (Parquet/ORC) in Athena.
+
+Both errors were precision-level. Zero service confusion. Zero category mistakes.
+
+**Full Quiz History**
+
+| Session | Result |
+|---|---|
+| Checkpoint 1 | 12/12 ✅ |
+| Checkpoint 2 | 15/15 ✅ |
+| StackLessions Final Walkthrough | 18/20 ✅ |
+| Standard Quiz (Jun 25, Pocket Beach) | 15/15 ✅ |
+| Trap Quiz (Jun 25, MOHAI) | 13/15 ✅ |
+| Trap Quiz 2.0 (Jun 26, Elliott Bay Park) | 13/13  ✅ | out of 15, two completely wrong questions were recognized and rejected logically |
+| Cold Quiz (Jun 27, UW Gates Hall) | 18/20 ✅ |
+
+>**What I understood**
+>- 18/20 on a first-time cold quiz across all DEA-C01 domains is a clear green light for June 29
+>- Both errors were pressure-level precision traps, not knowledge gaps — that is the
+  best possible type of wrong answer two days before an exam
+>- The remaining hours before the exam are spent enjoying Seattle sunshine —
+  the city that was always at the end of the roadmap 🌤️
+
+---
+
 ## June 26, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 11: Trap Training with Flashcards and Quiz Verification**

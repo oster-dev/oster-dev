@@ -64,7 +64,7 @@ Both errors were precision-level. Zero service confusion. Zero category mistakes
 >- Both errors were pressure-level precision traps, not knowledge gaps — that is the
   best possible type of wrong answer two days before an exam
 >- The remaining hours before the exam are spent enjoying Seattle sunshine —
-  the city that was always at the end of the roadmap 🌤️
+  the city that is the end of the roadmap 🌤️
 
 ---
 

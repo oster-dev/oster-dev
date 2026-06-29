@@ -7,6 +7,56 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 28, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Day 13: Trigger Phrases and Precision Mapping**
+
+Today was a pure keyword-mastery day. Three quiz rounds tested trigger phrases under exam-like
+pressure, and the main lesson was clear: the problem is not broad service knowledge — it is
+the exact mapping from wording to the right AWS service.
+
+**Quiz results**
+
+- Quiz 1 at Madrona Park Beach: **17/20**
+- Quiz 3A at Madrona Park Beach: **5/5**
+- Quiz 3B at Madison Park Beach: **15/20**
+
+Quiz 3A was a complete hit and confirmed that the trigger phrases from the first keyword block
+are fully locked in. Quiz 3B was harder and more distracting, but that was useful because it
+exposed the last precision gaps.
+
+**Today’s key learning points**
+
+- CloudTrail logs Management Events by default; Data Events like `S3 GetObject` must be enabled explicitly
+- CloudTrail Lake is the right choice for long-term immutable audit history with SQL access across accounts and regions
+- IAM Trust Policies define who can assume a role; Permission Policies define what the role can do
+- Glue Job Bookmarks work with DynamicFrames, not cleanly with Spark DataFrames
+- S3 Event Notifications do not support SQS FIFO directly; EventBridge is the correct workaround
+- EMR Spot is only safe when Master and Core stay On-Demand and Spot is used only for Task nodes
+- SSE-S3 is for simple, low-cost encryption; SSE-KMS is the choice for auditability and key control
+- Lake Formation is for governance and fine-grained access, not for data prep
+- DataBrew is for visual no-code data preparation, not governance
+- Athena cost drops most through Parquet, partitioning, and Snappy compression
+- Redshift Spectrum is read-only; writes belong in S3 or a regular Redshift table
+
+**Quiz errors**
+
+- Quiz 1: CloudTrail Data Events, Trust Policy vs Permission Policy, and Glue Job Bookmarks
+- Quiz 3A: 5/5 correct, no errors
+- Quiz 3B: S3 Event Notifications → SQS FIFO, EMR Spot rolling, SSE-S3 vs SSE-KMS, and CloudTrail Data Events
+
+**Exam readiness**
+
+No more quizzes today. Tomorrow should be a short review block with the error list, trigger
+mappings, and the most important trap patterns. The focus is now on retrieval, not new material.
+
+>**What I understood**
+>- The remaining issue is not broad knowledge, but precision in trigger-word mapping
+>- Quiz 3A confirmed the first keyword block is fully internalized
+>- Quiz 3B exposed the last small gaps, which is exactly what the final prep day should do
+
+---
+
 ## June 27, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 12: First Cold Quiz on untested Material**

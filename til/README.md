@@ -7,6 +7,60 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 30, 2026
+
+**AWS DEA-C01 — Exam Result — Attempt 3**
+
+Third attempt. Score: **698/1000** — Fail. Passing threshold: **720**. Missed by just 22 points.
+
+**Domain breakdown**
+
+| Domain | Weight | Result |
+|---|---:|---|
+| D1 — Data Ingestion & Transformation | 34% | Needs Improvement |
+| D2 — Data Store Management | 26% | Needs Improvement |
+| D3 — Data Operations & Support | 22% | Meets Competencies |
+| D4 — Data Security & Governance | 18% | Meets Competencies |
+
+Domain 3 and 4 are solid. The gap is isolated to Domain 1 and Domain 2, which together
+make up 60% of the exam — that is exactly where the next round of effort needs to go.
+
+**Honest reflection: study material vs real exam gap**
+
+A frustrating mismatch became clear across seven different study sources, all advertised
+as DEA-C01 exam content. On exam day, roughly 20 questions took a completely different
+direction than anything covered across all of those sources. This is not a lack-of-effort
+problem — it is a real misalignment between marketed prep content and the actual current
+exam scope.
+
+>**What I understood**
+>- 22 points away from passing with Domain 3 and 4 already at Meets Competencies means
+  the path forward is narrow and specific, not a full restart
+>- Seven sources missing the same ~20 questions' worth of content is a structural signal,
+  not bad luck — the next prep cycle needs sources closer to the live exam pool, not more volume
+>- Pausing Domain 3 and 4 entirely and going all-in on Domain 1 and 2 is the correct,
+  disciplined use of the next two weeks
+
+**Next steps**
+
+- Retake booked for **July 13, 2026** — the earliest date allowed under the mandatory 14-day wait
+- Until then: focused grinding limited strictly to Domain 1 (Ingestion/Transformation) and Domain 2 (Data Store Management)
+- Domain 3 and 4 paused — no need to re-review what is already solid
+
+```
+Progress | AWS DEA-C01
+- Attempt 1 — Jun 1:  708/1000 ❌ (threshold: 720, delta: -12)
+- Attempt 2 — Jun 15: 680/1000 ❌ (threshold: 720, delta: -40)
+- Attempt 3 — Jun 29: 698/1000 ❌ (threshold: 720, delta: -22)
+- D1 Ingestion & Transformation (34%): Needs Improvement
+- D2 Data Store Management (26%): Needs Improvement
+- D3 Data Operations & Support (22%): Meets Competencies ✅
+- D4 Data Security & Governance (18%): Meets Competencies ✅
+- Retake: July 13, 2026 — focused on D1 + D2 only
+```
+
+---
+
 ## June 29, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Exam Day**

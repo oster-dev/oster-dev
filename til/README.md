@@ -7,6 +7,36 @@ TIL Started: April 13, 2026
 
 ---
 
+## June 29, 2026
+
+**AWS DEA-C01 Retake Prep 2.0 — Exam Day**
+
+Today was the exam day. Before the test, the keyword mapping list and the exam-trap notes
+from the Master Battle Plan PDF were reviewed once more, and the feeling going in was
+solid and calm. One last pass on the rules, one last pass on the traps, then straight into
+the exam.
+
+**Two last-minute clarifications**
+
+- `CREATE TABLE ... AS SELECT ... WHERE 1=0` is the trick for creating a **zero-row copy**
+  of a table structure without loading data
+- EventBridge cannot directly target DataBrew; if orchestration is needed, Step Functions
+  sits in between
+
+**What stood out before the exam**
+
+The last review was not about learning new material — it was about locking in the final
+precision rules and trusting the work that had already been done over the previous 2.0
+prep phase. The keyword map, the trap list, and the repeated recall passes all came together
+in one final review session.
+
+>**What I understood**
+>- The final value now is not more volume, but calm recall and exact trigger mapping
+>- The `WHERE 1=0` pattern is the right mental shortcut for a table-structure-only copy
+>- EventBridge → DataBrew is not a direct path; orchestration belongs to Step Functions
+
+---
+
 ## June 28, 2026
 
 **AWS DEA-C01 Retake Prep 2.0 — Day 13: Trigger Phrases and Precision Mapping**

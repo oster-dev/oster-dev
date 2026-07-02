@@ -7,6 +7,40 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 2, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 2: Domain 1 + 2 Re-Review and Flight Prep**
+
+Today was about narrowing the focus even further. The plan is to review Domain 1 and
+Domain 2 again in StackLessions today, and if needed continue on the flight. I also went
+through the topics that felt new to me from the exam questions I saw after the exam, so
+that there are no knowledge gaps left before the next retake.
+
+**What was reviewed**
+
+- Domain 1 and Domain 2 re-review in StackLessions
+- The exam topics that felt unfamiliar after the last attempt
+- The goal was not broad repetition, but closing the last small gaps that still existed
+
+**Why this matters**
+
+The first two domains are still the decisive ones, and reviewing them again in a calmer,
+more deliberate way helps turn earlier recognition into real recall. Going back through the
+post-exam unfamiliar topics also removes the chance of leaving a hidden gap behind.
+
+>**What I understood**
+>- The next retake needs zero ambiguity in Domain 1 and Domain 2
+>- Re-reviewing the same material with a fresh mindset is more valuable now than adding new volume
+>- Anything that felt new on the actual exam has to be made familiar before July 13
+
+**Travel note**
+
+If the review is not finished today, the flight is the backup study block. That keeps the
+prep moving even while traveling and makes sure the next retake is approached with a clean
+knowledge base.
+
+---
+
 ## July 1, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 1: Material Gap Analysis**

@@ -7,6 +7,48 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 1, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 1: Material Gap Analysis**
+
+Day 1 of a new prep cycle, and it started with an honest audit instead of jumping straight
+back into studying. Actively searched for updated study material today, targeting
+specifically the topics that felt unfamiliar on the real exam.
+
+**Material gap analysis**
+
+- StackLessons course structure and pedagogy are genuinely strong and still recommendable —
+  the core teaching approach holds up well
+- However, the content was not fully up to date with the current DEA-C01 exam scope, which
+  cost real points on the actual exam
+- Key takeaway: supplement any single course with additional, more current sources to close
+  the gaps that naturally exist when AWS updates the exam faster than course providers can
+
+**Seattle trip wrap-up**
+
+Return flight booked for tomorrow: Seattle → Frankfurt → home to Cologne. Seattle was a
+genuine experience, but realistically not the right long-term fit as a German-Romanian
+without a strong existing connection to the city. On top of everything else, a fire alarm
+went off at 1 AM in the accommodation — loud, triggered across all floors, with an actual
+fire one floor below. A lot to process today, stacked directly on top of processing the
+failed exam result.
+
+**Mindset moving forward**
+
+Setbacks noted, but confidence remains that the retake will go better with sharper, updated
+preparation. Trusting the roadmap to sort itself out over time — no need to force
+conclusions today. Closing this Seattle chapter on good terms: valuable experience, clear
+decision to move on.
+
+>**What I understood**
+>- The exam gap was never a knowledge problem — it is a material-currency problem, and
+  Prep 3.0 needs to actively correct for that by mixing in updated sources
+>- StackLessons remains a good foundation; it just cannot be the only source going forward
+>- A rough night and a hard result on the same day do not need to be processed into a
+  final verdict immediately — some things are allowed to just settle
+
+---
+
 ## June 30, 2026
 
 **AWS DEA-C01 — Exam Result — Attempt 3**

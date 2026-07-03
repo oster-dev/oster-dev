@@ -7,6 +7,33 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 3, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 3: Highest-Priority Gap Mapping**
+
+Today was about translating the corrected gap analysis into a clear action plan. The highest-priority gaps are now identified, and tomorrow the work begins to actively close them.
+
+**Highest-priority gaps**
+
+- **Vector search / vector index / vectorization**: questions around vector indexes, Bedrock Knowledge Base, and vectorization concepts were not anchored strongly enough yet
+- **B-tree / index creation**: the exam exposed a gap around choosing the right index type with the least operational overhead
+- **Watermark / streaming state**: the wording around adjusting only the watermark after ingestion is now flagged as a special trap
+- **Blank table copy patterns**: `WHERE 1=0` style zero-row table copies need to be fully automatic, not a hesitation point
+- **Level aggregation**: rollup / cube-style aggregations need to be recognized instantly
+- **Apache Iceberg**: open table format behavior must be more solid, especially around schema evolution and table management
+
+>**What I understood**
+>- The exam is now narrowed down to precision gaps, not broad knowledge gaps
+>- The highest-priority list is small enough to attack directly and thoroughly
+>- Tomorrow starts the actual repair phase, beginning with these exact items
+
+
+**Plan for tomorrow**
+
+Tomorrow’s prep starts with fixing the highest-priority gaps 
+
+---
+
 ## July 2, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 2: Domain 1 + 2 Re-Review and Flight Prep**

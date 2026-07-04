@@ -7,6 +7,46 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 4, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 4: Bedrock KBs, Vector Indexes, and Iceberg**
+
+Today focused on the first major remaining gap area: Amazon Bedrock Knowledge Bases,
+vectorization, HNSW vs IVF, and Apache Iceberg. The plan is now cleaner because I’m no
+longer repeating topics that are already solid, and I’m keeping this day centered on the
+remaining exam-only gaps.
+
+**What I learned**
+
+- Vectorization in Bedrock Knowledge Bases turns unstructured text into dense embeddings for semantic similarity search
+- HNSW is a graph-based approximate nearest-neighbor index with strong recall and low latency on moderate-sized datasets
+- IVF partitions vectors into clusters and trades recall vs latency through centroid probing
+- Apache Iceberg adds schema evolution, snapshot tracking, and structured table semantics on top of lake data, which makes it useful as a source for knowledge-base ingestion
+- Chunking and metadata matter: each chunk gets embedded separately, and stable row identifiers should be kept as metadata for traceability
+
+**Practice result**
+
+- Bedrock KBs and Vector Index Quiz: **15/15 — 100%**
+
+**What changed**
+
+The remaining scope gaps are now being treated as separate exam-only topics instead of
+mixing them into broad review. That makes the next days much more efficient, because the
+plan can now focus only on the actual missing pieces instead of redoing material that is
+already solid.
+
+>**What I understood**
+>- Vectorization, HNSW, IVF, and Iceberg are now in a good enough state to move forward
+>- The quiz confirmed that the topic is strong enough to leave the first gap area behind
+>- Active recall and short quizzes are the right way to verify each topic before moving on
+
+**Next steps**
+
+Move to the next remaining gap day instead of redoing already-solved material. Keep using
+active recall and short quizzes to verify each topic before moving on.
+
+---
+
 ## July 3, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 3: Highest-Priority Gap Mapping**

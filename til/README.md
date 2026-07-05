@@ -7,6 +7,48 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 5, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 5: SageMaker Unified Studio, Catalog, and ML Lineage**
+
+Today I focused on the remaining DEA-C01 gap area around SageMaker Unified Studio,
+SageMaker Catalog, domains, domain units, projects, and ML lineage tracking. I also
+removed another false gap from the study plan: the miss was not a technical weakness,
+but a wording trap around compliance and audit.
+
+**What I learned**
+
+- SageMaker Unified Studio is the browser-based interface that brings together authoring, experimentation, deployment, monitoring, governance, and the catalog in one place
+- A SageMaker domain is the managed control plane for users, access, and shared resources, while domain units are logical sub-divisions inside a domain for team or environment isolation
+- SageMaker Projects provide standardized templates for pipelines, source repos, IAM roles, and CI/CD-style workflows
+- SageMaker Catalog is the curated business catalog for approved ML assets such as pipelines, models, datasets, and project templates
+- ML Lineage Tracking records the chain from datasets and code to training jobs, models, and endpoints, which makes it useful for reproducibility, impact analysis, auditability, and compliance
+- The key exam trap is that "compliance" and "audit" can point to ML lineage, not only to logging or encryption features
+
+**Quiz result**
+
+- SageMaker Unified Studio / Catalog / ML Lineage Quiz: **14/15 — 93%**
+
+**What the miss taught me**
+
+The wrong-answer trap was confusing SageMaker Training Compiler with SageMaker ML Lineage Graph.
+Training Compiler is a performance tool, while ML lineage is a governance and traceability tool.
+If a question mentions reproducibility, audit, compliance, or tracing dataset-to-endpoint
+relationships, the answer is lineage.
+
+>**What I understood**
+>- The real topic is not just SageMaker features, but knowing whether the question is about speed or about traceability
+>- Lineage is the correct answer whenever the exam asks about auditability, reproducibility, or model history
+>- This was another false gap: the topic is mostly solid, and the miss was a wording issue rather than a knowledge hole
+
+**Next steps**
+
+Move to the next remaining gap block instead of re-reading already known material. Keep
+using active recall and short quizzes to separate performance tools from governance tools.
+Continue closing the remaining DEA-C01 gaps one topic at a time.
+
+---
+
 ## July 4, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 4: Bedrock KBs, Vector Indexes, and Iceberg**

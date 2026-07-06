@@ -7,6 +7,53 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 6, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 6: AWS Transfer Family and Infrastructure as Code**
+
+Today focused on AWS Transfer Family and Infrastructure as Code with SAM and CDK. The goal
+was to understand how to build secure file transfer workflows into S3 or EFS and how to
+define them cleanly in code.
+
+**What I learned**
+
+- AWS Transfer Family provides managed SFTP, FTPS, and FTP endpoints for secure file transfer into AWS
+- Transfer Family can use S3 or EFS as the backend storage layer
+- For custom authentication, Transfer Family uses a Lambda-based identity provider rather than reading users directly from Secrets Manager
+- IAM roles and prefix-level permissions are central to controlling what each Transfer Family user can access
+- AWS SAM is useful for compact serverless templates, especially when wiring S3 events to Lambda
+- AWS CDK is better when the infrastructure becomes more complex and you want reusable constructs in TypeScript or Python
+- CDK also supports testing infrastructure logic with normal unit test frameworks
+
+**Quiz result**
+
+- AWS Transfer Family and IaC Quiz: **13/15 — 86%**
+
+**What the misses taught me**
+
+The first mistake was thinking Secrets Manager could act as the identity provider. It cannot;
+the correct pattern is a Lambda custom identity provider. The second mistake was assuming
+the identity provider Lambda is triggered by S3 events. In reality, Transfer Family calls
+it directly during authentication. That clarified the key exam idea: identity for Transfer
+Family is an auth-time callback, not an event-driven workflow.
+
+**Key exam pattern**
+
+- If the question asks about custom authentication for Transfer Family, think Lambda identity provider
+- If the question asks about automation and repeatable infrastructure, think SAM or CDK depending on complexity
+- If the question asks about auditing or logging, combine CloudTrail data events with Transfer Family logs in CloudWatch
+
+>**What I understood**
+>- Transfer Family auth is a direct authentication callback, not a trigger-based workflow
+>- SAM is the concise option for simple serverless wiring; CDK is the better choice when the stack grows and needs reusable logic
+>- The repeated trap is now identified clearly enough to avoid on the next quiz
+
+**Next step**
+
+Keep moving through the remaining gaps instead of revisiting already stable topics.
+
+---
+
 ## July 5, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 5: SageMaker Unified Studio, Catalog, and ML Lineage**

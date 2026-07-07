@@ -7,6 +7,49 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 7, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 7: LLM Integration and Data Governance**
+
+Today focused on LLM integration in data pipelines and on governance frameworks for
+controlled data sharing. The goal was to understand how AWS services keep LLMs inside
+governed, auditable boundaries instead of letting them act as uncontrolled automation.
+This was the last of the newly added exam-skill areas in the current gap list, so the
+focus was on closing the final new concepts cleanly.
+
+**What I learned**
+
+- PII classification and governance metadata belong in catalog and tagging systems before data ever reaches an LLM
+- AWS Lake Formation is the main control point for fine-grained access, so LLM-driven workflows must still respect user permissions
+- The AWS Glue Data Catalog acts as the authoritative metadata source for data classification, ownership, and allowed usage
+- LLMs should suggest policy templates, masking rules, or classifications, but deterministic AWS services and human stewards must enforce them
+- Asynchronous patterns like SQS and EventBridge are safer than synchronous per-record LLM calls because they support retries, throttling, and centralized checks
+- Row-level security, SCP guardrails, versioned source documents, and detailed redacted logs all help make AI-assisted data processing compliant and auditable
+
+**Quiz result**
+
+- LLM Integration and Governance Quiz: **15/15 — 100%**
+
+**The core pattern**
+
+The quiz reinforced one central idea: the **LLM advises, AWS enforces**. That means the
+model can classify, summarize, or draft policies, but actual access control, masking, and
+routing must be handled by governed AWS services. Whenever compliance, audit, or data
+residency came up, the correct answer was always the deterministic AWS control, not the
+LLM itself.
+
+>**What I understood**
+>- The final new exam-skill area is now covered and no longer needs separate discovery work
+>- Governance metadata has to exist before AI touches the data, not after the fact
+>- The answer pattern is consistent: LLM for suggestion, AWS for enforcement
+
+**Progress check**
+
+All newly added exam-skill gaps are now covered. The remaining work is repetition, trap
+recognition, and mixed practice rather than new topic discovery.
+
+---
+
 ## July 6, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 6: AWS Transfer Family and Infrastructure as Code**

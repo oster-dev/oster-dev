@@ -7,6 +7,62 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 8, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 8: Domain 1 and 2 Baseline Assessment**
+
+Today I ran a 15-question baseline quiz for Domain 1 and another 15-question baseline quiz
+for Domain 2. Both came back **15/15**, which confirmed that the core patterns are still
+solid and that the remaining prep can stay focused on the final blueprint coverage.
+
+**Domain 1 — Data Ingestion & Transformation**
+
+The quiz reinforced the main architectural choices:
+
+- MSK for fan-out and replayability across independent consumer groups
+- Kinesis Data Firehose for near-real-time delivery with minimal custom code
+- Kinesis Data Streams retention + sequence numbers for ordered, replayable pipelines
+- Enhanced Fan-Out for dedicated per-consumer throughput
+- AppFlow for low-code SaaS ingestion without custom API clients
+- Lambda reserved concurrency as the direct lever against throttling from Kinesis-driven invocations
+- Step Functions for multi-service orchestration with human-in-the-loop approval via Wait states
+- AWS CDK in TypeScript for type-safe, reusable IaC
+- CodeCommit + CodeBuild + CodePipeline as the native AWS CI/CD pattern
+- Parquet as the default transformation target for analytics cost and performance
+
+**Deep dive: EMR Spot placement**
+
+The safe exam default remains **On-Demand Master, On-Demand Core, Spot Task**. Core nodes
+hold HDFS state, so Spot there is only safe when the scenario explicitly makes data-loss
+risk acceptable or resilience is already engineered. The question wording matters a lot here.
+
+**Domain 2 — Data Store Management**
+
+The quiz reinforced these choices:
+
+- RDS for OLTP workloads that need ACID guarantees
+- Lake Formation for fine-grained governance in multi-source data lakes
+- Redshift Spectrum for hybrid queries joining S3 external data with Redshift tables
+- Redshift materialized views for repeated aggregations on refreshed data
+- Partitioning to reduce scanned data and lower Athena / Spectrum cost
+- DynamoDB TTL for automatic expiry of transient records
+- S3 Versioning + Object Lock for compliant and recoverable protection
+- SageMaker Feature Store for ML-specific lineage and cataloging
+- Apache Iceberg for ACID transactions, row-level deletes, and schema evolution on S3
+
+**What I understood**
+
+> The foundational and classic decision patterns for DEA-C01 are still strong, and the
+baseline results show that Domains 1 and 2 are ready for the next phase of mixed trap drills.
+
+**Progress check**
+
+- Domain 1 baseline: **15/15**
+- Domain 2 baseline: **15/15**
+- Next up: Domain 3 and Domain 4 baseline assessment
+
+---
+
 ## July 7, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 7: LLM Integration and Data Governance**

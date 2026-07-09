@@ -7,6 +7,61 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 9, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 9: Domain 3 and 4 Baseline Assessment**
+
+Today I ran a 15-question baseline quiz for Domain 3 and another 15-question baseline quiz
+for Domain 4. Both came back **15/15**, which confirmed that the operational and security
+patterns are still stable and that full-domain coverage is now in place across the exam.
+
+**Domain 3 — Data Operations and Support**
+
+The quiz reinforced these operational choices:
+
+- AWS Step Functions for multi-service orchestration with retries, branching, and human-in-the-loop approval
+- Amazon EventBridge + AWS Lambda for low-overhead scheduled checks and validation tasks
+- Amazon MWAA for managed Apache Airflow DAGs when existing workflows already live in Airflow
+- AWS DataBrew for code-free data preparation and rule-based quality checks
+- Amazon Athena for rolling averages, log analysis, mismatch detection, and skew investigation using SQL over S3
+- Amazon QuickSight SPICE for fast dashboarding over large datasets while keeping source data in S3
+- Amazon Redshift Serverless vs. provisioned tradeoffs based on elasticity, cost predictability, and workload spikes
+- CloudWatch Logs, Glue console history, and Athena-over-S3-log analysis for pipeline troubleshooting
+- EMR log analysis plus S3 access logs for intermittent timeout debugging
+
+**Domain 4 — Data Security and Governance**
+
+The quiz reinforced these security and governance choices:
+
+- Cross-account S3 access using IAM roles, STS temporary credentials, trust policies, and bucket policies in the target account
+- ABAC using resource tags and condition keys for scalable attribute-based authorization
+- AWS Secrets Manager for sensitive values with rotation; Systems Manager Parameter Store for non-sensitive configuration
+- SSE-S3 for low-overhead encryption at rest, SSE-KMS with customer-managed keys for tighter control and auditability
+- TLS/HTTPS to protect data in transit, including explicit enforcement in clients
+- AWS Lake Formation for fine-grained governance across table-, column-, and row-level access with LF-Tags
+- Amazon Macie for discovering PII and sensitive data in S3
+- Amazon S3 Object Lambda for dynamic masking and transformation at read time
+- AWS CloudTrail as the primary audit-log service, supported by AWS Config and CloudWatch alarms
+- Residency concerns handled by keeping data and processing in the correct Regions, not by IAM alone
+
+**Milestone | Full DEA-C01 Domain Coverage**
+
+All four DEA-C01 domains now have baseline assessments completed:
+
+- Domain 1: 15/15
+- Domain 2: 15/15
+- Domain 3: 15/15
+- Domain 4: 15/15
+
+This is the strongest signal so far that the core exam patterns are stable across ingestion,
+storage, operations, and security.
+
+>**What I understood**
+>- The exam is no longer about discovering missing major themes, but about staying sharp on traps and wording
+>- Full-domain baseline coverage is now complete, so the remaining work can shift to mixed practice and qualifier heuristics
+
+---
+
 ## July 8, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 8: Domain 1 and 2 Baseline Assessment**

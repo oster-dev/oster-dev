@@ -7,6 +7,47 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 10, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 10: Mixed-Domain Trap Drill**
+
+Today was a mixed-domain quiz across all DEA-C01 areas, focused on qualifiers, service boundaries,
+and exam traps. The result was **20/20**, which confirmed that the concepts hold up across domains
+and not just inside one topic.
+
+**Key answers from the drill**
+
+- Real-time or near-real-time processing with multiple consumers: Kinesis Data Streams or MSK, depending on replay and Kafka compatibility
+- Automatic discovery and classification of sensitive data in S3: Amazon Macie
+- Long-term archival with up to 12 hours retrieval: Glacier Flexible Retrieval
+- EMR Spot placement that keeps HDFS stable while saving cost: Master and Core On-Demand, Spot only on Task nodes
+- Unpredictable access pattern: S3 Intelligent-Tiering
+- Rising IteratorAge in Kinesis: add shards and increase parallelization, or use Enhanced Fan-Out
+- Predictable BI dashboard workloads: Redshift provisioned or Redshift Serverless depending on elasticity needs
+- Column-level and row-level access control in a data lake: Lake Formation
+- Sporadic ad hoc analytics on S3: Athena
+- High-cardinality joins and date filtering: Redshift distribution and sort keys aligned to access patterns
+- Near-real-time delivery to S3: Kinesis Data Firehose
+- Known access pattern over time: S3 Lifecycle rules
+- Mask data on read without changing the source object: S3 Object Lambda
+- Serverless SQL exploration over S3: Athena
+- Macie-style discovery plus Lake Formation-style governed access: Macie + Lake Formation together
+- Parquet plus partitioning to reduce scan cost: Athena or Spectrum
+- Strict performance and concurrency control: provisioned services when serverless simplicity is not enough
+
+**Main takeaway**
+
+The biggest lesson was to read the last sentence first, identify the qualifier, and eliminate
+answers that violate it. That approach turned the mixed drill into a clean **20/20** result
+and confirmed that the concepts now hold up across the full exam blueprint.
+
+>**What I understood**
+>- Qualifier-first reading is now the main exam pattern, not a backup trick
+>- The difference between discovery, masking, governance, and storage tier selection is now clearer across domains
+>- The final mixed drill showed that the full blueprint is stable enough for the retake
+
+---
+
 ## July 9, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 9: Domain 3 and 4 Baseline Assessment**

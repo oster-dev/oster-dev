@@ -7,6 +7,47 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 11, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 11: Master Battle Plan Expansion**
+
+Today I expanded the master battle plan again because a few important DEA-C01 topics were still
+missing. The new version now covers all four domains with keyword-to-answer mappings and trap-focused
+patterns for faster recall under exam pressure.
+
+**What changed**
+
+- A full English version was created with keyword-to-answer mappings for all four domains
+- The document was restructured around exam traps instead of only topic summaries
+- Cross-domain trap patterns were added so the same keyword logic can be reused across question styles
+- The missing DEA-C01 topics were filled in to make the battle plan more complete for revision
+
+**Why this helped**
+
+The new structure is more useful than a simple topic list because it trains the mind to map a keyword
+to the exact AWS responsibility layer. That matters when a service is relevant but not actually the
+right answer category.
+
+Examples of the trap logic include:
+
+- Discovery vs. governance: Macie finds sensitive data, Lake Formation controls access
+- Ingestion vs. delivery: Kinesis Data Streams supports multiple consumers, Firehose delivers data downstream
+- Storage class vs. lifecycle intent: Glacier retrieval time and access pattern decide the choice
+- Service capability vs. exam qualifier: the last sentence often decides the correct answer
+
+**Main takeaway**
+
+The biggest lesson today was that DEA-C01 rewards precise reading of the qualifier and the service
+boundary. A service can be relevant without being the actual answer category, so the question must be
+mapped to the exact responsibility layer before selecting the option.
+
+>**What I understood**
+>- The battle plan now works as a fast recall sheet, not just a study summary
+>- Trap-based structure is more valuable than raw topic coverage for exam performance
+>- Service boundary thinking is the real filter that prevents wrong but plausible answers
+
+---
+
 ## July 10, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 10: Mixed-Domain Trap Drill**

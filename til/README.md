@@ -7,6 +7,45 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 12, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 12: Active Recall Session and Exam Date Decision**
+
+Today was focused on active recall against the master battle plan, plus a strategic decision to move
+the retake date. The session confirmed strong retention across all four domains, and the exam booking
+was shifted to July 15 to protect performance quality.
+
+**Active Recall Session**
+
+- Read through the full master battle plan PDF twice as an encoding pass to refresh all four domains
+- Ran a third pass using active recall by covering the answers and testing memory before checking each one
+- Confirmed that this blurting-style method (cover the answer, recall, then verify) is one of the most effective techniques for long-term retention, stronger than passive rereading alone
+- Noticed that most answers came back correctly on the first recall attempt, which signals strong retention across all domains rather than just recognition memory
+
+**Exam Date Decision**
+
+- A personal incident came up that affects readiness for the originally planned exam date
+- Decided to move the exam booking to July 15 instead of pushing through under added stress
+- This is a deliberate, strategic choice, not a setback, since the mixed-domain quiz already scored 20/20 and the extra days can be used for spaced recall instead of new material
+
+**What I reinforced**
+
+- Active recall combined with spaced repetition builds stronger memory pathways than rereading, even when a recall attempt is not fully successful
+- Confidence under exam conditions comes from repeated retrieval practice, not from cramming more content
+- Rescheduling an exam under personal stress is a valid strategy to protect performance quality
+
+**Main takeaway**
+
+The best use of the remaining days is short, spaced active recall sessions focused on weak points and
+exam traps, not additional reading. Protecting mental capacity now matters more than adding new material.
+
+>**What I understood**
+>- Blurting-style active recall exposes true retention far better than a second or third rereading pass
+>- Rescheduling is a controlled decision made from a position of strength, not weakness
+>- The extra days should be spent on spaced recall and trap review, not new domain content
+
+---
+
 ## July 11, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 11: Master Battle Plan Expansion**

@@ -7,6 +7,55 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 13, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 13: Active Recall Quiz and Confidence Check**
+
+Today I ran another active recall quiz across the DEA-C01 blueprint and scored **20/20** again.
+That confirmed the material is stable across single-domain, mixed-domain, and pure recall formats.
+
+**Active Recall Quiz**
+
+- Kinesis Data Streams for real-time personalization with multiple consumers and custom logic
+- Consumer-side scaling and Enhanced Fan-Out to address rising IteratorAge when producers are within throughput limits
+- S3 One Zone-IA as the class disqualified by high-availability requirements because it stores data in a single AZ
+- S3 Intelligent-Tiering for unknown and variable access patterns
+- Glacier Instant Retrieval for compliance archives that still need millisecond retrieval
+- S3 Object Lambda to intercept and transform object data at read time without modifying the stored object
+- Lake Formation to enforce fine-grained column and row-level permissions across Athena, Redshift Spectrum, and EMR
+- Macie to automatically discover and classify sensitive data in S3 using machine learning
+- EMR Master and Core On-Demand with Task Spot to protect HDFS stability while still saving cost
+- Redshift Federated Query for querying RDS or Aurora data without copying it into the warehouse
+- Redshift Spectrum for querying S3 data directly using the existing cluster as the query engine
+- Redshift distribution keys for minimizing data movement during frequent joins on a specific key
+- Athena for ad hoc pay-per-query analytics on S3
+- Glue Data Catalog for centralizing technical metadata for tables used by Athena, Spectrum, and EMR
+- Glue Schema Registry for centralizing streaming payload schemas and enforcing compatibility rules across producers and consumers
+- Secrets Manager when automatic secret rotation is required
+- AWS Config for tracking configuration state and compliance over time
+- CloudTrail for capturing the full audit trail of API calls across an account
+- Parameter Store for configuration and secrets management without automatic rotation
+- MWAA for migrating existing Airflow DAGs with minimal code changes
+
+**What I reinforced**
+
+- Kinesis Data Streams versus Firehose depends on custom consumer needs and latency requirements
+- IteratorAge problems are usually solved by scaling consumers or improving parallelism, not by changing producers first
+- Storage class selection depends on availability, retrieval time, and access pattern, not just the storage family name
+- Macie discovers, Lake Formation governs, and S3 Object Lambda masks or transforms at read time
+- EMR Spot placement should protect HDFS by keeping master and core nodes On-Demand
+- Redshift feature selection depends on source system and data location, especially when comparing federated access and Spectrum
+- Glue Data Catalog and Glue Schema Registry solve different metadata layers
+- Secrets Manager, Config, and CloudTrail each answer a different governance question
+
+**Main takeaway**
+
+Six consecutive perfect quiz results now confirm that the material is stable across single-domain, mixed-domain,
+and pure recall formats. The exam date move to July 15 is protecting focus without costing any retention,
+since today's recall accuracy matched every previous result exactly.
+
+---
+
 ## July 12, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 12: Active Recall Session and Exam Date Decision**

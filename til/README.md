@@ -7,6 +7,45 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 14, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 14: Final Trap Review**
+
+Today I ran one final 20-question pre-exam quiz focused on the highest-value DEA-C01 traps plus the
+newer topics that were added more recently. The result was **20/20**, which made it seven perfect quiz
+results in a row across domain-specific quizzes, a mixed-domain quiz, an active recall quiz, and the
+final trap review.
+
+**What I reinforced**
+
+- Kinesis Data Streams is the right answer when a scenario requires low-latency processing with custom consumers, while Firehose remains a buffered delivery service
+- Rising IteratorAge points to consumer lag, so the fix is consumer-side scaling or parallelism rather than changing producers
+- S3 Intelligent-Tiering is the right choice for unknown access patterns, while explicit lifecycle transitions are better when the pattern is known
+- One Zone-IA remains a trap whenever the prompt also requires multi-AZ resilience or high availability
+- Deep Archive is the right answer when retrieval can take many hours and minimum storage cost is the priority
+- Macie discovers and classifies sensitive data, Lake Formation enforces governed access, and S3 Object Lambda masks data dynamically on read
+- Glue Data Catalog stores lake table metadata, while Glue Schema Registry handles streaming schemas and compatibility
+- Redshift Spectrum is for querying S3 data, while Redshift Federated Query is for operational sources like RDS or Aurora
+- Secrets Manager is the answer when automatic secret rotation is required, while Parameter Store fits general configuration values
+- CloudTrail captures API calls, AWS Config tracks configuration history, and CloudWatch Logs handles application logs
+- MWAA is the correct migration path when existing Airflow DAGs must be preserved with minimal code changes
+
+**Newer topics that locked in**
+
+- AWS Transfer Family is the managed answer for SFTP, FTPS, and FTP ingestion into AWS storage
+- AWS CDK is the high-level programmable IaC layer that synthesizes CloudFormation, while AWS SAM is the specialized framework for serverless stacks
+- Amazon Bedrock with Knowledge Bases is the native fit for managed LLM integration, summarization, and retrieval-augmented generation over enterprise data
+- HNSW is a strong vector index choice for high-recall semantic search, and pgvector in Aurora PostgreSQL enables vector storage and approximate nearest neighbor search
+- SageMaker Unified Studio, domains, and projects form the governed collaboration model for modern ML workspaces
+- SageMaker Catalog combined with IAM and Lake Formation enables project-scoped access to governed datasets and ML assets
+
+**Main takeaway**
+
+The knowledge is no longer just familiar, it is stable under recall pressure. The exam is tomorrow, and
+the job now is not to learn more but to protect energy, sleep well, and show up calm.
+
+---
+
 ## July 13, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 13: Active Recall Quiz and Confidence Check**

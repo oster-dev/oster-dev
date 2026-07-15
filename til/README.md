@@ -7,6 +7,25 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 15, 2026
+
+**AWS DEA-C01 Retake Prep 3.0 — Day 15: Passed**
+
+Today I officially passed the AWS Certified Data Engineer – Associate exam, finishing in under an hour and coming out with the clear feeling that the preparation had paid off. This result validated the entire training arc from late March to mid-July, including the CLF-C02 pass shortly before DEA-C01.
+
+The path to this point was not lightweight. It cost stress, energy, repetition, and focus, and it also happened alongside private challenges, a hernia, moving back to Germany, and the experience of living and following work in Seattle. But that difficulty is exactly what made the knowledge durable, practical, and real instead of shallow memorization.
+
+Starting from no IT experience at the end of March 2026, my understanding of AWS data engineering best practices has changed completely. The goal is no longer just passing an exam; it is building pipelines correctly, choosing the right storage solution, and applying security and governance patterns with confidence. This certification now stands as a concrete proof point of that growth and a real anchor for the long-term L5 goal.
+
+Tomorrow starts the next phase: more power, more depth, and a stronger focus on reading and adapting Spark-Scala code without needing to write everything from scratch. The momentum is here, and now it is about turning the certification into practical engineering strength.
+
+> **What I understood**
+> - Real competence comes from repeated retrieval, correction, and pressure-tested study, not from cramming.
+> - Stress can be converted into durable skill when the work is treated seriously and consistently.
+> - The certification is not the finish line; it is evidence that the engineering path is now becoming tangible and earned.
+
+---
+
 ## July 14, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 14: Final Trap Review**

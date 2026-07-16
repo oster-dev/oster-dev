@@ -7,6 +7,25 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 16, 2026
+
+**Scala + Spark Scala Basics — Day 1**
+
+Today I started my Scala and Spark-Scala learning block, and I went much deeper than syntax alone. The first crash course sections made it clear why Scala matters so much inside the Spark ecosystem, and the transition into Spark already felt like the right next step for my roadmap.
+
+What stood out most today was how Scala feels familiar coming from Python, but also much more explicit and strongly typed. That difference makes the language feel stricter at first, but it also explains why Scala + Spark is such a powerful combination in real-world codebases.
+
+I covered immutable values with `val`, basic string concatenation, primitive data types, string interpolation with `s` and `f`, regex extraction, boolean logic, control flow, typed functions, higher-order functions, tuples, lists, maps, and safe fallbacks with `Try(...).getOrElse(...)`. I also reached the Spark introduction, Spark basics, and the beginning of the RDD section, which made the whole path feel more concrete and engineering-focused.
+
+For my roadmap, this is exactly the right direction. I do not need to become a full-time Scala engineer; I need to become comfortable enough to read and adapt Spark-Scala code, and today felt like a strong first step toward that goal.
+
+> **What I understood**
+> - Scala is not about replacing Python for me; it is about unlocking Spark code comprehension and adaptation.
+> - Strong typing and explicitness make the language feel more rigid, but also more predictable.
+> - The real objective is practical Spark-Scala literacy, not language mastery for its own sake.
+
+---
+
 ## July 15, 2026
 
 **AWS DEA-C01 Retake Prep 3.0 — Day 15: Passed**

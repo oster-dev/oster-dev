@@ -7,6 +7,99 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 17, 2026
+
+**Scala + Spark Scala Basics — Day 2: RDDs, Key/Value Transformations, DataFrames and DataSets**
+
+Today went deep into RDDs, key/value transformations, and the conceptual transition toward
+DataFrames and DataSets in Spark-Scala. It was a dense but coherent day that moved from raw
+functional transformations to real architectural understanding of where Spark is heading.
+
+**Functional Programming and RDD Basics**
+
+- `sc.parallelize(...)` to create an RDD from a list
+- `.map(x => x*x)` as a basic example of functional transformation
+- A named function like `def squareIt` can be passed to `.map()` just like a lambda
+- RDD actions: `collect`, `count`, `countByValue`, `take`, `top`, `reduce`
+- RDD transformations: `map`, `flatMap`, `filter`, `distinct`, `sample`, `union`, `intersection`, `subtract`, `cartesian`
+
+**RDD Creation and Data Sources**
+
+- Creating RDDs from lists, text files (`sc.textFile`), S3, and HDFS
+- `HiveContext` and running SQL queries directly on RDDs via `hiveCtx.sql(...)`
+- Additional sources: JDBC, Cassandra, HBase, Elasticsearch, JSON, CSV, Sequence Files, Object Files, and compressed formats
+- Lazy evaluation: nothing runs until an action is called
+
+**Practice Example: RatingsCounter**
+
+- Full Scala code using `SparkContext`, `textFile`, `map`, `countByValue`, `sortBy`, and `foreach(println)`
+- Concept of stages and tasks: Spark builds an execution plan from RDD operations and splits it into stages and tasks for cluster distribution
+
+**Key/Value RDDs**
+
+- RDDs can hold key/value pairs, such as (age, number of friends)
+- SQL-style joins: `join`, `rightOuterJoin`, `leftOuterJoin`, `cogroup`, `subtractByKey`
+- Specialized key/value operations: `reduceByKey`, `groupByKey`, `sortByKey`, `keys()`, `values()`
+- Creating key/value RDDs by mapping to tuples, e.g. `rdd.map(x => (x, 1))`
+- `mapValues()` and `flatMapValues()` for more efficient transformations when only values change
+
+**Practice Example: FriendsByAge**
+
+- `parseLine` function to parse CSV rows into `(age, numFriends)` tuples
+- `mapValues(x => (x, 1))` and `reduceByKey` to compute sum and count per key
+- Average calculation with `mapValues(x => x._1 / x._2)`
+
+**Practice Example: MinTemperatures / MaxTemperatures**
+
+- Parsing weather data into `(stationID, entryType, temperature)`
+- `filter()` to isolate specific entry types, such as only "TMIN"
+- Temperature conversion handled directly in the parsing step
+- `reduceByKey` with `min()` / `max()` to aggregate per station
+
+**flatMap() vs. map()**
+
+- `map()` transforms each element one to one
+- `flatMap()` can produce multiple new elements from a single input, such as splitting sentences into words
+
+**Practice Example: WordCount / WordCountBetter / WordCountBetterSorted**
+
+- Reading text, splitting into words with the regex `\W+`, and normalizing everything to lowercase
+- Word counting with `map(x => (x,1)).reduceByKey(_+_)`
+- Sorting results by frequency by swapping key and value and using `sortByKey()`
+
+**Practice Example: TotalSpentByCustomer**
+
+- `extractCustomerPricePairs` function to parse customer ID and amount
+- `reduceByKey` to sum spending per customer
+- Results sorted and printed by amount
+
+**Transition to DataFrames and DataSets**
+
+- DataFrames extend RDDs and add automatic optimization
+- DataFrames contain Row objects, support SQL queries, carry a schema, read/write JSON, Hive, and Parquet, and connect to JDBC, ODBC, and Tableau
+- DataSets are typed (`DataSet[Person]`, `DataSet[(String, Double)]`), with the schema known at compile time rather than only at runtime like DataFrames
+- DataSets can only be used in compiled languages like Java and Scala, not in Python
+- RDDs can be converted to DataSets with `.toDS()`
+- The Spark trend is moving away from RDDs toward DataSets, since they serialize more efficiently, allow better compile-time execution plans, and simplify development
+- MLLib and Spark Streaming are moving toward DataSets rather than RDDs as their primary API
+- `SparkSession` replaces `SparkContext` for Spark SQL and DataSets, including operations like `.select()`, `.filter()`, `.groupBy().mean()`, and `.rdd().map(...)`
+- Spark SQL exposes a JDBC/ODBC server via `start-thriftserver.sh`, accessible through `beeline`
+- User-Defined Functions (UDFs) via `org.apache.spark.sql.functions.udf`
+
+**Why today's observation mattered**
+
+The key insight today was recognizing exactly what makes Scala indispensable for Spark: DataSets are
+type-safe and checked at compile time, which is simply not possible in Python because Python is not
+compiled. This is not a nice-to-have detail, it is the core reason production Spark codebases at
+companies like Netflix lean so heavily on Scala, which is precisely the target environment for this
+roadmap.
+
+>**What I understood**
+>- This was a dense but highly coherent day, moving from pure RDD transformations through key/value
+>pair operations to a conceptual grasp of DataFrames and DataSets
+
+---
+
 ## July 16, 2026
 
 **Scala + Spark Scala Basics — Day 1**

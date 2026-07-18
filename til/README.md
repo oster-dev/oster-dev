@@ -7,6 +7,66 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 18, 2026
+
+**Scala + Spark Scala Basics — Day 3: RDD vs. DataSet Tradeoffs and BFS with Accumulators**
+
+Today's focus was implementing the same problems in parallel RDD and DataSet form, culminating in a
+BFS-based "Degrees of Separation" algorithm using accumulators. This was the clearest day yet for
+understanding when each API actually fits better.
+
+**Spark SQL with DataSets (case class + SparkSession)**
+
+- `SparkSession.builder.appName(...).master("local[*]").getOrCreate()` as the new entry point instead of `SparkContext`
+- `case class Person(id, name, age, friends)` for schema definition, combined with `.as[Person]` on CSV read
+- `createOrReplaceTempView("people")` plus `spark.sql("SELECT ...")` for direct SQL queries on DataSets
+
+**DataFrame Operations vs. RDD Style**
+
+- `.select()`, `.filter()`, `.groupBy().count()`, and column arithmetic directly on the DataFrame, e.g. `people("age") + 10`
+- FriendsByAge reimplemented using `.groupBy("age").avg("friends")` instead of manual `reduceByKey` logic
+- Refined with `agg(round(avg(...), 2).alias("friends_avg"))` for clean output formatting
+
+**Key Insight: DataSets Are Not Always the Better Choice**
+
+- DataSets work best with structured data; on unstructured text like a book, the DataSet version gets stuck with generic Row objects and a single "value" column, while RDDs stay more direct
+- WordCount solved additionally with SQL functions like `explode()`, `split()`, `lower()`, and the special comparison operators `=!=` and `===`
+- RDDs and DataSets can be mixed, for example loading data as an RDD and converting it into a DataSet with `.toDS()`
+
+**Schema Definition with StructType**
+
+- Explicit schema via `new StructType().add("col", Type, nullable)` instead of inference, important for weather data (MinTemperatures) and customer orders
+- `withColumn()` to create new or transformed columns, such as a Fahrenheit conversion directly in the DataFrame
+
+**Broadcast Variables and UDFs**
+
+- Motivation: a large lookup table (movie ID to name) should be transferred once per executor, not repeatedly per task
+- `sc.broadcast(loadMovieNames())` to distribute the table, `.value` to access it inside the executor
+- A UDF built with `udf(lookupName)` to display movie names via the broadcast map in a new column
+
+**MostPopularSuperhero: RDD vs. DataSet Comparison**
+
+- RDD version: `flatMap(parseNames)` returning `Option` to discard malformed rows, `reduceByKey`, `map` to swap key/value, and `.max()`
+- DataSet version: `split()`, `size()`, `withColumn()`, `groupBy().agg(sum(...))`, and `.sort($"connections".desc).first()`, noticeably more compact than the RDD solution
+- Bonus task "MostObscureSuperheroes": `.agg(min("connections")).first().getLong(0)` and `.join(names, usingColumn="id")` to resolve names of the least-connected heroes
+
+**BFS and Degrees of Separation — the Central Tradeoff Showcase**
+
+- Classic breadth-first search with color coding (WHITE for unvisited, GRAY for marked to explore, BLACK for fully processed) and distance values
+- Data model: `BFSNode = (heroID, (connections, distance, color))`, initialized with distance 9999 and color WHITE, except for the start node
+- RDD implementation: iterative `flatMap(bfsMap)` to expand gray nodes plus `reduceByKey(bfsReduce)` to merge duplicates per hero ID, keeping the shortest distance and darkest color
+- Accumulator concept: `sc.longAccumulator("Hit Counter")` as a global, driver-readable counter that executors can increment in parallel, crucial for detecting when the target node is found
+- Important pitfall: the accumulator only updates when an action (`mapped.count()`) actually forces evaluation of the RDD; lazy transformations alone are not enough
+- DataSet implementation of the same BFS: using `explode()`, `join()` with `left_outer`, and `when().otherwise()` constructs instead of manual reduce logic to update color and distance each iteration
+
+>**What I understood**
+>- DataSets shine on structured data, but RDDs are still more direct for unstructured or highly custom logic
+>- Mixing RDDs and DataSets in the same pipeline is a normal and practical pattern, not a compromise
+>- Accumulators only reflect real state once an action triggers evaluation, which is a subtle but critical Spark behavior
+>- The BFS exercise made the RDD-vs-DataSet tradeoff concrete instead of theoretical
+
+---
+
 ## July 17, 2026
 
 **Scala + Spark Scala Basics — Day 2: RDDs, Key/Value Transformations, DataFrames and DataSets**

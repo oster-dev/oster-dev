@@ -83,7 +83,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | AWS CLF-C02 | Cloud Practitioner Certification | ✅ Passed |
 | Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
 | Functional Programming | map · filter · reduce · Pure Functions · Immutability | ✅ Completed |
-| AWS DEA-C01 | Maarek Course · Data Engineering Associate Prep · Exam | 🔄 In Progress |
+| AWS DEA-C01 | Maarek Course · Data Engineering Associate Prep · Exam | ✅ Completed |
 | Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | 🔄 In Progress |
 | Scala literacy | Read + adapt Spark-Scala code · No writing required | 🔄 In Progress |
 | Kafka · Airflow · Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 4–6 |
@@ -122,7 +122,7 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 | Certification | Target | Status |
 |---|---|---|
 | Cloud Practitioner · CLF-C02 | Month 2 · May 2026 | ✅ [Passed](https://www.credly.com/badges/2c2b32e6-4bc9-4e60-ad56-3cf7bc2775bd/public_url) |
-| Data Engineer Associate · DEA-C01 | Month 3–4 · June/July 2026 | 📅 Upcoming |
+| Data Engineer Associate · DEA-C01 | Month 3–4 · June/July 2026 | ✅ [Passed](https://www.credly.com/badges/76633228-8b19-4fb6-81bd-ebea0e96f087/public_url) |
 | Solutions Architect Associate · SAA-C03 | Month 5–6 · Aug/Sep 2026 | 📅 Upcoming |
 | ML Engineer Associate · MLA-C01 | Month 7 · October 2026 | 📅 Upcoming |
 

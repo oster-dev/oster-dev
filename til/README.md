@@ -7,6 +7,78 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 19, 2026
+
+**Scala + Spark Scala Basics — Day 4: Collaborative Filtering, Caching, SBT Packaging, and AWS EMR**
+
+Today's focus was item-based collaborative filtering, caching strategy, packaging with SBT, and
+running a real production-style cluster job on AWS EMR. This was the first day that closed the full
+loop from local development to actual cluster deployment.
+
+**Item-Based Collaborative Filtering (Movie Similarities)**
+
+- Strategy: find every movie pair rated by the same user, measure the similarity of their ratings across all shared users, group by movie, and sort by similarity strength
+- Technical core is a self-join on the same ratings DataSet: `ratings.as("ratings1").join(ratings.as("ratings2"), $"ratings1.userId" === $"ratings2.userId" && $"ratings1.movieId" < $"ratings2.movieId")`, where the `<` condition avoids duplicate pairs
+- Cosine similarity implemented manually: computing `xx`, `yy`, `xy` columns, then per movie pair `sum(xy)` as the numerator and `sqrt(sum(xx)) * sqrt(sum(yy))` as the denominator, the classic vector similarity formula translated directly into Spark SQL
+- Result filtering by a score threshold (0.97) and a minimum co-occurrence count (`numPairs`) to exclude weak or noisy similarities
+
+**Caching Concept**
+
+- Clear rule: as soon as more than one action runs on the same DataSet, it should be cached with `.cache()` or `.persist()`, otherwise Spark re-evaluates the full lineage every time
+- Difference: `.persist()` additionally allows caching to disk instead of only memory, acting as a fallback if a node fails
+
+**Packaging with SBT**
+
+- `build.sbt` with `name`, `version`, `organization`, `scalaVersion`, and `libraryDependencies`, marking Spark-Core and Spark-SQL as `"provided"` so they are not bundled into the JAR
+- `sbt-assembly` plugin wired in via `assembly.sbt` to build a fat JAR with all dependencies included
+- The command `sbt assembly` produces a self-contained JAR in the `target/scala-x.xx` folder, runnable directly with `spark-submit <jar>` without specifying a class
+- Important practical note: never use local filesystem paths in the script; use HDFS or S3 instead, since the cluster cannot access the local machine
+
+**spark-submit and Cluster Parameters**
+
+- Syntax: `spark-submit --class <MainClass> --jars <deps> --files <files> <jar>`
+- Key parameters: `--master` (yarn, hostname:port, mesos), `--num-executors` (must be set explicitly on YARN, since the default is only 2), `--executor-memory`, `--total-executor-cores`
+- Architecture concept: the Spark Driver communicates with the Cluster Manager, which coordinates multiple cluster workers and executors
+
+**Amazon EMR (Elastic MapReduce)**
+
+- EMR as a fast way to spin up a cluster with Spark, Hadoop, and YARN pre-installed, billed by instance hours plus network and storage I/O
+- Practical setup workflow: AWS account, EC2 key pair, SSH access (PuTTY on Windows including .pem to .ppk conversion), IAM roles for service and instance profiles, and configuring S3 bucket access
+- Concrete cluster workflow: place scripts and data on S3, launch the cluster via the AWS Console, SSH into the master node, download the JAR from S3 with `aws s3 cp s3://bucket/file .`, then run `spark-submit`
+- Important warning: always terminate the cluster after use, otherwise costs keep accruing; roughly $30 was spent for a few hours of test runtime
+- Practical proof: a successful run of the "Star Wars" similarity example on the real 1M dataset, producing scores like 0.99 for "The Empire Strikes Back"
+
+**Partitioning as a Performance Factor**
+
+- Central insight: Spark does not automatically distribute expensive operations like self-joins optimally; explicit `.repartition()` (DataFrame) or `.partitionBy()` (RDD) is required
+- Operations that preserve partitioning in the result: `join()`, `cogroup()`, `groupWith()`, `leftOuterJoin()`, `rightOuterJoin()`, `groupByKey()`, `reduceByKey()`, `combineByKey()`, `lookup()`
+- Practical rule of thumb: at least as many partitions as cores/executors, but not too many to avoid shuffle overhead; `repartition(100)` as a solid starting point for large operations
+
+**Cluster Debugging and Dependency Management**
+
+- Spark Web UI (port 4040) shows jobs, stages, shuffle read/write, and DAG visualization, though it is hard to reach externally on EMR
+- Recommendation: avoid hardcoding Spark configuration including the master in the driver script, so EMR defaults and spark-submit parameters can take effect
+- Executor memory can be adjusted on error directly via `--executor-memory` in the spark-submit call
+- Broadcast variables serve as a way to share data outside RDDs/DataSets between driver and executors, important since executors don't run on the same machine as the driver
+- Missing dependencies can either be bundled into the JAR via `sbt assembly` or passed at submit time via `--jars`
+
+**Why this mattered for the roadmap**
+
+Today was the first time the complete chain from local development to fat-JAR packaging to cluster
+deployment on AWS EMR was run end to end. This is exactly the skillset that matters for an L5
+Data/Feature Infrastructure role, since real deployment and scaling questions like partitioning,
+executor memory, cluster cost, and dependency management showed up, not just algorithm logic. The
+partitioning concept is especially relevant since it is the kind of performance tuning regularly
+needed in production feature pipelines.
+
+>**What I understood**
+>- Caching is not optional once a DataSet is reused across multiple actions; it directly affects cost and speed
+>- Fat-JAR packaging with SBT is the standard bridge between local Scala code and cluster execution
+>- EMR makes cluster setup fast, but cost discipline (terminating clusters) is a real operational responsibility
+>- Partitioning is a manual performance decision, not something Spark solves automatically for expensive joins
+
+---
+
 ## July 18, 2026
 
 **Scala + Spark Scala Basics — Day 3: RDD vs. DataSet Tradeoffs and BFS with Accumulators**

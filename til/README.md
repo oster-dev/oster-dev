@@ -7,6 +7,65 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 20, 2026
+
+**Scala + Spark Scala Basics — Day 5: Spark ML, Streaming, and GraphX with Pregel**
+
+Today spanned an impressive arc from Spark ML through streaming (DStream and Structured Streaming)
+all the way to GraphX with Pregel, and the course material itself already flags which parts are
+outdated. It was a dense but very rewarding day that closed several loops at once.
+
+**Spark ML**
+
+- The ML library covers feature extraction (TF/IDF), basic statistics, linear/logistic regression, SVM, Naive Bayes, decision trees, K-Means, PCA/SVD, and recommendations via Alternating Least Squares
+- Explicit note in the course itself: MLlib (the RDD-based library) is deprecated in Spark 3, and the new ML library works exclusively with DataFrames
+- `ALS().setMaxIter(5).setRegParam(0.01).setUserCol().setItemCol().setRatingCol()` as a compact API, trained with `.fit(ratings)`
+- Critical self-reflection built right into the course material: recommendation quality is called questionable ("putting your faith in a black box is dodgy"), noting that the previously built movie-similarity solution often performs better
+
+**Linear Regression and Decision Trees with Spark ML**
+
+- `VectorAssembler` combines multiple feature columns into a single vector, followed by a train/test split via `randomSplit()`
+- `LinearRegression().setRegParam().setElasticNetParam().setMaxIter().setTol()` uses stochastic gradient descent, but is sensitive to feature scaling, assuming normal distribution and defaulting the y-intercept to 0
+- Practice exercise: real-estate valuation on the Taiwan dataset using `DecisionTreeRegressor` instead of linear regression, since decision trees handle differing scales more robustly
+
+**Classic Spark Streaming (DStream)**
+
+- Concept: continuous data streams are aggregated in intervals, with sources like Kinesis, HDFS, Kafka, and Flume; checkpointing saves state to disk for fault tolerance
+- Windowed operations (`window()`, `reduceByWindow()`, `reduceByKeyAndWindow()`) and `updateStateByKey()` for ongoing state management across batches
+- Practice example: Twitter hashtag counting using `flatMap()` to split text, `filter()` for hashtags, `map()` to key/value pairs, and `reduceByKeyAndWindow()` over a 300-second window
+
+**Structured Streaming as the Successor**
+
+- The course material itself clarifies that Spark 2 introduced Structured Streaming, which uses DataSets as the primary API and is no longer based on micro-batches
+- Practice example: `spark.readStream.text()` reads Apache access logs, `regexp_extract()` parses host, timestamp, method, endpoint, status, and content size, followed by `groupBy("status").count()` with `.writeStream.outputMode("complete")`
+- Windowed aggregation with event time: `groupBy(window(col("eventTime"), "30 seconds", "10 seconds"), col("endpoint"))` to find top URLs in a sliding time window
+
+**GraphX and Pregel**
+
+- GraphX works with `VertexRDD` and `EdgeRDD`, useful for connectivity, degree distribution, path lengths, triangle counting, and PageRank, but without native support for something like "Degrees of Separation"
+- Reimplemented the BFS example once more, this time via the Pregel API: vertices iteratively send messages to neighbors in "supersteps" until convergence
+- Core logic: `(id, attr, msg) => math.min(attr, msg)` as the vertex program preserving the shortest known distance, plus a reduce function that also keeps the minimum when multiple messages arrive
+
+**Important note on current status**
+
+Both DStream and GraphX are now officially deprecated: DStream since Spark 3.4.0 and GraphX since Spark 4.0.x, both being replaced by DataFrame-native successors, Structured Streaming and GraphFrames. Notably, the course material already flags this exact caveat for MLlib ("MLlib is deprecated in Spark 3") but not for DStream and GraphX, simply because the course predates their official deprecation.
+
+**Why this was still worthwhile**
+
+Today's Pregel-based BFS implementation was the third time solving the same algorithm, now in a
+third philosophy (message-passing instead of RDD-reduce or DataFrame-join), which rounds out a solid
+understanding of the tradeoffs between RDD, DataFrame, and graph-native APIs. The most important
+transfer for the roadmap is that Spark ML is built entirely on DataFrames, and Structured Streaming
+follows the same architectural line, exactly the direction production feature pipelines are built
+in today.
+
+>**What I understood**
+>- MLlib and DStream/GraphX represent an older RDD-centric era of Spark that is actively being phased out
+>- DataFrame-native APIs (ML, Structured Streaming, GraphFrames) are the clear direction for production systems
+>- Seeing BFS solved three times across three paradigms made the tradeoffs between RDD, DataFrame, and graph APIs concrete rather than abstract
+
+---
+
 ## July 19, 2026
 
 **Scala + Spark Scala Basics — Day 4: Collaborative Filtering, Caching, SBT Packaging, and AWS EMR**

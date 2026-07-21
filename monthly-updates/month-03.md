@@ -23,7 +23,7 @@ This did not stop the roadmap. It simply turned Month 3 into a longer, more dema
 
 | Goal | Status | Note |
 |---|---|---|
-| AWS DEA-C01 preparation | ✅ Done | Required a significantly larger study block |
+| AWS DEA-C01 Exam | ✅ Done | Required a significantly larger study block |
 | Spark DataFrames, RDDs, Transformations, Actions | ✅ Done | Core Spark workflow covered and practiced |
 | First Spark ETL project in Python on GitHub | ✅ Done | Public proof project completed |
 | Scala reading competency | ✅ Done | Able to read and adapt Spark-Scala code |

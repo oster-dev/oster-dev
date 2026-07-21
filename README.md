@@ -85,7 +85,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | AWS CLF-C02 | Cloud Practitioner Certification | ✅ Passed |
 | Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
 | Functional Programming | map · filter · reduce · Pure Functions · Immutability | ✅ Completed |
-| AWS DEA-C01 | Maarek Course · Data Engineering Associate Prep · Exam | ✅ Completed |
+| AWS DEA-C01 | Data Engineering Associate Exam | ✅ Passed |
 | Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | ✅ Completed |
 | Scala literacy | Read + adapt Spark-Scala code · No writing required | ✅ Completed |
 | Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | 📅 Month 4 |

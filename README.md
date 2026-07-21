@@ -69,11 +69,13 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 ## Projects
 
+**[PYSparkETL Project Month 3](https://github.com/oster-dev/projects/tree/main/Retaildata%20PYSparkETL)** | Retail Data ETL with PySpark
+
 **[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
 
 **[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
 
-## **Current Status · Month 3 of 8**
+## Current Status · Month 4 of 8
 
 | Area | Detail | Status |
 |---|---|---|
@@ -84,9 +86,13 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
 | Functional Programming | map · filter · reduce · Pure Functions · Immutability | ✅ Completed |
 | AWS DEA-C01 | Maarek Course · Data Engineering Associate Prep · Exam | ✅ Completed |
-| Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | 🔄 In Progress |
-| Scala literacy | Read + adapt Spark-Scala code · No writing required | 🔄 In Progress |
-| Kafka · Airflow · Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 4–6 |
+| Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | ✅ Completed |
+| Scala literacy | Read + adapt Spark-Scala code · No writing required | ✅ Completed |
+| Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | 📅 Month 4 |
+| Airflow | DAGs · Scheduling · Retry · XComs · Backfill | 📅 Month 4 |
+| System Design | DDD start · DIA book · Netflix Tech Blog notes | 📅 Month 4 |
+| Streaming Pipeline | First version in progress | 📅 Month 4–5 |
+| Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 5–6 |
 <br>
 
 ## **The Roadmap · 8 Months**

@@ -7,6 +7,24 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 21, 2026
+
+**Month 3 · Officially Completed**
+
+Today I officially closed Month 3 of the roadmap, and the milestone feels real because it now has a visible public artifact behind it. The PySpark ETL project was finished from scratch in the planned style, intentionally small in scope but technically meaningful, and published on GitHub as the Month 3 deliverable.
+
+That choice mattered. Instead of trying to make the project bigger than necessary, I kept it focused on proving that Spark fundamentals are not just understood in theory, but can be applied in a real repository with a clean pipeline, clear output, and proper presentation. I also cleaned up my GitHub profile and repositories so the portfolio feels consistent and complete rather than scattered.
+
+What this month taught me is that small projects can still be strong evidence when the scope is intentional and the execution is clean. Spark becomes much clearer once it is turned into an actual pipeline, and roadmap progress is not only about learning new topics, but also about finishing and publishing them properly. Month 3 is now officially complete, and the next phase will move into Kafka, Airflow, and system design foundations.
+
+> **What I understood**
+> - A compact project can still be strong proof when it is well scoped and well presented.
+> - Spark understanding becomes more concrete once it is used in a real ETL pipeline.
+> - Portfolio hygiene, documentation, and cleanup are part of the proof, not optional extras.
+> - Progress is measured not only by learning, but by shipping and publishing.
+
+---
+
 ## July 20, 2026
 
 **Scala + Spark Scala Basics — Day 5: Spark ML, Streaming, and GraphX with Pregel**

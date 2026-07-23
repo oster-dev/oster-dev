@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 23, 2026
+
+**Kafka · Java Producer & Consumer API**
+
+Today I worked through the Java programming part of the Kafka course and moved from project setup to the actual producer and consumer APIs. The focus was never really Java syntax itself, but the transferable Kafka logic behind the examples, which made the material feel directly relevant to the streaming layer I want to build later.
+
+**Producer side**
+
+- Kafka project set up with Gradle and the first Java producer implemented
+- Producer callbacks learned as asynchronous confirmations that reveal which partition and offset a message was actually written to
+- Producer with keys implemented, reinforcing that a key is consistently hashed to the same partition and preserves ordering for related events
+
+**Consumer side**
+
+- Java consumer implemented and the pull model for reading from partitions understood
+- Graceful shutdown covered so the consumer can stop cleanly without losing processing state
+- Consumer behavior inside a consumer group explored, including exclusive partition assignment per group member
+- Incremental cooperative rebalancing and static group membership reviewed as modern strategies that cause less interruption than classic rebalancing
+- Auto offset commit behavior understood, including when offsets are committed automatically and why that matters for delivery semantics
+
+**Result**
+
+The chapter "Kafka Java Programming 101" is now fully complete, including the final quiz with 6 out of 6 correct answers. The next section in the course is already the "Kafka Real World Project", which moves from isolated examples into a connected, realistic use case.
+
+> **What I understood**
+> - Kafka producers are not just about sending records; callbacks and keys control observability, partitioning, and ordering.
+> - Consumer groups are the core scaling mechanism, and rebalancing behavior directly affects stability.
+> - Auto commit is convenient, but it also changes the risk profile for delivery semantics.
+> - The Java examples matter because they expose the Kafka mechanics cleanly, even if the long-term goal is broader than Java itself.
+
+---
+
 ## July 22, 2026
 
 **Kafka · Fundamentals & CLI**

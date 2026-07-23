@@ -7,6 +7,26 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 22, 2026
+
+**Kafka · Fundamentals & CLI**
+
+Today I started my Kafka block and finally built a clean mental model for why Kafka exists at all: it replaces brittle N×M point-to-point integrations with a decoupled log-based system where sources and targets can evolve independently. The architecture started to click through brokers, topics, partitions, replication, and the CLI tools that make the whole system practical.
+
+The most important idea for me was that topics are like tables without constraints, while partitions are the real unit of ordering and scale. Ordering is only guaranteed within a partition, keys are hashed to a partition so that related records stay together, and replication gives the cluster resilience through leaders and in-sync replicas. That also made delivery semantics and acks feel much more concrete, because the tradeoff between speed and durability is now easy to read in the configuration.
+
+I also worked through consumer groups, offsets, and the internal `__consumer_offsets` topic, which made pull-based consumption and group balancing much clearer. On top of that, I learned the practical Kafka CLI flow for topics, producers, consumers, and consumer-group management, plus the important shift away from ZooKeeper toward KRaft and the standard `--bootstrap-server` approach.
+
+This was exactly the right start for the next phase of the roadmap, because Kafka is not just theory here — it is the streaming ingestion layer I want to connect to the existing PySpark ETL project. The Java + Gradle setup will be the bridge into real producer and consumer work, and today gave me the architecture vocabulary to move into that work with more confidence.
+
+> **What I understood**
+> - Kafka exists to decouple systems cleanly instead of forcing direct point-to-point integrations.
+> - Ordering, replay, and fault tolerance all depend on partitions, replication, and the chosen ack strategy.
+> - Consumer groups, offsets, and CLI tools are not side topics; they are the operational core of Kafka.
+> - KRaft is the modern direction, so ZooKeeper should no longer be treated as the default mental model.
+
+---
+
 ## July 21, 2026
 
 **Month 3 · Officially Completed**

@@ -7,6 +7,56 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 24, 2026
+
+**Kafka · Real-World Wikimedia Producer & Advanced Producer Configurations**
+
+Today I worked through sections 10 and 11 of the Kafka course: from the real-world project concept through a complete Wikimedia producer to the critical producer reliability settings. This was exactly the part I expected to be most relevant to my streaming pipeline goal.
+
+**Real-World Project**
+
+- Target architecture understood: Wikimedia Recent-Change stream → Kafka producer → Kafka topic → consumer → OpenSearch
+- Docker Compose setup with ZooKeeper and a Kafka broker configured (KRaft-adjacent Confluent images, ports, listener config)
+- Java project structure with Gradle set up for the Wikimedia producer, including OkHttp3 and okhttp-eventsource as dependencies for the SSE stream
+
+**Wikimedia Producer Implementation**
+
+- Implemented `WikimediaChangeHandler` as an `EventHandler` reacting to the SSE stream and sending every message asynchronously via `kafkaProducer.send()` to the `wikimedia.recentchange` topic
+- Understood that the event stream runs on its own thread (`eventSource.start()`) while the producer keeps running in the background and the main thread blocks
+- Ran the producer live against real Wikimedia traffic and verified messages arriving in the topic via the Conduktor Console UI
+
+**Producer Acknowledgements Deep Dive**
+
+- Fully internalized the three acks levels: `acks=0` (no waiting, highest throughput, data loss possible), `acks=1` (only the leader confirms, limited loss possible), `acks=all` (leader plus ISR confirm, no loss)
+- Understood `min.insync.replicas` as the lever between availability and durability: with `acks=all`, RF=3, and `min.insync.replicas=2`, exactly one broker can fail without write operations failing
+- Took away the rule of thumb: `acks=all` combined with `min.insync.replicas=2` is the most common compromise between resilience and availability
+
+**Producer Retries and Idempotence**
+
+- Understood why retries without an idempotent producer can cause reordering under parallel in-flight processing, especially relevant for key-based ordering
+- Learned `delivery.timeout.ms` as the overarching timeout budget that wraps `linger.ms`, `retries`, and `request.timeout.ms`
+- Internalized the idempotent producer as the Kafka 3.0 standard: prevents duplicates from network errors via server-side duplicate detection, automatically combining `acks=all`, high retries, and controlled in-flight requests
+- Worked fully through the safe-producer summary: `acks=all`, `min.insync.replicas=2`, `enable.idempotence=true`, `retries=MAX_INT`, `delivery.timeout.ms=120000`, `max.in.flight.requests.per.connection=5`
+
+**Performance Tuning**
+
+- Understood message compression: snappy/lz4 as a good tradeoff between CPU cost and compression ratio, more effective with larger batches
+- Internalized `linger.ms` and `batch.size` as the levers for throughput vs. latency, applied practically in the high-throughput producer demo with snappy, a 20ms linger, and a 32KB batch size
+- Compared default partitioner behavior: round-robin (Kafka ≤2.3) vs. sticky partitioner (Kafka ≥2.4), and why sticky partitioning lowers p99 latency through larger batches
+- Understood `max.block.ms` and `buffer.memory` as the backpressure mechanism when the producer produces faster than the broker can absorb
+
+**Result**
+
+Completed the "Quiz on Producer Configurations" with 6 out of 6 correct answers.
+
+> **What I understood**
+> - Reliability in Kafka is a tunable spectrum, not a fixed guarantee, and acks plus min.insync.replicas define exactly where a system sits on that spectrum
+> - Idempotent producers solve a real correctness problem, not just a convenience issue, once retries and parallel in-flight requests are in play
+> - Throughput and latency tuning (batching, linger, compression, sticky partitioning) are concrete, measurable levers, not vague performance advice
+> - The Wikimedia producer made all of these settings feel like production decisions instead of abstract configuration flags
+
+---
+
 ## July 23, 2026
 
 **Kafka · Java Producer & Consumer API**

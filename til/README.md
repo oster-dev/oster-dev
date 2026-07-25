@@ -7,6 +7,55 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 25, 2026
+
+**Kafka · OpenSearch Consumer, Delivery Semantics & Extended APIs**
+
+Today I completed OpenSearch Consumer and Advanced Consumer Configurations and Kafka Extended APIs. It was an especially dense day with a very direct connection to the streaming-pipeline direction of the roadmap.
+
+**OpenSearch Consumer Implementation**
+
+- OpenSearch cluster set up with Docker Compose (`opensearch` and `opensearch-dashboards`), including access to the Dev Tools console
+- `OpenSearchConsumer` project built with the Kafka client and the OpenSearch REST High Level Client, including handling for both secured and unsecured REST clients
+- Wikimedia index created programmatically in OpenSearch and individual Kafka records indexed via `IndexRequest`
+
+**Idempotence and Delivery Semantics**
+
+- Compared two idempotence strategies for the consumer: IDs based on Kafka coordinates (`topic_partition_offset`) versus IDs extracted from the JSON payload itself; the payload-based approach prevents duplicates even across consumer restarts over multiple runs
+- Fully internalized the three delivery semantics: at-most-once (commit offset before processing, data loss possible), at-least-once (commit offset after processing, duplicates possible, so idempotence is needed), exactly-once (only with the Transactional API or an idempotent consumer)
+- Reinforced that at-least-once plus idempotent processing is the standard recommendation for most real-world applications
+
+**Offset Commit Strategies and Batching**
+
+- Understood auto-commit behavior: with `enable.auto.commit=true`, offsets are committed every `auto.commit.interval.ms` on the next `.poll()`, which can lead to data loss if processing has not finished before the next poll
+- Implemented manual offset committing with `consumer.commitSync()` after a successful bulk insert, including batching multiple records into one `BulkRequest` instead of sending each record individually
+- Understood `auto.offset.reset` behavior for `latest`, `earliest`, and `none`
+
+**Kafka Extended APIs**
+
+- Understood Kafka Connect as the high-level API for source and sink integrations, solving External Source → Kafka and Kafka → External Sink without custom code, with built-in fault tolerance, idempotence, and scaling
+- Connected a Kafka Connect Wikimedia source and ElasticSearch sink in practice and configured them via Connect Standalone properties
+- Learned Kafka Streams as a Java library for Kafka → Kafka transformations and built three own stream processors: bot-vs-human counter, website counter with one-minute time windowing, and an event-count timeseries with 10-second windows
+- Understood the core Kafka Streams model: one-record-at-a-time processing, exactly-once capable, no separate cluster required, runs as a normal Java application
+
+**Schema Registry**
+
+- Understood the core problem without Schema Registry: Kafka only handles bytes without validation, so producer schema changes can silently break consumers
+- Internalized the role of Schema Registry: producers register schemas, Kafka validates via Avro, consumers fetch the schema for deserialization; supports backward, forward, and full compatibility
+- Saw schema evolution demonstrated live in Conduktor: from one field (`f1`) to two fields (`f1`, `f2`), including how incompatible messages are rejected by the schema rules
+
+**Result**
+
+This completes both the practical producer/consumer reliability side and the high-level ecosystem overview across Connect, Streams, and Schema Registry. That is exactly the foundation this part of Month 4 is supposed to build for the streaming-pipeline project.
+
+> **What I understood**
+> - Reliability in Kafka is not only about the producer; the consumer side matters just as much through offset strategy, batching, and idempotent writes
+> - At-least-once plus idempotent processing is the practical default because it balances correctness and operational simplicity
+> - Kafka Connect, Streams, and Schema Registry form the real ecosystem layer that turns Kafka from a log into a platform
+> - Today was the first full view of how a production-style Kafka pipeline is assembled end to end
+
+---
+
 ## July 24, 2026
 
 **Kafka · Real-World Wikimedia Producer & Advanced Producer Configurations**

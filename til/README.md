@@ -7,6 +7,45 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 26, 2026
+
+**Kafka · Real-World Case Studies, Enterprise Admin & Advanced Topic Configurations** 
+
+Today I worked through the final three sections of the Kafka course: real-world case studies for system-design thinking, enterprise admin fundamentals, and deep internal topic behavior. This officially completes the full Kafka beginners course, from producer basics all the way to enterprise administration. 
+
+**Real-World Case Studies**
+
+- Went through four architecture patterns with Kafka as the backbone: GetTaxi (IoT/position tracking using Kafka Streams for surge pricing), MySocialMedia (CQRS pattern with separated command/query paths for posts, likes, and comments), MyBank (CDC via Debezium combined with Kafka Streams for real-time alerts), and logging/metrics aggregation plus big-data ingestion as a "speed layer" in front of batch systems. 
+- Core design heuristic: topic key choice (e.g. user_id, post_id) and partition count need to be planned correctly early, since both are very hard to change safely later. 
+- Understood why state changes in event streams should be modeled as events (e.g. "User X liked Post Y at time Z") instead of as raw state. 
+
+**Kafka in the Enterprise for Admins**
+
+- Learned the most important monitoring metrics: under-replicated partitions, request handler utilization, and request timing, exposed via JMX and typically visualized in Prometheus, Datadog, or ELK. 
+- Internalized the security pillars: encryption (SSL between client and broker), authentication (SSL certificates, SASL/PLAINTEXT, SASL/SCRAM, Kerberos, OAuth), and authorization via ACLs. 
+- Understood advertised listeners in detail: why misconfigured private/public IPs or localhost settings can prevent clients outside the network from reaching the broker. 
+- Compared multi-cluster replication strategies: active/passive (simple, but no clean failover) vs. active/active (better latency and redundancy, but conflict risk with asynchronous writes). 
+
+**Advanced Topic Configurations**
+
+- Understood segments and their two indexes (offset-to-position, timestamp-to-offset), along with the `log.segment.bytes` and `log.segment.ms` levers. 
+- Clearly distinguished the two cleanup policies: `delete` (default, time/size based) vs. `compact` (keeps only the latest value per key, used for example in `__consumer_offsets`). 
+- Traced log compaction practically through an employee-salary topic: only the last salary value per employee key survives compaction, order is preserved, and deleted records remain visible for `delete.retention.ms`. 
+- Understood unclean leader election as a tradeoff between availability and data loss when all in-sync replicas are offline. 
+- Internalized two strategies for large messages (>1MB): external storage (S3/HDFS) with a reference in Kafka vs. directly raising `message.max.bytes`, `replica.fetch.max.bytes`, `max.partition.fetch.bytes`, and `max.request.size`. 
+
+**Result**
+
+This completes the entire Kafka course, from producer basics to enterprise administration — a very solid foundation for the Month 4 streaming-pipeline project in the roadmap. 
+
+> **What I understood**
+> - Topic key and partition design decisions are effectively permanent, so system design thinking has to happen before the first record is written. 
+> - Enterprise Kafka is as much about monitoring, security, and multi-cluster strategy as it is about producers and consumers. 
+> - Log compaction and segment internals explain a lot of Kafka's "magic" behavior, like how `__consumer_offsets` stays efficient at scale. 
+> - Finishing the full course from basics to admin-level topics closes the loop needed before starting the actual streaming pipeline project. 
+
+---
+
 ## July 25, 2026
 
 **Kafka · OpenSearch Consumer, Delivery Semantics & Extended APIs**

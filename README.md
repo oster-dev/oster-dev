@@ -83,7 +83,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 | Area | Detail | Status |
 |---|---|---|
-| Python | Angela Yu Bootcamp · OOP, APIs, Data Structures | ✅ Completed |
+| Python | Functional Programming, OOP, APIs, Data Structures | ✅ Completed |
 | SQL | Window Functions · CTEs · Query Optimization | ✅ Completed |
 | Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
 | AWS CLF-C02 | Cloud Practitioner Certification | ✅ Passed |

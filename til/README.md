@@ -7,6 +7,50 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 27, 2026
+
+**Apache Airflow · Fundamentals, Architecture & First Practical DAG**
+
+Today was my first real contact with Apache Airflow: why it exists, all core components, architecture variants, and a complete practical example (the user_processing DAG) with an API sensor, PostgreSQL, and CSV export.
+
+**Why Airflow and What It Delivers**
+
+- Internalized the four core benefits: organization (controlling task order and timing), visibility (a dashboard for all workflows), flexibility/scalability (from simple queries to ML training), and extensibility via provider packages.
+- Clearly separated what Airflow is NOT: not a data-processing framework, not a real-time streaming solution, not a data storage system — so it doesn't fit high-frequency sub-minute scheduling or direct bulk data processing.
+- Understood Airflow explicitly as an orchestrator rather than a processing engine, which cleanly separates it from Kafka and Spark from the last few weeks.
+
+**Core Components in Detail**
+
+- Worked through seven core components: Metadata Database, Scheduler, DAG File Processor, Executor, API Server, Worker, Queue, and Triggerer (manages deferrable tasks waiting on external events).
+- Compared single-node vs. multi-node architecture: single-node is simple but not scalable, while multi-node distributes scheduler, worker, and API server across multiple machines for scalability and fault tolerance, at the cost of setup complexity.
+
+**Core Concepts: DAG, Operator, Task, Workflow**
+
+- Understood a DAG as an acyclic task structure — cycles are explicitly not allowed, confirmed via quiz.
+- Grasped the operator as the blueprint for a single task, with task/task instance as the concrete execution of an operator at a specific point in time.
+- Learned the important standard operators: PythonOperator, BashOperator, SQLExecuteQueryOperator, FileSensor, plus S3KeySensor and HttpSensor from the Astronomer Registry.
+- Correctly understood task dependencies both via `set_upstream`/`set_downstream` and via bitshift operators (`>>`, `<<`), confirmed by quiz.
+- Internalized the sensor concept: a long-running task that waits for an external event at fixed intervals via a poke function, e.g. `@task.sensor` with `PokeReturnValue`.
+
+**Practical Example: user_processing DAG**
+
+- Built a complete pipeline: `create_table` (SQLExecuteQueryOperator against PostgreSQL) → `is_api_available` (sensor on an external API) → `extract_user` (PythonOperator/TaskFlow) → `process_user` (CSV creation) → `store_user` (PostgresHook with `copy_expert` for bulk insert).
+- Learned the TaskFlow API with `@dag` and `@task` decorators as an alternative to classic operator instances, including implicit data passing between tasks without manual XCom handling.
+- Correctly set up Airflow connections (e.g. `postgres`) and provider packages (`apache-airflow-providers-postgres`), and tested individual tasks in isolation via `airflow tasks test`.
+- First contact with assets/datasets: understood how one DAG (e.g. `daily_report`) produces an asset via outlets and a second DAG (`monthly_report`) listens to it and gets triggered automatically.
+
+**Result**
+
+A very dense first day: solid architecture understanding plus a fully functional end-to-end DAG example with a real database connection.
+
+> **What I understood**
+> - Airflow is an orchestrator, not a processing engine, which makes its role next to Spark and Kafka very clear.
+> - The core components (scheduler, executor, worker, triggerer) each solve a distinct part of reliably running scheduled workflows.
+> - The TaskFlow API removes a lot of boilerplate compared to classic operator instances, especially around passing data between tasks.
+> - Sensors and deferrable tasks are the mechanism for waiting on external events without wasting resources.
+
+---
+
 ## July 26, 2026
 
 **Kafka · Real-World Case Studies, Enterprise Admin & Advanced Topic Configurations** 

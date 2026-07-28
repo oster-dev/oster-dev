@@ -7,6 +7,53 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 28, 2026
+
+**Apache Airflow · Assets, Executors, Task Groups, XCom & Branching**
+
+Second Airflow day with a focus on advanced concepts: data-driven scheduling via assets, the three executor architectures, task organization, and data exchange between tasks.
+
+**Assets as Data-Driven Scheduling**
+
+- Understood assets via the `@asset` decorator: an asset (e.g. `user`) encapsulates an external data source with a URI and schedule, and automatically pushes its result as an XCom
+- Learned asset chaining — a second asset (`user_location`) can set `schedule=user` and gets triggered automatically once the source asset is materialized, including `xcom_pull` with `include_prior_dates=True`
+- Learned `@asset.multi` with multiple outlets to produce several downstream assets (`user_location`, `user_login`) from one asset at once, plus the `airflow assets materialize` CLI command for manual triggering
+
+**The Three Executor Types**
+
+| Executor | How It Works | Use Case |
+|---|---|---|
+| SequentialExecutor | Runs exactly one task at a time, uses SQLite | Debugging, default on first install |
+| LocalExecutor | Runs multiple tasks in parallel on one machine | Small to medium setups, easy to configure |
+| CeleryExecutor | Distributes tasks via a broker (Redis) and result backend to multiple worker nodes | Production scaling across multiple machines |
+
+- Understood the SQLite limitation: only one writer at a time, which is why it is not compatible with the Local or Celery executor, confirmed by quiz
+- Practically set up Celery queues with dedicated worker pools (`high_cpu`, `ml_model`, `default`) to route tasks by resource need, and learned monitoring via Flower
+- Internalized key concurrency parameters: `parallelism` (max tasks per scheduler, default 32), `max_active_tasks_per_dag` (default 16), and `max_active_runs_per_dag` (default 16)
+
+**Task Groups for DAG Organization**
+
+- Used task groups with `@task_group` to visually bundle related tasks and apply `default_args` (e.g. `retries`) to a group instead of the whole DAG
+- Built nested task groups and understood how values are passed between groups and individual tasks via parameters
+
+**XCom and Branching**
+
+- Fully worked through XCom mechanics: `xcom_push`/`xcom_pull` for explicit data exchange, plus implicit passing of return values via the TaskFlow API (`val = t1(); t2(val)`)
+- Implemented branching with `@task.branch`: depending on the return value, only one path executes while the other is automatically marked "skipped," clearly visible in the UI
+- Learned `@task.sql` as a specialized SQL task decorator that dynamically generates SQL strings from Python code and executes them via `SQLExecuteQueryOperator`
+
+**Custom Provider SDK**
+
+As the most advanced point of the day, I built a small custom SDK (`my-sdk`) with its own `@task.sql` decorator and integrated it into an Airflow instance via `pyproject.toml` and a custom Dockerfile — an important step toward extensibility and platform engineering.
+
+> **What I understood**
+> - Assets shift scheduling from purely time-based to data-driven, which is a much more natural model for real pipelines
+> - Choosing the right executor is an infrastructure decision, not a code decision, and directly determines how far a setup can scale
+> - Task groups and nested groups are what keep large DAGs readable and maintainable as complexity grows
+> - Building a custom provider SDK is the first real platform-engineering move, since it turns Airflow into something extensible for a team rather than just a personal tool
+
+---
+
 ## July 27, 2026
 
 **Apache Airflow · Fundamentals, Architecture & First Practical DAG**

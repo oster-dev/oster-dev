@@ -7,6 +7,46 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 29, 2026
+
+**Event Stream Pipeline · Full Reset, Docker Compose Debugging & End-to-End Recovery**
+
+Today I spent more than 11 hours working on my event-stream pipeline project and rebuilt the entire setup from scratch in a practical way. The main focus was debugging Docker Compose, environment variables, a wrong Postgres password lingering in the shell environment, and a persisted Postgres volume that still had the old credentials.
+
+**What I Debugged**
+
+- Rebuilt the complete local stack from scratch instead of trying to patch around broken state
+- Tracked down a stale `POSTGRES_PASSWORD=airflow_secure_pwd` shell variable that was overriding the `.env` value
+- Learned that `docker compose down` does not remove named volumes, while `docker compose down -v` removes volumes and therefore also old data and Kafka topics
+- Used `down -v --remove-orphans` to fully clean the environment before bringing the stack back up again
+
+**What I Learned**
+
+- Shell variables can override values from `.env`, so a local shell can silently keep the wrong credentials active
+- Persisted Docker volumes can preserve old database state long after the config file has changed
+- A clean reset is sometimes faster and safer than trying to salvage a broken dev environment
+- Infrastructure debugging is part of the project itself, not just an annoyance around the project
+
+**What Worked**
+
+- Postgres was freshly initialized after the cleanup
+- The Airflow database migration completed successfully
+- The `event_stream_pipeline` DAG ran without errors
+- I was able to produce an event into Kafka and verify that the DAG consumed it correctly
+- The raw record appeared in `raw_events` in Postgres, confirming the full end-to-end flow
+
+**Result**
+
+Today was a hard debugging day, but also a very productive learning day. The project is now rebuilt on a clean foundation, and I understand the interaction between Docker Compose, volumes, environment variables, Airflow, Kafka, and Postgres much more deeply.
+
+> **What I understood**
+> - `docker compose down` and `docker compose down -v` have very different effects, especially when persistent state is involved
+> - Shell environment variables can override `.env` values and cause confusing credential bugs
+> - A full clean restart is often the right solution when persistent infrastructure state becomes inconsistent
+> - Seeing the full event flow work again proved that the pipeline is now based on a much more solid foundation
+
+---
+
 ## July 28, 2026
 
 **Apache Airflow · Assets, Executors, Task Groups, XCom & Branching**

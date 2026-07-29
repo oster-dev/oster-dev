@@ -11,7 +11,7 @@ TIL Started: April 13, 2026
 
 **Event Stream Pipeline · Full Reset, Docker Compose Debugging & End-to-End Recovery**
 
-Today I spent more than 11 hours working on my event-stream pipeline project and rebuilt the entire setup from scratch in a practical way. The main focus was debugging Docker Compose, environment variables, a wrong Postgres password lingering in the shell environment, and a persisted Postgres volume that still had the old credentials.
+Today I spent more than 11 hours working on my event-stream pipeline project and started the entire setup from scratch in a practical way. The main focus was debugging Docker Compose, environment variables, a wrong Postgres password lingering in the shell environment, and a persisted Postgres volume that still had the old credentials.
 
 **What I Debugged**
 

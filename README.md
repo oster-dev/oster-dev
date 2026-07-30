@@ -73,30 +73,35 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 ## Projects
 
+**[Kafka + Airflow + Postgres Project Month 4](https://github.com/oster-dev/projects/tree/main/event-stream-pipeline)** | End-to-End Event Stream Pipeline 
+
 **[PYSparkETL Project Month 3](https://github.com/oster-dev/projects/tree/main/Retaildata%20PYSparkETL)** | Retail Data ETL with PySpark
 
 **[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
 
 **[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
 
-## Current Status · Month 4 of 8
+## Current Status · Month 5 of 8
 
 | Area | Detail | Status |
-|---|---|---|
+| :-- | :-- | :-- |
 | Python | Functional Programming, OOP, APIs, Data Structures | ✅ Completed |
 | SQL | Window Functions · CTEs · Query Optimization | ✅ Completed |
-| Git & GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
+| Git \& GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
 | AWS CLF-C02 | Cloud Practitioner Certification | ✅ Passed |
 | Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
 | Functional Programming | map · filter · reduce · Pure Functions · Immutability | ✅ Completed |
 | AWS DEA-C01 | Data Engineering Associate Exam | ✅ Passed |
 | Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | ✅ Completed |
 | Scala literacy | Read + adapt Spark-Scala code · No writing required | ✅ Completed |
-| Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | 📅 Month 4 |
-| Airflow | DAGs · Scheduling · Retry · XComs · Backfill | 📅 Month 4 |
-| System Design | DDD start · DIA book · Netflix Tech Blog notes | 📅 Month 4 |
-| Streaming Pipeline | First version in progress | 📅 Month 4–5 |
-| Feast · MLflow · Metaflow | Full ML platform stack | 📅 Months 5–6 |
+| Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | ✅ Completed |
+| Airflow | DAGs · Scheduling · Retry · XComs · Backfill | ✅ Completed |
+| System Design | DDD start · DIA book · Netflix Tech Blog notes | ✅ Active |
+| **Feature Store / Feast** | Offline / Online Feature Store, feature definitions, backfill logic | 📅 Month 5 |
+| **GitHub / CI-CD** | Repo hygiene, documentation, GitHub Actions pipeline | 📅 Month 5 |
+| **Project 1: Open Mini Feature Store** | Public, documented feature store with tests, architecture, CI/CD | 📅 Month 5 |
+| **AWS SAA-C03** | AWS Certified Solutions Architect Certification | 📅 Month 5 - 6|
+
 <br>
 
 ## **The Roadmap · 8 Months**

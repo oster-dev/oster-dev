@@ -7,6 +7,30 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 30, 2026
+
+**Month 4 · Officially Finished + Month 4 project uploaded**
+
+Today I learned that finishing a project is often less about writing the last line of code and more about closing all the loose ends around it. The big takeaway from today was that my Month 4 project is truly finished now: the Kafka + Airflow event-stream pipeline works, the validation and metric layers behave as expected, and the project can be treated as the official Month 4 proof point in my roadmap.
+
+I also learned how important it is to clean up the repository before publishing. I spent time adjusting the GitHub structure, removing unnecessary empty folders, and making the project look like a deliberate final version rather than a raw work-in-progress. That matters because a good GitHub repo is not just about working code — it is also about readability, structure, and how clearly the project communicates what it is.
+
+A big technical lesson today was related to Docker and Airflow state. I hit an authentication problem during `airflow-init` because the Postgres volume still contained old state, and the fix was to reset the stack with `docker compose down -v` so the metadata database could be rebuilt cleanly. After that, the initialization succeeded, which reminded me again that containerized data projects often fail because of persistent state rather than because the code itself is wrong.
+
+Another useful lesson was that `airflow tasks test` is extremely valuable as a quick verification step. Once the environment was clean again, I used it to confirm that the `create_tables` task worked before trusting the full pipeline run. That gave me confidence that the DAG import, SQL loading, and database connectivity were all healthy before I moved on to the rest of the pipeline.
+
+From a project perspective, today was a strong closing day. I manually prepared the project for GitHub, restructured the repository layout, validated the pipeline end to end, and treated the project as the finished Month 4 milestone. That also means the transition into Month 5 is now clean: Month 4 is done, the public project exists, and the next focus can move fully toward Feast and the feature store direction.
+
+> **What I understood**
+> - Finishing a data infrastructure project means closing the environment, repository, and validation gaps too, not just the code gaps.
+> - Persistent Docker state can cause misleading Airflow errors even when the code is fine.
+> - `airflow tasks test` is a fast, practical confidence check before trusting the full DAG run.
+> - Repo cleanup is part of shipping a project because presentation communicates engineering maturity.
+
+
+
+---
+
 ## July 29, 2026
 
 **Event Stream Pipeline · Full Reset, Docker Compose Debugging & End-to-End Recovery**

@@ -61,6 +61,8 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 ## **Monthly Updates & Learning Log**
 
+[Month 4 · July 2026](./monthly-updates/month-04.md) 
+
 [Month 3 · June/July 2026](./monthly-updates/month-03.md) 
 
 [Month 2 · May 2026](./monthly-updates/month-02.md) 

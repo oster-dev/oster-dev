@@ -7,6 +7,57 @@ TIL Started: April 13, 2026
 
 ---
 
+## July 31, 2026 
+
+**SAA-C03 Exam Prep Day 1  · Practice Exam 1 Baseline and Priority Mapping**
+
+Today I finished the first SAA-C03 practice exam and used it as a pure knowledge map rather than as a final judgment. The result was **41% correct (27/65)**, which shows that I already have some strong transfer from DEA-C01, but SAA-C03 clearly tests a different set of architectural decisions and trade-offs.
+
+**Result Overview**
+
+| Topic Area | Questions | Correct | Wrong |
+|---|---|---|---|
+| Migration & Transfer | 4 | 100% | 0% |
+| Management & Governance | 4 | 75% | 25% |
+| Networking & Content Delivery | 11 | 55% | 45% |
+| Analytics | 4 | 50% | 50% |
+| Compute | 12 | 42% | 58% |
+| Storage | 9 | 44% | 56% |
+| Security, Identity & Compliance | 5 | 40% | 60% |
+| Database | 9 | 33% | 67% |
+| Application Integration | 7 | 29% | 71% |
+
+Total: 41% correct, 1h 24m test time.
+
+**What This Means**
+
+- Migration & Transfer is already solid, which makes sense because it overlaps strongly with DEA-C01 knowledge such as DMS, SCT, and Storage Gateway.
+- The biggest gaps are Application Integration, Database, and Security, which are exactly the areas where SAA-C03 is about different use-case decisions, not just broader versions of the same topics.
+- Compute also needs priority because it had the largest question weight in the exam.
+- This first exam is useful as a baseline for targeted study, not as a final performance verdict.
+
+**Rework Priority**
+
+1. Application Integration: SQS, SNS, EventBridge, Kinesis decisions, pub/sub patterns, queue prioritization.
+2. Database: Aurora Global Database, Read Replicas, RDS encryption migration, multi-region database strategies.
+3. Security, Identity & Compliance: IAM Roles Anywhere, SCPs, Tag Policies, cross-account access, PrivateLink.
+4. Storage: EFS vs. FSx vs. Storage Gateway, EBS types, IOPS sizing.
+5. Compute: EKS, ECS, Fargate decisions, Auto Scaling, EC2 vs. container vs. serverless trade-offs.
+
+Networking & Content Delivery is already above 50% correct, so it only needs targeted cleanup. Analytics and Management & Governance are moderate or low-priority refresh areas. Migration & Transfer does not need further rework right now.
+
+**Result**
+
+The first practice exam worked exactly as intended: it mapped out where the real SAA-C03 gaps are and where DEA-C01 knowledge already transfers cleanly. The next two practice exams will provide more evidence, and only after all three will I draw the final conclusion and start the targeted rework phase.
+
+> **What I understood**
+> - SAA-C03 is a different exam with different architectural choices compared to DEA-C01.
+> - A practice exam is most valuable when used as a diagnostic tool, not as a final scorecard.
+> - Application Integration, Database, Security, and Compute are the highest-value areas to revisit first.
+> - My migration background is strong, but the exam shows where architectural reasoning still needs sharpening.
+
+---
+
 ## July 30, 2026
 
 **Month 4 · Officially Finished + Month 4 project uploaded**

@@ -7,6 +7,55 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 1, 2026
+
+**SAA-C03 Exam Prep | Day 2 · Practice Exam 2/3 Result and Combined Weakness Picture**
+
+Today I completed the second SAA-C03 practice exam and scored **46% correct (30/65)**, a slight improvement over Exam 1, but Security, Compute, and Storage remain clearly the biggest problem areas.
+
+**Result Overview — Practice Exam 2/3**
+
+| Topic Area | Questions | Correct | Wrong |
+|---|---|---|---|
+| Migration & Transfer | 1 | 100% | 0% |
+| Application Integration | 1 | 0% | 100% |
+| Analytics | 1 | 100% | 0% |
+| Networking & Content Delivery | 12 | 58% | 42% |
+| Database | 12 | 58% | 42% |
+| Storage | 18 | 44% | 56% |
+| Compute | 11 | 36% | 64% |
+| Security, Identity & Compliance | 9 | 22% | 78% |
+
+Total: 46% correct, 1h 51m test time, August 1, 2026.
+
+**What Stands Out**
+
+- Security is clearly the weakest area in this exam with a 78% error rate, with repeated mistakes on permissions boundaries, Security Lake, PrivateLink, presigned URLs, and encryption strategies.
+- Storage remains the largest topic block with 18 questions and still shows gaps around FSx variants (Lustre vs. Windows File Server), lifecycle policies, and EBS/EFS/S3 decisions.
+- Compute also has a high error rate at 64%, mainly around Auto Scaling strategies, ECS/EKS decisions, and scaling based on SQS queue length.
+- Database and Networking improved moderately to 58% correct each, but are not yet reliable.
+- Migration & Transfer, Application Integration, and Analytics each had only one question, so these results are not statistically meaningful and should not be overweighted.
+
+**Rework Priority for Exam 2/3**
+
+1. Security, Identity & Compliance (78% wrong, biggest gap): IAM permissions boundaries, Security Lake, PrivateLink, Secrets Manager vs. Parameter Store, S3 encryption options.
+2. Compute (64% wrong, 11 questions): Auto Scaling (scheduled vs. target tracking), ECS/EKS networking and IAM design, SQS-based scaling.
+3. Storage (56% wrong, largest topic block with 18 questions): FSx variants, lifecycle transitions, EBS vs. EFS vs. S3 by use case.
+4. Networking & Content Delivery (42% wrong): Transit Gateway, Direct Connect resilience, VPC endpoints.
+5. Database (42% wrong): Aurora endpoints (custom/reader/writer), RDS Proxy, backup strategies.
+
+**Combined Picture from Exam 1 + Exam 2**
+
+Migration & Transfer looks strong in Exam 2, but that is only because it had a single question, so it should not be treated as a confirmed strength. Security is now a consistently weak area across both exams, and the same is true for Compute and Storage — these three are the real core topics to prioritize before Practice Exam 3.
+
+> **What I understood**
+> - A single improvement in overall score does not mean the weak areas have actually closed; Security got worse relative to Exam 1.
+> - Topics with very few questions in an exam can create misleading signals of strength or weakness.
+> - Security, Compute, and Storage are now confirmed as the persistent weak areas across two exams, not one-off mistakes.
+> - The rework plan should now focus on these three areas specifically before attempting Exam 3.
+
+---
+
 ## July 31, 2026
 
 **SAA-C03 Exam Prep | Day 1 · Practice Exam 1 Baseline and Priority Mapping**

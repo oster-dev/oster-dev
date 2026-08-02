@@ -13,18 +13,18 @@ TIL Started: April 13, 2026
 
 Today I finished the third and final SAA-C03 mapping practice exam, this time from the top of the Transfagarasan near Balea Lac in Romania, and the view genuinely stole focus from the questions. The result was **33% correct (22/65)**, the lowest of the three baseline exams, with Networking & Content Delivery scoring only 22% correct across 18 questions, making it the single largest and weakest domain overall.
 
-**Result Overview — All Three Exams**
+**Result Overview — All Three Exams (% Correct)**
 
 | Topic Area | Exam 1 | Exam 2 | Exam 3 |
 |---|---|---|---|
-| Networking & Content Delivery | Weakness | 58% | 22% |
-| Compute | Weakness | 36% | 36% |
-| Database | Weakness | 58% | 25% |
-| Security, Identity & Compliance | Weakness | 22% | 50% |
-| Storage | Medium | 44% | 41% |
-| Application Integration | Weakness | 0% | 67% |
-| Migration & Transfer | Not confirmed | 100% | 100% |
-| Management & Governance | Low priority | – | 100% |
+| Networking & Content Delivery | 55% | 58% | 22% |
+| Compute | 42% | 36% | 36% |
+| Database | 33% | 58% | 25% |
+| Security, Identity & Compliance | 40% | 22% | 50% |
+| Storage | 44% | 44% | 41% |
+| Application Integration | 29% | 0% | 67% |
+| Migration & Transfer | 0% | 100% | 100% |
+| Management & Governance | 75% | 0% | 100% |
 
 **Combined Priority List (All 3 Exams)**
 

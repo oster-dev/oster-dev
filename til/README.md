@@ -7,6 +7,51 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 2, 2026
+
+**SAA-C03 Exam Prep | Day 3 · Practice Exam 3 and Full 3-Exam Priority Mapping**
+
+Today I finished the third and final SAA-C03 mapping practice exam, this time from the top of the Transfagarasan near Balea Lac in Romania, and the view genuinely stole focus from the questions. The result was **33% correct (22/65)**, the lowest of the three baseline exams, with Networking & Content Delivery scoring only 22% correct across 18 questions, making it the single largest and weakest domain overall.
+
+**Result Overview — All Three Exams**
+
+| Topic Area | Exam 1 | Exam 2 | Exam 3 |
+|---|---|---|---|
+| Networking & Content Delivery | Weakness | 58% | 22% |
+| Compute | Weakness | 36% | 36% |
+| Database | Weakness | 58% | 25% |
+| Security, Identity & Compliance | Weakness | 22% | 50% |
+| Storage | Medium | 44% | 41% |
+| Application Integration | Weakness | 0% | 67% |
+| Migration & Transfer | Not confirmed | 100% | 100% |
+| Management & Governance | Low priority | – | 100% |
+
+**Combined Priority List (All 3 Exams)**
+
+1. Networking & Content Delivery — largest and now weakest domain overall.
+2. Compute — consistently around 36% correct across all three exams.
+3. Database — unstable, weakest in the most recent exam.
+4. Security, Identity & Compliance — fluctuating, never reliably passed.
+5. Storage — consistently medium-weak.
+6. Application Integration — highly volatile between exams.
+7. Migration & Transfer, Analytics, Management & Governance — lowest priority, either consistently strong or too few questions to be statistically meaningful.
+
+**What I Understood**
+
+My hope was that DEA-C01 and CLF-C02 knowledge would carry over significantly into SAA-C03, but across all three baseline exams it's clear that SAA-C03 is a fundamentally different exam with a completely different approach. It tests deep AWS cloud architecture thinking, infrastructure trade-offs, and design reasoning rather than the data-platform-centric knowledge that DEA-C01 rewarded, and this gap shows up hardest in Networking, Compute, and Database, which are architecture-heavy domains by nature. Based on this full three-exam overview, I've concluded that self-study alone isn't going to close this gap efficiently, and I need a structured SAA-C03 course to properly rebuild the architectural mental models this exam actually demands.
+
+> **What I understood**
+> - SAA-C03 rewards architecture and trade-off reasoning, not data-platform knowledge like DEA-C01 did.
+> - Networking, Compute, and Database are consistently the weakest domains across all three baseline exams.
+> - Fluctuating results in Security and Application Integration point to unstable, shallow understanding rather than real mastery.
+> - Self-study alone is not sufficient here; a structured course is needed to rebuild the correct mental models.
+
+**Result**
+
+Three-exam baseline mapping complete: 41%, 46%, 33% correct respectively, with Networking, Compute, and Database confirmed as the top rework priorities before moving into structured course-based study.
+
+---
+
 ## August 1, 2026
 
 **SAA-C03 Exam Prep | Day 2 · Practice Exam 2/3 Result and Combined Weakness Picture**

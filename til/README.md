@@ -7,6 +7,32 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 3, 2026
+
+**SAA-C03 Exam Prep | Day 4 · Course Decision After 3-Exam Baseline**
+
+Today was mostly travel, driving from Balea Lac down to Mamaia, Constanța on the Black Sea coast, but I used the downtime to make a key decision about my SAA-C03 preparation path.
+
+**Decision**
+
+After mapping three full baseline practice exams (41%, 46%, 33% correct), I've decided to commit to Stephane Maarek's "Ultimate AWS Certified Solutions Architect Associate" course as my structured path forward for SAA-C03. It's the most established SAA-C03 prep course on the market, with roughly 27 hours of video, hands-on labs, over 800 slides, and a full practice exam, and it's built specifically around the architectural depth this certification demands.
+
+**Why This Makes Sense**
+
+My hope was that DEA-C01 and CLF-C02 knowledge would carry over significantly, but the three-exam baseline made it clear that SAA-C03 is a fundamentally different exam with a different approach. It requires deep AWS cloud architecture thinking rather than data-platform-centric reasoning, and the weakest domains from my baseline (Networking, Compute, Database) are exactly the architecture-heavy areas this course is structured to build up systematically. The course covers VPC networking, compute scaling design, database architecture trade-offs, security, and the AWS Well-Architected Framework in the depth needed to actually close these gaps.
+
+**What This Means**
+
+> - Self-study through practice exams alone wasn't sufficient to close the architectural depth gap.
+> - The Maarek course is widely regarded as the de facto standard for SAA-C03 preparation, with a 4.7 rating across hundreds of thousands of reviews.
+> - My plan: work through the course systematically, prioritizing Networking, Compute, and Database sections first based on my baseline weaknesses.
+
+**Result**
+
+Committed to the Stephane Maarek SAA-C03 course as the structured study path, informed directly by the combined weakness mapping from Practice Exams 1–3.
+
+---
+
 ## August 2, 2026
 
 **SAA-C03 Exam Prep | Day 3 · Practice Exam 3 and Full 3-Exam Priority Mapping**

@@ -7,6 +7,40 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 4, 2026
+
+**SAA-C03 Exam Prep | Day 5 · Course Start — IAM & AWS CLI Section**
+
+Today I watched through an entire section of Stephane Maarek's course from the beach at Olimp, Romania — a fitting contrast between coastal downtime and dense IAM content.
+
+**What I Covered**
+
+I completed Section 4 – IAM & AWS CLI in full, from the introduction through the hands-on labs and the section quiz. The lessons covered:
+
+- IAM fundamentals: Users, Groups, Policies, and how Root accounts should never be used or shared.
+- Groups only contain Users, not other Groups, and Users can belong to multiple Groups at once.
+- Hands-on labs for IAM Users & Groups, IAM Policies, and IAM MFA setup.
+- AWS Access Keys, CLI, and SDK setup across Windows, Mac OS X, and Linux.
+- AWS CloudShell as a browser-based CLI alternative, plus its Region availability constraints.
+- IAM Roles for AWS services and their hands-on configuration.
+- IAM Security Tools and IAM Best Practices, closing out with an IAM & AWS CLI quiz (9 questions).
+
+**What This Means**
+
+This section builds the identity and access foundation that underpins almost every other AWS service tested on SAA-C03, so getting IAM Users, Groups, Policies, and Roles solid early is a good structural start before moving into networking and compute, which remain my weakest baseline areas.
+
+> **What I understood**
+> - IAM is the identity layer that every other AWS service and exam domain builds on top of.
+> - Groups only ever contain Users, never other Groups — a small but exam-relevant detail.
+> - CLI/SDK setup and CloudShell give practical alternatives to console-based work, each with their own constraints.
+> - Starting the course with IAM was the right structural choice before tackling my weaker Networking and Compute domains.
+
+**Result**
+
+Section 4 (IAM & AWS CLI) of the Maarek SAA-C03 course completed, including hands-on labs and the section quiz.
+
+---
+
 ## August 3, 2026
 
 **SAA-C03 Exam Prep | Day 4 · Course Decision After 3-Exam Baseline**

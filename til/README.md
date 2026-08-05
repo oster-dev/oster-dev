@@ -7,6 +7,46 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 5, 2026
+
+**SAA-C03 Exam Prep | Day 6 · Completing EC2 Fundamentals & Advancing into EC2 Associate Level**
+
+Today I continued through the Maarek SAA-C03 course, finishing Section 5 – EC2 Fundamentals entirely and progressing well into Section 6 – EC2 Solutions Architect Associate Level.
+
+**What I Covered**
+
+*Section 5 – EC2 Fundamentals (completed):*
+- AWS Budget Setup, EC2 Basics, and creating an EC2 instance with EC2 User Data to serve a website (hands-on).
+- EC2 Instance Types Basics.
+- Security Groups & Classic Ports Overview, plus a hands-on lab.
+- SSH Overview, and SSH connection walkthroughs for Linux/Mac, Windows, and Windows 10.
+- SSH Troubleshooting (article).
+- EC2 Instance Connect and EC2 Instance Roles Demo.
+- EC2 Instance Purchasing Options (On-Demand, Reserved, Spot, etc.).
+
+*Section 6 – EC2 - Solutions Architect Associate Level (in progress):*
+- Private vs Public vs Elastic IP, including the hands-on lab.
+- EC2 Placement Groups, plus hands-on.
+- Elastic Network Interfaces (ENI) — overview, hands-on, and extra reading.
+- EC2 Hibernate, plus hands-on.
+- Reached the EC2 SAA Level Quiz (5 questions) at the end of the section.
+
+**What This Means**
+
+This was a dense, practical day covering the full EC2 lifecycle: from basic instance creation and SSH access through to associate-level architecture concepts like IP addressing strategy, placement groups for performance/compliance, and ENIs for advanced networking setups. Since Compute has consistently been one of my weakest domains across all three baseline practice exams, this section is directly closing one of my highest-priority gaps.
+
+> **What I understood**
+> - EC2 fundamentals (instance types, security groups, SSH access, purchasing options) form the base layer that all associate-level compute concepts build on.
+> - Private vs. Public vs. Elastic IP choices are a recurring architectural decision, not just a networking detail.
+> - Placement Groups and ENIs address specific performance, resilience, and compliance requirements rather than being general-purpose defaults.
+> - Compute is one of my confirmed baseline weaknesses, so this section is directly targeted rework, not just course progression.
+
+**Result**
+
+Section 5 (EC2 Fundamentals) completed in full; Section 6 (EC2 - Solutions Architect Associate Level) advanced through lesson 55, with the EC2 SAA Level Quiz next up.
+
+---
+
 ## August 4, 2026
 
 **SAA-C03 Exam Prep | Day 5 · Course Start — IAM & AWS CLI Section**

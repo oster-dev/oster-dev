@@ -7,6 +7,60 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 6, 2026
+
+**SAA-C03 Exam Prep | Day 7 · Finishing EC2 Storage and Advancing Through ELB & ASG**
+
+Today I continued through the Maarek SAA-C03 course and made strong progress across EC2 storage, high availability, and scaling topics. I officially returned from vacation and am back in Cologne, which means starting tomorrow I can increase the study volume again and move through the course with more intensity.
+
+**What I Covered**
+
+*Section 7 – EC2 Instance Storage:*
+- EBS Overview and EBS Hands On.
+- EBS Snapshots and EBS Snapshots Hands On.
+- AMI Overview and AMI Hands On.
+- EC2 Instance Store.
+- EBS Volume Types.
+- EBS Multi-Attach.
+- EBS Encryption.
+- Amazon EFS and Amazon EFS Hands On.
+- EFS vs EBS.
+- EBS & EFS Section Cleanup.
+- Reached the EC2 Data Management Quiz.
+
+*Section 8 – High Availability and Scalability: ELB & ASG:*
+- High Availability and Scalability.
+- Elastic Load Balancing Overview.
+- Application Load Balancer (ALB).
+- Application Load Balancer Hands On Part 1 and Part 2.
+- Network Load Balancer (NLB) and NLB Hands On.
+- Gateway Load Balancer (GWLB).
+- Sticky Sessions.
+- Cross Zone Load Balancing.
+- SSL Certificates and SSL Certificates Hands On.
+- Connection Draining.
+- Auto Scaling Groups Overview.
+- Auto Scaling Groups Hands On.
+- Auto Scaling Groups Scaling Policies.
+- Auto Scaling Groups Scaling Policies Hands On.
+- Reached the High Availability & Scalability Quiz.
+
+**What This Means**
+
+This was one of the most relevant study days so far because it directly targeted two of my biggest weakness clusters from the three baseline practice exams: Compute and Storage. EBS, EFS, AMIs, load balancers, and Auto Scaling are core SAA-C03 building blocks, so getting through these sections gives me more of the infrastructure-level thinking that the exam has clearly been demanding from the start.
+
+> **What I understood**
+> - EBS, EFS, and Instance Store each serve a fundamentally different access pattern and need to be chosen based on the specific use case, not interchangeably.
+> - ALB, NLB, and GWLB are not interchangeable either — each targets a different layer and traffic type, and the exam tests precisely these distinctions.
+> - Auto Scaling policies (scheduled, target tracking, step scaling) are one of my confirmed weak spots from the baseline, so working through them in the course is directly closing that gap.
+> - Being back in Cologne means the next phase can have the consistency and volume SAA-C03 actually requires to get through the remaining sections cleanly.
+
+**Result**
+
+Section 7 effectively completed, Section 8 advanced through load balancers and Auto Scaling, and from tomorrow onward the study pace increases again now that the România vacation is officially over.
+
+---
+
 ## August 5, 2026
 
 **SAA-C03 Exam Prep | Day 6 · Completing EC2 Fundamentals & Advancing into EC2 Associate Level**
@@ -43,7 +97,7 @@ This was a dense, practical day covering the full EC2 lifecycle: from basic inst
 
 **Result**
 
-Section 5 (EC2 Fundamentals) completed in full; Section 6 (EC2 - Solutions Architect Associate Level) advanced through lesson 55, with the EC2 SAA Level Quiz next up.
+Section 5 (EC2 Fundamentals) completed in full; Section 6 (EC2 - Solutions Architect Associate Level) advanced through lesson 55, with the EC2 SAA Level Quiz.
 
 ---
 

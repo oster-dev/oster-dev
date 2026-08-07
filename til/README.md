@@ -75,6 +75,7 @@ This was by far the highest-volume day so far, closing out the database fundamen
 > - CloudFront and Global Accelerator solve different problems — caching/CDN vs. global network-layer routing — and shouldn't be confused.
 
 **Result**
+
 Six sections completed in one day (RDS/Aurora/ElastiCache, Route 53, Classic Solutions Architecture Discussions, S3 Introduction, Advanced S3, S3 Security) plus CloudFront & Global Accelerator, with every section quiz completed along the way.
 
 ---

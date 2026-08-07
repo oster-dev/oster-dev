@@ -7,6 +7,78 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 7, 2026
+
+**SAA-C03 Exam Prep | Day 8 · Massive Volume Increase — RDS Through CloudFront**
+
+Today I finally delivered on the promise to increase study volume now that I'm back in Cologne, and it shows: I worked through 7 full course sections in a single day, from database fundamentals all the way to global content delivery.
+
+**What I Covered**
+
+*Section 9 – AWS Fundamentals: RDS + Aurora + ElastiCache (completed):*
+- Amazon RDS Overview, RDS Read Replicas vs Multi-AZ, RDS Hands On.
+- RDS Custom for Oracle and Microsoft SQL Server.
+- Amazon Aurora, Aurora Hands On, Aurora Advanced Concepts.
+- RDS & Aurora Backup and Monitoring, RDS Security, RDS Proxy.
+- ElastiCache Overview, ElastiCache Hands On, ElastiCache for Solutions Architects.
+- List of Ports to be familiar with (article).
+- Completed the RDS, Aurora, & ElastiCache Quiz (24 questions).
+
+*Section 10 – Route 53 (completed):*
+- What is a DNS, Route 53 Overview, registering a domain, creating first records.
+- Route 53 EC2 Setup, TTL, CNAME vs Alias.
+- Routing Policies: Simple, Weighted, Latency, Failover, Geolocation, Geoproximity, IP-based, Multi-Value.
+- Route 53 Health Checks and Hands On.
+- 3rd Party Domains & Route 53, Route 53 Resolvers & Hybrid DNS, Section Cleanup.
+- Completed the Route 53 Quiz (7 questions).
+
+*Section 11 – Classic Solutions Architecture Discussions (completed):*
+- Solutions Architecture Discussions Overview.
+- Case studies: WhatsTheTime.com, MyClothes.com, MyWordPress.com.
+- Instantiating applications quickly, Beanstalk Overview, Beanstalk Hands On.
+- Completed the Classic Solutions Architecture Discussions Quiz (6 questions).
+
+*Section 12 – Amazon S3 Introduction (completed):*
+- S3 Overview and Hands On.
+- S3 Security: Bucket Policy and Hands On.
+- S3 Website Overview and Hands On.
+- S3 Versioning, Replication, Replication Notes and Hands On.
+- S3 Storage Classes Overview and Hands On, S3 Express One Zone.
+- Completed the Amazon S3 Quiz (7 questions).
+
+*Section 13 – Advanced Amazon S3 (completed):*
+- S3 Lifecycle Rules (with S3 Analytics) and Hands On.
+- S3 Requester Pays, Event Notifications and Hands On.
+- S3 Performance, Batch Operations, Storage Lens.
+- Completed the Amazon S3 Advanced Quiz (9 questions).
+
+*Section 14 – Amazon S3 Security (completed):*
+- S3 Encryption and Hands On, About DSSE-KMS (article), S3 Default Encryption.
+- S3 CORS and Hands On, S3 MFA Delete and Hands On.
+- S3 Access Logs and Hands On, S3 Pre-signed URLs and Hands On.
+- Glacier Vault Lock & S3 Object Lock, S3 Access Points, S3 Object Lambda.
+- Completed the Amazon S3 Security Quiz (12 questions).
+
+*Section 15 – CloudFront & AWS Global Accelerator (completed):*
+- CloudFront Overview, CloudFront with S3 Hands On.
+- CloudFront ALB/EC2 as an Origin, Geo Restriction, Cache Invalidation.
+- AWS Global Accelerator Overview and Hands On.
+- Completed the CloudFront & AWS Global Accelerator Quiz (5 questions).
+
+**What This Means**
+This was by far the highest-volume day so far, closing out the database fundamentals section and pushing all the way through DNS, classic architecture patterns, and a very deep dive into Amazon S3 across three dedicated sections plus CDN/global routing. S3 alone spans four sections in this course, which reflects how heavily SAA-C03 weights storage architecture, security, and performance decisions.
+
+> **What I understood**
+> - RDS, Aurora, and ElastiCache each solve different reliability and performance needs, and the exam tests exactly when to choose which.
+> - Route 53 routing policies (weighted, latency, failover, geolocation, geoproximity) are architectural decisions, not just DNS trivia.
+> - S3 is disproportionately weighted in this course across four sections, matching how central Storage is to the SAA-C03 exam.
+> - CloudFront and Global Accelerator solve different problems — caching/CDN vs. global network-layer routing — and shouldn't be confused.
+
+**Result**
+Six sections completed in one day (RDS/Aurora/ElastiCache, Route 53, Classic Solutions Architecture Discussions, S3 Introduction, Advanced S3, S3 Security) plus CloudFront & Global Accelerator, with every section quiz completed along the way.
+
+---
+
 ## August 6, 2026
 
 **SAA-C03 Exam Prep | Day 7 · Finishing EC2 Storage and Advancing Through ELB & ASG**

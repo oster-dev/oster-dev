@@ -7,6 +7,74 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 8, 2026
+
+**SAA-C03 Exam Prep | Day 9 · Storage Extras, Messaging, Containers & Serverless**
+
+Today continued the increased study pace from Cologne, covering five full sections: AWS storage extras, application decoupling with messaging services, containers, and a deep serverless block ending in solutions architecture discussions.
+
+**What I Covered**
+
+*Section 16 – AWS Storage Extras (completed):*
+- AWS Snow Family Overview and Hands On, Snowball into Glacier architecture.
+- Amazon FSx and Hands On.
+- Storage Gateway Overview and Hands On.
+- AWS Transfer Family, DataSync Overview.
+- All AWS Storage Options Compared.
+- Completed the AWS Storage Extras Quiz (17 questions).
+
+*Section 17 – Decoupling Applications: SQS, SNS, Kinesis, Active MQ (completed):*
+- Introduction to Messaging.
+- SQS Standard Queues Overview and Hands On, Message Visibility Timeout, Long Polling, FIFO Queues.
+- SQS + Auto Scaling Group integration.
+- Amazon SNS Overview and Hands On, SNS + SQS Fan Out Pattern.
+- Amazon Kinesis Data Streams and Hands On.
+- Amazon Data Firehose and Hands On.
+- SQS vs SNS vs Kinesis comparison.
+- Amazon MQ.
+- Completed the Messaging & Integration Quiz (12 questions).
+
+*Section 18 – Containers on AWS: ECS, Fargate, ECR & EKS (completed):*
+- Docker Introduction.
+- Amazon ECS, ECS Cluster Hands On, ECS Service Hands On.
+- ECS Auto Scaling, ECS Solutions Architectures, ECS Clean Up.
+- Amazon ECR.
+- Amazon EKS Overview and Hands On.
+- Completed the Containers on AWS Quiz (7 questions).
+
+*Section 19 – Serverless Overviews from a Solutions Architect Perspective (completed):*
+- About the Serverless Section (article), Serverless Introduction.
+- Lambda Overview, Hands-On, Limits, Concurrency and Hands On.
+- Lambda SnapStart, Lambda@Edge & CloudFront Functions, Lambda in VPC.
+- RDS Invoking Lambda & Event Notifications.
+- Amazon DynamoDB, Hands-On, and Advanced Features.
+- API Gateway Overview and Basics Hands-On.
+- Step Functions, Amazon Cognito Overview.
+- Completed the Serverless Overview Quiz (17 questions).
+
+*Section 20 – Serverless Solutions Architecture Discussions (completed):*
+- Mobile Application case study: MyTodoList.
+- Serverless Website case study: MyBlog.com.
+- MicroServices Architecture.
+- Software Updates Distribution.
+- Completed the Serverless Solutions Architecture Discussions Quiz (8 questions).
+
+**What This Means**
+
+This day covered a huge swath of modern application architecture: decoupled messaging patterns (SQS/SNS/Kinesis), container orchestration (ECS/EKS), and the full serverless stack (Lambda, DynamoDB, API Gateway, Cognito). These topics are heavily represented on the SAA-C03 exam under application integration and modern architecture design, so closing five sections in one sitting is a major dent in the remaining course backlog.
+
+> **What I understood**
+> - SQS, SNS, and Kinesis solve different decoupling problems (queueing, pub/sub fan-out, and streaming), and the exam expects precise use-case matching.
+> - ECS, Fargate, ECR, and EKS represent a spectrum from managed orchestration to full Kubernetes control, each with different operational trade-offs.
+> - The serverless stack (Lambda, DynamoDB, API Gateway, Cognito, Step Functions) forms a cohesive architecture pattern rather than isolated services.
+> - Covering five sections in one day shows the storage, messaging, container, and serverless domains are now much more consolidated than before this study block.
+
+**Result**
+
+Five sections completed end-to-end (Storage Extras, Messaging & Integration, Containers, Serverless Overview, Serverless Solutions Architecture Discussions), with all five section quizzes finished.
+
+---
+
 ## August 7, 2026
 
 **SAA-C03 Exam Prep | Day 8 · Massive Volume Increase — RDS Through CloudFront**

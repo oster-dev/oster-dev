@@ -7,6 +7,55 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 9, 2026
+
+**SAA-C03 Exam Prep | Day 10 · Quiet Day — Data & Analytics and Machine Learning Overview**
+
+Today was a calmer, lower-volume day compared to the recent streak, but I still closed out two content-rich sections covering NoSQL/analytics extras, the full data & analytics toolset, and a broad AWS machine learning services overview. Starting tomorrow, I'm going back to maximum intensity.
+
+**What I Covered**
+
+*Section 21 – Databases & Analytics Extras (tail end):*
+- Amazon Keyspaces (for Apache Cassandra).
+- Amazon Timestream.
+
+*Section 22 – Data & Analytics (completed):*
+- Amazon Athena and Athena Hands On.
+- Amazon Redshift.
+- OpenSearch (formerly ElasticSearch).
+- Amazon EMR.
+- Amazon QuickSight.
+- AWS Glue and Lake Formation.
+- Amazon Managed Service for Apache Flink and its Hands On.
+- MSK (Managed Streaming for Apache Kafka).
+- Big Data Ingestion Pipeline overview.
+- Completed the Data & Analytics Quiz (14 questions).
+
+*Section 23 – Machine Learning (completed):*
+- Rekognition, Transcribe, Polly, and Translate overviews.
+- Lex + Connect Overview.
+- Comprehend and Comprehend Medical overviews.
+- SageMaker AI Overview.
+- Kendra, Personalize, and Textract overviews.
+- Machine Learning Summary.
+- Completed the Machine Learning Quiz (13 questions).
+
+**What This Means**
+
+Even on a lighter day, this material matters: analytics services like Athena, Redshift, and Glue frequently show up on the SAA-C03 exam in data pipeline and reporting scenarios, while the AI/ML overview section builds the "which service does what" recognition needed for scenario-based questions, even though deep ML expertise isn't required for this exam.
+
+> **What I understood**
+> - Athena, Redshift, EMR, and Glue each fit different points in a data pipeline, and the exam tests recognizing which one fits a given scenario rather than deep implementation detail.
+> - MSK sitting alongside Kinesis and Data Firehose shows there are multiple valid streaming approaches on AWS, chosen based on existing tooling and control needs.
+> - The ML section is about service recognition (Rekognition, Comprehend, Textract, Lex, SageMaker, etc.), not deep machine learning expertise, since SAA-C03 tests architecture decisions, not ML theory.
+> - A lighter day still made real progress, closing two full sections while leaving room to reset before increasing intensity again tomorrow.
+
+**Result**
+
+Section 21 wrapped up, Section 22 (Data & Analytics) and Section 23 (Machine Learning) both completed in full including their quizzes, with a heavier pace resuming tomorrow.
+
+---
+
 ## August 8, 2026
 
 **SAA-C03 Exam Prep | Day 9 · Storage Extras, Messaging, Containers & Serverless**

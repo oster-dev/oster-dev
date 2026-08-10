@@ -7,6 +7,75 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 10, 2026
+
+**SAA-C03 Exam Prep | Day 11 · Monitoring, IAM Advanced, Security & Full VPC Networking**
+
+Back to maximum intensity as planned — today I processed a massive amount of material, completing four full sections that together cover operational visibility, advanced identity management, security services, and the entire VPC networking deep dive.
+
+**What I Covered**
+
+*Section 24 – AWS Monitoring & Audit: CloudWatch, CloudTrail, Config (completed):*
+- CloudWatch Metrics, Logs, Logs Hands On, Live Tail Hands On, Agent.
+- CloudWatch Alarms and Hands On, Network Synthetic Monitor.
+- Amazon EventBridge Overview and Hands On.
+- CloudWatch Insights and Operational Visibility.
+- CloudTrail Overview, Hands On, and EventBridge Integration.
+- AWS Config Overview and Hands On.
+- CloudTrail vs CloudWatch vs Config comparison.
+- Completed the Monitoring & Auditing Quiz (16 questions).
+
+*Section 25 – Identity and Access Management (IAM) Advanced (completed):*
+- AWS Organizations Overview, Hands On, Tag Policies.
+- IAM Advanced Policies, Resource-based Policies vs IAM Roles, Policy Evaluation Logic.
+- AWS IAM Identity Center.
+- AWS Directory Services and Hands On.
+- AWS Control Tower.
+- Completed the IAM Advanced Quiz (5 questions).
+
+*Section 26 – AWS Security & Encryption: KMS, SSM Parameter Store, Shield, WAF (completed):*
+- Encryption 101, KMS Overview, Hands On with CLI, Multi-Region Keys.
+- S3 Replication with Encryption, Encrypted AMI Sharing Process.
+- SSM Parameter Store Overview and Hands On CLI.
+- AWS Secrets Manager Overview and Hands On.
+- AWS Certificate Manager (ACM), AWS CloudHSM.
+- WAF, Shield DDoS Protection, Firewall Manager, WAF/Shield Hands On.
+- DDoS Protection Best Practices.
+- Amazon GuardDuty, Amazon Inspector, Amazon Macie.
+- Completed the AWS Security & Encryption Quiz (25 questions).
+
+*Section 27 – Networking: VPC (completed):*
+- CIDR, Private vs Public IP, Default VPC Overview, VPC Overview and Hands On.
+- Subnet Overview and Hands On.
+- Internet Gateways & Route Tables, and Hands On.
+- Bastion Hosts, NAT Instances, NAT Gateways, Regional NAT Gateway (all with Hands On).
+- NACLs & Security Groups and Hands On.
+- VPC Peering and Hands On.
+- VPC Endpoints and Hands On.
+- VPC Flow Logs and Hands On with Athena.
+- Site-to-Site VPN, Virtual Private Gateway/Customer Gateway and Hands On.
+- Direct Connect, Direct Connect Gateway, Transit Gateway.
+- VPC Traffic Mirroring, IPv6 for VPC and Hands On.
+- Egress-Only Internet Gateway and Hands On, Section Cleanup, VPC Section Summary.
+- Networking Costs in AWS, AWS Network Firewall.
+- Completed the VPC Quiz (23 questions).
+
+**What This Means**
+
+This was one of the heaviest and most exam-critical days yet. VPC networking alone is consistently one of the largest, most tested domains on SAA-C03, and combining it with the security/encryption stack (KMS, WAF, Shield, GuardDuty) and monitoring/auditing tools (CloudWatch, CloudTrail, Config) covers nearly the entire "secure and monitor architectures" pillar of the exam in one sitting.
+
+> **What I understood**
+> - CloudWatch, CloudTrail, and Config each answer a different question (metrics/alarms, API activity history, and configuration compliance), and mixing them up is a common exam trap.
+> - IAM policy evaluation logic and resource-based policies vs. roles are precise, rule-based mechanics that need to be memorized exactly, not approximated.
+> - KMS, Secrets Manager, and SSM Parameter Store overlap in purpose but differ in rotation, cost, and integration depth — exactly the kind of distinction SAA-C03 tests.
+> - VPC networking, my confirmed weakest baseline domain, got its most complete single-day coverage yet, from CIDR and subnets through NAT, peering, endpoints, VPN, and Direct Connect.
+
+**Result**
+
+Four full sections completed end-to-end (Monitoring & Audit, IAM Advanced, Security & Encryption, VPC Networking) with all four section quizzes finished, confirming the return to full study intensity after vacation.
+
+---
+
 ## August 9, 2026
 
 **SAA-C03 Exam Prep | Day 10 · Quiet Day — Data & Analytics and Machine Learning Overview**

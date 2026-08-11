@@ -7,6 +7,68 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 11, 2026
+
+**SAA-C03 Exam Prep | Day 12 · COURSE COMPLETE**
+
+Today marks the finish line: I completed the entire Maarek SAA-C03 course from Section 28 all the way through to the "Congratulations" lecture. Six sections in one day, closing out disaster recovery, advanced architectures, miscellaneous services, whitepapers, and exam preparation itself.
+
+**What I Covered**
+
+*Section 28 – Disaster Recovery & Migrations (completed):*
+- Disaster Recovery in AWS, Elastic Disaster Recovery (DRS).
+- Database Migration Service (DMS) and Hands On, RDS/Aurora Migrations.
+- On-Premises Strategies with AWS, AWS Backup and Hands On.
+- Application Migration Service (MGN), Transferring Large Datasets into AWS.
+- VMware Cloud on AWS.
+- Completed the Disaster Recovery & Migration Quiz (10 questions).
+
+*Section 29 – More Solution Architectures (completed):*
+- Event Processing in AWS, Caching Strategies in AWS.
+- Blocking an IP Address in AWS, High Performance Computing (HPC) on AWS.
+- EC2 Instance High Availability.
+- Completed the More Solution Architectures Quiz (3 questions).
+
+*Section 30 – Other Services (completed):*
+- CloudFormation Intro, Hands On, Service Role.
+- Amazon SES, Amazon Pinpoint.
+- SSM Session Manager and Other Services.
+- AWS Cost Explorer, AWS Cost Anomaly Detection.
+- AWS Outposts, AWS Batch, Amazon AppFlow, AWS Amplify, Instance Scheduler on AWS.
+- Completed the Other Services Quiz (5 questions).
+
+*Section 31 – Whitepapers and Architectures (completed):*
+- AWS Well-Architected Framework & Well-Architected Tool.
+- AWS Trusted Advisor Overview and Hands-On.
+- Examples of Architecture for the SAA exam.
+- Completed the Whitepapers & Architectures Quiz (1 question).
+
+*Section 32 – Preparing for the Exam (completed):*
+- Exam Preparation Introduction, State of Learning Checkpoint.
+- Exam Tips, Links to Whitepapers (article).
+- Exam Walkthrough and Signup, saving on exam cost, extra time for non-native English speakers.
+- How does the exam work, plus the built-in practice exam.
+
+*Section 33 – Congratulations (completed):*
+- AWS Certification Paths.
+- Congratulations lecture and Bonus Lecture.
+
+**What This Means**
+
+This closes the full instructional portion of the SAA-C03 prep. Disaster recovery and migration services (DMS, DRS, AWS Backup) round out the resilience domain, while the Well-Architected Framework and Trusted Advisor tie together the architectural best practices that show up across nearly every exam scenario. The exam-prep section itself now gives me a clear checklist for signup, timing, and logistics.
+
+> **What I understood**
+> - DMS, DRS, and AWS Backup each target a different point in the migration/resilience lifecycle, and the exam expects precise matching of scenario to service.
+> - The Well-Architected Framework and Trusted Advisor function as the connecting thread across nearly every domain covered so far, not as a standalone topic.
+> - Finishing the exam-logistics section removes uncertainty about signup, timing, and accommodations, so the only remaining unknowns are content-related.
+> - Completing all 33 sections confirms the course backlog is fully closed; the next phase is entirely about targeted practice and weak-domain review, not new material.
+
+**Result**
+
+Course officially finished end-to-end — all 33 sections and their quizzes completed. Next milestone: shifting fully into practice exams and targeted review of weak domains (Compute and Networking, per the baseline exams) ahead of scheduling the real SAA-C03 exam.
+
+---
+
 ## August 10, 2026
 
 **SAA-C03 Exam Prep | Day 11 · Monitoring, IAM Advanced, Security & Full VPC Networking**

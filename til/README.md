@@ -7,6 +7,45 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 12, 2026
+
+**SAA-C03 Exam Prep | Day 13 · First Tutorials Dojo Mock Exam — Reality Check**
+
+Today I purchased the Tutorials Dojo SAA-C03 practice exam bundle and immediately took a 100-question mock exam to get an honest baseline now that the Maarek course is fully completed. The result: not passed, but a clear and actionable map of where the remaining work needs to go.
+
+**Mock Exam Results**
+
+- Score: 50% (passing threshold is 70%)
+- Correct: 50 / Incorrect: 50
+- Status: Not Passed — "Keep going, review the missed answers and target your weak domains"
+
+**Domain Performance**
+
+| Domain | Score |
+|---|---|
+| Design Cost-Optimized Architectures | 75% |
+| Design Resilient Architectures | 50% |
+| Design Secure Architectures | 50% |
+| Design High-Performing Architectures | 33% |
+
+**What This Means**
+
+Cost-Optimized Architectures is clearly my strongest domain right now, while Design High-Performing Architectures is the weakest by a wide margin at 33%. This domain covers compute, storage, database, and networking solutions for performance — directly overlapping with the EC2, VPC, and storage sections I worked through hard in the past week, so the gap suggests I need deeper review rather than just re-watching, likely through targeted question review and hands-on reinforcement of performance-oriented service choices (e.g., placement groups, caching, read replicas, storage classes).
+
+Design Resilient and Secure Architectures sitting at 50% each are close behind and represent the next priority tier, since both are large, heavily-weighted domains on the actual exam.
+
+> **What I understood**
+> - Finishing the full course does not automatically translate into a passing score; the mock exam exposed a real gap between watching content and applying it under exam conditions.
+> - Design High-Performing Architectures needs targeted question review and hands-on reinforcement, not just a re-watch of the course sections.
+> - Cost-Optimized Architectures being the strongest domain suggests trade-off reasoning transfers well when the decision criteria are more clear-cut (pricing models, storage tiers).
+> - Resilient and Secure Architectures are close behind at 50% and should be treated as the next priority tier after Performance.
+
+**Result**
+
+First Tutorials Dojo mock exam completed with a 50% baseline score. Next step is reviewing all missed answers in detail and building a focused study plan around Design High-Performing Architectures first, then Resilient and Secure Architectures, before attempting the next mock exam.
+
+---
+
 ## August 11, 2026
 
 **SAA-C03 Exam Prep | Day 12 · COURSE COMPLETE**

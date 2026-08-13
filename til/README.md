@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 13, 2026
+
+**SAA-C03 Exam Prep | Day 14 · Weaker Session — 65 Questions at 42% Correct**
+
+Today was a noticeably weaker study day compared to the recent streak. I worked through 65 questions in Tutorials Dojo and only scored 42% correct, pulling my 30-day score trend further below the 72% pass line to a latest score of 43%.
+
+**Session Numbers**
+
+- Questions answered today: 65, at 42% correct.
+- Overall activity so far: 2 active study days, 75 questions total in the last 12 weeks.
+- Score trend (last 30 days): dropped from roughly 50% on August 12 to 43% on August 13, still well below the 72% pass threshold, flagged as "Needs Work."
+
+**What This Means**
+
+A dip like this right after finishing the full course and taking the first mock exam is a normal part of the process — it usually reflects genuine knowledge gaps surfacing under exam-style pressure rather than a step backward. What matters now is how I close those gaps, not the raw score itself.
+
+> **What I understood**
+> - A score dip right after course completion is a common pattern, since exam-style questions surface gaps that passive video content doesn't reveal.
+> - Volume of questions answered isn't the same as progress; the trend line matters more than any single session's score.
+> - Reading explanations for every missed question, not just the correct answer, is the mechanism that actually converts weak recall into durable understanding.
+> - Staying at "Needs Work" status this early is expected and shouldn't be read as a setback, since the review process hasn't started yet.
+
+**My Plan Going Forward**
+
+I'm staying confident because I have a concrete follow-up strategy: bookmarking every missed question, then carefully reading through the explanations for each one rather than just noting the correct answer. This kind of deliberate review — understanding *why* an option is right or wrong — tends to convert weak recall into durable understanding much faster than re-answering fresh questions blindly.
+
+**Result**
+
+65 questions completed at 42% today; next step is a dedicated review pass over all flagged incorrect questions and their explanations before attempting further mock exams, working toward exam-readiness at the 72%+ pass level.
+
+---
+
 ## August 12, 2026
 
 **SAA-C03 Exam Prep | Day 13 · First Tutorials Dojo Mock Exam — Reality Check**

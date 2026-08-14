@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 14, 2026
+
+**SAA-C03 Exam Prep | Day 15 · Smart Review Pays Off — Score Trend Turns "Improving"**
+
+Today I used Tutorials Dojo's Smart Review feature for the first time, which resurfaces previously missed questions and lets me read through their explanations again. The impact on today's numbers was immediate and clear.
+
+**Session Numbers**
+
+- Questions answered today: 69, at 68% correct — just shy of the 72% pass line.
+- Overall activity: 3 active study days, 144 questions total in the last 12 weeks.
+- Score trend (last 30 days): moved from 43% (Aug 13) up to a latest score of 55%, with the trend now officially flagged as "Improving" instead of "Needs Work."
+
+**What This Means**
+
+The jump from 42% correct yesterday to 68% correct today validates the review approach directly: instead of grinding fresh questions blindly, revisiting exactly the questions I got wrong and reading their explanations closes knowledge gaps far more efficiently. Smart Review essentially turns every mistake into a targeted micro-lesson rather than a one-off wrong answer, which is exactly the kind of deliberate practice that moves a score trend from declining to improving in a single session.
+
+> **What I understood**
+> - Smart Review's targeted resurfacing of missed questions closed gaps far faster than answering fresh, unrelated questions would have.
+> - A single well-designed review session can shift a 30-day trend line from "Needs Work" to "Improving," showing that method matters more than raw question volume.
+> - Being close to the 72% pass line on a daily score, even if not yet there, is a meaningful signal that the underlying gaps are shrinking, not just noise.
+> - The next real test is whether these gains hold up on fresh, previously unseen questions, not just on material I've already reviewed.
+
+**What I Understood**
+
+This confirms the plan from yesterday was the right one. The daily score itself (68%) is already close to the 72% pass threshold, and the 30-day trend line curving upward suggests that consistent Smart Review sessions, rather than just volume of new questions, is the more effective lever for closing the remaining gap to exam-readiness.
+
+**Result**
+
+69 questions completed at 68% correct, pushing the 30-day trend to "Improving" at 55% latest. Next step is continuing Smart Review cycles on remaining flagged questions while gradually mixing in fresh questions to confirm the retained gains transfer beyond just previously-seen material.
+
+---
+
 ## August 13, 2026
 
 **SAA-C03 Exam Prep | Day 14 · Weaker Session — 65 Questions at 42% Correct**

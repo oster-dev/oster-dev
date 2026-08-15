@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 15, 2026
+
+**SAA-C03 Exam Prep | Day 16 · Fresh Questions Reveal Real Progress**
+
+Today I deliberately worked through a batch of completely new, previously unseen questions in Tutorials Dojo to get an honest read on my actual knowledge level — separate from the boost that reviewing already-seen questions tends to give. The result confirms a genuine learning curve is forming.
+
+**Session Numbers**
+
+- Questions answered today: 96, at 57% correct.
+- Overall activity: 4 active study days, 240 questions total in the last 12 weeks.
+- Score trend (last 30 days): climbed from 43% (Aug 13) to 56% (Aug 14) to a latest 56% today, still flagged "Needs Work" against the 72% pass line but clearly trending upward since the Aug 13 low point.
+
+**What This Means**
+
+Testing myself on entirely fresh questions rather than repeating known ones is the more rigorous signal here, and scoring 57% on unfamiliar material — up from the 42% low earlier this week — shows the improvement isn't just an artifact of memorizing specific question-answer pairs from Smart Review. The underlying concept understanding is genuinely strengthening.
+
+> **What I understood**
+> - Testing on fresh, unseen questions is a more honest measure of readiness than repeating known ones, since it isolates real concept understanding from memorized answers.
+> - A 42% → 57% jump on unfamiliar material this week is meaningful evidence that Smart Review is building durable knowledge, not just pattern-matching on specific questions.
+> - The trend line curving upward since the Aug 13 low point matters more than any single day's percentage, since it shows sustained direction rather than a one-off spike.
+> - Still being flagged "Needs Work" against the 72% threshold is expected at this stage; the goal now is closing the remaining gap through the same review discipline that worked earlier this week.
+
+**What I Understood**
+
+Comparing this session against the past few days makes the trajectory clear: Aug 12 baseline mock at 50%, a dip to 42% on Aug 13 after hitting harder material, recovery to 68% on Aug 14 through Smart Review of known mistakes, and now 57% on brand-new questions today. That pattern is consistent with real skill consolidation rather than noise.
+
+**Result**
+
+96 new questions completed at 57% correct, confirming an upward learning curve. Tomorrow's plan is to go back and review today's specific mistakes and their explanations before introducing the next batch of fresh questions.
+
+---
+
 ## August 14, 2026
 
 **SAA-C03 Exam Prep | Day 15 · Smart Review Pays Off — Score Trend Turns "Improving"**

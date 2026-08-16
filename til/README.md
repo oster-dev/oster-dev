@@ -14,9 +14,16 @@ TIL Started: April 13, 2026
 Big find today: StackLessions has finally uploaded a dedicated video series for SAA-C03 on YouTube, mirroring what they did for DEA-C01. Since that format had the single biggest learning impact on me during DEA-C01 prep, I'm shifting focus for the next several days to work through this new series in full.
 
 **What This Means**
+
 This isn't a random course-hop — it's a deliberate return to the resource format that historically produced my best retention. The plan is to treat the next few days primarily as a StackLessions video block, layered on top of (not replacing) the Tutorials Dojo question-review cycle that's been steadily pushing my 30-day score trend upward (43% → 59% this past week).
 
+> **What I understood**
+> - Switching resources deliberately, based on a format that already proved effective for DEA-C01, is different from random course-hopping.
+> - The StackLessions block is meant to layer on top of the existing Tutorials Dojo review cycle, not replace the momentum it already built.
+> - Protecting the upward 30-day trend (43% → 59%) means keeping the question-review cycle running in parallel rather than pausing it for new content.
+
 **Result**
+
 Study focus pivots starting now: StackLessions SAA-C03 video series becomes the primary content source for the next few days, while Tutorials Dojo practice questions continue in parallel to keep reinforcing weak domains.
 
 **SAA-C03 Exam Prep | Day 17 · Reviewing Yesterday's Questions — Steady Upward Climb**

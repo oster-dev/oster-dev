@@ -7,6 +7,38 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 16, 2026
+
+**SAA-C03 Exam Prep | Day 17 · Reviewing Yesterday's Questions — Steady Upward Climb**
+
+Today I went back through yesterday's fresh questions and did a full review pass, including reading the explanations for every answer I got wrong again. It's a smaller, more focused session, but the trend line keeps moving in the right direction.
+
+**Session Numbers**
+
+- Questions answered today: 96, at 67% correct.
+- Overall activity: 5 active study days, 336 questions total in the last 12 weeks.
+- Score trend (last 30 days): now at a latest 59%, continuing the climb from 43% (Aug 13) → 56% (Aug 14) → 56% (Aug 15) → 59% today. Still flagged "Needs Work" against the 72% pass line, but the trajectory has been consistently upward since the Aug 13 low point.
+
+**What This Means**
+
+Going from 57% on yesterday's fresh attempt to 67% on today's review of the exact same question set shows the explanation-reading habit is doing real work — it's converting first-pass mistakes into retained knowledge rather than just repeated guessing. More importantly, the 30-day trend line itself has now risen for three consecutive check-ins, which is a much stronger signal than any single day's score.
+
+> **What I understood**
+> - Re-reviewing the same question set with explanations converted a meaningful share of yesterday's mistakes into retained knowledge, shown by the 57% → 67% jump.
+> - Three consecutive upward check-ins on the 30-day trend line is a stronger signal of real progress than any single day's score.
+> - The repeating cycle of fresh questions followed immediately by a review-with-explanations pass appears to be the actual mechanism moving the 30-day average, not just raw question volume.
+> - Still being flagged "Needs Work" at 59% against a 72% threshold means there's real gap left, but the direction and consistency of the trend now matter more than the absolute number.
+
+**What I Understood**
+
+The pattern across this week is becoming clear: fresh questions expose the actual gap, and the immediate review-with-explanations pass closes a meaningful chunk of it right away. Repeating this cycle — new batch, then review — seems to be the mechanism actually moving the 30-day average, rather than volume alone.
+
+**Result**
+
+96 questions reviewed at 67% correct, pushing the 30-day trend to 59%. Progress is steady and visible; next step is continuing the new-question-then-review cycle to keep closing the gap toward the 72% pass threshold.
+
+---
+
 ## August 15, 2026
 
 **SAA-C03 Exam Prep | Day 16 · Fresh Questions Reveal Real Progress**

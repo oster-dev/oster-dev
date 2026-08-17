@@ -7,6 +7,64 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 17, 2026
+
+**SAA-C03 Exam Prep | Day 18 · StackLessions Series — A Genuine Game Changer**
+
+Today I worked through the full StackLessions "Cloud Architect Path" video series for SAA-C03, and it lived up to the hype from DEA-C01: the way this content is structured for exam-day thinking, not just service memorization, is genuinely one of the best study formats I've used.
+
+**What I Covered**
+
+*Episode 1 – Exam Format, Domain Weights & How to Study:*
+- Scaled scoring (100–1000, pass at 720), compensatory scoring model, pretest questions.
+- Domain weight breakdown: Secure Architectures 30%, Resilient 26%, High-Performing 24%, Cost-Optimized 20% — Security and Resilience alone make up 56% of the exam.
+- The "decathlon, not pass/fail gates" mental model and the four-step reading method: read the qualifier, list hard requirements, eliminate violations, apply the qualifier.
+- The three traps for experienced engineers: over-engineering, technically-valid-but-suboptimal answers, and near-identical service name pairs.
+
+*Episode 2 – IAM Core: Users, Groups, Roles, and Policy Evaluation:*
+- Default-deny model, explicit Deny always wins over Allow.
+- Users vs Groups vs Roles, and why groups can only contain users (no nesting, no roles).
+- The canonical EC2 pattern: IAM role via instance profile, never stored access keys.
+- Identity-based vs resource-based policies, spotting a resource-based policy via the Principal element.
+- Root account hygiene: MFA always on, never create root access keys.
+
+*Episode 3 – IAM Roles Assumed: STS, Cross-Account Access, SCPs, and Permission Boundaries:*
+- STS AssumeRole and temporary credentials as the tie-breaker heuristic.
+- Trust policy (who) vs permissions policy (what) on every role.
+- External ID for defending against the confused deputy problem.
+- SCPs as org-wide guardrails that only restrict, never grant; permission boundaries as the per-identity equivalent.
+- IAM Roles Anywhere for on-premises/non-AWS workloads via X.509 certificates.
+
+*Episode 4 – Workforce and Application Identity: IAM Identity Center and Cognito:*
+- The bright-line rule: workforce and multi-account access → IAM Identity Center; application end users → Cognito.
+- SAML for authentication vs SCIM for provisioning/directory sync.
+- Cognito user pools (authentication, "who you are") vs identity pools (authorization, "what you can touch").
+- Why IAM users are the wrong tool for customer-facing apps (5,000 user quota, long-term credential risk).
+
+*Episode 5 – Encryption and Key Management: KMS and CloudHSM:*
+- Envelope encryption: KMS wraps a data key, the data key does the bulk encryption locally.
+- The three KMS key types (AWS-owned, AWS-managed, customer-managed) on a control spectrum.
+- The KMS key policy as a separate authorization gate from IAM — the most common AccessDenied cause.
+- Automatic key rotation rules, and why imported (BYOK) key material can only rotate manually.
+- When CloudHSM is the correct answer: single-tenant, sole-custody hardware mandates only.
+- KMS (at rest) vs ACM (in transit), and the us-east-1 quirk for CloudFront certificates.
+
+**What This Means**
+
+This series reframes the entire exam around decision rules instead of feature lists — exactly the shift needed after weeks of service-by-service course content. The heavy emphasis on Security (30% of the exam) tracks with my current domain mastery gap from the Tutorials Dojo mock exams, so front-loading this material now is well-timed rather than redundant.
+
+> **What I understood**
+> - The exam rewards decision rules (qualifier reading, requirement elimination) far more than raw service recall, which is a genuinely different skill than what the Maarek course built.
+> - Security and Resilience together make up 56% of the exam weight, which validates prioritizing the security-heavy episodes right now given my mock exam weak spots.
+> - Small distinguishing rules — explicit Deny always wins, groups can't be nested, KMS key policies as a separate gate from IAM — are exactly the kind of near-identical trap the exam is designed to test.
+> - Running StackLessions in parallel with the Tutorials Dojo review cycle, rather than replacing it, keeps both the conceptual reframing and the steady score-trend momentum intact.
+
+**Result**
+
+Five full StackLessions episodes completed today, each with built-in practice quizzes. This series becomes the primary study format for the coming days, run in parallel with the ongoing Tutorials Dojo review cycle.
+
+---
+
 ## August 16, 2026
 
 **SAA-C03 Exam Prep | Strategy Shift — StackLessions YouTube Series Discovered**

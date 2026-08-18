@@ -7,6 +7,62 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 18, 2026
+
+**SAA-C03 Exam Prep | Day 19 · StackLessions — Secrets, S3 Security & VPC Networking Deep Dive**
+
+Today continued the StackLessions series with five dense episodes covering runtime secrets management, the full S3 security stack, VPC networking foundations, traffic control between security groups and NACLs, and VPC endpoints with PrivateLink.
+
+**What I Covered**
+
+*Episode 6 – Runtime Secrets: Secrets Manager vs Parameter Store:*
+- Parameter Store (free standard tier, SecureString via KMS, no built-in rotation) vs Secrets Manager (paid, purpose-built for credentials with automatic rotation).
+- The decision rule: need automatic database credential rotation → Secrets Manager; just need cheap encrypted config → Parameter Store SecureString.
+- Common trap: forgetting `WithDecryption=true` returns ciphertext, not plaintext.
+- Canonical pattern: EC2 instance role fetches secrets at runtime, never stored in user-data.
+
+*Episode 7 – Securing Data in Amazon S3:*
+- The six layers of S3 defense: Block Public Access, bucket policies/disabled ACLs, server-side encryption, deny-unencrypted-puts policy, presigned URLs/VPC endpoints, and Object Lock (WORM).
+- Object Ownership "Bucket owner enforced" as the fix for cross-account upload ownership problems.
+- SSE-S3 vs SSE-KMS vs SSE-C vs DSSE-KMS, and why SSE-KMS with a customer-managed key is the compliance answer (CloudTrail audit trail).
+- Presigned URLs (max 7 days via CLI/SDK) and their hidden expiry tied to the credentials that signed them.
+- Object Lock Governance mode (bypassable) vs Compliance mode (no bypass, ever — not even root).
+
+*Episode 8 – VPC Foundations: Subnets, Route Tables, Internet and NAT Gateways:*
+- VPC scoped to one region across AZs; a subnet lives in exactly one AZ.
+- Public vs private subnet is purely a route table decision — no toggle exists.
+- Internet Gateway (two-way traffic for public IPs) vs NAT Gateway (outbound-only for private subnets, must sit in a public subnet, one per AZ for HA).
+- VPC Peering is non-transitive (point-to-point only) vs Transit Gateway as the transitive hub for many VPCs.
+
+*Episode 9 – VPC Traffic Control: Security Groups vs NACLs:*
+- Security Groups: instance-level, allow-only, stateful (return traffic automatic), evaluated as one combined ruleset.
+- NACLs: subnet-level, allow AND deny, stateless (return traffic must be explicit), numbered rules evaluated in order with first-match-wins.
+- The classic ephemeral-port trap: NACLs need an explicit outbound rule for ports 1024–65535 or replies get silently dropped.
+- Only a NACL can block a specific IP/CIDR — security groups cannot express deny.
+- Security group referencing (by group ID) for maintenance-free multi-tier architectures.
+
+*Episode 10 – Private Connectivity: VPC Endpoints and PrivateLink:*
+- Gateway Endpoints: free, route-table-based, S3 and DynamoDB only, same-region/same-VPC traffic only.
+- Interface Endpoints (PrivateLink): ENI with a private IP, covers 100+ services, billed hourly + per-GB, works cross-region and on-premises.
+- Gateway endpoints cannot serve on-premises, peered VPCs, or cross-region traffic — that requires an interface endpoint.
+- Endpoint policies are additive on top of IAM and bucket policies, useful for blocking data exfiltration to external buckets.
+
+**What This Means**
+
+Today's material lines up almost perfectly with the two heaviest exam domains (Security 30%, Resilient Architectures 26%) and directly reinforces the VPC networking I covered in the Maarek course, but now framed as decision rules rather than a feature tour — exactly the kind of reinforcement needed to convert the earlier 33%-on-High-Performing weak spot into real exam-day confidence.
+
+> **What I understood**
+> - The Secrets Manager vs. Parameter Store decision boils down to one question: does this need automatic rotation, or just cheap encrypted storage?
+> - S3 security is genuinely layered defense-in-depth (six distinct controls), not a single setting, and Object Lock Compliance mode is the one true point of no return, even for root.
+> - Security Groups and NACLs solve overlapping but distinct problems — stateful allow-only at the instance level vs. stateless allow/deny at the subnet level — and the ephemeral-port trap is a classic exam gotcha.
+> - Gateway Endpoints and Interface Endpoints are not interchangeable: only PrivateLink-based interface endpoints support cross-region, on-premises, and the 100+ service coverage beyond S3/DynamoDB.
+
+**Result**
+
+Five StackLessions episodes completed (Runtime Secrets, S3 Security, VPC Foundations, Security Groups vs NACLs, VPC Endpoints & PrivateLink), each with built-in practice quizzes, continuing in parallel with the Tutorials Dojo review cycle.
+
+---
+
 ## August 17, 2026
 
 **SAA-C03 Exam Prep | Day 18 · StackLessions Series — A Genuine Game Changer**

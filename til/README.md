@@ -7,6 +7,62 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 19, 2026
+
+**SAA-C03 Exam Prep | Day 20 · StackLessions — Web Protection, Threat Detection, Decoupling & Orchestration**
+
+Today covered another dense StackLessions block: web application protection, threat detection and governance, a full retrieval checkpoint on the entire Secure Architectures domain, and two more episodes on decoupling and application integration.
+
+**What I Covered**
+
+*Episode 11 – Web Application Protection: WAF, Shield, and Network Firewall:*
+- The layer map: WAF for Layer 7 (HTTP/HTTPS content — SQLi, XSS, rate-limiting), Shield for Layers 3/4 (volumetric DDoS), Network Firewall for Layers 3–7 inside the VPC (any protocol, DPI via Suricata), Firewall Manager for org-wide enforcement.
+- Web ACL scope: Global (us-east-1, CloudFront only) vs Regional (ALB, API Gateway, AppSync).
+- Shield Standard (free, automatic, L3/L4) vs Shield Advanced (paid, cost protection, 24/7 response team, pairs with WAF for L7 DDoS mitigation).
+- Network Firewall for domain-based egress filtering (SNI/HTTP host) — a capability neither security groups nor WAF provide.
+
+*Episode 12 – Threat Detection and Governance: GuardDuty, Macie, and CloudTrail:*
+- The core distinction: GuardDuty (behavior — "is someone acting suspicious?"), Macie (content — "where does sensitive data live in S3?"), CloudTrail (the immutable record of every API call).
+- AWS Config (state — "was this compliant over time?") vs CloudTrail (action — "who did it?").
+- Security Hub as the aggregation layer — requires AWS Config enabled or most controls show INSUFFICIENT_DATA.
+- Amazon Inspector for proactive CVE scanning across EC2, ECR, and Lambda.
+- GuardDuty only detects, never remediates — automated response requires EventBridge → Lambda.
+
+*Episode 13 – Secure Architectures Retrieval Checkpoint:*
+- Five pure-retrieval scenarios covering the entire security block: EC2-to-S3 access (IAM role via instance profile), blocking a CIDR at the subnet level (NACL, not security group), RDS credential rotation with least effort (Secrets Manager, not Parameter Store), lowest-cost private S3 access (Gateway Endpoint, free), and discovering unprotected PII across buckets (Macie).
+
+*Episode 14 – Decoupling Architectures: SQS, SNS, and EventBridge:*
+- SQS as point-to-point buffering (Standard: high-throughput, at-least-once; FIFO: strict order, exactly-once).
+- SNS as push-based fan-out to many subscribers at once.
+- EventBridge as content-based routing with native SaaS integrations (45+ partner sources).
+- The flagship pattern: one event triggering many services → SNS topic with one SQS queue per subscriber.
+- SQS vs Kinesis Data Streams: SQS deletes on consumption (one consumer group), Kinesis retains and allows replay for multiple independent consumers.
+- Scaling consumers by backlog-per-instance, not raw queue depth or CPU.
+
+*Episode 15 – Application Integration: API Gateway and Step Functions:*
+- API Gateway as the synchronous HTTP front door (REST API for usage plans/API keys/WAF/caching vs cheaper HTTP API for simple Lambda proxying).
+- Step Functions as the serverless workflow orchestrator with built-in Retry and Catch.
+- Standard Workflows (exactly-once, up to 1 year, for anything non-idempotent like payments) vs Express Workflows (at-least-once, high-volume, cheaper).
+- The 29-second API Gateway integration timeout ceiling and the async 202-Accepted-then-poll fix for long-running workflows.
+- API keys identify and throttle clients but never authenticate or authorize — that needs IAM, Cognito, or a Lambda authorizer.
+
+**What This Means**
+
+Today closed out the entire "Design Secure Architectures" domain (30% of the exam) with a dedicated retrieval checkpoint, then pivoted into Application Integration patterns (SQS/SNS/EventBridge/API Gateway/Step Functions) that show up heavily across both the Resilient and High-Performing domains — directly targeting the 33% weak spot flagged in the earlier Tutorials Dojo mock exam.
+
+> **What I understood**
+> - WAF, Shield, and Network Firewall map to distinct OSI layers, and the exam expects picking the tool by the layer and traffic type, not by generic "security" framing.
+> - GuardDuty, Macie, CloudTrail, and Config each answer a fundamentally different question (behavior, content, action, state), and confusing them is a classic distractor pattern.
+> - The retrieval checkpoint format (recalling answers cold, not just recognizing them) is a much better test of exam-day readiness than passive review.
+> - SQS, SNS, EventBridge, and Kinesis are frequently confused but solve different decoupling problems, and the "one event, many services" pattern (SNS fan-out to per-subscriber SQS queues) is a recurring exam scenario.
+> - Standard vs. Express Step Functions workflows hinge entirely on idempotency requirements, a distinction that's easy to overlook under time pressure.
+
+**Result**
+
+Five StackLessions episodes completed (Web Application Protection, Threat Detection & Governance, Secure Architectures Checkpoint, Decoupling Architectures, Application Integration), each with practice quizzes, continuing the parallel Tutorials Dojo review cycle.
+
+---
+
 ## August 18, 2026
 
 **SAA-C03 Exam Prep | Day 19 · StackLessions — Secrets, S3 Security & VPC Networking Deep Dive**

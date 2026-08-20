@@ -7,6 +7,59 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 20, 2026
+
+**SAA-C03 Exam Prep | Day 21 · StackLessions — Load Balancing, Auto Scaling & Disaster Recovery**
+
+Only four episodes today, but each one was dense enough that a fifth would have added noise rather than value. Better to stop while retention is still high and pick up Episode 20 fresh tomorrow.
+
+**What I Covered**
+
+*Episode 16 – Elastic Load Balancing: ALB vs NLB vs GWLB:*
+- ALB (Layer 7): routes by path/host/header, attaches WAF, offloads auth to Cognito/OIDC, but has no static IP.
+- NLB (Layer 4): ultra-low latency TCP/UDP/TLS, static/Elastic IP per AZ, the only ELB type that can back PrivateLink.
+- GWLB (Layer 3): transparently inserts third-party appliances (firewalls, IDS/IPS) inline via GENEVE on port 6081, preserving original packet addresses.
+- The classic trap: "HTTP" doesn't automatically mean ALB — a static IP requirement means NLB, or NLB in front of ALB.
+- Cross-zone load balancing: always on for ALB, off by default (and billed) for NLB/GWLB.
+
+*Episode 17 – EC2 Auto Scaling Strategies:*
+- ASG fundamentals: min/desired/max capacity, launch templates (versioned, modern) vs launch configurations (deprecated since Oct 2024).
+- The health check grace period trap: defaults to 300s in the console but 0 via CLI/SDK, killing instances before they finish booting.
+- Four scaling policy types matched to demand shape: target tracking (unpredictable/gradual), step scaling (multi-threshold bursts), scheduled (known time-based spikes), predictive (recurring cyclical demand).
+- Predictive scaling only scales out — a dynamic policy is still needed to scale back in.
+- Warm pools (stopped state recommended) to cut scale-out latency without paying for idle running instances.
+
+*Episode 18 – Relational Resilience: RDS Multi-AZ, Read Replicas, and Aurora:*
+- The canonical trap: "route reads to the Multi-AZ standby" is always wrong — the standby is never readable.
+- Multi-AZ (synchronous, automatic failover, same endpoint) vs Read Replicas (asynchronous, manually promoted, no auto-failover) as two independent dials: availability vs read scaling.
+- Aurora's 6-copy/3-AZ storage redundancy exists automatically, even with zero replicas.
+- Aurora Replicas (shared storage, sub-100ms lag, double as failover targets) vs standard RDS Read Replicas (separate async copies, seconds-to-minutes lag).
+- Aurora Global Database for cross-region DR (RTO in minutes, RPO in seconds) and RDS Proxy for Lambda connection pooling (cuts failover from ~24s to ~3.1s).
+
+*Episode 19 – Disaster Recovery Strategies and RTO/RPO:*
+- RTO (downtime tolerance) and RPO (data-loss tolerance) as two independent axes that drive every DR decision.
+- The four strategies on the cost-vs-speed spectrum: Backup & Restore (hours), Pilot Light (tens of minutes, data replicates but compute is off), Warm Standby (minutes, reduced capacity already running), Multi-Site Active/Active (near-zero, all regions serve live traffic).
+- The critical distinction: pilot light can't serve traffic until compute is turned on; warm standby serves immediately at reduced capacity.
+- Even active/active needs point-in-time backups — replication instantly copies corruption to every region.
+- AWS Backup as the centralized policy layer (Vault Lock for WORM immutability, cross-account copies for ransomware isolation, Audit Manager for SOC 2 evidence).
+
+**What This Means**
+
+This block ties together nearly every resilience concept from the exam's second-heaviest domain (26%): load balancer selection, scaling strategy matching, and the RDS/Aurora availability-vs-read-scaling distinction that trips up even experienced engineers. The RTO/RPO decision framework in particular gives a repeatable method for any disaster recovery scenario question, regardless of the specific services involved.
+
+> **What I understood**
+> - Choosing between ALB, NLB, and GWLB comes down to OSI layer and specific requirements like static IP or PrivateLink support, not just "HTTP vs. not HTTP."
+> - The health check grace period default trap (300s console vs. 0s CLI/SDK) is exactly the kind of operational detail that silently breaks a working setup.
+> - Availability (Multi-AZ) and read scaling (Read Replicas) are two independent dials, not a single "resilience" setting, and Aurora's shared-storage replicas behave differently from standard RDS replicas.
+> - RTO and RPO as two independent axes give a repeatable framework for any DR question, and knowing that even active/active setups still need point-in-time backups closes a subtle but important gap.
+> - Stopping at four dense episodes instead of pushing a fifth protected retention rather than just maximizing volume.
+
+**Result**
+
+Four StackLessions episodes completed (Elastic Load Balancing, EC2 Auto Scaling Strategies, Relational Resilience, Disaster Recovery Strategies), each with practice quizzes. Picking up with Episode 20 tomorrow with a clear head rather than pushing a fifth episode tonight.
+
+---
+
 ## August 19, 2026
 
 **SAA-C03 Exam Prep | Day 20 · StackLessions — Web Protection, Threat Detection, Decoupling & Orchestration**

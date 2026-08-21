@@ -7,6 +7,66 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 21, 2026
+
+**SAA-C03 Exam Prep | Day 22 · StackLessions — Route 53, Storage, Compute & Container Orchestration**
+
+Today was another marathon session covering six full episodes: Route 53 routing policies, a full retrieval checkpoint on Resilient Architectures, high-performing storage, the FSx family, elastic compute options, and container orchestration.
+
+**What I Covered**
+
+*Episode 20 – Route 53 Routing Policies and Health Checks:*
+- Eight routing policy types: Simple (no health checks), Weighted (A/B testing, canary), Latency-based (fastest measured region, not nearest), Failover (active-passive DR), Geolocation (user location, compliance), Geoproximity (resource location with a bias dial), Multivalue (up to 8 healthy IPs, client-side load balancing), IP-based.
+- The pair everyone confuses: Geolocation asks where the USER is; Geoproximity asks where the RESOURCE is.
+- Alias records work at the zone apex and are free for AWS resources; CNAME records cannot exist at the apex (RFC 1034) and are billed per query.
+- Health checkers live outside any VPC — private endpoints need a CloudWatch alarm instead.
+
+*Episode 21 – Resilient Architectures Retrieval Challenge (Checkpoint 2):*
+- Five scenarios testing the whole resilience toolkit: automatic failover with no data loss → Multi-AZ (never read-from-standby); static IP + non-HTTP TCP → NLB; tens-of-minutes RTO at low cost → Pilot Light; residency compliance → Geolocation; spiky producer with one slow consumer → SQS.
+
+*Episode 22 – High-Performing Storage: EBS, EFS, and Instance Store:*
+- The storage decision tree: must survive a stop? Shared by many instances? API-only access?
+- gp3 as the modern default (3,000 IOPS/125 MiB/s baseline on any size, no burst credits) vs gp2's burst-credit cliff (drains in ~30 minutes under load).
+- io2 Block Express as the top tier (up to 256,000 IOPS, sub-500μs latency, 99.999% durability) for mission-critical databases.
+- EFS as Linux-only shared NFS across multiple AZs — a Windows file-share question always points to FSx, not EFS.
+- Instance store as the fastest but fully ephemeral option — never for durable data.
+
+*Episode 23 – Shared File Systems: The Amazon FSx Family:*
+- FSx for Windows File Server: native SMB, NTFS permissions, Active Directory integration — the only AWS SMB file share.
+- FSx for Lustre: parallel HPC/ML file system with Scratch (temporary, unreplicated, cheaper) vs Persistent (replicated within the AZ) deployment types.
+- FSx for NetApp ONTAP: the only multi-protocol variant (NFS + SMB + iSCSI simultaneously), with SnapMirror replication for NetApp migrations.
+- FSx for OpenZFS: low-latency Linux NFS with near-instant copy-on-write clones for dev/test dataset copies.
+
+*Episode 24 – Elastic Compute: EC2, Lambda, and Fargate:*
+- The compute spectrum: EC2 (full control) → Fargate (containers, no cluster) → Lambda (event-driven, scale to zero).
+- EC2 instance families mapped to bottleneck resource: M (general purpose), C (compute), R/X (memory), I/D (storage), T (burstable, credit-based).
+- Lambda's hard 15-minute ceiling as an instant disqualifier for longer jobs; CPU scales directly with memory (1,769 MB = 1 vCPU).
+- Placement groups: Cluster (same rack, low latency, single-AZ only), Spread (max 7 instances/AZ, fault isolation), Partition (rack sets, max 7 partitions/AZ, for Kafka/Cassandra-style replication).
+
+*Episode 25 – Container Orchestration: Amazon ECS, EKS, and ECR:*
+- Two independent axes: orchestrator (ECS vs EKS) and compute layer (Fargate vs EC2 launch type).
+- ECS: AWS-native, no control-plane fee, simplest path. EKS: full Kubernetes API, ~$0.10/hr per cluster, chosen for existing K8s tooling or portability.
+- Fargate works under both ECS and EKS but never supports GPUs, DaemonSets, or privileged containers — GPU workloads require the EC2 launch type.
+- ECR as the private, IAM-gated registry with Basic vs Enhanced (Inspector-powered, continuous re-scan) vulnerability scanning.
+- Task Execution Role (pulls images, sends logs — invisible to app code) vs Task Role (what the application actually assumes) — a classic AccessDenied trap.
+
+**What This Means**
+
+This was the broadest single day yet, closing the entire Resilient Architectures checkpoint and then covering the full compute and storage decision space that underlies both the Resilient and High-Performing domains. The FSx family and placement group distinctions in particular fill in gaps that the earlier Tutorials Dojo mock exams flagged as weak (33% on High-Performing Architectures).
+
+> **What I understood**
+> - Geolocation (user location) and Geoproximity (resource location with a bias dial) are structurally similar but answer different questions, making them a classic exam confusion pair.
+> - The gp3 vs. gp2 distinction, especially the burst-credit cliff under sustained load, is exactly the kind of performance detail the High-Performing domain tests directly.
+> - FSx has four genuinely different variants (Windows, Lustre, ONTAP, OpenZFS), each solving a distinct protocol or workload need — treating them as one generic "FSx" service would be a mistake.
+> - Placement group types (Cluster, Spread, Partition) map to specific failure and latency requirements, not general-purpose scaling.
+> - Task Execution Role vs. Task Role is a subtle but common source of confusing AccessDenied errors in containerized workloads.
+
+**Result**
+
+Six StackLessions episodes completed (Route 53 Routing Policies, Resilient Architectures Checkpoint, High-Performing Storage, Amazon FSx Family, Elastic Compute, Container Orchestration), each with practice quizzes, continuing the parallel Tutorials Dojo review cycle.
+
+---
+
 ## August 20, 2026
 
 **SAA-C03 Exam Prep | Day 21 · StackLessions — Load Balancing, Auto Scaling & Disaster Recovery**

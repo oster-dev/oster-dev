@@ -7,6 +7,58 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 22, 2026
+
+**SAA-C03 Exam Prep | Day 23 · StackLessions — Purpose-Built Databases, Caching, Content Delivery & Data Analytics**
+
+Today covered five dense episodes plus a full retrieval checkpoint targeting the exact weak spot flagged weeks ago in the first Tutorials Dojo mock exam: Design High-Performing Architectures, which sat at only 33%.
+
+**What I Covered**
+
+*Episode 26 – Purpose-Built Databases: DynamoDB, Redshift, and Specialized Engines:*
+- Keyword-to-engine map: key-value/massive scale → DynamoDB; data warehouse/OLAP → Redshift; graph/relationships → Neptune; time-series → Timestream; immutable ledger → QLDB (retired, migrate to Aurora PostgreSQL + pgAudit); MongoDB-compatible → DocumentDB; joins/ACID → RDS or Aurora.
+- DynamoDB's 400 KB item limit, on-demand (spiky traffic) vs provisioned (steady traffic) capacity modes, and the hot-partition trap from low-cardinality partition keys.
+- LSI (same partition key, must be defined at table creation) vs GSI (different keys, addable anytime) — the classic "can I add an index later" trap.
+- DynamoDB Global Tables for true multi-region active-active, distinct from read replicas (read scaling only) and Multi-AZ (single-region HA).
+
+*Episode 27 – Caching Layers: ElastiCache, DAX, and CloudFront:*
+- Matching the cache to the bottleneck: repetitive RDS/Aurora reads → ElastiCache; DynamoDB microsecond reads → DAX; global static content → CloudFront; shared session state → ElastiCache/DynamoDB.
+- Redis/Valkey (persistence, replication, Multi-AZ failover, advanced structures) vs Memcached (simple, multithreaded, disposable, no HA).
+- DAX only accelerates eventually consistent reads — strongly consistent reads bypass it entirely and go straight to DynamoDB.
+- Session state externalization as the fix for sticky-session Auto Scaling conflicts.
+
+*Episode 28 – Content Delivery and Network Acceleration: CloudFront and Global Accelerator:*
+- CloudFront caches HTTP/HTTPS content at 750+ edge locations; Global Accelerator routes any TCP/UDP over the AWS backbone via static anycast IPs but caches nothing.
+- Signed URLs (per-file) vs signed cookies (section-wide) — both require Origin Access Control to prevent direct S3 bypass.
+- Lambda@Edge (all four hooks, network calls, authored in us-east-1) vs CloudFront Functions (viewer-only, JavaScript, sub-millisecond, far cheaper).
+- Direct Connect (private fiber, not encrypted by default) vs Site-to-Site VPN (IPsec-encrypted, minutes to provision) — layering VPN over Direct Connect for regulated workloads needing both.
+
+*Episode 29 – Data Ingestion and Analytics: Kinesis, Glue, and Athena:*
+- Kinesis Data Streams (replayable, sub-second, multiple independent consumers, shards as the throughput unit) vs Data Firehose (managed delivery only, 60–900s buffer, zero replay).
+- AWS Glue Data Catalog stores metadata only — data always stays in S3; Glue Crawlers auto-infer schema.
+- Amazon Athena as serverless SQL directly on S3, $5/TB scanned; converting CSV to Parquet can cut scanned data by 30–90%.
+- Glue (serverless ETL, auto-scaled Spark) vs EMR (managed Hadoop/Spark cluster, full tuning control).
+
+*Episode 30 – High-Performing Architectures Retrieval Challenge (Checkpoint 3):*
+- Five scenarios where every distractor "technically works" but one qualifier decides: microsecond DynamoDB reads → DAX (not ElastiCache); ad-hoc SQL on S3 → Athena (not Redshift/EMR); shared file system for thousands of Linux instances → EFS (not EBS Multi-Attach); consistent baseline IOPS at lowest cost → gp3 (not gp2/io2); replay plus multiple independent consumers → Kinesis Data Streams (not Firehose/SQS).
+
+**What This Means**
+
+This was the single most targeted study day so far relative to my known weak domain. The checkpoint's five-scenario format directly drills the "every wrong answer technically works" pattern that likely caused the 33% score on High-Performing Architectures in the first mock exam — purpose-built database selection, caching layer matching, and storage/analytics tool selection are all core to that domain.
+
+> **What I understood**
+> - The "keyword-to-engine" mapping for purpose-built databases (key-value, graph, time-series, ledger, document) turns a wide service list into a fast, reliable decision rule.
+> - LSI vs. GSI hinges on a single practical constraint — LSIs must be defined at table creation, GSIs can be added anytime — which is exactly the kind of detail an exam trap relies on.
+> - DAX and ElastiCache solve caching for different databases (DynamoDB vs. RDS/Aurora) and are not interchangeable despite both being "caching layers."
+> - CloudFront and Global Accelerator solve different problems (HTTP caching vs. any-protocol network routing), and neither one substitutes for the other.
+> - The retrieval checkpoint's "every answer technically works" format is likely the exact mechanism behind the earlier 33% High-Performing score, so drilling this pattern directly targets the real weakness.
+
+**Result**
+
+Five StackLessions episodes completed (Purpose-Built Databases, Caching Layers, Content Delivery & Network Acceleration, Data Ingestion & Analytics) plus the High-Performing Architectures Checkpoint, each with practice quizzes, continuing the parallel Tutorials Dojo review cycle.
+
+---
+
 ## August 21, 2026
 
 **SAA-C03 Exam Prep | Day 22 · StackLessions — Route 53, Storage, Compute & Container Orchestration**

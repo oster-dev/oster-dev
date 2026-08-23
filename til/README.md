@@ -7,6 +7,62 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 23, 2026
+
+**SAA-C03 Exam Prep | Day 24 · StackLessions — Cost-Optimized Compute, Storage, Networking & FinOps Tooling**
+
+Today covered five full episodes on the "Design Cost-Optimized Architectures" domain, from purchasing models through S3 storage classes, networking cost traps, FinOps tooling, and hybrid migration services.
+
+**What I Covered**
+
+*Episode 31 – Cost-Optimized Compute: Reserved Instances, Savings Plans, and Spot:*
+- A Reserved Instance is a billing discount, not physical hardware — Standard RI (up to 72% off, locked config, sellable on the Marketplace) vs Convertible RI (up to 54% off, exchangeable family).
+- AWS itself now recommends Savings Plans over RIs for most customers: Compute Savings Plans (up to 66%, most flexible, covers Fargate/Lambda) vs EC2 Instance Savings Plans (up to 72%, locked to one family/Region).
+- Spot Instances: up to 90% off, reclaimed with 2 minutes' notice — never for databases or stateful/SLA-bound workloads.
+- The critical sequencing rule: right-size with Compute Optimizer *before* committing to any purchasing model, or you lock in waste at a discount.
+- Dedicated Hosts (BYOL, per-socket/per-core visibility) vs Dedicated Instances (isolation only, no hardware visibility).
+
+*Episode 32 – Cost-Optimized Storage: S3 Classes and Lifecycle Policies:*
+- The storage class spectrum: Standard → Standard-IA (30-day min + retrieval fee) → Glacier Instant Retrieval (millisecond reads, 90-day min) → Glacier Flexible Retrieval (hours, free bulk restore) → Deep Archive (12–48hr restore, 180-day min, cheapest).
+- The most-tested rule: archived data needing millisecond reads always means Glacier Instant Retrieval, never Flexible or Deep.
+- S3 Intelligent-Tiering for unknown/changing access patterns — no retrieval fees, no minimum duration, but objects under 128 KB never get auto-tiered.
+- Lifecycle rules are retroactive and apply even against explicit-deny bucket policies; versioned buckets need NoncurrentVersionExpiration or old versions keep billing forever.
+
+*Episode 33 – Cost-Optimized Networking: NAT Gateway, Endpoints, and Data Transfer:*
+- The data transfer cost map: same-AZ private IP is free; cross-AZ costs $0.01/GB each way (even double-billed via public/Elastic IPs); internet egress is the most expensive path.
+- NAT Gateway stacks three separate charges: hourly existence fee, $0.045/GB processing, plus $0.09/GB egress if internet-bound.
+- The rule that pays for itself: private access to S3/DynamoDB always means a free gateway endpoint, never routed through NAT.
+- Interface endpoints beat NAT per-GB at volume; Direct Connect wins over VPN at high sustained throughput (50 TB/month favors Direct Connect by over $3,300/month).
+
+*Episode 34 – FinOps Tooling: Cost Explorer, Budgets, and Compute Optimizer:*
+- Cost Explorer (passive analysis, 14-month history, forecasts) vs AWS Budgets (active alerting on thresholds, can trigger automated SCP actions).
+- Cost and Usage Report (CUR) as the most granular line-item billing dataset, queryable via Athena — distinct from Cost Explorer's dashboard.
+- Cost-allocation tags require explicit activation and are never retroactive — unattributed spend before activation is permanently lost.
+- Compute Optimizer (ML-driven, names specific replacement instance types, 14-day free / 93-day paid lookback) vs Trusted Advisor (simple threshold checks, flags idle resources only).
+
+*Episode 35 – Migration and Hybrid Transfer: Snow Family, DataSync, and DMS:*
+- Snow Family for offline/petabyte-scale/bandwidth-constrained transfers; DataSync for automated online file transfer when bandwidth is sufficient.
+- DMS for live database migration via full-load + CDC (near-zero downtime); heterogeneous migrations (different engines) always require the Schema Conversion Tool (SCT) first — DMS alone is never enough.
+- Storage Gateway provides ongoing hybrid access after migration — it is explicitly not a migration tool, unlike its name suggests.
+- The canonical pattern: DataSync migrates the data, Storage Gateway keeps providing access afterward.
+
+**What This Means**
+
+This block reinforces my strongest domain (Cost-Optimized Architectures scored 75% in the baseline mock exam) with the specific decision rules and dollar-figure anchors the exam actually tests: purchasing model sequencing, storage class retrieval-time tradeoffs, and the NAT-vs-endpoint cost traps that show up constantly in scenario questions.
+
+> **What I understood**
+> - Right-sizing with Compute Optimizer must happen before committing to Reserved Instances or Savings Plans, otherwise the discount just locks in existing waste.
+> - Storage class selection hinges specifically on retrieval time requirements, not just "how old is the data" — Glacier Instant Retrieval vs. Flexible vs. Deep Archive is a retrieval-speed decision first.
+> - NAT Gateway's three stacked charges (hourly, processing, egress) make it an expensive default, and gateway endpoints for S3/DynamoDB are the free alternative that's easy to overlook.
+> - Cost-allocation tags are never retroactive, meaning cost visibility gaps from before activation are permanent — a governance lesson as much as a technical one.
+> - Migration tooling has clear role separation: DataSync moves data, DMS/SCT migrates databases, and Storage Gateway only provides ongoing hybrid access afterward, despite its name suggesting otherwise.
+
+**Result**
+
+Five StackLessions episodes completed (Cost-Optimized Compute, Cost-Optimized Storage, Cost-Optimized Networking, FinOps Tooling, Migration & Hybrid Transfer), each with practice quizzes, continuing the parallel Tutorials Dojo review cycle.
+
+---
+
 ## August 22, 2026
 
 **SAA-C03 Exam Prep | Day 23 · StackLessions — Purpose-Built Databases, Caching, Content Delivery & Data Analytics**

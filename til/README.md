@@ -7,6 +7,49 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 24, 2026
+
+**SAA-C03 Exam Prep | Day 25 · StackLessions Series COMPLETE — IaC, Production Patterns, Full Practice Exam & Cheat Sheet**
+
+Today I finished the entire StackLessions "Cloud Architect Path" series. As expected, this content delivered exactly the depth of understanding it promised throughout — and now it's time to let the practice exams prove it over the coming days.
+
+**What I Covered**
+
+*Episode 36 – Infrastructure as Code and Managed Deployments: CloudFormation and Elastic Beanstalk:*
+- Configuration drift as the disease; IaC as the cure — "if it isn't in the template, it doesn't exist."
+- CloudFormation stacks, change sets (preview before execute), and stack policies (guard rails against accidental resource replacement/deletion — not IAM).
+- CloudFormation (full control, any resource) vs Elastic Beanstalk (upload code, least operational overhead, still full access to underlying resources).
+- Click-ops is always the wrong answer whenever it appears in a scenario.
+
+*Episode 37 – Production Patterns: 10 AWS Architecture Decisions Senior Engineers Get Right:*
+- Ten scenario-driven decisions mapped across all four exam pillars: Multi-AZ vs read replicas, IAM roles + Secrets Manager over static keys, free gateway endpoints over NAT, blue/green with alarm-gated rollback, cheapest-option-that-meets-requirements thinking, externalized session state, SNS+SQS fan-out with backlog-per-instance scaling, matching real RTO/RPO to DR tier, enforcing encryption via deny policies (default encryption ≠ enforcement), and right-sizing before committing to Reserved Instances.
+- The unifying thesis: the decisions that keep production alive are the same decisions the exam tests.
+
+*Episode 38 – Practice Exam Walkthrough: 18 Scenario Questions:*
+- Full walkthrough across all four domains (Security, Resilience, Performance, Cost) using the read-qualifier-first, eliminate-the-impossible method.
+- Reinforced the highest-value traps: IAM role over stored keys, CloudHSM vs KMS for sole custody, NACL as the only explicit-deny mechanism, deny-unencrypted-puts as true encryption enforcement, Amazon Detective for root-cause investigation (vs GuardDuty's detection-only role).
+
+*Episode 39 – SAA-C03 Night-Before Cheat Sheet: The Complete Recall Pass:*
+- One-screen recall drills across all four domains: Security Groups vs NACLs, SCPs restrict-never-grant, the four DR tiers by RTO, ALB/NLB/GWLB keyword triggers, Multi-AZ vs Read Replica, DAX for microseconds, Route 53 policy keywords, LSI vs GSI, FSx variant map, Spot/RI/Savings Plans, and key numeric anchors (DynamoDB 400 KB limit, gp3 baseline 3,000 IOPS, Lambda's 15-minute ceiling, S3 minimum storage durations, SQS vs Kinesis retention).
+- Exam-day technique: read the last-sentence qualifier first, eliminate capability violations, decide on the dominant constraint, never leave a blank (compensatory scoring, pass at 720/1000).
+
+**What This Means**
+
+Finishing the full StackLessions series closes the loop I opened over a week ago, and the format delivered on its promise from DEA-C01: turning scattered service knowledge into repeatable decision rules rather than a memorized service catalog. The production-patterns episode in particular ties directly back to real engineering judgment, which should translate well to the scenario-heavy style of the actual exam.
+
+> **What I understood**
+> - CloudFormation stack policies protect against accidental replacement or deletion of resources — a distinct concern from IAM, and easy to conflate under time pressure.
+> - The ten production patterns episode shows the exam isn't testing arbitrary trivia; it's testing the same judgment that keeps real systems alive, which reframes the whole prep effort as more than exam-passing.
+> - The read-qualifier-first, eliminate-the-impossible method used throughout the practice exam walkthrough is now a repeatable technique I can apply to any unfamiliar scenario, not just ones I've already seen.
+> - The night-before cheat sheet consolidates dozens of small decision rules and numeric anchors into a single recall pass, which is exactly the kind of high-density review that pays off right before the real exam.
+> - Completing the full series (39 episodes, 3 checkpoints, a practice exam, and a cheat sheet) means the next phase is purely about validating retention under real exam conditions, not acquiring new content.
+
+**Result**
+
+StackLessions SAA-C03 series fully completed — 39 episodes plus 3 retrieval checkpoints, a full practice exam walkthrough, and the night-before cheat sheet. Next up: a fresh round of Tutorials Dojo mock exams over the coming days to validate how much of this decision-rule framework has actually stuck under real exam conditions.
+
+---
+
 ## August 23, 2026
 
 **SAA-C03 Exam Prep | Day 24 · StackLessions — Cost-Optimized Compute, Storage, Networking & FinOps Tooling**

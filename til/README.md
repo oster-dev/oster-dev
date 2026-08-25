@@ -7,6 +7,46 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 25, 2026
+
+**SAA-C03 Exam Prep | Day 26 · First Full Mock Since StackLessons — 65 Fresh Questions at 63%**
+
+Today marked the real test of everything the StackLessions series built: a full 65-question practice exam with completely new, previously unseen questions. The result confirms the decision-rule framework is working, while pinpointing exactly where the remaining gap lives.
+
+**Session Numbers**
+
+- Questions answered: 65, at 63% correct — the single best full-length attempt yet.
+- Overall activity: 6 active study days, 401 questions total in the last 12 weeks.
+- Score trend (last 30 days): climbed from 43% (Aug 13) through 56%, 59%, up to a latest **60%**, still flagged "Needs Work" against the 72% pass line but now on its most consistent upward run yet.
+
+**Domain Mastery**
+
+| Domain | Score |
+|---|---|
+| Design Secure Architectures | 67% |
+| Design Resilient Architectures | 67% |
+| Design Cost-Optimized Architectures | 67% |
+| Design High-Performing Architectures | **50%** |
+
+**What This Means**
+
+Three of the four domains are now clustered tightly at 67%, showing the StackLessons decision-rule approach is generalizing well across Security, Resilience, and Cost — the exact areas that series structured most heavily around trigger keywords and elimination logic. Design High-Performing Architectures remains the clear outlier at 50%, which lines up exactly with the original baseline weakness flagged in the very first Tutorials Dojo mock exam (33% back then) — this is a long-running gap, not a new one.
+
+> **What I understood**
+> - Three domains clustering tightly at 67% is strong evidence the decision-rule framework from StackLessons generalizes to fresh, unseen questions, not just familiar material.
+> - High-Performing Architectures being the persistent outlier across both the original baseline (33%) and this fresh mock (50%) confirms it's a structural gap, not noise from a single bad exam.
+> - The dense, near-identical-sounding services in this domain (EBS types, purpose-built databases, DAX vs ElastiCache, FSx variants) are exactly the kind of content that benefits from targeted trap-based review rather than a general re-watch.
+
+**What I Understood**
+
+High-Performing Architectures covers exactly the material from StackLessons Episodes 22–30: EBS volume types, purpose-built databases (DynamoDB/Redshift/Neptune/Timestream), caching layer selection (DAX vs ElastiCache), FSx variants, placement groups, and container orchestration. These are dense, detail-heavy topics with lots of near-identical-sounding services — a good match for targeted review using the cheat sheet's Domain 3 section and its specific traps (gp2 vs gp3, LSI vs GSI, DAX's eventually-consistent-only catch).
+
+**Result**
+
+65 fresh questions completed at 63% overall, pushing the 30-day trend to 60%. Next step is a dedicated review pass on Design High-Performing Architectures specifically — re-reading the Domain 3 section of the cheat sheet and running targeted practice sets on EBS types, database selection, and caching before the next full mock attempt.
+
+---
+
 ## August 24, 2026
 
 **SAA-C03 Exam Prep | Day 25 · StackLessions Series COMPLETE — IaC, Production Patterns, Full Practice Exam & Cheat Sheet**

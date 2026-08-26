@@ -7,6 +7,47 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 26, 2026
+
+**SAA-C03 Exam Prep | Day 27 · Second Full Mock Exam — Sharper Domain Picture Emerges**
+
+Yesterday's domain breakdown felt too muddy to act on, so I ran a second complete 65-question exam today to get a clearer read on where the real gaps sit. The result reshuffled the picture significantly and points to a different priority than expected.
+
+**Exam Results**
+
+- Score: 63% (passing threshold is 70%)
+- Correct: 41 / Incorrect: 24
+- Status: Not Passed — "Keep going, review the missed answers and target your weak domains"
+
+**Domain Performance**
+
+| Domain | Score |
+|---|---|
+| Design High-Performing Architectures | **73%** |
+| Design Resilient Architectures | 71% |
+| Design Cost-Optimized Architectures | 62% |
+| Design Secure Architectures | **50%** |
+
+**What This Means**
+
+This is a genuinely different signal than yesterday's exam, where High-Performing Architectures was the clear weak spot at 50%. Today it's the strongest domain at 73%, while **Design Secure Architectures** — previously sitting comfortably at 67% — has dropped to the weakest position at 50%. This kind of swing between two full mock exams suggests the earlier High-Performing weakness may have been partly question-set noise rather than a stable gap, while Security concepts haven't been as fully internalized as the consistent 67% scores suggested.
+
+> **What I understood**
+> - A single mock exam's domain breakdown can be misleading; the swing between two full exams (High-Performing 50%→73%, Security 67%→50%) shows why a second data point was necessary before committing to a review priority.
+> - Question-set noise is real at this sample size, so a domain score should be treated as a trend signal across multiple exams, not a definitive verdict from one attempt.
+> - Security dropping to the weakest domain across both exams' "Areas to Improve" flags (Security 50%, Cost-Optimized 62%) makes it the higher-confidence priority for the next review pass.
+> - The cheat sheet's Domain 1 section (IAM roles, KMS vs CloudHSM, Security Groups vs NACLs, S3 enforcement, GuardDuty/Macie/CloudTrail/Detective) maps directly onto the specific concepts most likely to move a borderline score above the 720/1000 pass line.
+
+**What I Understood**
+
+Getting two data points instead of one is exactly why this second exam was worth running — a single mock exam can be misleading about which domain actually needs attention. With Security now flagged as the priority across both "Areas to Improve" call-outs (Security 50%, Cost-Optimized 62%), the next review pass should center on the Domain 1 section of the cheat sheet: IAM role patterns, KMS vs CloudHSM, Security Groups vs NACLs, S3 enforcement policies, and the GuardDuty/Macie/CloudTrail/Detective distinctions — since these are the areas most likely to swing a borderline score above the 720/1000 pass line.
+
+**Result**
+
+Second full mock exam completed at 63% overall (41/65 correct). Combined with yesterday's data, Design Secure Architectures and Design Cost-Optimized Architectures are the two domains flagged for improvement; next study session will target Security specifically using the cheat sheet before attempting a third mock exam.
+
+---
+
 ## August 25, 2026
 
 **SAA-C03 Exam Prep | Day 26 · First Full Mock Since StackLessons — 65 Fresh Questions at 63%**

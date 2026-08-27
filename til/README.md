@@ -7,6 +7,42 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 27, 2026
+
+**SAA-C03 Exam Prep | Day 28 · Full Review Pass — 48 Missed Questions + Security Domain Deep Dive**
+
+Today was a pure consolidation day: no new mock exam, just deliberate review of everything gotten wrong across the last two full exams, plus a targeted pass through my own cheat sheet's weakest-flagged domain.
+
+**What I Covered**
+
+*Review of 48 Incorrect Answers (24 + 24 from the two prior mock exams):*
+- Went through every missed question from both the Aug 25 (63%, High-Performing weakest) and Aug 26 (63%, Secure weakest) mock exams.
+- Read each explanation carefully rather than just noting the correct answer.
+
+*Cheat Sheet Deep Dive — Design Secure Architectures Domain:*
+- Worked through my own SAA-C03 Complete Cheat Sheet, Domain 1 section in full: IAM Core, EC2-to-AWS-service access patterns, identity-based vs resource-based policies, STS/cross-account access/SCPs/permission boundaries, workforce & application identity (IAM Identity Center vs Cognito), KMS/CloudHSM/ACM, runtime secrets, S3's six layers of defense, VPC networking foundations, Security Groups vs NACLs, VPC Endpoints & PrivateLink, WAF/Shield/Network Firewall, and threat detection & governance.
+- Chose this domain specifically because it came out weakest (50%) in yesterday's mock exam.
+
+**What This Means**
+
+The review revealed something important about where I actually stand: most of the 48 missed questions weren't knowledge gaps in the traditional sense — I recognized the correct answer but wasn't fully confident enough to commit to it under pressure. That's a meaningfully different problem than not knowing the material, and it's frustrating precisely because it's so close to being solved.
+
+> **What I understood**
+> - Most missed questions were recognition failures under time pressure, not true knowledge gaps — a fundamentally different problem to solve than re-learning content.
+> - This pattern is a classic signal of being in the "polish" phase rather than the "learning" phase of exam prep.
+> - The underlying decision rules (Multi-AZ vs Read Replica, NACL vs Security Group, DAX's eventually-consistent catch, SCP vs Permission Boundary) are stored correctly; what's missing is recall speed and confidence under the clock.
+> - Timed, repeated practice is the correct lever to close this specific gap, since it directly trains the confidence and speed dimension rather than adding new knowledge.
+
+**What I Understood**
+
+This pattern — knowing the right answer but hesitating — is a classic sign of being in the "polish" phase rather than the "learning" phase of exam prep. It suggests the underlying decision rules (Multi-AZ vs Read Replica, NACL vs Security Group, DAX's eventually-consistent catch, SCP vs Permission Boundary, etc.) are stored correctly, but recall speed and confidence under time pressure haven't fully caught up yet. That's exactly what repeated timed practice and deliberate review — like today's session — are meant to close.
+
+**Result**
+
+All 48 incorrect answers from the last two mock exams reviewed in full, plus a complete re-read of the Secure Architectures cheat sheet section. The gap remaining is confidence and recall speed rather than raw knowledge — next mock exam will be the real test of whether this review translated into faster, more decisive answers under the clock.
+
+---
+
 ## August 26, 2026
 
 **SAA-C03 Exam Prep | Day 27 · Second Full Mock Exam — Sharper Domain Picture Emerges**

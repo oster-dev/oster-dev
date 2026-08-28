@@ -7,6 +7,63 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 28, 2026
+
+**SAA-C03 Exam Prep | Day 29 · Domain 1 Active Recall — Security Knowledge Consolidation**
+
+Today I focused entirely on **Domain 1: Design Secure Architectures**, using the SAA-C03 cheat sheet for deliberate active recall rather than only passive reading. This is the exact learning method that had a major impact during my DEA-C01 preparation, and it is now becoming a core part of the SAA-C03 final-review strategy.
+
+**What I Did**
+
+- Read the complete Domain 1 section of my self-created SAA-C03 cheat sheet three times.
+- On the third pass, deliberately covered the detailed explanations and answers.
+- Recalled the relevant rules, service mappings, distinctions, and traps out loud from memory before checking the material.
+- Completed a 15-question English quiz focused exclusively on Design Secure Architectures.
+- Scored **11/15 correct (73.3%)**, clearing the quiz's 70% pass threshold.
+
+**What I Reinforced**
+
+- EC2 access to AWS services → IAM role through an instance profile, never stored access keys.
+- `Principal` element → resource-based policy.
+- Explicit Deny always overrides an Allow.
+- SCPs set an organization/account-level permission ceiling but never grant permissions.
+- Permission boundaries cap one user or role and prevent privilege escalation during delegated IAM administration.
+- Workforce access across AWS accounts → IAM Identity Center; external application users → Cognito.
+- Cognito User Pool = authentication and JWT issuance; Cognito Identity Pool = temporary AWS credentials for direct access to services such as S3.
+- KMS key policies are a separate authorization layer from IAM policies.
+- CloudHSM is required for dedicated, single-tenant key hardware and sole custody.
+- Secrets Manager is the correct answer for automatic credential rotation.
+- S3 default encryption does not enforce a specific encryption method; an explicit deny bucket policy is required.
+- Security Groups are stateful and allow-only; NACLs are stateless, subnet-level, and the only control that can explicitly deny an IP range.
+- Same-Region private access to S3 or DynamoDB → Gateway VPC Endpoint, never NAT Gateway.
+
+**Missed Quiz Concepts**
+
+The four missed questions were concentrated in IAM and identity distinctions, which makes the follow-up review highly focused:
+
+- A policy containing `Principal` is resource-based, not identity-based.
+- Permission Boundary vs. SCP: individual identity ceiling vs. organization-wide guardrail.
+- IAM Identity Center vs. Cognito: workforce/multi-account access vs. application customer identity.
+- Cognito User Pool vs. Identity Pool: authentication/JWT vs. temporary AWS credentials and AWS authorization.
+
+**What This Means**
+
+The score is encouraging because the most security-critical technical traps were answered correctly: IAM roles on EC2, KMS key-policy behavior, CloudHSM selection, S3 encryption enforcement, Object Lock Compliance Mode, NACL explicit-deny rules, the ephemeral-port trap, and Gateway Endpoints.
+
+More importantly, today confirmed that the DEA-C01 method still works: repeated exposure builds familiarity, but covering the answer and explaining it out loud forces retrieval. That is the difference between recognizing a service name and being able to select the correct architecture under exam pressure.
+
+> **What I understood**
+> - Active recall (covering the answer and recalling out loud) is a fundamentally different cognitive task than passive re-reading, and it directly trains exam-day retrieval under pressure.
+> - The four missed concepts cluster tightly around IAM and identity distinctions, which makes the next review pass highly targeted rather than a general re-study of the entire domain.
+> - Getting the most security-critical traps right (IAM roles, KMS vs CloudHSM, S3 enforcement, NACLs, Gateway Endpoints) is a stronger signal than the raw 73.3% score.
+> - The DEA-C01 method — repeated exposure plus active recall — transfers directly to SAA-C03 and should remain the core review technique going forward.
+
+**Result**
+
+Domain 1 was reviewed three times using a final active-recall pass, followed by a 15-question quiz at **73.3%**. The next Domain 1 review should focus specifically on policy classification, SCP vs. permission-boundary scope, IAM Identity Center vs. Cognito, and Cognito User Pool vs. Identity Pool.
+
+---
+
 ## August 27, 2026
 
 **SAA-C03 Exam Prep | Day 28 · Full Review Pass — 48 Missed Questions + Security Domain Deep Dive**

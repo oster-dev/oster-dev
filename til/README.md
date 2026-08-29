@@ -7,6 +7,61 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 29, 2026
+
+**SAA-C03 Exam Prep | Day 30 · Domain 2 Active Recall — Resilient Architectures Consolidation**
+
+Today I focused on **Domain 2: Design Resilient Architectures**, using the same deliberate active-recall approach that worked well yesterday for Domain 1 and previously contributed heavily to the successful DEA-C01 preparation.
+
+**What I Did**
+
+- Reviewed the complete Domain 2 section of the self-created SAA-C03 cheat sheet three times.
+- On the third pass, covered the explanations, mappings, and answers instead of simply rereading them.
+- Recalled the decision rules, architecture patterns, service distinctions, and known exam traps out loud from memory.
+- Completed a 15-question Domain 2 quiz based on the cheat sheet.
+- Achieved **12/15 correct — 80%**.
+
+**What I Reinforced**
+
+- **Multi-AZ vs. Read Replicas:** Multi-AZ is synchronous high availability with automatic failover; the classic standby is not readable. Read Replicas are asynchronous, readable, and built for read scaling—not automatic failover.
+- **Aurora Global Database:** The cross-Region resilience solution when the target is recovery in minutes with potential data loss measured in seconds.
+- **RDS Proxy:** The canonical answer for Lambda-to-RDS connection storms; it pools and multiplexes connections instead of adding Read Replicas.
+- **ALB vs. NLB vs. GWLB:** ALB for Layer 7 content routing; NLB for TCP/UDP/TLS, static or Elastic IPs, and PrivateLink; GWLB for transparent inline third-party security appliances.
+- **Auto Scaling policy selection:** Target Tracking for unpredictable demand, Scheduled Scaling for known time-based demand, Step Scaling for tiered bursts, and Predictive Scaling for recurring patterns—combined with a dynamic policy for scale-in.
+- **Route 53 policies:** Geolocation for strict user-location requirements such as GDPR data residency; Geoproximity for resource-location-based traffic shifts using a bias; Multivalue Answer Routing for filtering unhealthy endpoints without a load balancer.
+- **Disaster recovery:** RTO defines allowable downtime, RPO defines allowable data loss. Pilot Light keeps data replication running but compute off; Warm Standby keeps reduced compute capacity already running.
+- **Decoupling:** SNS plus one dedicated SQS queue per subscriber for reliable fan-out; Kinesis Data Streams for sub-second processing, replay, and multiple independent consumers.
+
+**Quiz Review**
+
+| Missed area | Correct decision rule |
+|---|---|
+| Lambda concurrency exhausting RDS connections | **RDS Proxy** — connection pooling and multiplexing, not Read Replicas |
+| HTTP application plus a fixed IP allowlist | **NLB in front of ALB** — ALB cannot receive an Elastic IP |
+| Tens-of-minutes RTO with the lowest ongoing cost | **Pilot Light** — replicated data with compute off, not Warm Standby |
+
+**What This Means**
+
+The 80% score is a strong result, especially because the questions deliberately tested highly confusable service pairs and technically-valid-but-suboptimal distractors. The three misses are not broad knowledge gaps; they are specific selection traps where several AWS services can plausibly work, but only one exactly satisfies the deciding qualifier.
+
+The method is showing the intended effect: after three passes, with the final pass requiring spoken recall instead of recognition, the core Domain 2 decision rules are becoming easier to retrieve under quiz conditions. The remaining work is to make the three high-value distinctions automatic:
+
+1. **Lambda + database connection storm → RDS Proxy.**
+2. **Static IP + HTTP routing → NLB in front of ALB.**
+3. **Tens-of-minutes RTO + lowest cost → Pilot Light.**
+
+> **What I understood**
+> - Domain 2 at 80% and Domain 1 at 73.3% confirm the active-recall method is working consistently across both Security and Resilience domains.
+> - The three misses are not broad knowledge gaps but specific, high-value decision traps that are exactly the kind of detail the exam uses to separate borderline scores.
+> - Making these three distinctions automatic (RDS Proxy, NLB+ALB, Pilot Light) is a higher-leverage use of time than re-studying the entire domain.
+> - With Domains 1 and 2 both above 70% in targeted quizzes, the next logical step is to apply the same active-recall treatment to Domain 3 (High-Performing Architectures).
+
+**Result**
+
+Domain 2 reviewed three times with an active cover-and-recall final pass, followed by a 15-question quiz at **80%**. Domain 1 and Domain 2 are now both above the 70% threshold in targeted recall quizzes, while the remaining review focus should shift toward Domain 3 — High-Performing Architectures.
+
+---
+
 ## August 28, 2026
 
 **SAA-C03 Exam Prep | Day 29 · Domain 1 Active Recall — Security Knowledge Consolidation**

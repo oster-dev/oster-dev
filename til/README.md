@@ -7,6 +7,100 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 30, 2026
+
+**SAA-C03 Exam Prep | Day 31 · Domain 3 & 4 Active Recall — Completing the Four-Domain Review Cycle**
+
+Today I completed the final two domains of the cheat-sheet review cycle: **Domain 3 — Design High-Performing Architectures** and **Domain 4 — Design Cost-Optimized Architectures**. I used the same learning pattern that worked for Domains 1 and 2, and that had a major impact during DEA-C01 preparation: repeated review followed by deliberate spoken retrieval.
+
+**What I Did**
+
+- Reviewed the Domain 3 and Domain 4 sections of the self-created SAA-C03 cheat sheet **three times each**.
+- Used the first two passes to refresh the content, keyword mappings, numeric anchors, service-selection rules, and documented exam traps.
+- During the third pass, covered the explanations and answers and recalled the concepts and decisions out loud before checking them.
+- Completed one 15-question quiz for each domain.
+- Finished the complete four-domain targeted-recall cycle across Secure, Resilient, High-Performing, and Cost-Optimized Architectures.
+
+**Domain 3 Review — Design High-Performing Architectures**
+
+The Domain 3 review reinforced the high-value selection rules around:
+
+- gp2 burst-credit exhaustion versus gp3 as the modern general-purpose EBS default.
+- io2 Block Express for the highest IOPS and sub-millisecond database latency.
+- DynamoDB versus Redshift versus RDS/Aurora versus Neptune, Timestream, and DocumentDB.
+- LSI versus GSI: creation-time-only same-partition-key index versus add-anytime different-key index.
+- DAX for DynamoDB microsecond reads versus ElastiCache for repeated RDS/Aurora reads.
+- CloudFront for cacheable HTTP content and origin offloading versus Global Accelerator for TCP/UDP, static Anycast IPs, and fast network failover.
+- Athena for ad-hoc serverless SQL directly on S3, Glue for ETL/cataloging, and Kinesis Data Streams for replay plus multiple independent consumers.
+- Lambda's hard 15-minute execution ceiling, Fargate for long-running serverless container tasks, and EC2 for GPU/host-level control.
+- Cluster, Spread, and Partition Placement Groups.
+- ECS vs. EKS and Fargate vs. EC2 launch type.
+
+**Quiz result:** **12/15 correct — 80%**
+
+The three missed questions were tightly isolated:
+
+- OLAP / billions of rows / BI aggregation → **Amazon Redshift**, not RDS.
+- Global static HTTP file delivery plus reduced S3 origin load → **CloudFront**, not Global Accelerator.
+- UDP gaming plus static IPs and fast regional failover → **Global Accelerator**, not CloudFront.
+
+The two CloudFront/Global Accelerator answers were a service-pair mix-up rather than a broad architecture gap. The correction is now clear:
+
+> **CloudFront stores copies. Global Accelerator speeds the path.**
+
+**Domain 4 Review — Design Cost-Optimized Architectures**
+
+The Domain 4 review reinforced:
+
+- Right-size with Compute Optimizer before buying Reserved Instances or Savings Plans.
+- Spot for interruptible workloads; Savings Plans/RIs for predictable committed baseline; On-Demand for genuinely unpredictable workloads.
+- Dedicated Hosts for BYOL requirements tied to physical sockets or cores.
+- S3 storage-class decisions based on retrieval time, storage duration, and access behavior.
+- Glacier Instant Retrieval for archive data requiring millisecond access.
+- Intelligent-Tiering for unknown/changing access patterns.
+- Lifecycle-rule, minimum-duration, small-object, and versioning cost traps.
+- Gateway Endpoints for free private S3/DynamoDB access rather than NAT Gateway data-processing charges.
+- Interface Endpoints for high-volume private ECR access.
+- Direct Connect for high sustained transfer volume versus Site-to-Site VPN for lower-volume, bursty, or fast-to-provision connectivity.
+- Cost Explorer vs. AWS Budgets vs. CUR vs. Compute Optimizer vs. Trusted Advisor.
+- Snow Family, DataSync, DMS + SCT, Storage Gateway, and Transfer Family.
+
+**Quiz result:** **15/15 correct — 100%**
+
+**Four-Domain Quiz Results**
+
+| Domain | Focus | Result | Score |
+|---|---|---:|---:|
+| Domain 1 | Design Secure Architectures | 11/15 | 73.3% |
+| Domain 2 | Design Resilient Architectures | 12/15 | 80.0% |
+| Domain 3 | Design High-Performing Architectures | 12/15 | 80.0% |
+| Domain 4 | Design Cost-Optimized Architectures | 15/15 | 100.0% |
+| **Average** | **All four domains** | **50/60** | **83.3%** |
+
+\\[\\text{Average} = \\frac{73.3 + 80.0 + 80.0 + 100.0}{4} \\approx 83.3\\%\\]
+
+Equivalent question-weighted calculation:
+
+\\[\\frac{11 + 12 + 12 + 15}{60} = \\frac{50}{60} = 83.3\\%\\]
+
+**What This Means**
+
+This finishes a complete active-recall pass across the SAA-C03 blueprint. The targeted quizzes now show passing-level recall in every domain, with a combined **83.3%** average. Domain 4 is exceptionally stable at 100%, while Domains 2 and 3 are both at 80%. Domain 1 is above the practical threshold at 73.3%, but remains the domain that benefits most from one additional focused pass on IAM policy mechanics, Identity Center versus Cognito, and User Pool versus Identity Pool.
+
+The meaningful next validation is no longer another domain-specific quiz. It is a fresh, mixed, unseen Tutorials Dojo practice exam, because that will test whether the recall framework transfers under full exam-style ambiguity, distractors, and cross-domain context.
+
+> **What I understood**
+> - Completing all four domains with an 83.3% average confirms the active-recall method is working consistently across the entire blueprint, not just isolated topics.
+> - Domain 4 at 100% shows Cost-Optimized Architectures is now a reliable strength, while Domain 1 at 73.3% suggests one more focused IAM/identity pass would be high-leverage before the real exam.
+> - The CloudFront vs. Global Accelerator mix-up in Domain 3 is a clean, fixable decision rule ("CloudFront stores copies, Global Accelerator speeds the path") rather than a structural gap.
+> - The next meaningful test is a fresh, mixed, full-length mock exam under timed conditions, since domain-specific quizzes no longer stress cross-domain ambiguity the way the real exam does.
+
+**Result**
+
+All four SAA-C03 domains reviewed using the three-pass active-recall method, with targeted quizzes showing: Domain 1 (Secure) 73.3%, Domain 2 (Resilient) 80%, Domain 3 (High-Performing) 80%, Domain 4 (Cost-Optimized) 100%, for a combined average of **83.3%** across 60 questions. Next step is a fresh, mixed, full-length Tutorials Dojo mock exam to validate transfer under real exam-style conditions.
+
+---
+
 ## August 29, 2026
 
 **SAA-C03 Exam Prep | Day 30 · Domain 2 Active Recall — Resilient Architectures Consolidation**

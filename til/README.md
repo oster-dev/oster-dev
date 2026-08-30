@@ -77,11 +77,13 @@ The Domain 4 review reinforced:
 | Domain 4 | Design Cost-Optimized Architectures | 15/15 | 100.0% |
 | **Average** | **All four domains** | **50/60** | **83.3%** |
 
-\\[\\text{Average} = \\frac{73.3 + 80.0 + 80.0 + 100.0}{4} \\approx 83.3\\%\\]
+**Review Summary**
 
-Equivalent question-weighted calculation:
-
-\\[\\frac{11 + 12 + 12 + 15}{60} = \\frac{50}{60} = 83.3\\%\\]
+- Domain 1: 73.3% — above the practical threshold, but IAM and identity distinctions need one additional focused pass.
+- Domain 2: 80.0% — solid recall of resilient architecture patterns.
+- Domain 3: 80.0% — strong improvement in the former High-Performing weakness area.
+- Domain 4: 100.0% — exceptionally stable Cost-Optimized Architectures knowledge.
+- Overall: 83.3% across all 60 targeted-recall questions.
 
 **What This Means**
 

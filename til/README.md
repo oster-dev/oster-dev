@@ -7,6 +7,69 @@ TIL Started: April 13, 2026
 
 ---
 
+## August 31, 2026
+
+**SAA-C03 Exam Prep | Day 32 · Cheat Sheet Complete — Full Mock Exam & Deep-Review Plan**
+
+Today I finished the remaining sections of the self-created SAA-C03 cheat sheet, including the production decision rules, numeric anchors, and final exam-day checklist. I then used a full Tutorials Dojo practice exam to test whether the structured recall work transfers to deeper, mixed exam scenarios.
+
+**What I Covered**
+
+- Completed the final cheat-sheet sections:
+  - Infrastructure as Code: CloudFormation vs. Elastic Beanstalk, Change Sets, Stack Policies, and avoiding configuration drift through IaC.
+  - The 10 production architecture decision rules, including Multi-AZ vs. Read Replicas, IAM roles vs. static keys, Gateway Endpoints vs. NAT, blue/green deployment, externalized session state, SNS-to-SQS fan-out, DR selection, S3 encryption enforcement, and right-sizing before cost commitments.
+  - All high-value numerical anchors: Lambda's 15-minute limit, gp3 baseline, io2 Block Express IOPS, S3 storage durations, SQS/Kinesis retention, RDS failover timing, Route 53 failover timing, KMS 4 KB limit, NAT pricing, and more.
+  - Final exam-day method: read the qualifier first, eliminate impossible answers, prefer the simplest managed solution, and never leave a question unanswered.
+
+**Tutorials Dojo Practice Exam**
+
+| Metric | Result |
+|---|---:|
+| Overall score | **58%** |
+| Correct | 38 |
+| Incorrect | 27 |
+| Passing benchmark | 70% |
+| Result | Not passed |
+
+**Domain Performance**
+
+| Domain | Score | Current signal |
+|---|---:|---|
+| Design High-Performing Architectures | **67%** | Closest to the pass benchmark |
+| Design Cost-Optimized Architectures | **69%** | Nearly at the benchmark |
+| Design Resilient Architectures | **53%** | Material review needed |
+| Design Secure Architectures | **50%** | Primary review priority |
+
+**What This Means**
+
+The 58% result is frustrating, but it is useful rather than discouraging. Tutorials Dojo questions are intentionally deeper and more scenario-specific than the targeted cheat-sheet quizzes: several AWS services can appear plausible, while the correct answer depends on a small constraint, exact service limitation, or the wording of the qualifier.
+
+There is also an important difference between knowing an isolated decision rule and applying it under a 65-question mixed exam with unfamiliar wording. The targeted quizzes measured recall within one domain; this mock exam measures transfer, endurance, elimination under ambiguity, and the ability to spot hidden constraints across domains.
+
+The positive signal is that Cost-Optimized Architectures reached 69% and High-Performing Architectures reached 67%, validating the work on Domain 3 and Domain 4. The key gap is now clear: Security and Resilience need a deeper scenario-level review, not a broad rewatch of all course material.
+
+> **What I understood**
+> - Domain-isolated recall and full mixed-exam transfer are two different skills; scoring well on single-domain quizzes doesn't guarantee the same result under cross-domain ambiguity.
+> - Cost-Optimized (69%) and High-Performing (67%) both validated the recent active-recall work, confirming the method holds up outside the cheat sheet's own questions.
+> - Security (50%) and Resilience (53%) are now the clear, evidence-based priorities, not a vague sense of "needing more review."
+> - The fix from here is a scenario-level deep review of missed questions, not another broad rewatch of course material.
+
+**Deep Review Plan for Tomorrow**
+
+1. Review every incorrect answer in detail rather than only memorizing the correct option.
+2. Write down the decisive keyword or requirement that eliminated the selected distractor.
+3. Categorize missed questions by service pair or architecture decision:
+   - IAM roles, SCPs, KMS, Secrets Manager, S3 controls, Security Groups vs. NACLs, WAF/Shield/Network Firewall, and GuardDuty/Macie/CloudTrail.
+   - Multi-AZ vs. Read Replicas, ALB/NLB/GWLB, Auto Scaling policy selection, Route 53 routing policies, DR tiers, SQS/SNS/Kinesis.
+4. Revisit only the matching cheat-sheet rule after reading the Tutorials Dojo explanation.
+5. Turn recurring mistakes into short active-recall prompts before the next mixed practice exam.
+
+**Result**
+
+The cheat sheet is now fully covered end-to-end, and the first post-review Tutorials Dojo mock scored **58%**. The score exposes a specific next step rather than an unclear problem: a focused Deep Review Session tomorrow, prioritizing **Secure Architectures (50%)** and **Resilient Architectures (53%)**, then re-validating progress with fresh mixed questions.
+
+---
+
 ## August 30, 2026
 
 **SAA-C03 Exam Prep | Day 31 · Domain 3 & 4 Active Recall — Completing the Four-Domain Review Cycle**

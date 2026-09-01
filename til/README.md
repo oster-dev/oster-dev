@@ -7,6 +7,88 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 1, 2026
+
+**SAA-C03 Exam Prep | Day 33 · Full Deep Review of the Tutorials Dojo Mock Exam**
+
+Today I completed the full deep review of **all 27 incorrect questions** from yesterday's Tutorials Dojo SAA-C03 practice exam. The objective was not to memorize the answer letter, but to identify the decisive requirement in each scenario, understand why the selected option was wrong, and convert every miss into a reusable architecture rule.
+
+Yesterday's initial result was **38/65 correct (58%)**. Today's work turned those 27 incorrect answers into a structured list of service boundaries, selection patterns, and common exam traps.
+
+**Review Method**
+
+For every missed question, I applied the same process:
+
+1. Re-read the scenario and identify the qualifying words: *least operational overhead*, *most cost-effective*, *real-time*, *high availability*, *dedicated connection*, *cross-account*, or *survive an AZ failure*.
+2. Compare the selected answer with the correct one.
+3. Identify the exact AWS capability boundary that disqualifies the wrong option.
+4. Map the lesson back to the cheat sheet.
+5. Formulate a short active-recall rule for future mixed questions.
+
+**Questions Reviewed**
+
+| # | Scenario / concept | Correct answer | Key rule learned |
+|---:|---|---|---|
+| 1 | Provisioning multiple AWS accounts with standardized security and network baselines | **AWS Control Tower Landing Zone with guardrails** | Use Control Tower for governed multi-account environments, account provisioning, standardized baselines, and preventive/detective guardrails. |
+| 2 | Managed SFTP uploads, encryption at rest, high availability, deletion after one month | **AWS Transfer Family for SFTP + encrypted S3 bucket + S3 lifecycle expiration rule** | Use Transfer Family for managed SFTP and S3 lifecycle rules for timed object deletion. EFS lifecycle management does not delete files after a retention period. |
+| 3 | Central data-lake access across multiple accounts with role-based permissions | **AWS Lake Formation** | Lake Formation centralizes data-lake governance, catalog permissions, and fine-grained cross-account data access. |
+| 4 | Correct properties of VPC subnets | **One subnet maps to one AZ; new subnets use the VPC main route table by default** | A subnet cannot span multiple AZs. Private-subnet internet access requires a NAT route, not an Elastic IP directly attached to the private instance. |
+| 5 | Make an EC2-hosted web application scalable and elastic | **Multiple EC2 instances behind an ELB; multiple EC2 instances with Route 53 weighted routing** | Add redundancy and traffic distribution. An S3 "cache" is not a valid scaling layer for an EC2 application. |
+| 6 | Third-party service must call Lambda through an HTTP POST webhook | **Lambda Function URL** | For the least operational overhead, use a Function URL as the public HTTPS endpoint for a Lambda webhook. |
+| 7 | Monitor AWS Organizations OU hierarchy changes and enable stakeholder alerts | **AWS Control Tower with account drift notifications** | Control Tower provides governed multi-account management and drift detection; AWS Config aggregation alone does not fulfill the complete governance workflow. |
+| 8 | Global user-facing real-time data processing with low latency near users | **CloudFront + Lambda@Edge + Kinesis + S3** | Lambda@Edge runs request logic close to users; Kinesis handles streaming data; S3 stores durable results. Athena queries existing S3 data and is not a streaming processor. |
+| 9 | Lambda/API Gateway application throttles while writing processed requests to Aurora | **Decouple two Lambda functions with Amazon SQS** | SQS buffers bursts and lets processing scale independently. SNS is for fan-out, not the primary work-queue solution for smoothing load. |
+| 10 | Windows EC2 application has slow startup after being stopped overnight | **Migrate to an EC2 configuration that supports hibernation** | EC2 hibernation preserves RAM state for fast resume, but it requires a compatible instance and must be enabled at launch rather than retrofitted freely. |
+| 11 | EBS snapshot runs during a production incident | **The EBS volume remains usable during the snapshot** | EBS snapshots are point-in-time backups; the source volume can continue serving reads and writes while the snapshot progresses. |
+| 12 | Site-to-Site VPN between an on-premises SAP HANA environment and a VPC | **A static, internet-routable public IP for the customer gateway external interface** | The on-premises customer gateway needs a static public IP. NAT instances and Elastic IPs on a virtual private gateway are not the required external component. |
+| 13 | Six EC2 instances must remain available after losing one of three AZs | **Three instances in each of three AZs** | For AZ-failure tolerance, calculate capacity remaining after removing one AZ. Three instances per AZ gives nine total; losing one AZ leaves the required six. |
+| 14 | Serverless API that receives small JSON payloads and writes results to Aurora | **Amazon API Gateway + AWS Lambda** | For request-driven API processing with low operational overhead, API Gateway and Lambda are the direct managed combination. |
+| 15 | Private, dedicated hybrid connection with high bandwidth and predictable performance | **AWS Direct Connect** | Choose Direct Connect when the question emphasizes dedicated connectivity, high bandwidth, and more consistent performance than internet-based solutions. |
+| 16 | Difference between a reusable work queue and notification fan-out | **Amazon SQS for decoupled processing** | Use SQS to retain and buffer work for consumers; use SNS when one event needs delivery to multiple independent subscribers. |
+| 17 | Control Tower vs. AWS Config | **Control Tower for account governance; Config for resource-compliance evaluation** | Account factory, landing zones, guardrails, and governed provisioning point to Control Tower. Resource configuration history and compliance rules point to AWS Config. |
+| 18 | Lambda Function URL vs. API Gateway | **Function URL when direct webhook access and least overhead are required** | API Gateway offers richer API-management features; Function URLs are simpler for a direct Lambda HTTP endpoint. |
+| 19 | Kinesis vs. Athena | **Kinesis for real-time streams; Athena for ad-hoc SQL over stored S3 data** | "Streaming," "continuous ingestion," and near-real-time processing indicate Kinesis. "Query data in S3 using SQL" indicates Athena. |
+| 20 | S3 vs. EFS for time-based file deletion | **S3 lifecycle expiration rule** | S3 lifecycle policies can expire objects. EFS lifecycle policies transition inactive files to IA storage; they do not serve as an object-expiration mechanism. |
+| 21 | Dedicated connectivity vs. Transit Gateway | **Direct Connect establishes the dedicated network link** | Transit Gateway centrally connects VPCs and on-premises networks but does not replace the dedicated physical connectivity provided by Direct Connect. |
+| 22 | Private subnet outbound internet access | **NAT Gateway/NAT instance route through a public subnet** | A private instance does not become internet-capable simply by receiving an Elastic IP; it needs an appropriate route via NAT and an Internet Gateway path. |
+| 23 | Multi-AZ capacity planning | **Distribute capacity so the required minimum survives loss of the largest failure domain** | Always test the proposed design by removing one AZ and checking whether the remaining capacity satisfies the requirement. |
+| 24 | S3 object storage for managed SFTP workflows | **S3 + Transfer Family** | Managed file transfer, durable storage, encryption, and lifecycle expiration make S3 with Transfer Family the minimal-operations solution. |
+| 25 | Global low-latency processing vs. geographic routing | **Lambda@Edge for edge request logic; Route 53 policy only for DNS routing** | Route 53 directs DNS requests but does not process application logic close to end users. |
+| 26 | Read scaling vs. asynchronous workflow scaling | **Queues for burst absorption and asynchronous processing** | Increasing Lambda concurrency treats the symptom; decoupling through SQS protects downstream systems and improves resilience under traffic spikes. |
+| 27 | Managed service selection under "least operational overhead" | **Prefer the fully managed service that directly satisfies every stated constraint** | The exam frequently tests whether a simpler managed service removes unnecessary EC2, custom scripts, cron jobs, or self-managed infrastructure. |
+
+**Core Patterns Reinforced**
+
+The full review exposed several repeated decision boundaries that now deserve immediate recall:
+
+- **Control Tower** manages and governs AWS accounts; **AWS Config** records and evaluates resource configuration compliance.
+- **Lake Formation** manages data-lake permissions; **Kinesis** ingests/processes streams; **Athena** queries stored data using SQL.
+- **S3 lifecycle** expires objects; **EFS lifecycle** transitions files between storage classes.
+- **Lambda Function URLs** provide simple direct webhooks; **API Gateway** is used where API-management features are required.
+- **SQS** absorbs and buffers work; **SNS** distributes events to multiple subscribers.
+- **CloudFront/Lambda@Edge** reduces latency and executes edge logic; **Route 53** resolves and routes DNS, but does not run code.
+- **Direct Connect** is the dedicated, high-bandwidth hybrid link; **Site-to-Site VPN** uses encrypted tunnels over the public internet.
+- For availability questions, validate the design **after removing one AZ**, not only against its normal total capacity.
+
+**What This Means**
+
+All **27 incorrect questions** from the 58% Tutorials Dojo mock exam have now been deep reviewed. The review was especially valuable because the misses were not random: they clustered around service-pair distinctions, managed-service selection, VPC and hybrid-network fundamentals, account governance, and queue-based decoupling.
+
+The next practice exam should therefore be treated as a transfer test. The goal is to confirm that the new decision rules hold under unseen, mixed scenarios—particularly in the previously weaker Security and Resilience domains.
+
+> **What I understood**
+> - The most important part of reviewing a wrong answer is finding the single qualifier that invalidates the selected distractor, not memorizing the correct answer letter.
+> - The missed questions clustered around a small set of recurring service boundaries: Control Tower vs. Config, SQS vs. SNS, Kinesis vs. Athena, Direct Connect vs. Transit Gateway, and Function URL vs. API Gateway.
+> - "Least operational overhead" is a decisive exam qualifier that regularly points toward the fully managed service directly matching the requirements.
+> - Availability scenarios should always be tested after removing the largest failure domain, such as one Availability Zone, not only against normal operating capacity.
+> - The next mock exam is the real transfer test: applying these decision rules under fresh wording, mixed domains, time pressure, and technically plausible distractors.
+
+**Outcome**
+
+All **27 incorrect questions** from the 58% Tutorials Dojo mock exam have been deep reviewed and converted into reusable architecture rules. The next step is a fresh, mixed practice exam to validate whether these rules now transfer under unseen scenario-based conditions.
+
+---
+
 ## August 31, 2026
 
 **SAA-C03 Exam Prep | Day 32 · Cheat Sheet Complete — Full Mock Exam & Deep-Review Plan**

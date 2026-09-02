@@ -7,6 +7,37 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 2, 2026
+
+**SAA-C03 Exam Prep | Day 34 · All 45 Bookmarked Questions Deep Reviewed — Approaching Exam-Ready**
+
+Today I completed a full deep review of **all 45 questions** I had bookmarked in the Tutorials Dojo SAA-C03 app since I started using it. Rather than reviewing only the most recent mock exam misses, this session consolidated every flagged question across the entire study period into one comprehensive pass.
+
+**What I Did**
+
+- Went through all 45 bookmarked questions individually.
+- For each question, re-read the scenario, identified the decisive qualifier, and confirmed *why* the correct answer satisfies every stated constraint better than the distractors.
+- Cross-referenced each question against the cheat sheet to confirm the underlying rule was already documented, or added it if missing.
+- Grouped questions by recurring theme rather than treating them as isolated facts, since bookmarked items tend to cluster around the same handful of tricky service-pair distinctions.
+
+**Why This Matters**
+
+Bookmarked questions accumulate over weeks of practice and usually represent the material that resisted simple review the first time. Consolidating all 45 into a single deep-review session is different from reviewing a single mock exam's misses: it surfaces the recurring weak spots that kept reappearing across different practice sets, which is a stronger signal of true knowledge gaps than any one exam session alone.
+
+This type of review also tests durability. A concept that only felt solid right after the original mock exam explanation, but still needed a bookmark days or weeks later, is exactly the kind of gap that a single pass of active recall does not fully close. Working through all 45 today forces a final confirmation that those concepts are now stable.
+
+> **What I understood**
+> - Bookmarked questions accumulated across weeks are a stronger weak-spot signal than any single mock exam, because they represent material that resisted review more than once.
+> - Grouping bookmarks by recurring theme rather than reviewing them as isolated facts reveals the same handful of service-pair distinctions surfacing repeatedly.
+> - A concept still needing a bookmark days or weeks after its original explanation is a durability gap, not just a one-time mistake, and needs a different kind of review to close.
+> - Cross-referencing every bookmarked question against the cheat sheet keeps the cheat sheet itself complete and prevents the same gap from resurfacing unaddressed.
+
+**Result**
+
+All 45 bookmarked questions accumulated since starting Tutorials Dojo have now been deep reviewed, cross-referenced against the cheat sheet, and grouped by recurring theme. This consolidation pass moves the preparation closer to exam-ready by confirming that previously unstable concepts now hold up under a final, deliberate review rather than only immediately after their original explanation.
+
+---
+
 ## September 1, 2026
 
 **SAA-C03 Exam Prep | Day 33 · Full Deep Review of the Tutorials Dojo Mock Exam**

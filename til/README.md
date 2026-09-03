@@ -7,6 +7,41 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 3, 2026
+
+**SAA-C03 Exam Prep | Day 35 · Full Cheat Sheet Review — Cold Pass + Active Recall**
+
+Today I ran the complete SAA-C03 cheat sheet through two full passes: one cold read-through and one active-recall pass. This marks a shift from domain-by-domain or topic-specific review into full-document consolidation, which is the natural next step now that all four domains and all 45 bookmarked questions have already been deep reviewed.
+
+**What I Did**
+
+- **Cold pass:** Read through the entire cheat sheet start to finish without pausing to test recall, refreshing every section: domain weights, IAM/security decision rules, resilience patterns, high-performing architecture selection logic, cost-optimization rules, the 10 production decision rules, and all numeric anchors.
+- **Active recall pass:** Went through the cheat sheet a second time, this time covering each section's content and reconstructing the key facts, numeric anchors, and decision rules from memory before checking against the source material.
+
+**Why This Approach Works at This Stage**
+
+A cold pass followed immediately by active recall serves a different purpose than the earlier day-by-day domain reviews. Early in preparation, the goal was learning and reinforcing individual concepts in isolation. At this stage, with quizzes, mock exams, and 45 bookmarked questions already processed, the goal shifts to consolidating the entire knowledge base into one coherent, retrievable structure. Reading cold first re-establishes the full picture, and testing recall immediately after exposes any details that have quietly decayed since the material was last actively used, rather than passively recognized.
+
+This is also a natural checkpoint before the final push: once the full cheat sheet holds up under active recall, the remaining work becomes about breadth and edge cases via fresh Tutorials Dojo questions rather than reinforcing already-known material.
+
+> **What I understood**
+> - Consolidating the full cheat sheet in one pass is a fundamentally different exercise than domain-by-domain review, since it tests whether the entire knowledge base holds together as one retrievable structure rather than isolated pockets.
+> - A cold read followed immediately by active recall exposes quiet knowledge decay that passive recognition alone would hide.
+> - Reaching this consolidation stage after a full domain-quiz cycle, a fully reviewed mock exam, and all 45 bookmarked questions means the remaining gaps are narrow and well-defined, not open-ended.
+> - The path to booking the real exam is now evidence-based: once full-cheat-sheet quizzes and fresh mixed questions land consistently above the 720/1000 threshold, there's a clear basis for setting the date.
+
+**The Plan From Here**
+
+1. **Tomorrow:** Build quizzes derived from the complete cheat sheet and work through the entire document in quiz form. This is a stronger test than passive recall, since multiple-choice framing forces distinguishing between plausible AWS service pairs rather than only recalling a fact when prompted directly.
+2. **Following days:** Answer additional Tutorials Dojo questions to keep surfacing new gaps outside the cheat sheet's existing coverage, particularly scenario-level nuance that a static reference document cannot fully capture.
+3. **Then:** Book the exam.
+
+**Result**
+
+Completed a full cold pass plus active-recall pass over the entire SAA-C03 cheat sheet, consolidating everything learned across all four domains and 45 bookmarked questions into one coherent, retrievable structure. Given the trajectory so far, the remaining work is narrow and well-defined rather than open-ended, with a clear, evidence-based path toward setting the exam date.
+
+---
+
 ## September 2, 2026
 
 **SAA-C03 Exam Prep | Day 34 · All 45 Bookmarked Questions Deep Reviewed — Approaching Exam-Ready**

@@ -38,7 +38,7 @@ This is also a natural checkpoint before the final push: once the full cheat she
 
 **Result**
 
-Completed a full cold pass plus active-recall pass over the entire SAA-C03 cheat sheet, consolidating everything learned across all four domains and 45 bookmarked questions into one coherent, retrievable structure. Given the trajectory so far, the remaining work is narrow and well-defined rather than open-ended, with a clear, evidence-based path toward setting the exam date.
+Completed a full cold pass plus active-recall pass over the entire SAA-C03 cheat sheet, consolidating everything learned across all four domains into one coherent, retrievable structure. Given the trajectory so far, the remaining work is narrow and well-defined rather than open-ended, with a clear, evidence-based path toward setting the exam date.
 
 ---
 

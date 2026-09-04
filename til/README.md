@@ -7,6 +7,70 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 4, 2026
+
+**SAA-C03 Exam Prep | Day 36 · Full Four-Domain Quiz Sweep — Strongest Results to Date**
+
+Today I ran a complete cheat-sheet-based quiz cycle across all four SAA-C03 domains in a single session: 20 questions each for Domain 1, Domain 2, Domain 3, and Domain 4. This is the first time all four domains were tested back-to-back in one day, immediately following the two full cheat-sheet passes and the deep review of all 45 bookmarked Tutorials Dojo questions from earlier this week.
+
+**What I Did**
+
+- Completed a 20-question Domain 1 quiz (Design Secure Architectures) covering IAM, KMS, Security Groups vs. NACLs, Secrets Manager, SCPs, GuardDuty vs. Macie, WAF vs. Shield, VPC endpoints, and Cognito.
+- Completed a 20-question Domain 2 quiz (Design Resilient Architectures) covering Multi-AZ vs. Read Replicas, SQS/SNS fan-out, Auto Scaling health checks, Route 53 failover, DR strategies, EventBridge DLQs, and session state externalization.
+- Completed a 20-question Domain 3 quiz (Design High-Performing Architectures) covering EBS volume types, EFS/FSx for Lustre, compute selection, DynamoDB indexing and partition throughput, CloudFront vs. Global Accelerator, and streaming/analytics services.
+- Completed a 20-question Domain 4 quiz (Design Cost-Optimized Architectures) covering S3 storage classes and lifecycle rules, EC2 purchasing models, Aurora Serverless, DynamoDB on-demand capacity, VPC endpoints, Direct Connect, NAT Gateway design, and cost visibility tools.
+
+**Results**
+
+| Domain | Score | Percentage |
+|---|---:|---:|
+| Domain 1 — Design Secure Architectures | 18/20 | 90.0% |
+| Domain 2 — Design Resilient Architectures | 18/20 | 90.0% |
+| Domain 3 — Design High-Performing Architectures | 19/20 | 95.0% |
+| Domain 4 — Design Cost-Optimized Architectures | 20/20 | 100.0% |
+| **Total** | **75/80** | **93.75%** |
+
+**Progress Since the First Domain-Specific Quizzes**
+
+| Domain | First quiz (late August) | Today | Improvement |
+|---|---:|---:|---:|
+| Domain 1 — Secure | 11/15 · 73.3% | 18/20 · 90.0% | +16.7 pts |
+| Domain 2 — Resilient | 12/15 · 80.0% | 18/20 · 90.0% | +10.0 pts |
+| Domain 3 — High-Performing | 12/15 · 80.0% | 19/20 · 95.0% | +15.0 pts |
+| Domain 4 — Cost-Optimized | 15/15 · 100.0% | 20/20 · 100.0% | Stable |
+| **Combined average** | **50/60 · 83.3%** | **75/80 · 93.75%** | **+10.45 pts** |
+
+**The Four Missed Questions**
+
+The four mistakes were narrow and specific rather than reflecting broad gaps:
+
+- **Domain 1:** Confused passive default encryption with active enforcement — only a deny-based bucket policy truly blocks unencrypted uploads, and CloudTrail logs API activity but does not evaluate resource compliance the way AWS Config does.
+- **Domain 2:** Mixed up pilot light with backup-and-restore DR tiers, and chose sticky sessions instead of externalizing session state to ElastiCache for a horizontally scaling, fault-tolerant design.
+- **Domain 3:** Missed that a single DynamoDB partition has its own throughput ceiling independent of the table's total provisioned capacity — the classic hot-partition-key trap.
+- **Domain 4:** None — a clean 20/20 sweep.
+
+**What This Means**
+
+This is the strongest single-day result of the entire preparation cycle, and it directly reflects the value of the last several days of consolidation work: two full cold-and-active-recall passes through the cheat sheet, the complete deep review of all 27 Tutorials Dojo mock exam misses, and the full sweep of all 45 bookmarked questions. Rather than testing isolated facts, today's quizzes tested whether that consolidated knowledge could be applied consistently across all four domains without a drop-off in any one area.
+
+The remaining four errors all share the same underlying pattern: choosing a plausible but subtly incorrect AWS service or behavior when two options are conceptually adjacent — passive vs. active enforcement, one DR tier vs. another, session affinity vs. externalized state, and table-level vs. partition-level capacity. This is a narrower and more addressable gap than the domain-level weaknesses that showed up in the original Tutorials Dojo mock exam (58% overall, with Security at 50% and Resilience at 53%).
+
+**Where This Leaves the Prep**
+
+With a 93.75% average across a full four-domain sweep and no domain scoring below 90%, the cheat-sheet-based knowledge base is now in a strong, stable state across the board. The logical next step is a fresh, unseen, full-length mixed practice exam to confirm this consolidation transfers to exam-style question density and cross-domain scenario complexity, rather than the domain-isolated quiz format used today. A strong result there would provide clear, evidence-based confidence to move forward with booking the exam.
+
+> **What I understood**
+> - Testing all four domains back-to-back in one session is a stronger consolidation check than isolated domain quizzes, since it exposes whether knowledge holds up under sustained, cross-domain cognitive load.
+> - The four remaining errors are all narrow boundary cases between conceptually adjacent AWS behaviors, not broad domain weaknesses — exactly the kind of gap that targeted review can close efficiently.
+> - The jump from 83.3% to 93.75% average across domains directly reflects the compounding effect of the week's deep reviews, bookmark sweeps, and full cheat-sheet passes.
+> - The next meaningful milestone is a fresh, full-length mixed practice exam to confirm that this domain-level strength transfers to exam-style density and cross-domain scenario complexity.
+
+**Result**
+
+Completed the strongest single-day quiz session of the entire SAA-C03 preparation cycle: 75/80 correct (93.75%) across all four domains, with no domain below 90%. The remaining four errors are narrow, addressable boundary cases rather than systemic gaps, setting up a clear path toward a final mixed mock exam and, pending strong results, booking the real exam.
+
+---
+
 ## September 3, 2026
 
 **SAA-C03 Exam Prep | Day 35 · Full Cheat Sheet Review — Cold Pass + Active Recall**

@@ -7,6 +7,47 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 5, 2026
+
+**SAA-C03 Exam Prep | Day 37 · 50 Difficult Questions Deep Reviewed — Targeting Multiple-Choice Gaps**
+
+Today I deep reviewed **50 questions** from the Tutorials Dojo question catalog. Most were questions I had already seen before, but specifically ones I had previously struggled with, rather than a random or fresh sample. This continues the pattern from the last two days: consolidating known weak points rather than only accumulating new material.
+
+**What I Did**
+
+- Went through 50 previously-seen Tutorials Dojo questions that had proven difficult in earlier passes.
+- For each one, re-confirmed the decisive requirement in the scenario and re-derived why the correct answer satisfies it better than the distractors, rather than just recognizing the right letter from memory.
+- Identified that the recurring difficulty isn't tied to a specific domain or service, but specifically to **multiple-choice (select-two/select-three) questions**, which require eliminating combinations of answers rather than a single correct option.
+
+**The Multiple-Choice Gap**
+
+This is a useful and specific diagnosis. Multiple-choice questions in the Tutorials Dojo catalog are structurally harder than single-answer questions for a clear reason: instead of finding one correct answer among four distractors, you need to correctly classify *every* option as correct or incorrect independently, and a single misjudged option turns an otherwise-correct answer into a miss. This matches the pattern from Tuesday's mock-exam review, where several of the 27 missed questions (VPC subnet facts, EC2 scalability options) were "select two" format and involved partial correctness rather than a clean right/wrong split.
+
+**Plan for Tomorrow**
+
+1. Remove all current bookmarks in the Tutorials Dojo app to clear the slate.
+2. Go through the entire question catalog specifically filtering for **multiple-choice (select-two/select-three) questions only**.
+3. Bookmark and review each one individually, focusing on why each *individual* option is correct or incorrect, not just the final combination.
+4. Build a mental checklist for select-two questions: treat each answer choice as its own true/false statement before comparing combinations, rather than pattern-matching the whole set at once.
+
+**What This Means**
+
+This is a precise, well-targeted adjustment rather than a setback. After four domain quizzes yesterday averaging 93.75% and a full sweep of all 45 bookmarked questions, the remaining friction isn't about AWS knowledge gaps across security, resilience, performance, or cost — it's about a specific question format that stresses a different skill: exhaustive option-by-option evaluation instead of single-answer pattern recognition.
+
+Isolating multiple-choice questions as their own dedicated review category tomorrow is a smart way to close this gap directly rather than letting it dilute across mixed practice sessions. Given the strength of the underlying content knowledge and the consistently high domain-quiz scores this week, closing this one structural gap puts you in a strong position to book the exam within the next few days, as planned.
+
+> **What I understood**
+> - The recurring difficulty across 50 previously-seen hard questions isn't a content gap in any domain, but a structural weakness specific to select-two/select-three question format.
+> - Multiple-choice questions demand independent true/false classification of every option, so a single misjudged option can turn an otherwise-correct answer into a full miss — a fundamentally different skill than single-answer pattern recognition.
+> - This diagnosis connects directly back to Tuesday's mock-exam review, where several of the 27 missed questions (VPC subnet facts, EC2 scalability) were select-two format with partial correctness traps.
+> - Isolating select-two/select-three questions as their own dedicated review category is a more effective fix than letting the gap dilute across mixed practice sessions.
+
+**Result**
+
+Completed a targeted deep review of 50 previously difficult Tutorials Dojo questions and isolated the root cause of remaining errors: not AWS knowledge gaps, but the structural demands of multiple-choice (select-two/select-three) questions. Tomorrow's plan resets all bookmarks and builds a dedicated review pass filtering specifically for this question format, closing the last identified gap before booking the exam.
+
+---
+
 ## September 4, 2026
 
 **SAA-C03 Exam Prep | Day 36 · Full Four-Domain Quiz Sweep — Strongest Results to Date**

@@ -7,6 +7,49 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 6, 2026
+
+**SAA-C03 Exam Prep | Day 38 · Multiple-Choice Question Sweep — A Clear Weak Spot Surfaces**
+
+Today I went through the Tutorials Dojo catalog and marked/answered all multiple-choice (select-two/select-three) questions I had previously struggled with. The result confirms what yesterday's plan anticipated: this question format is a genuine, isolated weak point rather than a minor inconvenience.
+
+**Today's Numbers**
+
+Today's session: **36 questions answered, 42% correct**. That's a sharp drop compared to the 90–100% domain-quiz results from Friday, and it lines up exactly with the hypothesis from yesterday — the issue isn't AWS knowledge, it's the multiple-choice format itself.
+
+Looking at the broader activity data: over the last 12 weeks, there have been 643 questions attempted across 11 active days, with 95h 4m of study time this week and a 30-day accuracy of 62%. The 30-day score trend shows clear improvement — climbing from the low 60s in mid-August up to a plateau around 90%+ through late August and early September — but today's dedicated multiple-choice session pulled the daily figure back down to 42%, well below the 72% pass threshold. This confirms the drop is concentrated specifically in this question type, not a general regression.
+
+**Why This Matters**
+
+Memorizing these specific 36 questions won't transfer directly to the real SAA-C03 exam, since the actual exam questions will be worded differently. But the underlying skill absolutely does transfer: multiple-choice questions require evaluating **each option independently** as true or false, rather than pattern-matching toward one "best" answer the way single-choice questions work. A single misjudged option — one correctly identified as wrong but for the wrong reason, or one incorrectly accepted — turns an otherwise strong answer into a miss.
+
+This is a structurally different skill from what the last week of domain quizzes tested. Those were almost entirely single-answer format, which is why Domain 1–4 scores looked strong (90–100%) while this specific format is exposing a real gap. It's a good thing this surfaced now, with time to address it before booking, rather than during the actual exam.
+
+**What This Confirms From Yesterday's Diagnosis**
+
+Yesterday's plan was to isolate multiple-choice questions as their own category and deep review them individually — checking why each *individual* option is correct or incorrect, not just the final combination. Today's 42% result validates that this was the right call. The gap is real, measurable, and specific enough to close with focused practice rather than broad review.
+
+**Recommended Focus Going Forward**
+
+1. **Treat every option as its own true/false question.** Before comparing combinations, decide independently whether each of the 4–6 choices is correct.
+2. **Watch for partial-credit traps.** A combination with one correct and one plausible-but-wrong answer is the most common way these questions get missed.
+3. **Extract the underlying rule, not the answer set.** Since exact questions won't reappear, the value is in the AWS behavior distinctions being tested (e.g., which VPC facts are universally true vs. situational, or which scaling actions are valid vs. superficially reasonable).
+4. **Re-test with a fresh batch** in a day or two to see whether this same review method produces the same kind of improvement seen in the single-choice domain quizzes (73% → 90%+ in under a week).
+
+Given the strength everywhere else — the 93.75% four-domain average, the deep review of 27 mock exam misses, and the full 45-bookmark sweep — this multiple-choice gap is a well-defined, closeable problem rather than a sign of underlying weakness. It's a reasonable reason to spend one more focused day here before locking in the exam date, without derailing the "book within the next few days" plan.
+
+> **What I understood**
+> - A 42% score on 36 select-two/select-three questions, against a backdrop of 90–100% domain-quiz results days earlier, isolates a format-specific gap rather than a knowledge regression.
+> - Multiple-choice questions demand independent true/false judgment on every option; a single misjudged option — wrong reasoning or wrongly accepted — turns a strong answer into a miss, which single-answer pattern matching never trains for.
+> - The 30-day trend (climbing from low 60s to a 90%+ plateau) shows the underlying knowledge base is solid; today's dip is concentrated specifically in question format, not general regression.
+> - The fix generalizes: extracting the AWS behavior rule behind each option, not memorizing the specific question, is what will transfer to the real exam's differently-worded scenarios.
+
+**Result**
+
+Confirmed a specific, closeable weak spot: select-two/select-three questions scored 42% (36 questions) versus 90–100% on single-answer domain quizzes just one day earlier. This validates yesterday's diagnosis and sets up one more focused day of option-by-option review before locking in the exam date.
+
+---
+
 ## September 5, 2026
 
 **SAA-C03 Exam Prep | Day 37 · 50 Difficult Questions Deep Reviewed — Targeting Multiple-Choice Gaps**

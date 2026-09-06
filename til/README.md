@@ -17,8 +17,6 @@ Today I went through the Tutorials Dojo catalog and marked/answered all multiple
 
 Today's session: **36 questions answered, 42% correct**. That's a sharp drop compared to the 90–100% domain-quiz results from Friday, and it lines up exactly with the hypothesis from yesterday — the issue isn't AWS knowledge, it's the multiple-choice format itself.
 
-Looking at the broader activity data: over the last 12 weeks, there have been 643 questions attempted across 11 active days, with 95h 4m of study time this week and a 30-day accuracy of 62%. The 30-day score trend shows clear improvement — climbing from the low 60s in mid-August up to a plateau around 90%+ through late August and early September — but today's dedicated multiple-choice session pulled the daily figure back down to 42%, well below the 72% pass threshold. This confirms the drop is concentrated specifically in this question type, not a general regression.
-
 **Why This Matters**
 
 Memorizing these specific 36 questions won't transfer directly to the real SAA-C03 exam, since the actual exam questions will be worded differently. But the underlying skill absolutely does transfer: multiple-choice questions require evaluating **each option independently** as true or false, rather than pattern-matching toward one "best" answer the way single-choice questions work. A single misjudged option — one correctly identified as wrong but for the wrong reason, or one incorrectly accepted — turns an otherwise strong answer into a miss.

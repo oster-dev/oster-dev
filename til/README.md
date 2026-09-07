@@ -7,6 +7,46 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 7, 2026
+
+**SAA-C03 Exam Prep | Day 39 · Multiple-Choice Deep Review Complete — Exam Booked for September 9!**
+
+Huge milestone today: after deep reviewing yesterday's multiple-choice questions, you booked the SAA-C03 exam for **Wednesday, September 9, 2026 at 11:30 Berlin time**. This closes the "book within the next few days" plan from Friday's four-domain quiz sweep, and turns weeks of structured preparation into a concrete, two-days-away commitment.
+
+**What I Did Today**
+
+- Deep reviewed all of yesterday's multiple-choice (select-two/select-three) questions, which had scored only 42% (36 questions) — the weakest result of the entire preparation cycle.
+- For each question, went back through every individual answer option rather than just the overall combination, applying the "treat each choice as its own true/false statement" method identified as the fix yesterday.
+- Reconfirmed the underlying AWS behavior distinctions behind each miss, rather than memorizing the specific question wording, since the real exam will phrase things differently.
+- **Booked the exam:** September 9, 2026, 11:30 Berlin time.
+
+**Why This Sequencing Makes Sense**
+
+Tackling the multiple-choice weak spot the day immediately before booking, rather than after, was the right call. It means the exam date wasn't set on hope — it was set right after directly confronting the one structural gap that showed up clearly in the data (42% on a dedicated multiple-choice session, against 90–100% on single-choice domain quizzes the day before). Booking now, with that specific gap addressed, is a much stronger decision point than booking a week ago would have been.
+
+**Where Things Stand, Two Days Out**
+
+| Preparation stage | Status |
+|---|---|
+| Full four-domain quiz sweep (20 Q each) | 93.75% average, all domains ≥90% |
+| Tutorials Dojo mock exam, all 27 misses reviewed | Complete |
+| All 45 bookmarked questions reviewed | Complete |
+| Two full cheat-sheet passes (cold + active recall) | Complete |
+| Multiple-choice weak spot identified and reviewed | Complete (today) |
+| **Exam booked** | **Sep 9, 2026, 11:30 Berlin** |
+
+> **What I understood**
+> - Closing the multiple-choice gap immediately before booking, rather than booking speculatively, turns the exam date into a data-backed decision rather than a hopeful guess.
+> - The fix from yesterday's diagnosis — evaluating each option as its own true/false statement instead of pattern-matching a whole combination — is the method actually applied today across all the missed multiple-choice questions.
+> - Reconfirming the underlying AWS behavior distinction behind each miss, rather than the specific question wording, is what will transfer to the real exam's differently-phrased scenarios.
+> - The full arc from a 58% mock exam on August 31 to a booked exam nine days later reflects a structured, evidence-based preparation cycle: domain review, mock exam analysis, bookmark consolidation, cheat-sheet passes, and format-specific gap closure, each stage validated before moving to the next.
+
+**Result**
+
+Completed a full deep review of yesterday's weakest-performing multiple-choice questions, applying the option-by-option true/false method to close the last identified gap. With that structural weak spot addressed and every other preparation stage already complete, the SAA-C03 exam is now booked for September 9, 2026 at 11:30 Berlin time.
+
+---
+
 ## September 6, 2026
 
 **SAA-C03 Exam Prep | Day 38 · Multiple-Choice Question Sweep — A Clear Weak Spot Surfaces**

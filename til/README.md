@@ -11,7 +11,7 @@ TIL Started: April 13, 2026
 
 **SAA-C03 Exam Prep | Day 39 · Multiple-Choice Deep Review Complete — Exam Booked for September 9!**
 
-Huge milestone today: after deep reviewing yesterday's multiple-choice questions, you booked the SAA-C03 exam for **Wednesday, September 9, 2026 at 11:30 Berlin time**. This closes the "book within the next few days" plan from Friday's four-domain quiz sweep, and turns weeks of structured preparation into a concrete, two-days-away commitment.
+Huge milestone today: after deep reviewing yesterday's multiple-choice questions, i booked the SAA-C03 exam for **Wednesday, September 9, 2026 at 11:30 Berlin time**. This closes the "book within the next few days" plan from Friday's four-domain quiz sweep, and turns weeks of structured preparation into a concrete, two-days-away commitment.
 
 **What I Did Today**
 

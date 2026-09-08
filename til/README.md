@@ -7,6 +7,57 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 8, 2026
+
+**SAA-C03 Exam Prep | Day 40 · Final Day Before the Exam — 40-Question Mixed Quiz at 92.5%**
+
+Today was my last full study day before the SAA-C03 exam tomorrow. I took a custom 40-question mixed quiz spanning all four domains, weighted proportionally to their actual exam weightings (12 questions Domain 1, 10 Domain 2, 10 Domain 3, 8 Domain 4), designed to simulate the real domain balance one final time before test day.
+
+**Result**
+
+**37/40 correct — 92.5%**, comfortably above the 720/1000 (~72%) passing threshold.
+
+| Domain | Questions | Weighting basis |
+|---|---:|---|
+| Domain 1 — Secure Architectures | 12 | 30% of exam |
+| Domain 2 — Resilient Architectures | 10 | 26% of exam |
+| Domain 3 — High-Performing Architectures | 10 | 24% of exam |
+| Domain 4 — Cost-Optimized Architectures | 8 | 20% of exam |
+
+**The Three Misses**
+
+- **KMS direct-encryption limit:** Mixed up the 4 KB KMS limit with the 400 KB DynamoDB max item size — a numeric-anchor mix-up rather than a conceptual gap.
+- **Pilot Light vs. Warm Standby:** Selected Warm Standby for a scenario describing Pilot Light (core services running continuously, full capacity scaled up only during a disaster).
+- **Sticky Sessions vs. externalized session state:** Chose sticky sessions for a scenario requiring horizontal scalability and fault tolerance, where session state needs to live in ElastiCache for Redis instead.
+
+**The Important Pattern**
+
+Two of the three mistakes today were **exact repeats** of errors from Friday's Domain 2 quiz: Pilot Light vs. Warm Standby, and Sticky Sessions vs. externalized state. Everything else in Domain 2 was correct both times. This isolates the very last remaining soft spot with precision — not a domain-wide weakness, but two specific, well-defined concept pairs that hadn't fully locked in yet, surfacing consistently under quiz conditions across four days.
+
+Two final memory anchors going into tomorrow:
+
+> **Pilot Light** = only the core runs continuously; full capacity scales up during a disaster. **Warm Standby** = a smaller but fully functional copy runs continuously, all the time.
+
+> **Sticky sessions are never the right answer** for scalability or fault-tolerance questions — session state belongs in ElastiCache or DynamoDB.
+
+**Where This Leaves Things**
+
+This caps a remarkable six-week arc: a 58% first mock exam on August 31, a full four-domain quiz sweep averaging 93.75% on September 4, a multiple-choice weak spot surfaced and addressed on September 6–7, the exam booked for September 9 at 11:30 Berlin time, and now a final 92.5% mixed-domain check the day before.
+
+The prep is complete. Tonight calls for rest rather than more review — the two repeated errors are now explicitly flagged and easy to recall under pressure if either concept appears tomorrow, and everything else across all four domains has consistently landed at 90%+ over the past four days.
+
+> **What I understood**
+> - A final 92.5% mixed-domain quiz, weighted to the real exam's domain distribution, is the strongest possible confidence signal going into tomorrow — especially after the 58% starting point just nine days earlier.
+> - Two of the three misses today were exact repeats from Friday's Domain 2 quiz, which isolates the last soft spot to two specific concept pairs (Pilot Light vs. Warm Standby, Sticky Sessions vs. externalized state) rather than any broad gap.
+> - Explicitly phrased memory anchors — "Pilot Light = core only, Warm Standby = smaller but fully functional" and "Sticky sessions are never the answer for scalability" — are the kind of crisp rules that stick under exam pressure.
+> - The right move tonight is rest, not more cramming: the knowledge base is stable, the remaining edge cases are now clearly flagged, and the trajectory from 58% to 92.5% over six weeks shows the work is done.
+
+**Result**
+
+Finished the final study day with a 92.5% mixed-domain quiz (37/40), weighted to the real exam's domain balance. The three misses isolate to one numeric-anchor mix-up and two repeated Domain 2 concept pairs that are now explicitly flagged with simple memory rules. With the exam booked for tomorrow at 11:30 Berlin time and six weeks of structured prep complete, tonight is for rest, not review.
+
+---
+
 ## September 7, 2026
 
 **SAA-C03 Exam Prep | Day 39 · Multiple-Choice Deep Review Complete — Exam Booked for September 9!**

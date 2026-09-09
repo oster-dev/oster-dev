@@ -140,7 +140,7 @@ Every project ships with architecture diagrams, full test coverage, CI/CD, and a
 |---|---|---|
 | Cloud Practitioner · CLF-C02 | Month 2 · May 2026 | ✅ [Passed](https://www.credly.com/badges/2c2b32e6-4bc9-4e60-ad56-3cf7bc2775bd/public_url) |
 | Data Engineer Associate · DEA-C01 | Month 3–4 · June/July 2026 | ✅ [Passed](https://www.credly.com/badges/76633228-8b19-4fb6-81bd-ebea0e96f087/public_url) |
-| Solutions Architect Associate · SAA-C03 | Month 5–6 · Aug/Sep 2026 | 📅 Upcoming |
+| Solutions Architect Associate · SAA-C03 | Month 5–6 · Aug/Sep 2026 | ✅ [Passed](https://www.credly.com/badges/323635b9-4840-4a90-8900-a2a86b8082c1/public_url) |
 | ML Engineer Associate · MLA-C01 | Month 7 · October 2026 | 📅 Upcoming |
 
 <br>

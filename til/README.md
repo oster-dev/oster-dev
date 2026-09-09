@@ -7,6 +7,51 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 9, 2026
+
+**SAA-C03 Certification | Day 41 · PASSED — AWS Certified Solutions Architect – Associate**
+
+After 41 days of structured preparation, it's official: **AWS Certified Solutions Architect – Associate**, confirmed via a Credly badge issued by Amazon Web Services Training and Certification. The exam was completed in just 59 minutes against a 130-minute allowance, with a strong feeling walking out of the testing session.
+
+**The Path to Certification**
+
+This result is the outcome of a deliberately data-driven, iterative study process rather than a single cram session:
+
+| Milestone | Date | Result |
+|---|---|---:|
+| Four-domain cheat sheet cycle completed | Aug 30 | Domain 1–4 quizzes: 73–100% |
+| First full Tutorials Dojo mock exam | Aug 31 | 58% (38/65) |
+| All 27 incorrect questions deep reviewed | Sep 1 | Complete |
+| All 45 bookmarked questions deep reviewed | Sep 2 | Complete |
+| Two full cheat sheet passes | Sep 3 | Cold read + active recall |
+| Full four-domain quiz sweep | Sep 4 | 75/80 · 93.75% |
+| Multiple-choice weak spot identified | Sep 5–6 | 42% surfaced, targeted directly |
+| Multiple-choice questions deep reviewed; exam booked | Sep 7 | Booked for Sep 9, 11:30 Berlin |
+| Final 40-question mixed quiz | Sep 8 | 37/40 · 92.5% |
+| **Exam taken and passed** | **Sep 9** | **59 minutes, strong result** |
+
+**What Made This Work**
+
+The trajectory from a **58% first mock exam** to a passed certification nine days later reflects the strength of the underlying study system: cold reading followed immediately by active recall, systematic deep-review of every incorrect answer rather than just memorizing the correct one, targeted isolation of specific weak spots (the multiple-choice question format, and recurring mix-ups like Pilot Light vs. Warm Standby, sticky sessions vs. externalized session state, and S3 Object Lock Compliance vs. Governance mode), and disciplined repetition until those exact patterns stopped reappearing. Even the night before the exam, one last point of uncertainty around S3 Object Lock was resolved and confirmed — that attention to detail through the very end paid off.
+
+**Relevance to the L5 Roadmap**
+
+This certification is a concrete, externally validated milestone within the **Data & Feature Infrastructure ML Platform Engineer L5 roadmap**. The SAA-C03 knowledge base — secure, resilient, high-performing, and cost-optimized AWS architecture design — directly informs infrastructure decisions for ML platforms: storage selection (S3, EFS, FSx for Lustre), compute scaling patterns, and cost governance for data-intensive workloads.
+
+**Next up:** back to the roadmap, building on this foundation.
+
+> **What I understood**
+> - Certification is the outcome of an iterative, evidence-based loop, not a single study session: mock exam → deep review of every miss → bookmark consolidation → cheat-sheet passes → format-specific gap closure → final validation quiz → exam.
+> - The jump from 58% to a pass in nine days confirms that systematically reviewing *why* wrong answers were wrong, rather than memorizing correct letters, is what actually closes knowledge gaps for good.
+> - Isolating and repeatedly testing specific recurring mix-ups (Pilot Light vs. Warm Standby, sticky sessions vs. externalized state, S3 Object Lock modes) until they stopped reappearing was more effective than generic repeated review.
+> - This certification is a tangible checkpoint in the broader L5 roadmap, translating directly into infrastructure decision-making for ML platform storage, compute scaling, and cost governance.
+
+**Result**
+
+Passed the AWS Certified Solutions Architect – Associate exam on September 9, 2026, completing it in 59 minutes. This closes a 41-day structured preparation arc that started at 58% on the first mock exam and ended with a certification that now serves as a concrete milestone within the Data & Feature Infrastructure ML Platform Engineer L5 roadmap.
+
+---
+
 ## September 8, 2026
 
 **SAA-C03 Exam Prep | Day 40 · Final Day Before the Exam — 40-Question Mixed Quiz at 92.5%**

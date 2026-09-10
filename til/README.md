@@ -19,7 +19,7 @@ With SAA-C03 passed, today was about turning certification momentum into concret
 - Ran a realistic time estimate for the remaining Month 5/6 workload: roughly 104 hours across project build, MLflow/Metaflow learning, the open-source contribution, and System Design practice — translating to an estimated 4–6 weeks depending on open-source review latency and normal debugging overhead.
 - Assessed my current skill readiness against the project requirements: existing PySpark ETL experience, Scala reading fluency, Docker/Airflow setup experience, SQL Advanced, and the newly certified AWS architecture knowledge all directly support the next build phase.
 - Defined and fully scoped **Project 1: FeatureForge** — a production-inspired feature platform for real-time personalization, replacing a vague "mini feature store" concept with a precisely bounded, interview-defensible system.
-- Designed the complete six-phase build roadmap, repository structure, feature contracts, AWS production profile, and a four-week execution schedule at the standard 4h/day, 6-days/week cadence.
+- Designed the complete six-phase build roadmap, repository structure, feature contracts, AWS production profile, and a four-week execution schedule at the standard 4h/day cadence.
 
 **Project 1: FeatureForge**
 

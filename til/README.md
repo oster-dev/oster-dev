@@ -7,6 +7,75 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 10, 2026
+
+**Data & Feature Infrastructure Roadmap | Post-Certification Reset — Defining Project 1: FeatureForge**
+
+With SAA-C03 passed, today was about turning certification momentum into concrete engineering direction. This was a planning and architecture day rather than a hands-on coding day: reviewing the full 8-month L5 roadmap, quantifying the remaining Month 5/6 scope, and designing the exact project that will serve as the primary technical proof for Data & Feature Infrastructure / ML Platform work.
+
+**What I Did**
+
+- Reviewed the complete roadmap to Netflix L5 (Data & Feature Infrastructure / ML Platform) and confirmed that SAA-C03 closes out the certification portion of Month 5/6, with Project 1, MLflow, Metaflow, an open-source PR, and System Design practice still open.
+- Ran a realistic time estimate for the remaining Month 5/6 workload: roughly 104 hours across project build, MLflow/Metaflow learning, the open-source contribution, and System Design practice — translating to an estimated 4–6 weeks depending on open-source review latency and normal debugging overhead.
+- Assessed my current skill readiness against the project requirements: existing PySpark ETL experience, Scala reading fluency, Docker/Airflow setup experience, SQL Advanced, and the newly certified AWS architecture knowledge all directly support the next build phase.
+- Defined and fully scoped **Project 1: FeatureForge** — a production-inspired feature platform for real-time personalization, replacing a vague "mini feature store" concept with a precisely bounded, interview-defensible system.
+- Designed the complete six-phase build roadmap, repository structure, feature contracts, AWS production profile, and a four-week execution schedule at the standard 4h/day, 6-days/week cadence.
+
+**Project 1: FeatureForge**
+
+**Core proof statement:**
+
+> FeatureForge provides trusted, versioned, point-in-time-correct features for both offline model training and low-latency online inference.
+
+**Stack:** Python, PySpark, Amazon S3 + Parquet (offline store), Feast (feature definitions, historical retrieval, materialization), Redis via Docker Compose (local online store), DynamoDB (documented AWS production profile), pytest, GitHub Actions, and a Makefile-driven developer experience.
+
+**Explicit V1 boundaries:** No Kafka/Flink (reserved for the Month 7 Streaming Pipeline project), no Kubernetes, no Terraform-heavy infrastructure, no complex ML model as the centerpiece, and no cloud deployment before the local vertical slice is fully correct and tested.
+
+**The Six Build Phases**
+
+1. **Product framing and engineering foundation** — Repository, architecture documentation, and first ADR.
+2. **Reproducible data generation and batch feature computation** — PySpark transformations with partitioned Parquet output.
+3. **Feast integration and temporal correctness** — Point-in-time-correct historical retrieval protected by explicit future-leakage tests.
+4. **Online serving** — Redis materialization, incremental updates, and a small ranking demo.
+5. **Platform reliability** — Data-quality gates, feature-freshness SLOs, run manifests, failure simulations, and runbooks.
+6. **AWS production profile and public release** — S3, IAM least privilege, a DynamoDB online-store alternative, portfolio release, technical article, and a genuine Feast/MLflow open-source contribution.
+
+**Why This Matters**
+
+The certification proved architectural knowledge; FeatureForge is designed to prove infrastructure ownership — the actual day-to-day work of a Data & Feature Infrastructure / ML Platform engineer. The scope was deliberately built to avoid two failure modes: building a shallow demo that only shows "Feast works," or overbuilding with every tool in the ecosystem at once and shipping nothing coherent.
+
+Every phase maps to a real platform concern:
+
+- Temporal correctness.
+- Offline/online feature parity.
+- Reproducible data processing.
+- Reliability under failure.
+- Feature freshness and operational SLOs.
+- Least-privilege access.
+- Clear operational documentation.
+- Interview-defensible architecture decisions.
+
+> **What I understood**
+> - Passing SAA-C03 closes the certification milestone, but the next level of credibility requires demonstrating infrastructure ownership through a complete, production-inspired system.
+> - A strong portfolio project needs a precise proof statement and explicit boundaries; otherwise, adding more tools can produce a broad but shallow demo.
+> - Feature engineering infrastructure is not only about computing features. It must guarantee temporal correctness, prevent future leakage, maintain offline/online parity, support low-latency serving, and make failures observable and recoverable.
+> - Building the local vertical slice before cloud deployment reduces complexity and makes correctness testable before introducing AWS infrastructure concerns.
+> - A documented AWS production profile can demonstrate architectural judgment without forcing the first version of the project into premature cloud infrastructure work.
+
+**Next Steps**
+
+- **Day 1:** Repository setup, initial architecture documentation, first ADR, and baseline CI scaffolding.
+- **Week 1 goal:** Raw synthetic data → PySpark transformations → partitioned Parquet → Feast historical retrieval, working end to end locally.
+- **Following weeks:** Add future-leakage tests, online Redis serving, reliability controls, AWS production documentation, a technical article, and an open-source contribution.
+
+The full four-week execution plan is now documented, moving from local vertical slice to correctness testing, reliability engineering, AWS production profiling, and finally a public release with an article and open-source PR.
+
+**Result**
+
+Completed the post-certification reset and fully defined **FeatureForge** as the primary technical proof project for the Data & Feature Infrastructure / ML Platform roadmap. The project now has a clear product statement, bounded V1 scope, concrete technology choices, six build phases, an AWS production profile, repository structure, feature contracts, and a four-week execution schedule.
+
+---
+
 ## September 9, 2026
 
 **SAA-C03 Certification | Day 41 · PASSED — AWS Certified Solutions Architect – Associate**

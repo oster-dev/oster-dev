@@ -7,6 +7,99 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 11, 2026
+
+**FeatureForge | Day 0 — Public Feature Platform Foundation**
+
+Today I established and published the Day 0 foundation for `FeatureForge`, a production-inspired feature platform for reproducible offline training data and low-latency online ML feature serving.
+
+**Project: [FeatureForge](https://github.com/oster-dev/featureforge)**
+
+The goal was deliberately not to build feature logic yet. Instead, I created the engineering baseline required to build the system reliably over the coming weeks: a reproducible Python environment, package structure, quality checks, local online-store infrastructure, documentation, Git hygiene, and a public GitHub repository.
+
+**Project Foundation**
+
+- Created a production-oriented repository structure with `src/`, `tests/`, `docs/`, `data/`, `feature_repo/`, and `.github/`.
+- Configured the project through `pyproject.toml` and installed the package in editable development mode with `pip install -e ".[dev]"`.
+- Created the `featureforge` Python package under `src/featureforge/`.
+- Added a minimal package smoke test under `tests/unit/test_package.py`.
+- Added a `Makefile` so the most important development commands are repeatable instead of relying on undocumented manual steps.
+
+**Quality and Reproducibility**
+
+- Configured Ruff for linting and formatting checks.
+- Configured pytest for automated tests.
+- Verified the initial project baseline with:
+  - `make validate`
+  - `make lint`
+  - `make test`
+  - `make docker-config`
+- Confirmed that the package imports successfully and that the first unit test passes.
+- Used `.gitignore` to keep local and generated artifacts out of version control, including `.venv/`, `__pycache__/`, `.pytest_cache/`, `.ruff_cache/`, and `*.egg-info/`.
+
+**Local Online Feature Store**
+
+- Added Docker Compose configuration for a local Redis service.
+- Started Redis through the project Makefile with `make docker-up`.
+- Verified service connectivity using `docker exec featureforge-redis redis-cli ping`.
+- Confirmed the expected `PONG` response, proving that the local online-store foundation is reachable.
+
+**Documentation and Project Boundaries**
+
+- Created a `README.md` with the project goal, architecture stack, local setup, validation commands, and Redis workflow.
+- Added `ARCHITECTURE.md` to document the intended offline/online feature architecture and V1 boundaries.
+- Added `CONTRIBUTING.md` to establish a consistent local development and contribution workflow.
+- Added an MIT `LICENSE`.
+- Defined the V1 scope clearly:
+  - Event-time-aware batch features.
+  - Offline/online separation.
+  - Point-in-time-correct retrieval.
+  - Reproducible backfills.
+  - Online materialization.
+  - Data-quality validation.
+  - Freshness monitoring.
+  - Automated testing.
+  - Continuous integration.
+  - Operations documentation.
+- Explicitly excluded Kafka, Flink, Kubernetes, and complex model training from V1 to keep the project focused on the core feature-platform problem.
+
+**Git and GitHub**
+
+- Initialized the local repository with `git init` and standardized the primary branch as `main`.
+- Configured my Git author identity with my GitHub email address before publishing.
+- Created a clean initial commit:
+
+  ```text
+  chore: establish featureforge day zero foundation
+  ```
+
+- Connected the local repository to GitHub through `origin`.
+- Pushed the `main` branch successfully and confirmed that it tracks `origin/main`.
+- Verified the final local state with `git status`: working tree clean and branch up to date with GitHub.
+- Published the project at [github.com/oster-dev/featureforge](https://github.com/oster-dev/featureforge).
+
+**What I Understood**
+
+- A production-minded data or ML platform project begins with reproducibility, testability, documentation, and operational tooling — not with a large amount of business logic.
+- `pyproject.toml`, editable installs, a `src/` layout, unit tests, and a Makefile make local development repeatable and reduce hidden environment assumptions.
+- A `.gitignore` is a reliability and security boundary: it prevents local environments, caches, generated artifacts, and potentially sensitive files from leaking into a public repository.
+- Docker Compose makes local infrastructure dependencies explicit and reproducible; validating Redis with `PONG` is a small but meaningful end-to-end infrastructure check.
+- Git and GitHub are not just file backup tools: clean commits, correct author identity, branch tracking, readable documentation, and a public repository are part of the engineering artifact itself.
+- Limiting V1 scope is an engineering decision. A focused, working offline/online feature foundation is more valuable than an oversized project that claims Kafka, Flink, Spark, Feast, and Kubernetes before those pieces operate together.
+- Day 0 infrastructure work is valuable because it establishes the feedback loop that makes future implementation safe: change code, run validation, detect regressions, and document the result.
+
+**Next Step**
+
+- **Day 1:** Build a deterministic synthetic behavioral-data generator with users, content, timestamped events, duplicates, late-arriving events, and observation labels.
+
+**Result**
+
+Established and published the complete Day 0 foundation for `FeatureForge`. The repository now has a reproducible Python environment, production-oriented package structure, automated quality checks, local Redis infrastructure, architecture and contribution documentation, Git hygiene, and a clean public GitHub baseline.
+
+The project is ready to move from engineering foundation into its first real data-platform capability: deterministic synthetic behavioral data generation.
+
+---
+
 ## September 10, 2026
 
 **Data & Feature Infrastructure Roadmap | Post-Certification Reset — Defining Project 1: FeatureForge**

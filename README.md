@@ -75,13 +75,13 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 ## Projects
 
+**[FeatureForge](https://github.com/oster-dev/featureforge)** | Production-inspired feature platform for reproducible offline training data and low-latency online ML feature serving
+
 **[Kafka + Airflow + Postgres Project Month 4](https://github.com/oster-dev/projects/tree/main/event-stream-pipeline)** | End-to-End Event Stream Pipeline 
 
 **[PYSparkETL Project Month 3](https://github.com/oster-dev/projects/tree/main/Retaildata%20PYSparkETL)** | Retail Data ETL with PySpark
 
-**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)**   | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
-
-**[Projects Overview](https://github.com/oster-dev/projects)**  | Collection of current infrastructure and data projects.
+**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)** | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
 
 ## Current Status · Month 5 of 8
 
@@ -99,10 +99,10 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | ✅ Completed |
 | Airflow | DAGs · Scheduling · Retry · XComs · Backfill | ✅ Completed |
 | System Design | DDD start · DIA book · Netflix Tech Blog notes | ✅ Active |
-| **Feature Store / Feast** | Offline / Online Feature Store, feature definitions, backfill logic | 📅 Month 5 |
-| **GitHub / CI-CD** | Repo hygiene, documentation, GitHub Actions pipeline | 📅 Month 5 |
-| **Project 1: Open Mini Feature Store** | Public, documented feature store with tests, architecture, CI/CD | 📅 Month 5 |
-| **AWS SAA-C03** | AWS Certified Solutions Architect Certification | 📅 Month 5 - 6|
+| **Feature Store / Feast** | Offline / Online Feature Store, feature definitions, backfill logic | 🚧 In Progress |
+| **GitHub / CI-CD** | Repo hygiene, documentation, GitHub Actions pipeline | ✅ Foundation Complete |
+| **Project 1: Open Mini Feature Store** | Public, documented feature store with tests, architecture, CI/CD | 🚧 In Progress |
+| **AWS SAA-C03** | AWS Certified Solutions Architect Certification | ✅ Passed |
 
 <br>
 
@@ -126,7 +126,7 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 | # | Project | Stack | Status |
 |---|---|---|---|
-| 1 | Production-Grade Feature Store | Feast · Spark · AWS S3 · Python · GitHub Actions | 📅 Month 5 |
+| 1 | Production-Grade Feature Store | Feast · Spark · AWS S3 · Python · GitHub Actions | 🚧 In Progress |
 | 2 | Real-Time Streaming Pipeline | Kafka · Flink · AWS · Schema Registry · Monitoring | 📅 Month 7 |
 | 3 | End-to-End ML Workflow | Metaflow · MLflow · AWS · Reproducible training pipeline | 📅 Month 8 |
 

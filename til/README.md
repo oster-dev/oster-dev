@@ -7,6 +7,614 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 14, 2026
+
+**FeatureForge | Day 1 — Deterministic Synthetic Data Foundation Completed ✓**
+
+Today I built the first complete, reproducible data-generation foundation for FeatureForge.
+
+The goal was not to create random demo data. The goal was to build a production-inspired synthetic-data system that models the problems a future feature platform must handle: data contracts, event time versus ingestion time, duplicate deliveries, late-arriving events, ML labels, typed offline storage, and a reproducible command-line workflow.
+
+I started at approximately 09:00 and finished the implementation and documentation work around 18:25.
+
+By the end of the day, FeatureForge could generate a complete synthetic dataset from YAML configuration with one command:
+
+```
+featureforge generate \
+  --config configs/synthetic_data.yaml \
+  --output data/generated
+```
+
+The command loads and validates configuration, generates deterministic data, injects controlled data-quality scenarios, creates observation labels, writes four Parquet tables, and prints an operational summary.
+
+Example production-sized output:
+
+```
+users=500
+content=250
+events=10200
+labels=1000
+
+Duplicate events: 200
+Late events: 306
+```
+
+**Architecture | Layered Synthetic-Data Pipeline**
+
+I structured the implementation into clear layers instead of placing all logic inside one script:
+
+```
+config.py
+    → YAML loading and configuration validation
+
+models.py
+    → Pydantic data contracts
+
+synthetic_data.py
+    → deterministic entity generation and event transformations
+
+storage.py
+    → Parquet persistence
+
+cli.py
+    → command-line orchestration
+```
+
+The complete data flow is now:
+
+```
+YAML configuration
+        ↓
+Pydantic config validation
+        ↓
+deterministic user generation
+        ↓
+deterministic content generation
+        ↓
+deterministic base-event generation
+        ↓
+duplicate-event injection
+        ↓
+late-event injection
+        ↓
+observation-label generation
+        ↓
+SyntheticDataset orchestration
+        ↓
+Parquet persistence
+        ↓
+featureforge generate CLI
+```
+
+This separation matters because generation, storage, and CLI concerns can now evolve independently. Future PySpark transformations, Feast feature definitions, historical retrieval, materialization, and online serving can use the generated Parquet datasets without changing the data-generation contract.
+
+**Python | Executable Data Contracts with Pydantic**
+
+I defined typed Pydantic models for the main datasets:
+
+- `User`
+- `Content`
+- `Event`
+- `ObservationLabel`
+- `SyntheticDataset`
+- `SyntheticDataConfig`
+
+The models make important data assumptions executable instead of leaving them as comments or implicit conventions.
+
+Examples of enforced rules:
+
+- IDs must not be empty.
+- Content duration must be positive.
+- Watch duration cannot be negative.
+- `label_window_end` must be after `observation_time`.
+- `ingested_at` cannot be before `event_time`.
+- An event marked as late must have `ingested_at > event_time`.
+- Event rates must be between `0.0` and `1.0`.
+- `end_time` must be after `start_time`.
+- Late events require a positive `max_late_arrival_hours`.
+
+One important configuration rule I added was:
+
+```
+late_event_rate > 0
+    → max_late_arrival_hours must be > 0
+```
+
+This is a cross-field validation rule. It prevents an invalid configuration where late events are requested but no positive arrival delay is permitted.
+
+The key learning was that validation belongs as early as possible in the system. A configuration contradiction should fail while the config is loaded, not later inside a generator after other work has already started.
+
+**Synthetic Data | Deterministic Generation**
+
+I implemented deterministic generation for users, content, and behavioral events.
+
+The generator uses NumPy's `default_rng()` with a configured base seed. Each pipeline stage receives its own derived seed:
+
+```
+users        → seed
+content      → seed + 1
+base events  → seed + 2
+duplicates   → seed + 3
+late events  → seed + 4
+labels       → seed + 5
+```
+
+This design keeps the entire dataset reproducible while isolating random streams between stages.
+
+For the same configuration and seed, FeatureForge produces the same:
+
+- Users.
+- Content items.
+- Base events.
+- Duplicate deliveries.
+- Late-event selection and delays.
+- Observation labels.
+- Parquet output structure.
+
+This is important for debugging, regression tests, reproducible local development, backfills, and later feature-store workflows.
+
+**Synthetic Data | Users, Content, and Base Events**
+
+I implemented deterministic reference-data generation.
+
+Users contain:
+
+- Stable user IDs such as `user_000001`.
+- Signup timestamps.
+- Country.
+- Plan tier.
+- Acquisition channel.
+
+Content items contain:
+
+- Stable content IDs such as `content_000001`.
+- Title.
+- Genre.
+- Release timestamp.
+- Duration in seconds.
+
+Generated events always reference known user IDs. Non-search events reference known content IDs.
+
+I also implemented deterministic base-event generation with stable identifiers:
+
+```
+event_00000001
+event_00000002
+...
+```
+
+Supported event types are:
+
+- `impression`
+- `click`
+- `play`
+- `watch`
+- `like`
+- `search`
+
+I explicitly modeled behavioral semantics:
+
+```
+search event
+    → content_id=None
+
+play or watch event
+    → watch_seconds > 0
+
+impression, click, like, or search event
+    → watch_seconds == 0
+```
+
+For normal base events, the system correctly uses:
+
+```
+event_time == ingested_at
+is_duplicate == false
+is_late == false
+```
+
+This is a practical example of referential integrity outside a relational database: generated data must still satisfy relationships between entities.
+
+**Data Infrastructure | Duplicate-Event Injection**
+
+I added controlled duplicate-event injection.
+
+A duplicate is modeled as an additional delivery rather than replacing the original event. It receives a new delivery ID and keeps the original behavioral payload:
+
+```
+original:
+event_id=event_00000042
+is_duplicate=false
+
+duplicate:
+event_id=event_00000042_duplicate_01
+is_duplicate=true
+```
+
+The duplicate preserves:
+
+- User ID.
+- Content ID.
+- Event type.
+- Event time.
+- Ingestion time.
+- Session ID.
+- Device type.
+- Watch duration.
+
+The injection function does not mutate the original event list. It returns a new list, which makes the transformation easier to reason about and test.
+
+With the production configuration:
+
+```
+10000 base events
++  200 duplicate deliveries
+--------------------------
+10200 event deliveries
+```
+
+This creates a useful future test case for deduplication logic in feature transformations and data-quality checks.
+
+**Data Infrastructure | Late-Event Injection**
+
+I implemented late-event injection to distinguish user behavior time from arrival time.
+
+FeatureForge now models two different clocks:
+
+| Field | Meaning |
+|---|---|
+| `event_time` | When the user action actually occurred |
+| `ingested_at` | When the platform received or processed the event |
+
+For a late event, the behavioral event does not change. Only the arrival time changes:
+
+```
+event_time    = when the user acted
+ingested_at   = event_time + deterministic positive delay
+is_late       = true
+```
+
+A functional inspection produced:
+
+```
+event_id=event_00000006
+event_type=search
+is_duplicate=False
+is_late=True
+event_time=2026-01-31T14:32:47+00:00
+ingested_at=2026-02-01T12:16:52+00:00
+delay=21:44:05
+```
+
+This was a useful real example because the event crossed a calendar boundary: it occurred on January 31 but arrived on February 1.
+
+The important lesson is that grouping or calculating features by ingestion time alone can be incorrect. For behavioral and historical feature logic, event time and ingestion time have different responsibilities.
+
+With the current configuration:
+
+```
+10200 event deliveries
+× 3% late_event_rate
+---------------------
+306 late events
+```
+
+Late-event delays remain strictly positive and bounded by the configured maximum arrival delay.
+
+**ML Data Foundations | Observation Labels**
+
+I implemented observation labels for future user activity.
+
+Each label answers:
+
+> Did this user have at least one event during the configured future label window?
+
+The label rule is:
+
+```
+observation_time < event_time <= label_window_end
+```
+
+The label window is calculated as:
+
+```
+label_window_end = observation_time + label_horizon_days
+```
+
+Labels deliberately use `event_time`, not `ingested_at`, because the training target should represent real user behavior rather than pipeline arrival time.
+
+A functional inspection verified both positive and negative labels:
+
+```
+label_00000001
+user_id=user_000003
+matching_events=2
+is_active_next_7d=True
+```
+
+```
+label_00000002
+user_id=user_000003
+matching_events=0
+is_active_next_7d=False
+```
+
+This matters because FeatureForge now has both sides of a future training dataset:
+
+```
+features at observation_time
+        ↓
+future activity label
+```
+
+The feature layer has not been implemented yet, but the label contract and temporal boundaries are already present.
+
+**Software Design | Dataset Orchestration**
+
+I added a single orchestration function:
+
+```
+generate_synthetic_dataset(config)
+```
+
+It combines the independent generation stages and returns a typed `SyntheticDataset` containing:
+
+- Users.
+- Content.
+- Events.
+- Labels.
+
+This creates a clean boundary:
+
+```
+generator internals
+        ↓
+SyntheticDataset
+        ↓
+storage or future feature transformations
+```
+
+The storage layer does not need to know how events were generated, and the CLI does not need to know how data is written. This separation will make later PySpark and Feast integration easier.
+
+**Storage | Parquet Persistence and Read-Back Validation**
+
+I created `storage.py` and implemented Parquet persistence for the complete dataset.
+
+FeatureForge now writes:
+
+```
+data/generated/
+├── users.parquet
+├── content.parquet
+├── events.parquet
+└── labels.parquet
+```
+
+I used:
+
+```
+Pydantic model
+    → model_dump()
+    → Pandas DataFrame
+    → Parquet
+```
+
+The read-back check confirmed that important types survive persistence:
+
+```
+event_time      datetime64[ns, UTC]
+ingested_at     datetime64[ns, UTC]
+watch_seconds   int64
+is_duplicate    bool
+is_late         bool
+```
+
+The Event Parquet output correctly preserved:
+
+```
+duplicates=200
+late_events=306
+```
+
+This was important because a data pipeline must preserve the expected schema and semantic columns after reading data back, not merely succeed at writing a file.
+
+**CLI | Reproducible End-to-End Dataset Generation**
+
+I implemented the FeatureForge CLI using Python's standard-library `argparse` and Rich for terminal output.
+
+The CLI entry point is registered through `pyproject.toml`:
+
+```
+[project.scripts]
+featureforge = "featureforge.cli:main"
+```
+
+The command is:
+
+```
+featureforge generate \
+  --config configs/synthetic_data.yaml \
+  --output data/generated
+```
+
+A successful production-sized run printed:
+
+```
+FeatureForge dataset generated
+
+users      500  data/generated/users.parquet
+content    250  data/generated/content.parquet
+events   10200  data/generated/events.parquet
+labels    1000  data/generated/labels.parquet
+
+Duplicate events: 200
+Late events: 306
+```
+
+This completed the first usable developer workflow for the repository: instead of long temporary `python -c` scripts, anyone can reproduce the dataset with one documented command.
+
+**Testing | 41 Tests Passed**
+
+I expanded the project test suite to 41 passing tests.
+
+```
+41 passed in 1.13s
+```
+
+The suite now covers:
+
+- Configuration loading and invalid-config rejection.
+- Cross-field late-event validation.
+- Event-time and ingestion-time validation.
+- Observation-window validation.
+- Deterministic users, content, and base events.
+- Event referential integrity and watch-duration semantics.
+- Duplicate counts, determinism, payload preservation, and input immutability.
+- Late-event counts, determinism, delay boundaries, payload preservation, and input immutability.
+- Observation-label determinism, time windows, and correctness against matching events.
+- Complete dataset orchestration.
+- Parquet file creation, row-count read-back, and schema preservation.
+- CLI argument parsing.
+- CLI integration from YAML configuration to Parquet output.
+
+I also used Ruff throughout the day for formatting, import sorting, and linting:
+
+```
+ruff format src tests
+ruff check src tests
+pytest -v
+```
+
+The practical lesson was that formatting, linting, unit tests, integration tests, and manual functional inspection each detect different classes of problems. Passing unit tests alone is not the same as proving that the CLI, filesystem output, and persisted Parquet data work together.
+
+**Debugging | Configuration Contracts and Shell Quoting**
+
+I encountered and resolved two useful issues.
+
+First, a manual inspection command failed because the required config field `late_event_rate` was missing. I initially questioned whether the config model contained conflicting late-event names, but repository-wide search verified that the project consistently uses only:
+
+```
+late_event_rate
+max_late_arrival_hours
+```
+
+The issue was in the temporary inspection command, not in the project contract.
+
+This reinforced an important debugging habit:
+
+```
+Do not change production code based on an assumption.
+Search the repository and verify the actual contract first.
+```
+
+Second, a Parquet read-back inspection failed because escaped quotes inside a shell-quoted Python command caused a syntax error.
+
+I corrected the command by storing DataFrame values before interpolating them into f-strings:
+
+```
+duplicate_count = events["is_duplicate"].sum()
+late_event_count = events["is_late"].sum()
+```
+
+This was a good reminder that shell quoting and Python quoting are separate layers of syntax and should be kept simple.
+
+**Git and GitHub | Small, Focused, Verified Commits**
+
+I continued using small, focused commits rather than one large Day 1 commit.
+
+Today’s FeatureForge implementation history includes:
+
+```
+78e040b feat: add synthetic data contracts and configuration
+6dc5e75 feat: add deterministic synthetic user and content generator
+43e71ac feat: add deterministic base event generation
+5c49c98 feat: add deterministic duplicate event injection
+8d89079 feat: add deterministic late event injection
+dae9295 feat: add deterministic observation label generation
+81ba83f feat: add synthetic dataset orchestration
+e91d967 feat: add parquet dataset persistence
+8b493cd feat: add dataset generation CLI
+```
+
+Each functional step was tested, inspected, committed, and pushed separately.
+
+At the end of the implementation phase, Git confirmed:
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+```
+
+I also updated the repository documentation:
+
+- `README.md`
+- `ARCHITECTURE.md`
+- `CONTRIBUTING.md`
+
+The documentation now reflects the actual implemented system instead of only the future architecture. It explains setup, CLI usage, Parquet outputs, duplicate and late-event semantics, temporal correctness, testing, and future FeatureForge stages.
+
+**What I Understood Today**
+
+- Synthetic data becomes infrastructure work when it is deterministic, validated, realistic enough to model failure modes, and reproducible through an interface.
+- `event_time` and `ingested_at` are fundamentally different timestamps with different uses.
+- Late data is not simply bad data; it is a normal distributed-systems condition that must be modeled and handled explicitly.
+- Duplicate delivery and late arrival are independent dimensions. A delivery can be normal, duplicated, late, or both duplicated and late.
+- Cross-field configuration validation prevents impossible system states before data generation begins.
+- Labels must use a clearly defined future window and event-time semantics to avoid ambiguity and later leakage.
+- A successful Parquet write is not enough; read-back schema validation is necessary.
+- Pure-ish transformations that return new collections and do not mutate input are easier to test, reason about, and compose.
+- Unit tests, integration tests, linting, formatting, manual inspection, and clean Git commits all contribute different kinds of reliability.
+- A CLI turns internal modules into a reproducible developer workflow.
+- A data foundation is only trustworthy when its semantics are explicit enough for future feature computation and historical retrieval to depend on it.
+
+**Why This Matters for the L5 Data / Feature Infrastructure Path**
+
+Today’s work was not yet Feast, Spark, AWS, or real online feature serving. Those components come later.
+
+However, this is the foundation those components require:
+
+```
+trusted inputs
+        ↓
+explicit data contracts
+        ↓
+reproducible event history
+        ↓
+time-aware labels
+        ↓
+typed offline datasets
+        ↓
+future point-in-time feature computation
+        ↓
+future Feast historical retrieval and materialization
+        ↓
+future online feature serving
+```
+
+A feature store cannot be trustworthy if its input data is ambiguous, non-deterministic, temporally incorrect, or difficult to reproduce.
+
+FeatureForge now has a credible Day 1 data foundation: it produces a production-inspired event dataset with known data-quality scenarios and ML-oriented labels, backed by 41 tests and a reproducible CLI workflow.
+
+**Next Steps**
+
+- Finish the Day 1 documentation commit and confirm the repository is clean.
+- Add dataset metadata or a generation manifest so each run records configuration, seed, counts, timestamps, and output paths.
+- Add initial data-quality checks over generated Parquet datasets.
+- Begin PySpark transformation foundations for event-time-aware feature computation.
+- Implement point-in-time-safe feature calculations using the observation-label table.
+- Add Feast entities, data sources, and the first user-engagement feature view.
+- Later materialize features into Redis and compare offline versus online values.
+
+**Result**
+
+Completed Day 1 with a deterministic, tested, documented, CLI-driven synthetic-data pipeline that creates user, content, event, duplicate, late-event, and observation-label datasets as Parquet artifacts.
+
+The first real FeatureForge building block is now in place: a reproducible event history with explicit temporal semantics and controlled data-quality scenarios that future PySpark, Feast, Redis, and AWS components can safely build upon.
+
+---
+
 ## September 13, 2026
 
 **FeatureForge | Final Day Before Project 1 Execution Begins**

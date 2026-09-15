@@ -7,6 +7,279 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 15, 2026
+
+**FeatureForge | Day 2 — Quality Validation & Run Manifest**
+
+Today I built the quality-validation and auditability layer on top of FeatureForge's deterministic synthetic-data foundation from Day 1.
+
+FeatureForge is Project 1 of my Data & Feature Infrastructure / ML Platform Engineer L5 roadmap. The project is designed to provide reproducible offline training data, low-latency online ML feature serving, point-in-time-correct historical retrieval, and machine-readable auditability through generation manifests.
+
+**Day 2 Goal**
+
+The goal for Day 2 was to make generated data observable and auditable rather than merely reproducible.
+
+The pipeline now does more than create Parquet files. It can validate the generated dataset, explain detected failures through dedicated counters, record the exact configuration and output paths, and preserve the complete state of a generation run in a machine-readable manifest.
+
+**What I Built**
+
+### 1. Quality Validation Layer
+
+Implemented `DatasetQualityReport` in `quality.py` with ten independent quality dimensions:
+
+| Dimension | What It Checks |
+|---|---|
+| Referential integrity | All user and content references exist |
+| Temporal validity | `ingested_at >= event_time` for all events |
+| Event semantics | Search events have no content reference |
+| Watch semantics | Play/watch events have positive duration |
+| Late-event semantics | Late events have positive delay |
+| Label validity | Label windows end after observation time |
+| Volume validation | Event and label counts match expected values |
+
+Each violation increments a dedicated counter instead of failing silently.
+
+The central insight was that quality validation is not only about rejecting data. It is about making failures visible, explainable, and actionable.
+
+### 2. Quality Test Coverage
+
+Created `tests/unit/test_quality.py` with 11 deterministic unit tests:
+
+- One test verifies that a correctly generated dataset passes all checks.
+- Ten tests intentionally create invalid dataset copies.
+- Each invalid dataset targets one specific failure mode.
+- Every test verifies that exactly the expected quality counter increments.
+
+The complete quality test file passes:
+
+```
+pytest tests/unit/test_quality.py -v
+# 11 passed
+```
+
+This test structure gives each validation rule a clear contract and prevents future changes from silently weakening a quality check.
+
+### 3. Generation Run Manifest
+
+Implemented `GenerationRunManifest` in `manifest.py` to capture the complete state of every generation run.
+
+Example manifest structure:
+
+```
+{
+  "generated_at": "2026-09-15T09:13:06.952601+00:00",
+  "config": {
+    "..."
+  },
+  "row_counts": {
+    "users": 500,
+    "content": 250,
+    "events": 10200,
+    "labels": 1000
+  },
+  "quality_report": {
+    "passed": true,
+    "unknown_event_user_reference_count": 0,
+    "invalid_event_time_order_count": 0,
+    "duplicate_count_matches_expected": true
+  },
+  "output_paths": {
+    "users": "output/users.parquet",
+    "content": "output/content.parquet",
+    "events": "output/events.parquet",
+    "labels": "output/labels.parquet"
+  }
+}
+```
+
+The manifest enables:
+
+- Reproducible backfills by capturing the exact configuration.
+- Auditability by storing quality results and output paths.
+- Debugging by linking generated artifacts to their generation run.
+- Downstream automation through a machine-readable contract.
+
+A generated dataset is now accompanied by the metadata needed to understand how it was produced and whether it passed the expected quality checks.
+
+### 4. CLI Integration
+
+Extended `featureforge generate` so the end-to-end workflow now:
+
+1. Generates the synthetic dataset.
+2. Runs quality validation.
+3. Persists the Parquet files.
+4. Writes `run_manifest.json`.
+5. Prints a summary table.
+
+Example output:
+
+```
+           FeatureForge dataset generated            
+┏━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Table   ┃  Rows ┃ Path                            ┃
+┡━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ users   │   500 │ output/day2_e2e/users.parquet   │
+│ content │   250 │ output/day2_e2e/content.parquet │
+│ events  │ 10200 │ output/day2_e2e/events.parquet  │
+│ labels  │  1000 │ output/day2_e2e/labels.parquet  │
+└─────────┴───────┴─────────────────────────────────┘
+Duplicate events: 200
+Late events: 306
+Run manifest: output/day2_e2e/run_manifest.json
+```
+
+The CLI now represents a complete quality-aware data-generation workflow rather than a simple file-writing command.
+
+**Technical Decisions**
+
+### Why Counters Instead of Boolean Flags?
+
+Separate counters per failure mode provide much more diagnostic value than a simple `passed: false`.
+
+In production, I want to answer questions such as:
+
+- How many events failed each validation?
+- Is the problem systemic or limited to a small edge case?
+- Which data-quality rule should be fixed first?
+- Can valid records be processed while invalid records are quarantined?
+
+A boolean can tell me that something is wrong. Counters help explain what is wrong and how large the problem is.
+
+### Why JSON Manifests?
+
+JSON is a good fit for generation manifests because it is:
+
+- Human-readable for debugging.
+- Machine-parseable for CI/CD and monitoring.
+- Git-diffable for audit trails.
+- Language-agnostic for downstream consumers.
+
+The manifest is both an operational artifact and a stable interface between the generation pipeline and future consumers.
+
+### Why Not Fail on the First Error?
+
+The validator collects all errors in one pass instead of stopping at the first violation.
+
+This approach:
+
+- Reduces repeated validation runtime.
+- Provides a complete picture of dataset health.
+- Makes debugging more efficient.
+- Enables prioritization, such as fixing referential-integrity failures before investigating volume mismatches.
+
+The purpose of the quality layer is not only to block bad data. It is also to provide enough information to diagnose and improve the system.
+
+**What I Understood**
+
+- Quality gates are a platform feature, not an afterthought.
+- Explainable error counts are more useful than a simple boolean pass/fail result.
+- Run manifests are essential for reproducible backfills, audits, debugging, and incident response.
+- A generated dataset without its configuration, row counts, quality status, and output paths is difficult to reproduce and investigate.
+- A portfolio project needs both working code and clear operational documentation.
+- Day-by-day iteration creates visible progress while keeping each change focused and verifiable.
+- Validation should produce information that can be consumed by both engineers and automation.
+- Quality checks become more valuable when they are independently tested against intentionally invalid data.
+
+**Repository Status**
+
+Current commit history:
+
+```
+git log --oneline -7
+```
+
+```
+55c716d docs: add quality validation and run manifest documentation
+24e781e feat: add run manifest generation
+cf39a9a feat: add synthetic dataset quality validation
+c76cf34 style: apply ruff formatting
+9909876 docs: document synthetic data generation workflow
+8b493cd feat: add dataset generation CLI
+e91d967 feat: add parquet dataset persistence
+```
+
+All tests pass:
+
+```
+pytest -v
+# 52 passed
+```
+
+Ruff validation also passes:
+
+```
+ruff check src tests
+# All checks passed!
+```
+
+The repository now includes the Day 1 foundation, the Day 2 quality layer, run-manifest generation, CLI integration, documentation, and an end-to-end validated output directory.
+
+**Day 2 Deliverables**
+
+| File or directory | Purpose |
+|---|---|
+| `src/featureforge/quality.py` | Quality validation with explainable counters |
+| `src/featureforge/manifest.py` | Run auditability through configuration, counts, quality, and paths |
+| `tests/unit/test_quality.py` | 11 tests covering valid and invalid datasets |
+| `README.md` | Updated quality-validation and manifest documentation |
+| `output/day2_e2e/` | Validated end-to-end run with Parquet files and manifest |
+
+**What This Enables Next**
+
+### Day 3 — Feature Engineering Pipeline
+
+The next implementation phase is the first feature-computation layer:
+
+- `features.py` — User-level aggregation with Pandas.
+- `feature_schema.py` — Pydantic models for feature contracts.
+- `test_features.py` — Tests for feature logic and temporal behavior.
+- CLI command: `featureforge compute-features`.
+
+The quality and manifest layers now provide the trust boundary around this next stage. Feature computation can consume validated, documented, and traceable input datasets instead of operating on anonymous Parquet files.
+
+**Roadmap Alignment**
+
+FeatureForge now proves end-to-end ownership of:
+
+- Feature data and event-time batch computation.
+- Offline/online feature consistency.
+- Point-in-time correctness.
+- Reproducible backfills.
+- Quality gates and freshness monitoring.
+- Observability, testing, CI, and documentation.
+- Defensible architecture trade-offs.
+
+Day 2 completes the foundation for trusted, versioned, point-in-time-correct features.
+
+**Result**
+
+Completed FeatureForge Day 2 by adding dataset-quality validation, explainable violation counters, generation-run manifests, CLI integration, and end-to-end auditability.
+
+The pipeline now generates data, validates it, persists it, records its metadata, and exposes the complete result through a reproducible command-line workflow. With 52 tests passing and Ruff checks clean, FeatureForge is ready to move from trusted data generation into the first user-level feature-engineering pipeline.
+
+```
+L5 Roadmap Progress | Data & Feature Infrastructure / ML Platform
+- SAA-C03: PASSED on Sep 9, 2026
+- Project 1: FeatureForge — Day 2 complete
+- Day 1 foundation: deterministic synthetic users, content, events, duplicates,
+  late arrivals, and observation labels
+- Day 2 quality layer: referential integrity, temporal validity, event semantics,
+  watch semantics, late-event semantics, label validity, and volume checks
+- Quality report: DatasetQualityReport with dedicated explainable counters
+- Quality tests: 11 tests covering one valid and ten intentionally invalid datasets
+- Run manifest: configuration, generation timestamp, row counts, quality results,
+  and output paths
+- CLI workflow: generate → validate → persist Parquet → write manifest → print summary
+- End-to-end output: output/day2_e2e/
+- Test suite: 52 tests passed
+- Linting: Ruff checks passed
+- Latest commits: quality validation, run manifest, documentation, and formatting
+- Next step: Day 3 — user-level feature aggregation, feature schemas, and
+  feature-computation tests
+```
+
+---
+
 ## September 14, 2026
 
 **FeatureForge | Day 1 — Deterministic Synthetic Data Foundation Completed ✓**

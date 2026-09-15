@@ -257,27 +257,6 @@ Completed FeatureForge Day 2 by adding dataset-quality validation, explainable v
 
 The pipeline now generates data, validates it, persists it, records its metadata, and exposes the complete result through a reproducible command-line workflow. With 52 tests passing and Ruff checks clean, FeatureForge is ready to move from trusted data generation into the first user-level feature-engineering pipeline.
 
-```
-L5 Roadmap Progress | Data & Feature Infrastructure / ML Platform
-- SAA-C03: PASSED on Sep 9, 2026
-- Project 1: FeatureForge — Day 2 complete
-- Day 1 foundation: deterministic synthetic users, content, events, duplicates,
-  late arrivals, and observation labels
-- Day 2 quality layer: referential integrity, temporal validity, event semantics,
-  watch semantics, late-event semantics, label validity, and volume checks
-- Quality report: DatasetQualityReport with dedicated explainable counters
-- Quality tests: 11 tests covering one valid and ten intentionally invalid datasets
-- Run manifest: configuration, generation timestamp, row counts, quality results,
-  and output paths
-- CLI workflow: generate → validate → persist Parquet → write manifest → print summary
-- End-to-end output: output/day2_e2e/
-- Test suite: 52 tests passed
-- Linting: Ruff checks passed
-- Latest commits: quality validation, run manifest, documentation, and formatting
-- Next step: Day 3 — user-level feature aggregation, feature schemas, and
-  feature-computation tests
-```
-
 ---
 
 ## September 14, 2026

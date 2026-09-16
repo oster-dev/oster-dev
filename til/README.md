@@ -7,6 +7,281 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 16, 2026
+
+**FeatureForge | Day 3 — Feature Engineering Pipeline**
+
+Today I built the first feature-computation layer for FeatureForge: user-level engagement features derived from behavioral events.
+
+FeatureForge is Project 1 of my Data & Feature Infrastructure / ML Platform Engineer L5 roadmap. The project is designed to provide reproducible offline training data, low-latency online ML feature serving, point-in-time-correct historical retrieval, and auditability through machine-readable run manifests.
+
+**Day 3 Goal**
+
+The goal for Day 3 was to calculate user-level engagement features from event history while making the temporal boundaries explicit and testable.
+
+The implementation deliberately starts with one focused aggregation function, one typed feature contract, nine dedicated tests, and a CLI workflow. This establishes the correct semantics before scaling the computation with PySpark or integrating Feast.
+
+**What I Built**
+
+### 1. Feature Contracts
+
+Defined `UserEngagementFeatures` in `feature_schema.py` with explicit point-in-time semantics:
+
+```
+class UserEngagementFeatures(BaseModel):
+    user_id: str
+    observation_time: datetime
+    window_days: int
+
+    event_count: int
+    unique_content_count: int
+    total_watch_seconds: int
+    search_count: int
+    play_count: int
+    watch_count: int
+    days_since_last_activity: float | None
+```
+
+Key design decisions:
+
+- `observation_time` is the reference timestamp for feature computation.
+- `window_days` defines the lookback-window size, such as seven days.
+- `days_since_last_activity` is nullable for users with no activity in the selected window.
+
+The feature model also includes cross-field validation to ensure that typed event counts cannot exceed the total event count.
+
+This makes feature assumptions executable and prevents invalid feature records from silently entering downstream workflows.
+
+### 2. Point-in-Time-Correct Aggregation
+
+Implemented `compute_user_engagement_features()` in `features.py`:
+
+```
+def compute_user_engagement_features(
+    dataset: SyntheticDataset,
+    observation_time: datetime,
+    window_days: int,
+) -> UserFeatureBatch:
+    """Compute point-in-time-correct user engagement features.
+
+    Only events with event_time in (observation_time - window_days, observation_time]
+    are included. This strictly excludes any event at or after observation_time,
+    preventing future-data leakage.
+    """
+```
+
+The feature window is defined as:
+
+```
+observation_time - window_days < event_time <= observation_time
+```
+
+The critical boundary decisions are:
+
+- Use `> window_start`, not `>=`.
+- Use `<= observation_time` as the upper bound.
+- Exclude all events after the observation timestamp.
+- Preserve the same semantics for every backfill and future computation.
+
+This prevents future-data leakage, creates unambiguous window boundaries, and enables reproducible historical feature generation.
+
+The implementation also handles:
+
+- Empty event DataFrames.
+- Users with no activity in the selected window.
+- Zero-valued aggregate features for inactive users.
+- `days_since_last_activity=None` when recency is not applicable.
+- Proper Pandas-to-Pydantic type conversion.
+
+### 3. Feature Test Coverage
+
+Created `tests/unit/test_features.py` with nine tests:
+
+| Test | Purpose |
+|---|---|
+| `test_excludes_events_at_or_after_observation_time` | Future events must never appear in features |
+| `test_excludes_events_before_window_start` | Events older than the lookback window must not contribute |
+| `test_user_with_no_events_gets_zeroed_features` | Empty DataFrames are handled correctly |
+| `test_counts_typed_events_correctly` | Search, play, and watch events are classified separately |
+| `test_computes_unique_content_count` | Repeated interactions count once for uniqueness |
+| `test_sums_watch_seconds_within_window` | Watch time includes only in-window values |
+| `test_days_since_last_activity_is_computed_from_most_recent_event` | Recency uses the most recent eligible event |
+| `test_rejects_non_positive_window_days` | The lookback window must be strictly positive |
+| `test_produces_one_feature_record_per_user` | Every user receives exactly one output record |
+
+All tests pass deterministically.
+
+The test suite is especially important here because temporal-boundary errors often produce plausible-looking numbers. Without explicit tests, future leakage can remain invisible.
+
+### 4. Storage Extension
+
+Added `read_synthetic_dataset()` to `storage.py` so generated Parquet data can be loaded back into Pydantic models:
+
+```
+def read_synthetic_dataset(input_dir: Path) -> SyntheticDataset:
+    """Read a synthetic dataset from Parquet files."""
+    users_df = pd.read_parquet(input_dir / "users.parquet")
+    content_df = pd.read_parquet(input_dir / "content.parquet")
+    events_df = pd.read_parquet(input_dir / "events.parquet")
+    labels_df = pd.read_parquet(input_dir / "labels.parquet")
+
+    users = [User(**row) for row in users_df.to_dict("records")]
+    # ... etc
+```
+
+This creates a clean boundary between persisted offline data and feature computation:
+
+```
+Parquet files
+      ↓
+read_synthetic_dataset()
+      ↓
+SyntheticDataset
+      ↓
+feature computation
+```
+
+The feature pipeline no longer depends only on in-memory data generated during the same process. It can read and process persisted datasets as a separate workflow.
+
+### 5. CLI Integration
+
+Added the `compute-features` subcommand:
+
+```
+featureforge compute-features \
+  --input output/day2_e2e \
+  --output output/features_test \
+  --observation-time 2026-03-31T23:59:59+00:00 \
+  --window-days 7
+```
+
+The command reads the generated dataset, computes user-level engagement features, writes the result to Parquet, and prints an operational summary:
+
+```
+✓ Computed features for 500 users
+Observation time: 2026-03-31 23:59:59+00:00
+Window: 7 days
+Output: output/features_test/user_engagement_features.parquet
+```
+
+This makes feature computation reproducible from the command line instead of requiring temporary scripts or manual notebook execution.
+
+**Feature Output Validation**
+
+Computed features for 500 users with a seven-day lookback window.
+
+| Metric | Value |
+|---|---|
+| Shape | `(500, 10)` |
+| Columns | `user_id`, `observation_time`, `window_days`, `event_count`, `unique_content_count`, `total_watch_seconds`, `search_count`, `play_count`, `watch_count`, `days_since_last_activity` |
+| Null values | 121 in `days_since_last_activity` |
+| Mean event count | 1.55 per user |
+| Maximum event count | 6 events by one user |
+
+The 121 null `days_since_last_activity` values are correct. They represent users with no activity during the selected lookback window, for whom recency is not applicable rather than missing due to a pipeline error.
+
+**What I Understood**
+
+- Point-in-time correctness is a design choice, not an automatic library feature. The implementation must explicitly define whether the window uses `>` or `>=` at the lower boundary and `<=` or `<` at the upper boundary.
+- The wrong temporal boundary can silently leak future data into training features while still producing plausible-looking output.
+- Empty Pandas DataFrames break assumptions about available columns. The implementation must check `.empty` before filtering or accessing columns.
+- Nullable features can be intentional. `days_since_last_activity=None` means that recency is not applicable for a user without activity in the selected window.
+- Feature contracts enable early validation. Pydantic cross-field validators can catch impossible records, such as typed event counts exceeding the total event count.
+- Reading persisted Parquet data back into typed models creates a more realistic pipeline boundary than passing in-memory objects directly between stages.
+- Minimal scope is a feature. One aggregation function, one contract, and nine focused tests are enough for Day 3; complexity can be added after the core semantics are proven.
+- Correctness should be established in Pandas before translating the logic to PySpark for larger-scale backfills.
+
+**Repository Status**
+
+Current commit history:
+
+```
+git log --oneline -5
+```
+
+```
+28bc60b feat: add user engagement feature computation
+55c716d docs: add quality validation and run manifest documentation
+24e781e feat: add run manifest generation
+cf39a9a feat: add synthetic dataset quality validation
+c76cf34 style: apply ruff formatting
+```
+
+All tests pass:
+
+```
+pytest -v
+# 61 passed
+```
+
+Ruff validation also passes:
+
+```
+ruff check src tests
+# All checks passed!
+```
+
+The repository now contains the deterministic data foundation, quality and manifest layers, persisted-dataset loading, the first point-in-time-correct feature computation, feature tests, and the `compute-features` CLI workflow.
+
+**Day 3 Deliverables**
+
+| File or directory | Purpose |
+|---|---|
+| `src/featureforge/feature_schema.py` | Pydantic contracts for feature records |
+| `src/featureforge/features.py` | Point-in-time-correct user engagement aggregation |
+| `src/featureforge/storage.py` | `read_synthetic_dataset()` for Parquet input |
+| `src/featureforge/cli.py` | `compute-features` subcommand |
+| `tests/unit/test_features.py` | Nine tests for feature correctness |
+| `output/features_test/user_engagement_features.parquet` | Validated user-feature output |
+
+**What This Enables Next**
+
+### Day 4 — Content Popularity Features
+
+The next feature layer will add `compute_content_popularity_features()` with aggregation per `content_id`.
+
+Planned features include:
+
+- View count.
+- Unique viewers.
+- Average watch duration.
+- Trend score.
+
+This will follow the same temporal-window logic and validation approach as the user-level features.
+
+### Day 5 — Backfills
+
+The following stage will introduce:
+
+- Parameterized `--start-date` and `--end-date` options.
+- Historical feature computation.
+- Idempotency tests.
+- Run manifests for backfill auditability.
+
+### Phase 1 Completion
+
+The broader Phase 1 target remains:
+
+- PySpark transformations for scalable backfills.
+- Partitioned Parquet feature datasets.
+- Feast integration for feature definitions and historical retrieval.
+
+**Roadmap Alignment**
+
+FeatureForge Phase 1 requires:
+
+> Calculate initial user engagement features and write partitioned Parquet by event date and feature view.
+
+Day 3 completes the first half of this requirement. The Pandas implementation establishes the correct aggregation semantics and temporal boundaries, which can later be translated to PySpark for scale.
+
+**Result**
+
+Completed FeatureForge Day 3 by building the first point-in-time-correct feature-engineering layer. The project can now read persisted synthetic data, compute user-level engagement features for a defined observation timestamp and lookback window, validate the resulting feature records, and write the output as Parquet through the CLI.
+
+The first feature computation is intentionally small but production-relevant: it establishes temporal correctness, typed contracts, edge-case behavior, test coverage, and a clean interface for future content features, backfills, PySpark transformations, and Feast integration.
+
+---
+
 ## September 15, 2026
 
 **FeatureForge | Day 2 — Quality Validation & Run Manifest**

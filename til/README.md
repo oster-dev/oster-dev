@@ -7,6 +7,350 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 17, 2026
+
+**FeatureForge | Days 4–5 — Content Popularity Features & Idempotent Partitioned Backfills**
+
+Today I completed two closely related FeatureForge milestones in one implementation session: content-level popularity features and date-range backfills. Both were implemented, tested, documented, and shipped incrementally.
+
+FeatureForge now has a real offline feature-pipeline shape:
+
+```
+deterministic source data
+        ↓
+point-in-time feature computation
+        ↓
+partitioned Parquet feature store
+        ↓
+idempotent date-range backfill
+        ↓
+auditable run manifest
+```
+
+This is a significant step beyond in-memory feature computation. The project now resembles the structure expected from Spark batch jobs and Feast offline stores, while still keeping the reference implementation small and fully testable.
+
+**Project Context**
+
+FeatureForge is Project 1 of my Data & Feature Infrastructure / ML Platform Engineer L5 roadmap.
+
+The platform is being built to support:
+
+- Reproducible offline training data.
+- Low-latency online ML feature serving.
+- Point-in-time-correct historical retrieval.
+- Idempotent backfills.
+- Partitioned offline feature storage.
+- Auditability through machine-readable run manifests.
+
+**Day 4 — Content Popularity Features**
+
+### Feature Contracts
+
+Defined `ContentPopularityFeatures` and `ContentFeatureBatch` as Pydantic contracts, mirroring the existing user-engagement feature contracts.
+
+The content feature contract provides a typed boundary for all content-level aggregates and keeps the same point-in-time fields and window semantics as the user-level features.
+
+This symmetry is intentional:
+
+```
+UserEngagementFeatures
+ContentPopularityFeatures
+        ↓
+same observation-time model
+same lookback-window model
+same validation principles
+```
+
+Using the same temporal model for both feature groups reduces the chance that user and content features silently use different definitions of "historical."
+
+### Aggregation Logic
+
+Implemented aggregation per `content_id` across:
+
+- View count.
+- Unique viewer count.
+- Total watch time.
+- Average watch time.
+- Event-type counts.
+- Recency based on the most recent eligible event.
+
+The aggregation uses the same strict point-in-time boundary as the user-level feature computation:
+
+```
+observation_time - window_days < event_time <= observation_time
+```
+
+Any event at or after the observation timestamp is excluded. This prevents future information from entering the content features.
+
+### Zero-Filling Inactive Content
+
+Content items with no events in the selected window receive zero-valued features instead of being dropped.
+
+This guarantees:
+
+```
+one feature record per content item
+```
+
+That behavior is important for downstream training and serving because consumers can distinguish between:
+
+- A content item with zero activity.
+- A missing content item caused by an incomplete aggregation.
+
+### Content Feature Tests
+
+Added unit tests covering:
+
+- Events before the lookback window.
+- Events at or after the observation timestamp.
+- Event-type counts.
+- Unique viewer counts.
+- Average watch duration.
+- Recency based on the most recent event.
+- Rejection of non-positive window sizes.
+- Zero-filled content items without activity.
+
+The content feature implementation now follows the same tested temporal model as the user-level feature pipeline.
+
+**Day 5 — Idempotent Partitioned Feature Backfills**
+
+### Backfill Module
+
+Built `src/featureforge/backfill.py` to compute both feature groups across a date range instead of a single observation timestamp.
+
+The backfill layer iterates over an inclusive date range, computes features at UTC midnight for each observation date, and writes deterministic partitions for both feature views.
+
+### CLI Command
+
+Added the following CLI command:
+
+```
+featureforge backfill \
+  --input <source-data> \
+  --output <offline-store> \
+  --start-date YYYY-MM-DD \
+  --end-date YYYY-MM-DD \
+  --window-days N
+```
+
+This makes historical feature generation repeatable and suitable for future orchestration.
+
+### Offline Store Layout
+
+Designed a stable, partitioned offline-store layout:
+
+```
+<output>/
+├── user_engagement_features/
+│   └── observation_date=YYYY-MM-DD/
+│       └── features.parquet
+├── content_popularity_features/
+│   └── observation_date=YYYY-MM-DD/
+│       └── features.parquet
+└── manifests/
+    └── backfill-<start>-to-<end>.json
+```
+
+The partition key makes the observation date explicit in the storage path and keeps user and content feature views separate.
+
+### Idempotent Overwrites
+
+Made backfills idempotent.
+
+Rerunning the same date range:
+
+- Writes to the same partition paths.
+- Overwrites the existing partition deterministically.
+- Does not append duplicate files.
+- Does not create additional output partitions.
+- Produces identical feature results for the same source data and configuration.
+
+A real local run confirmed the behavior:
+
+```
+Three-day backfill:
+- Exactly seven files produced.
+- Repeating the identical backfill still produced exactly seven files.
+```
+
+The seven files consist of:
+
+- Three user-feature partitions.
+- Three content-feature partitions.
+- One backfill manifest.
+
+This is an important operational property because backfills are routinely retried after failures or rerun after code and configuration review.
+
+### Backfill Manifest
+
+Added a JSON run manifest capturing:
+
+- Start date.
+- End date.
+- Window size.
+- Run status.
+- Output paths.
+- Entity counts per partition.
+- Feature views included in the run.
+
+The manifest creates an auditable record of the backfill and makes it possible to understand which partitions were produced, with which parameters, and with what output counts.
+
+**Testing and Quality Coverage**
+
+Added tests for:
+
+- Inclusive date ranges.
+- Reversed date-range rejection.
+- UTC-midnight observation timestamps.
+- Correct user-feature partition writes.
+- Correct content-feature partition writes.
+- Idempotent overwrites.
+- Rejection of non-positive window sizes.
+- Backfill manifest correctness.
+- Run metadata and every partition being recorded.
+- CLI argument handling.
+- Full CLI execution against real generated Parquet input.
+
+The integration test `test_cli_backfill.py` exercises the complete backfill command end to end.
+
+The test suite now validates not only individual feature calculations, but also the storage layout, rerun behavior, metadata, and command-line workflow.
+
+**Git Workflow Discipline**
+
+I kept the implementation incremental and reviewable:
+
+```
+39fafe3  feat: add point-in-time content popularity features
+a6b7e01  feat: add idempotent partitioned feature backfills
+d1369be  docs: document feature backfills and offline feature store
+```
+
+I also followed several Git hygiene practices:
+
+- Staged files explicitly by path instead of using `git add .`.
+- Ran `git diff --cached --check` before committing.
+- Kept documentation changes in their own commit.
+- Separated feature logic, backfill logic, and documentation in the commit history.
+- Verified formatting, linting, and tests before closing the work.
+
+The resulting history reads clearly:
+
+```
+feature logic
+    ↓
+backfill logic
+    ↓
+documentation
+```
+
+That structure makes the changes easier to review and the project history easier to understand.
+
+**Quality Gate**
+
+The final validation passed:
+
+```
+25 files already formatted
+All checks passed!
+80 passed in 2.70s
+```
+
+The repository is now cleanly formatted, linted, and tested across the complete Day 4 and Day 5 implementation.
+
+**What I Understood**
+
+- Content-level features should use the same temporal boundary model as user-level features; otherwise, different feature groups can describe different versions of history.
+- Zero-filling entities with no activity is often more useful than dropping them because it preserves one output record per known entity.
+- Backfills must be idempotent because reruns are a normal operational behavior, not an exceptional event.
+- A stable partition path is part of the offline-store contract, not merely a filesystem detail.
+- Overwriting deterministic partitions is safer than appending results when the same backfill may be retried.
+- Run manifests make backfills auditable by recording parameters, status, output paths, and counts.
+- Explicit counters and metadata are more valuable than a single success flag when diagnosing pipeline behavior.
+- Staging Git changes by path helps prevent unrelated files from entering a commit.
+- `git diff --cached --check` is a small but effective pre-commit guard against whitespace and patch-quality issues.
+- Documentation should describe the implemented system, while feature and backfill code should remain separate and independently reviewable.
+- Building a tested Pandas reference implementation before introducing Spark creates a correctness oracle for later parity tests.
+
+**What This Pushes the Project Toward**
+
+FeatureForge is no longer just in-memory feature computation on synthetic data.
+
+It now has a real offline pipeline shape:
+
+```
+deterministic source data
+        ↓
+point-in-time user features
+        ↓
+point-in-time content features
+        ↓
+partitioned Parquet feature store
+        ↓
+idempotent date-range backfill
+        ↓
+auditable backfill manifest
+```
+
+That is the same general shape that scalable Spark batch jobs and Feast offline stores expect, which is why establishing this local reference implementation comes before introducing Spark.
+
+**What I Deliberately Did Not Do Yet**
+
+I deliberately did not add:
+
+- Spark.
+- Feast.
+- Redis online materialization.
+- Airflow or another orchestrator.
+- Kafka or Flink.
+- Kubernetes or cloud deployment.
+
+Those components come later, after the local reference implementation is fully proven correct through tests.
+
+The next step is not another feature group. It is a PySpark transformation layer with parity tests against today's Pandas-based reference logic.
+
+**Day 4 and Day 5 Deliverables**
+
+| Area | Deliverable |
+|---|---|
+| Content features | `ContentPopularityFeatures` and `ContentFeatureBatch` |
+| Content aggregation | Views, unique viewers, watch time, averages, event counts, and recency |
+| Backfill implementation | `src/featureforge/backfill.py` |
+| CLI | `featureforge backfill` |
+| Offline store | Date-partitioned user and content feature Parquet datasets |
+| Idempotency | Deterministic partition overwrites without duplicate files |
+| Manifest | Backfill metadata, status, paths, and entity counts |
+| Tests | Unit and end-to-end CLI coverage |
+| Documentation | Offline feature-store and backfill workflow |
+| Quality gate | 80 tests passed, Ruff checks clean |
+
+**Roadmap Alignment**
+
+FeatureForge is progressing toward the L5 roadmap requirement of building trusted, versioned, point-in-time-correct features.
+
+The project now demonstrates ownership of:
+
+- Event-time-aware batch computation.
+- User-level feature aggregation.
+- Content-level feature aggregation.
+- Partitioned offline storage.
+- Idempotent historical backfills.
+- Run-level auditability.
+- Deterministic outputs.
+- Testable feature contracts.
+- Clear operational boundaries.
+
+The next major engineering step is to translate the validated Pandas reference logic into PySpark while preserving exact semantic parity.
+
+**Result**
+
+Completed FeatureForge Days 4 and 5 in one focused session by adding point-in-time-correct content popularity features and idempotent partitioned backfills.
+
+The project now computes both user and content feature groups, preserves one output record per entity, writes stable date-partitioned Parquet datasets, supports deterministic date-range backfills, and records every backfill run in a JSON manifest.
+
+With 80 tests passing and all Ruff checks clean, the local offline feature-store reference implementation is ready for the next phase: PySpark transformations with parity tests against the Pandas implementation.
+
+---
+
 ## September 16, 2026
 
 **FeatureForge | Day 3 — Feature Engineering Pipeline**

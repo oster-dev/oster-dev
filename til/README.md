@@ -7,6 +7,284 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 18, 2026
+
+**FeatureForge | Day 6 — PySpark Parity Layer for Point-in-Time Features**
+
+Today I added a second execution engine for both FeatureForge feature views: a PySpark implementation that is validated against the existing Pandas reference logic.
+
+The focus was not simply to "use Spark." The goal was to preserve the exact feature semantics across execution engines and prove that the distributed implementation produces the same results as the trusted local reference implementation.
+
+**Day 6 Goal**
+
+The goal for Day 6 was to introduce PySpark transformations without changing the established feature contract:
+
+```
+Pandas reference implementation
+        ↓
+PySpark implementation
+        ↓
+parity tests
+        ↓
+same point-in-time feature semantics
+```
+
+This creates a correctness baseline before moving toward larger-scale batch processing.
+
+**PySpark Feature Implementations**
+
+Added `src/featureforge/spark_features.py` with two Spark-based feature functions:
+
+```
+compute_user_engagement_features_spark(...)
+compute_content_popularity_features_spark(...)
+```
+
+Both implementations preserve the same semantics as the Pandas reference in `features.py`:
+
+- Exact temporal window:
+
+  ```
+  observation_time - window_days < event_time <= observation_time
+  ```
+
+- Exclusion of events at or after `observation_time`.
+- No future-data leakage.
+- Identical typed event-count logic:
+  - `search_count`
+  - `play_count`
+  - `watch_count`
+- Identical `days_since_last_activity` calculation.
+- Identical `days_since_last_view` calculation.
+- Same zero-feature branch for users or content items with no activity in the selected window.
+- Identical rejection of non-positive `window_days`.
+
+The goal was semantic parity, not merely similar output columns.
+
+**Parity Testing**
+
+Added `tests/unit/test_spark_features.py` with nine parity tests covering:
+
+- Empty datasets.
+- Exact observation-time boundaries.
+- Events one second after the observation timestamp.
+- Events exactly at the lower window boundary.
+- Typed event aggregation across multiple users and content items.
+- Floating-point equality for `average_watch_seconds`.
+- Randomized datasets with 200–300 events.
+- Zero-feature output for entities without activity.
+- Identical rejection of non-positive `window_days`.
+
+The tests compare the Pandas and PySpark results rather than validating Spark in isolation.
+
+This matters because a Spark implementation can pass internal tests while still disagreeing with the reference implementation on temporal boundaries, null handling, aggregation behavior, or floating-point results.
+
+**The Timezone Bug**
+
+The first Spark implementation exposed a real timezone bug.
+
+I initially passed Python `datetime` objects with `tzinfo=UTC` directly into Spark `TimestampType` columns. Four of the nine parity tests failed with an exactly one-hour offset in:
+
+- `days_since_last_activity`
+- `days_since_last_view`
+
+The failure was subtle because the resulting values still looked plausible.
+
+The observed difference was:
+
+```
+-0.041666666666666664 days
+```
+
+That value is exactly negative one hour, not negative one minute.
+
+**Debugging the Offset**
+
+I first tried setting the Spark SQL session timezone to UTC:
+
+```
+spark.sql.session.timeZone = "UTC"
+```
+
+The problem persisted.
+
+The error showed that the issue was not simply the configured Spark SQL timezone. Spark's `TimestampType` conversion crosses the Python-to-JVM boundary through Py4J and Arrow. During that round trip, naive datetime values can be interpreted using the host machine's local timezone.
+
+The host timezone was:
+
+```
+Europe/Bucharest
+```
+
+That local timezone silently shifted values by the local UTC offset during the Python → JVM → Python conversion.
+
+The important lesson was that timezone-aware Python objects are not enough to guarantee safe behavior at a cross-runtime boundary.
+
+**Structural Fix: UTC Epoch Microseconds**
+
+I removed direct Python `datetime` values from the Spark boundary.
+
+Before creating Spark DataFrames, event timestamps are converted to UTC epoch microseconds and stored as `LongType` integers:
+
+```
+def _to_epoch_micros(value: datetime) -> int:
+    if value.tzinfo is None:
+        raise ValueError("event_time must be timezone-aware")
+
+    return int(value.astimezone(UTC).timestamp() * 1_000_000)
+```
+
+After collecting Spark results, the integer representation is converted back into a timezone-aware UTC datetime:
+
+```
+def _from_epoch_micros(value: int) -> datetime:
+    return datetime.fromtimestamp(value / 1_000_000, tz=UTC)
+```
+
+The resulting boundary model is:
+
+```
+Python datetime
+        ↓
+UTC normalization
+        ↓
+epoch microseconds as LongType
+        ↓
+Spark filtering and aggregation
+        ↓
+epoch microseconds
+        ↓
+timezone-aware UTC datetime
+```
+
+This makes `_filter_window` compare plain integer values instead of timezone-sensitive Spark timestamps.
+
+**Why This Fix Is Correct**
+
+Encoding timestamps as UTC epoch integers is the correct structural solution for this boundary because:
+
+- An integer has no timezone to reinterpret.
+- The representation is explicit.
+- Python and JVM runtimes exchange the same value.
+- Local machine timezone settings cannot silently shift the timestamp.
+- Window comparisons become deterministic.
+- The conversion logic can be tested independently.
+- The approach works consistently across local development and CI environments.
+
+This was not a test workaround. It removed the ambiguity at the system boundary.
+
+**What I Understood**
+
+- Parity tests are not merely a confirmation exercise; they can expose real semantic bugs between two execution engines.
+- Timezone bugs are especially dangerous in feature pipelines because they may produce plausible values instead of obvious failures.
+- A one-hour recency shift can pass Pydantic validation while still corrupting training or serving features.
+- Setting a framework timezone configuration is not always sufficient when values cross language-runtime boundaries.
+- At Python/JVM boundaries, time should be normalized explicitly and encoded in a timezone-independent representation.
+- UTC epoch microseconds provide an unambiguous interchange format for timestamp values.
+- A reference Pandas implementation is valuable because it gives the PySpark implementation something concrete to match.
+- Distributed processing should preserve existing feature semantics before it introduces scale.
+- Structural fixes are preferable to configuration-based workarounds when the problem is caused by ambiguous data representation.
+
+**Git Commit History**
+
+Today's implementation was split into focused commits:
+
+```
+d6d4ec3  feat: add PySpark parity layer for point-in-time features
+a1f61b9  docs: document PySpark parity layer and timezone fix
+```
+
+Both commits were pushed successfully, and `main` is synchronized with `origin/main`.
+
+The commit structure keeps the implementation and its architectural explanation separate while preserving a clear history of the change.
+
+**Quality Gate**
+
+The final validation passed:
+
+```
+ruff format --check .
+ruff check .
+pytest -v
+```
+
+```
+27 files already formatted
+All checks passed!
+89 passed in 8.17s
+```
+
+The complete test suite now validates both the Pandas reference implementation and the PySpark parity layer, including the timezone-sensitive cases that initially exposed the bug.
+
+**What This Proved Today**
+
+Parity testing caught a real, silent bug that would have produced incorrectly computed recency features in production.
+
+The bug did not crash the pipeline. It produced a one-hour shift in values such as:
+
+```
+days_since_last_view
+days_since_last_activity
+```
+
+The values still satisfied the Pydantic constraints and could have passed superficial inspection. Only comparison against the reference implementation exposed the semantic mismatch.
+
+This is exactly the type of bug a feature platform must detect before its outputs feed model training or online inference.
+
+**What I Deliberately Did Not Do**
+
+I did not use a partial fix such as:
+
+```
+"Just set spark.sql.session.timeZone to UTC and hope."
+```
+
+I also did not weaken the parity tests or introduce special cases for the failing examples.
+
+Instead, I removed the ambiguity at the Python/JVM boundary by using UTC epoch microseconds. This took more effort than changing a configuration property, but it produced a structurally correct implementation that is easier to reason about and safer across environments.
+
+That distinction matters more than simply being able to say that PySpark was installed and used.
+
+**Roadmap Alignment**
+
+FeatureForge now has two independently executable feature engines:
+
+```
+Pandas reference logic
+        ↓
+trusted semantic baseline
+
+PySpark implementation
+        ↓
+scalable execution path
+
+parity tests
+        ↓
+semantic equivalence
+```
+
+This directly supports the L5 Data & Feature Infrastructure roadmap by demonstrating:
+
+- Batch feature computation.
+- Point-in-time correctness.
+- Cross-engine semantic parity.
+- Timezone-safe data processing.
+- Test-driven distributed transformation design.
+- Production-oriented debugging.
+- Explicit runtime-boundary handling.
+
+The next step is to build on this parity layer for larger-scale backfills and future Feast integration.
+
+**Result**
+
+Completed FeatureForge Day 6 by adding PySpark implementations for user engagement and content popularity features, backed by parity tests against the Pandas reference logic.
+
+The parity suite caught a real one-hour timezone bug caused by direct Python `datetime` values crossing the Python/JVM boundary through Spark `TimestampType`. I fixed the issue structurally by converting timestamps to UTC epoch microseconds before Spark processing and restoring timezone-aware UTC datetimes after collection.
+
+With 89 tests passing and all Ruff checks clean, FeatureForge now has a validated PySpark execution path that preserves the same point-in-time feature semantics as the Pandas implementation.
+
+---
+
 ## September 17, 2026
 
 **FeatureForge | Days 4–5 — Content Popularity Features & Idempotent Partitioned Backfills**

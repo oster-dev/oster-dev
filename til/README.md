@@ -7,6 +7,55 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 19, 2026
+
+**FeatureForge | Day 7 — Spark-Native Parquet Backfills Complete ✓**
+
+Today I completed and validated the Spark-native Parquet backfill path with full engine parity against the Pandas reference implementation.
+
+**What I Built**
+
+- Added two Spark feature-computation paths in `spark_features.py`:
+  - `compute_*_features_spark()` for in-memory `SyntheticDataset` parity tests.
+  - `compute_*_features_from_parquet()` for the production disk-based path.
+- Used UTC epoch microseconds with Spark `LongType` to avoid JVM timezone conversion bugs.
+- Added deterministic Parquet writing in `storage.py` with `coerce_timestamps="us"` for Spark 4.x compatibility.
+- Added engine selection through `engine: Literal["pandas", "spark"]` in `backfill.py`.
+- Added parity tests verifying that Spark features from Parquet match the Pandas reference for users and content.
+- Added validation for non-positive `window_days`.
+- Extended run manifests with Git SHA, engine, input/output paths, record counts, duration, and status.
+
+**Key Learnings**
+
+- Spark `TimestampType` can be shifted by the JVM's default timezone during Python ↔ Spark conversion, even when `spark.sql.session.timeZone` is set to UTC.
+- UTC epoch integers have no timezone ambiguity and are safer at runtime boundaries.
+- Both engines use identical window semantics:
+
+  ```text
+  (observation_time - window_days, observation_time]
+  ```
+
+- Parquet timestamps must be coerced to microseconds with `coerce_timestamps="us"` for Spark 4.x compatibility.
+- Entity IDs must be read separately from Parquet so users or content items with zero events still appear in Spark output, matching the Pandas reference exactly.
+- Full engine parity includes values, schema, null handling, timestamps, zero-activity entities, and audit metadata.
+
+**Commit:**
+
+```text
+d1394cf feat: add Spark-native Parquet backfills
+```
+
+Successfully pushed to `origin/main`.
+
+**Next Step — Day 8**
+
+- Add Feast entities, sources, and feature views.
+- Add Redis materialization through Docker Compose.
+- Implement historical retrieval and point-in-time-correctness tests.
+- Add a `make demo` command for a one-command end-to-end workflow.
+
+---
+
 ## September 18, 2026
 
 **FeatureForge | Day 6 — PySpark Parity Layer for Point-in-Time Features**

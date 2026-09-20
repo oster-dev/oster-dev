@@ -7,6 +7,49 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 20, 2026
+
+**FeatureForge | Day 8 — Feast Historical Feature Retrieval complete ✓**
+
+Implemented Feast integration for point-in-time correct historical feature retrieval, connecting Spark-generated Parquet feature snapshots with observation data through a production-grade feature store configuration.
+
+**What I built**
+- Feast configuration in `feature_repo/`:
+  - `feature_store.yaml` — SQLite-based offline and online store for local development
+  - `sources.py` — `FileSource` with `partition_by_timestamp=True` for efficient Spark Parquet backfills
+  - `entities.py` — `user_id` and `content_id` as Feast entities
+  - `feature_views.py` — `user_features` and `content_features` with `timestamp_col` and `created_timestamp_col`
+  - `feature_services.py` — `personalization_service` for curated feature selection
+- Historical retrieval demo in `historical_retrieval_demo.py`:
+  - Observation data with `event_timestamp` (user interactions) and `label_timestamp` (target labels)
+  - `get_historical_features()` with point-in-time join semantics
+  - Output: `historical_features.parquet` with leakage-free training data
+- CLI integration in `src/featureforge/cli.py`:
+  - `featureforge retrieve` command with `--observations` flag
+  - Automatic output to `data/historical_features.parquet`
+- `.gitignore` updates:
+  - `feature_repo/data/` — excludes local Feast SQLite databases (`registry.db`, `online_store.db`)
+  - `feature_repo/__pycache__/` — excludes Python bytecode
+
+**Key learnings**
+- Feast performs **point-in-time joins** by matching `event_timestamp` to the latest feature with `timestamp <= event_timestamp` — prevents future-data leakage
+- `timestamp_col` = feature event time (when the feature value became valid), `created_timestamp_col` = write time (when Feast recorded it) — both required for correctness
+- `partition_by_timestamp=True` on `FileSource` enables efficient incremental backfills by pruning irrelevant Parquet partitions
+- Observation data can carry multiple timestamp columns (`event_timestamp`, `label_timestamp`) — Feast uses only `event_timestamp` for the join, labels pass through unchanged
+- Spark-generated Parquet files work seamlessly as Feast offline sources when schema matches (entity keys, feature columns, `timestamp`, `created_timestamp`)
+
+**Commit**
+- `fc3a446` — "feat: add Feast historical feature retrieval" (8 files, +178/-1)
+- Successfully pushed to `origin/main`
+
+**What's next (Day 9)**
+- Training dataset generation from `historical_features.parquet`
+- First model training run with correct point-in-time features
+- Feature validation tests (null checks, distribution drift)
+- CI/CD pipeline for feature backfills + Feast apply
+
+---
+
 ## September 19, 2026
 
 **FeatureForge | Day 7 — Spark-Native Parquet Backfills Complete ✓**

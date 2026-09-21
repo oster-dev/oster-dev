@@ -7,6 +7,125 @@ TIL Started: April 13, 2026
 
 ---
 
+# September 21, 2026
+
+**FeatureForge | Day 9 — ML-Ready Behavioral Training Pipeline Complete ✓**
+
+Today I completed the end-to-end ML training pipeline with behavioral synthetic data, Feast historical retrieval, and time-based model evaluation. The key breakthrough was fixing the synthetic data generator to create realistic behavioral differences between users, which gave the model genuine predictive signal.
+
+**What I Built**
+
+- Enhanced synthetic data generation:
+  - `behavioral` mode with persistent per-user `activity_weight`
+  - Event counts from `Poisson(activity_weight * base_rate)`
+  - Realistic engagement heterogeneity without label leakage
+- Feast integration:
+  - `entities.py` — `user` and `content` entities
+  - `sources.py` — `FileSource` pointing to `output/offline_store`
+  - `feature_views.py` — 7-day lookback feature views
+  - `feature_services.py` — curated feature services
+  - `historical_retrieval_demo.py` — point-in-time training dataset generation
+- ML training pipeline:
+  - `scripts/train_baseline.py` — sklearn Pipeline with time-based splits
+  - `scripts/diagnose_baseline.py` — diagnostic analysis and drift detection
+  - Persisted `baseline_logreg_pipeline.joblib` + `baseline_logreg_metrics.json`
+- Comprehensive documentation:
+  - Updated `README.md` with ML pipeline and Feast workflows
+  - Updated `ARCHITECTURE.md` with complete Day-9 additions
+  - Updated `CONTRIBUTING.md` with ML and Feast contribution guidelines
+
+**Key Results**
+
+| Metric | Value |
+|---|---|
+| Input labels | 1,000 |
+| Retrieved rows | 893 |
+| Retrieval rate | 89.3% |
+| Test AUC | 0.6973 |
+| Precision@25 | 0.84 |
+| Recall@25 | 0.3134 |
+| Test positive rate | 50.0% |
+
+**Key Learnings**
+
+- **Behavioral realism creates predictive signal** — Independent random events per user produce no signal. Persistent per-user activity weights create genuine engagement differences that historical features can predict.
+- **Point-in-time correctness is non-negotiable** — Every stage enforces explicit event-time boundaries: feature window `(observation_time - window_days, observation_time]`, label window `(observation_time, observation_time + label_horizon]`.
+- **Timezone bugs are silent killers** — The PySpark parity layer caught a real one-hour offset from passing Python `datetime` directly into Spark `TimestampType`. Fix: encode as UTC epoch microseconds (plain integers) before entering Spark.
+- **Simple models on correct data beat complex models on leaked data** — Logistic Regression with 0.70 AUC from correct data is more valuable than any model with inflated metrics from leakage.
+- **Feast historical retrieval enforces point-in-time joins** — Latest feature value where `timestamp <= event_timestamp`, preventing future-data leakage automatically.
+- **Time-based splits test true generalization** — Chronological train/val/test with no shuffling reveals temporal drift and future generalization gaps.
+
+**Before vs After**
+
+| Aspect | Before (Day 8) | After (Day 9) |
+|---|---|---|
+| Event generation | `independent` mode | `behavioral` mode |
+| User differences | None (i.i.d.) | Persistent `activity_weight` |
+| Test AUC | ~0.45 (inverted) | ~0.70 (genuine signal) |
+| Feast integration | Sources + views only | Historical retrieval + training |
+| ML pipeline | Not implemented | sklearn Pipeline + diagnostics |
+| Documentation | Basic | Complete (README, ARCHITECTURE, CONTRIBUTING) |
+
+**Technical Decisions**
+
+1. **Behavioral mode over independent** — Fixed per-user `activity_weight` sampled once, used for all event sampling. Creates realistic heterogeneity without label leakage.
+2. **Feast FileSource over partitioned Parquet** — Simple, correct, production-pattern. `partition_by_timestamp=True` enables partition pruning.
+3. **Historical retrieval before training** — Point-in-time joins at retrieval time, not training time. Feast handles the complexity.
+4. **Time-based splits** — Chronological train (70%), validation (15%), test (15%). No shuffling. Tests true out-of-time generalization.
+5. **Pipeline persistence** — StandardScaler + LogisticRegression as one `joblib` artifact. Prevents training-serving skew.
+6. **Deterministic missing-value handling** — `days_since_last_activity` filled with 999.0 for users with no events. Reproducible preprocessing.
+7. **Removed constant features** — `window_days` (always 7) has no predictive signal. Excluded from training.
+
+**Commands**
+
+```bash
+# Generate source data (behavioral mode)
+featureforge generate --config configs/synthetic_data.yaml --output output/source_data
+
+# Run backfill
+featureforge backfill --input output/source_data --output output/offline_store \
+  --start-date 2026-03-10 --end-date 2026-03-12 --window-days 7
+
+# Historical retrieval
+python feature_repo/historical_retrieval_demo.py
+
+# Train model
+python scripts/train_baseline.py
+
+# Diagnostics
+python scripts/diagnose_baseline.py
+
+# Validate
+pytest -v && ruff check . && ruff format --check .
+```
+
+**Files Changed**
+
+- `feature_repo/entities.py` — Feast entities
+- `feature_repo/sources.py` — FileSource definitions
+- `feature_repo/feature_views.py` — Feature view definitions
+- `feature_repo/feature_services.py` — Feature service definitions
+- `feature_repo/historical_retrieval_demo.py` — Historical retrieval demo
+- `scripts/train_baseline.py` — ML training pipeline
+- `scripts/diagnose_baseline.py` — Diagnostic analysis
+- `configs/synthetic_data.yaml` — Behavioral mode configuration
+- `src/featureforge/synthetic_data.py` — Behavioral event generation
+- `src/featureforge/config.py` — Event generation mode config
+- `tests/unit/test_synthetic_data.py` — Behavioral mode tests
+- `README.md`, `ARCHITECTURE.md`, `CONTRIBUTING.md` — Complete documentation update
+
+**Stats**
+
+- 98 tests passing
+- 35 files already formatted
+- All checks passed
+- 5 commits pushed to main
+- 3 documentation files updated (1,170 insertions, 35 deletions)
+
+**Day 9 complete.** The feature platform now has a complete ML training pipeline with genuine predictive signal (test AUC 0.70), point-in-time correctness enforced at every stage, production-pattern Feast integration, and comprehensive documentation.
+
+---
+
 ## September 20, 2026
 
 **FeatureForge | Day 8 — Feast Historical Feature Retrieval complete ✓**

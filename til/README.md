@@ -7,6 +7,278 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 22, 2026
+
+**FeatureForge | Day 10 — End-to-End Online Serving with Feast, Redis, and Make Demo Complete ✓**
+
+Today I completed the online serving and orchestration layer of FeatureForge: Full and Incremental Feast materialization into Redis, online feature lookup, deterministic content ranking, and a one-command end-to-end demo. The repository now demonstrates a complete vertical slice from synthetic data to real-time feature serving.
+
+**What I Built**
+
+- Feast materialization commands:
+  - `featureforge materialize` — full materialization with explicit UTC interval.
+  - `featureforge materialize-incremental` — incremental materialization using Feast's stored watermark.
+- Redis online store:
+  - Docker Compose service `featureforge-redis`.
+  - Feast online store configured for Redis.
+- Online feature lookup:
+  - `feature_repo/online_lookup_demo.py` — retrieves current user engagement features.
+  - Graceful handling of missing entities.
+- Deterministic ranking:
+  - `feature_repo/personalization_demo.py` — ranks candidate content by combined user and content scores.
+  - Transparent scoring formula and stable tie-breaker.
+- End-to-end orchestration:
+  - `scripts/run_end_to_end.py` — generate → backfill → materialize → lookup → ranking.
+  - Configurable `USER_ID`, `TOP_K`, `OUTPUT_DIR`, and `SKIP_INCREMENTAL`.
+- Makefile targets:
+  - `make demo` — one-command platform demo.
+  - `make e2e`, `make e2e-no-skip`, `make e2e-clean` — CI-style runs.
+- Updated:
+  - `README.md`
+  - `ARCHITECTURE.md`
+  - `CONTRIBUTING.md`
+
+The repository now documents and demonstrates the complete path from synthetic event generation through offline features, Feast materialization, Redis serving, online lookup, and deterministic ranking.
+
+**Key Results**
+
+| Metric | Value |
+|---|---:|
+| Source events | 10,200 |
+| Backfill partitions | 6 observation dates |
+| Feature views materialized | 2 (user, content) |
+| Online store | Redis via Docker Compose |
+| Demo user | `user_000290` |
+| Engagement score | 0.2303 |
+| Engagement segment | `low_engagement` |
+| Ranked candidates | 9 |
+| Requested top-k | 5 |
+| Top result | `content_000216` (score 0.2034) |
+| Test suite | 121 tests passing |
+| Ruff | All checks passed, 43 files formatted |
+
+The demo executes the full pipeline in under a minute and produces deterministic, interpretable results.
+
+**The Main Breakthrough**
+
+The previous days established offline feature correctness, Feast historical retrieval, and ML training. Today closed the loop by adding online serving with explicit time contracts and reproducible orchestration.
+
+The key insight was treating materialization and serving as first-class platform features, not as an afterthought:
+
+```text
+offline feature partitions
+        ↓
+Feast full or incremental materialization
+        ↓
+Redis online store
+        ↓
+online feature lookup
+        ↓
+deterministic ranking decision
+```
+
+Wrapping Feast materialization behind explicit CLI commands gives me:
+
+- clear UTC start and end boundaries
+- deterministic manifest paths
+- easier failure simulation and auditability
+- a foundation for future quality gates and freshness checks
+
+**Explicit Time Contracts**
+
+Full materialization requires timezone-aware UTC datetimes:
+
+```text
+start_time < end_time
+both timezone-aware (UTC)
+```
+
+Incremental materialization uses Feast's stored watermark:
+
+```text
+start_time = Feast materialization watermark
+end_time = explicit UTC datetime
+```
+
+Every successful run writes a JSON manifest under:
+
+```text
+output/materialization_manifests/materialize-<start>-to-<end>.json
+output/materialization_manifests/materialize-incremental-to-<end>.json
+```
+
+Manifests record:
+
+- run type
+- start and completion timestamps
+- status
+- mode (`full` or `incremental`)
+- Feast repository path
+- time range or incremental end time
+- manifest output directory
+
+**Online Lookup and Ranking**
+
+Online lookup retrieves current feature values through Feast feature services:
+
+```text
+user_engagement_service → UserEngagementOnlineFeatures
+content_popularity_service → ContentPopularityOnlineFeatures
+```
+
+Missing entities return `None` instead of raising opaque errors.
+
+Ranking combines user and content scores:
+
+```text
+ranking_score =
+    0.45 × user_engagement_score +
+    0.55 × content_popularity_score
+```
+
+Candidates are sorted by:
+
+1. descending overall score
+2. ascending `content_id` as a stable tie-breaker
+
+This is intentionally simple and transparent. It demonstrates how a consumer uses online feature values; it is not intended as a production recommendation model.
+
+**Before vs. After**
+
+| Aspect | Before (Day 9) | After (Day 10) |
+|---|---|---|
+| Materialization | Not implemented | Full and incremental with explicit UTC contracts |
+| Online store | Redis configured but unused | Actively serving materialized features |
+| Online lookup | Not implemented | `online_lookup_demo.py` with typed features |
+| Ranking | Not implemented | Deterministic scoring with stable tie-breaker |
+| Orchestration | Manual multi-step flow | `make demo` one-command end-to-end demo |
+| Documentation | Offline and ML focus | Complete serving and orchestration workflows |
+
+The improvement was not achieved by adding complexity. It came from making the serving path explicit, testable, and reproducible.
+
+**Technical Decisions**
+
+1. **Explicit UTC intervals for full materialization** — Require timezone-aware `start_time` and `end_time` instead of relying on Feast defaults. This makes audits and tests easier.
+2. **Incremental materialization using Feast watermark** — Leverage Feast's stored state for incremental runs while still recording explicit end times and manifests.
+3. **Redis as local online store** — Use Redis through Docker Compose for reproducible local serving; document DynamoDB as the AWS production profile.
+4. **Feature services for online lookup** — Use Feast feature services to expose curated feature sets instead of requiring clients to repeat feature-view and field selection.
+5. **Transparent ranking formula** — Use a simple weighted sum of user and content scores with a stable tie-breaker. This keeps the demo interpretable.
+6. **End-to-end orchestration script** — Centralize generate → backfill → materialize → lookup → ranking in one script for reproducible demos and CI runs.
+7. **Makefile as developer interface** — Provide `make demo`, `make e2e`, and related targets to reduce cognitive load for running the platform.
+
+**Key Learnings**
+
+- Materialization needs explicit time contracts. Feast's defaults are convenient, but explicit UTC intervals and deterministic manifests make the platform more auditable and testable.
+- Online serving exposes upstream mistakes. Wrong feature names, missing entities, or non-deterministic ranking become immediately visible in the demo.
+- One-command demos are a force multiplier. `docker compose up -d && make demo` turns a multi-step pipeline into something anyone can understand in 30 seconds.
+- Documentation is a feature. Clear README, architecture, and contributing docs tell a significantly better story than a half-dozen half-finished features.
+- Stable tie-breakers matter. Sorting by score alone produces non-deterministic output when scores tie; adding `content_id` as a secondary key makes the ranking reproducible.
+- Graceful missing-entity handling improves debuggability. Returning `None` with a clear log is better than opaque Feast errors for missing keys.
+- Incremental materialization is only as good as its watermark. Explicit end times and manifests make it easier to reason about what was materialized and when.
+- Redis is a good local fit. It runs reproducibly through Docker Compose and supports low-latency key-value access for online features.
+- The serving layer is where platform reliability becomes visible. Incorrect feature values, stale materialization, or missing entities are immediately obvious in the demo output.
+
+**Commands**
+
+```bash
+# Start Redis
+docker compose up -d
+
+# Run the full end-to-end demo
+make demo
+
+# Customize the demo
+make demo USER_ID=user_000290 TOP_K=5
+make demo OUTPUT_DIR=output_demo
+
+# Run full materialization explicitly
+featureforge materialize \
+  --repo feature_repo \
+  --start-time 2026-03-20T00:00:00+00:00 \
+  --end-time 2026-03-25T00:00:00+00:00 \
+  --manifest-output output
+
+# Run incremental materialization
+featureforge materialize-incremental \
+  --repo feature_repo \
+  --end-time 2026-03-25T00:00:00+00:00 \
+  --manifest-output output
+
+# Run online lookup for a specific user
+python feature_repo/online_lookup_demo.py --user-id user_000290
+
+# Run personalization ranking
+python feature_repo/personalization_demo.py \
+  --user-id user_000290 \
+  --top-k 5
+
+# Validate the repository
+pytest -v && ruff check . && ruff format --check .
+```
+
+**Files Changed**
+
+- `src/featureforge/materialize.py` — Full and incremental Feast materialization.
+- `src/featureforge/serving.py` — Online feature lookup and deterministic ranking.
+- `scripts/run_end_to_end.py` — End-to-end orchestration script.
+- `feature_repo/online_lookup_demo.py` — Online feature lookup demo.
+- `feature_repo/personalization_demo.py` — Personalization ranking demo.
+- `feature_repo/feature_services.py` — Feature service definitions.
+- `Makefile` — `demo`, `e2e`, `e2e-no-skip`, `e2e-clean` targets.
+- `tests/unit/test_materialize.py` — Materialization timestamp and manifest tests.
+- `tests/unit/test_serving.py` — Online lookup and ranking tests.
+- `README.md`, `ARCHITECTURE.md`, `CONTRIBUTING.md` — Complete documentation update.
+
+**Quality Gate**
+
+```text
+121 tests passing
+43 files already formatted
+All checks passed
+Documentation commit pushed to main
+828 insertions
+1,464 deletions (net documentation cleanup)
+```
+
+The full workflow now passes validation from synthetic data generation through offline backfill, Feast materialization, Redis serving, online lookup, ranking, and documentation.
+
+**Roadmap Alignment**
+
+FeatureForge now demonstrates end-to-end ownership of:
+
+- Behavioral synthetic-data generation.
+- Event-time-aware feature computation.
+- Point-in-time-correct Feast retrieval.
+- Time-based model evaluation.
+- Reproducible preprocessing and model persistence.
+- Training-data diagnostics.
+- Data and feature quality validation.
+- Feast full and incremental materialization.
+- Redis online serving and feature lookup.
+- Deterministic content ranking.
+- End-to-end orchestration and one-command demo.
+- Documentation and operational workflows.
+
+The project has moved from an ML-ready feature platform to a complete end-to-end feature infrastructure demonstration with online serving.
+
+**Result**
+
+Completed FeatureForge Day 10 with end-to-end online serving: Full and incremental Feast materialization into Redis, online feature lookup, deterministic content ranking, and a one-command platform demo.
+
+The final demo executed successfully with:
+
+- 10,200 source events
+- 6 backfill partitions
+- 2 feature views materialized
+- Online lookup for `user_000290`
+- Engagement score 0.2303, segment `low_engagement`
+- 9 candidates ranked, top-5 returned
+- Top result `content_000216` with score 0.2034
+
+The most important improvement came from making the serving path explicit, testable, and reproducible, with clear time contracts and deterministic behavior.
+
+---
+
 # September 21, 2026
 
 **FeatureForge | Day 9 — ML-Ready Behavioral Training Pipeline Complete ✓**

@@ -7,6 +7,401 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 23, 2026
+
+**FeatureForge | Days 11–12.1 — Pre-Materialization Quality Gate & Canonical Offline Store Contract**
+
+Today I completed two closely related reliability milestones for FeatureForge:
+
+- **Day 11:** Pre-materialization quality validation for persisted offline features.
+- **Day 12.1:** A documented and enforced canonical offline-store contract.
+
+Together, these changes ensure that the data validated before materialization is exactly the data Feast reads and promotes into Redis.
+
+**Canonical Serving Flow**
+
+The local offline-to-online path is now:
+
+```text
+Backfill
+        ↓
+output/offline_store/
+        ↓
+Persisted offline feature validation
+        ↓
+Feast FileSources
+        ↓
+Feast Materialization
+        ↓
+Redis Online Store
+        ↓
+Online Lookup, Ranking, and Parity Checks
+```
+
+The canonical local offline store is:
+
+```text
+output/offline_store/
+```
+
+Its Hive-partitioned structure is:
+
+```text
+output/offline_store/
+├── user_engagement_features/
+│   └── observation_date=YYYY-MM-DD/
+│       └── features.parquet
+├── content_popularity_features/
+│   └── observation_date=YYYY-MM-DD/
+│       └── features.parquet
+└── manifests/
+    └── backfill-YYYY-MM-DD-to-YYYY-MM-DD.json
+```
+
+The core invariant is:
+
+```text
+Backfill output
+    =
+Quality-gate input
+    =
+Feast FileSource input
+    =
+Materialization source
+    =
+Serving-parity source
+```
+
+**Day 11 — Pre-Materialization Quality Gate**
+
+The new quality gate validates persisted offline feature partitions before Feast is allowed to materialize values into Redis.
+
+Successful path:
+
+```text
+Canonical offline feature store
+        ↓
+Persisted offline feature validation
+        ↓
+passed
+        ↓
+Feast materialization
+        ↓
+Redis online store
+```
+
+Failure path:
+
+```text
+Canonical offline feature store
+        ↓
+Persisted offline feature validation
+        ↓
+failed checks
+        ↓
+materialization blocked
+        ↓
+blocked JSON manifest
+        ↓
+no Feast write
+        ↓
+no known-invalid values promoted to Redis
+```
+
+This protects the online store from persisted feature data containing:
+
+- Negative values where metrics must be non-negative.
+- Non-numeric values in numeric columns.
+- Invalid observation-time types.
+- Malformed or incomplete partitions.
+- Serialization or schema problems after computation.
+- Other defects that are not visible in the original in-memory computation.
+
+The central design principle is:
+
+> A feature platform must validate the persisted source that will actually be served, not only the in-memory result that produced it.
+
+**Day 11 Evidence**
+
+The implementation introduced:
+
+- Offline feature-store validation before full materialization.
+- Offline feature-store validation before incremental materialization.
+- `MaterializationBlockedError` when checks fail.
+- Blocked JSON manifests containing failed checks and the quality-report payload.
+- Completed JSON manifests after successful Feast materialization.
+- Unit coverage for full and incremental success and failure behavior.
+
+Commit:
+
+```text
+029aec3 Day 11: Pre-materialization quality gate
+```
+
+**Day 12.1 — Canonical Offline Store Contract**
+
+After completing the quality gate, I documented and enforced one canonical offline-store contract for the local FeatureForge platform.
+
+The contract intentionally prevents the materialization workflow from accepting an independent source path. Feast must read the same location that the quality gate validates.
+
+**ADR-001 — Offline/Online Feature-Store Split**
+
+Commit:
+
+```text
+5ad96e9 docs: add ADR for offline-online feature store split
+```
+
+The responsibilities are now explicit:
+
+```text
+Offline store:
+partitioned Parquet datasets for backfills, validation,
+historical retrieval, training data, and materialization
+
+Feast:
+feature definitions, point-in-time historical retrieval,
+and materialization boundary
+
+Online store:
+Redis for low-latency feature serving
+```
+
+The offline and online stores serve different purposes:
+
+- Offline Parquet supports reproducibility, backfills, validation, historical retrieval, and training.
+- Feast defines feature semantics and connects historical retrieval with materialization.
+- Redis serves current feature values for low-latency online inference.
+
+**ADR-002 — Canonical Offline Store Contract**
+
+Commit:
+
+```text
+eb01fcc docs: define canonical offline store contract
+```
+
+The canonical local path is:
+
+```text
+output/offline_store/
+```
+
+This establishes one explicit source of truth for all local components.
+
+**Split-Brain Failure Mode**
+
+During a read-only audit, I found that the architecture was documented but not fully enforced in code.
+
+```text
+Feast FileSources read:
+output/offline_store/
+
+Materialization quality gate accepted:
+--offline-store-dir <arbitrary path>
+```
+
+This allowed a potential split-brain condition:
+
+```text
+Quality gate validates path A
+        while
+Feast materializes path B
+```
+
+A successful validation would not prove that the data actually written to Redis was valid.
+
+This was a real reliability risk, not merely a documentation inconsistency.
+
+**Contract Enforcement**
+
+I enforced the canonical path at the materialization boundary:
+
+```python
+_CANONICAL_OFFLINE_STORE_DIR = Path("output/offline_store")
+```
+
+I removed the independent `offline_store_dir` parameter from:
+
+```python
+materialize(...)
+materialize_incremental(...)
+```
+
+I also removed `--offline-store-dir` from:
+
+```bash
+featureforge materialize
+featureforge materialize-incremental
+```
+
+The generic offline feature-validation library remains path-configurable for isolated tests and reusable library workflows.
+
+The production-like materialization boundary is intentionally not path-configurable because it must validate exactly the location that Feast reads.
+
+Commit:
+
+```text
+54297bf fix: enforce canonical offline store for materialization
+```
+
+**Testing Strategy**
+
+Updated materialization unit tests to mock the validator at the orchestration boundary.
+
+The tests now verify:
+
+- Valid persisted-feature reports allow full materialization.
+- Valid persisted-feature reports allow incremental materialization.
+- Invalid reports block full materialization.
+- Invalid reports block incremental materialization.
+- Blocked manifests are written on failure.
+- Completed manifests are written after successful materialization.
+- Feast is not called when validation fails.
+- Explicit UTC timestamp contracts remain enforced.
+
+The testing split is now:
+
+```text
+Unit tests:
+materialization orchestration, quality-gate decisions,
+manifests, and Feast boundary
+
+Integration tests:
+real canonical Parquet source → Feast → Redis → online parity
+```
+
+This keeps unit tests focused and fast while using integration tests to prove the real multi-component path.
+
+**Documentation Updated**
+
+Updated:
+
+- `README.md`
+- `ARCHITECTURE.md`
+- `CONTRIBUTING.md`
+
+The documentation now explains:
+
+- The canonical `output/offline_store/` contract.
+- Offline and online feature-store responsibilities.
+- Persisted-feature validation before materialization.
+- Blocked and completed materialization manifests.
+- Offline/online serving parity.
+- Why materialization cannot accept an independent source-path option.
+- Future migration to one environment-owned S3 URI.
+
+The future production-oriented contract will conceptually look like:
+
+```text
+s3://featureforge-<environment>/offline-store/
+```
+
+That single environment-owned URI should be shared by the backfill writer, quality gate, Feast sources, manifests, lineage metadata, freshness checks, and parity checks.
+
+**Validation Results**
+
+Formatting:
+
+```text
+ruff format --check .
+47 files already formatted
+```
+
+Linting:
+
+```text
+ruff check .
+All checks passed!
+```
+
+Unit tests:
+
+```text
+pytest tests/unit/ -v
+122 passed
+```
+
+Integration tests:
+
+```text
+pytest tests/integration/ -v
+7 passed
+```
+
+Total verified tests:
+
+```text
+129 passed
+```
+
+**Commits Published**
+
+```text
+8082bb9 fix: align E2E serving flow with canonical offline store
+029aec3 Day 11: Pre-materialization quality gate
+5ad96e9 docs: add ADR for offline-online feature store split
+eb01fcc docs: define canonical offline store contract
+54297bf fix: enforce canonical offline store for materialization
+0b5a880 docs: document canonical offline store quality gate
+979b979 style: format materialization modules
+```
+
+All commits are pushed to `main`. Local and remote branches are synchronized, and the working tree is clean.
+
+**What I Understood**
+
+- A quality gate only has value if it validates the exact dataset consumed downstream.
+- A configurable path can become a serious reliability risk when it breaks ownership between validation and materialization.
+- “One source of truth” must be enforced technically through APIs and configuration boundaries, not only described in documentation.
+- Data-platform reliability includes identifying and preventing split-brain source-of-truth failures.
+- Unit tests should isolate orchestration and external boundaries, while integration tests should prove the real component path.
+- ADRs are most valuable when code, tests, documentation, and operations enforce the decisions they describe.
+- A materialization API that removes ambiguous source-path options can prevent an entire class of operational mistakes.
+- Manifests provide evidence of both successful and blocked promotion attempts.
+
+**Relevance to the L5 Roadmap**
+
+This work directly supports my Data & Feature Infrastructure / ML Platform Engineer roadmap by demonstrating:
+
+- A trustworthy offline-to-online feature-serving path.
+- Clear ownership boundaries between Parquet, Feast, and Redis.
+- Pre-materialization quality gates that protect online serving.
+- Detection and elimination of split-brain data-contract risks.
+- Architecture enforcement through API design.
+- ADRs for durable technical decisions.
+- Operational evidence through manifests, idempotency, parity tests, unit tests, and integration tests.
+- A public GitHub history that demonstrates system-design thinking, not only feature implementation.
+
+**What I Deliberately Did Not Add Yet**
+
+- Freshness SLO enforcement.
+- Alerting and automated incident response.
+- Environment-owned S3 configuration.
+- DynamoDB online-store deployment.
+- Production lineage infrastructure.
+- Kafka, Flink, Kubernetes, or Terraform-heavy infrastructure.
+
+These remain future milestones. The local V1 contract is intentionally simple:
+
+```text
+one canonical offline source
+        ↓
+validated before materialization
+        ↓
+consumed by Feast
+        ↓
+parity-checked against Redis
+```
+
+**Result**
+
+Completed FeatureForge Days 11 and 12.1 by adding a persisted offline-feature quality gate and enforcing one canonical offline-store contract.
+
+The platform now validates the exact Parquet data that Feast reads, blocks full and incremental materialization when persisted features fail validation, writes blocked or completed manifests, and verifies the canonical Parquet → Feast → Redis path through integration tests.
+
+---
+
 ## September 22, 2026
 
 **FeatureForge | Day 10 — End-to-End Online Serving with Feast, Redis, and Make Demo Complete ✓**

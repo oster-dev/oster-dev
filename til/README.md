@@ -7,6 +7,328 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 24, 2026
+
+**FeatureForge | Days 12.2–13 — Feature Freshness, Failure Handling & Operational Runbooks Complete ✓**
+
+Today I completed the next reliability block of FeatureForge: feature freshness SLOs, controlled failure simulations, operational runbooks, and the architecture documentation explaining why these reliability decisions exist.
+
+The core platform question expanded from:
+
+```text
+Are persisted feature values correct?
+```
+
+to:
+
+```text
+Are persisted feature values current enough
+for the intended serving workflow?
+```
+
+A feature snapshot can be structurally valid, have the correct schema, and contain valid metrics while still being unsafe for current online serving if it is too old.
+
+**Feature Freshness SLOs**
+
+Implemented an offline freshness contract for the canonical feature store:
+
+```text
+output/offline_store/
+├── user_engagement_features/
+│   └── observation_date=YYYY-MM-DD/
+└── content_popularity_features/
+    └── observation_date=YYYY-MM-DD/
+```
+
+The freshness check uses the newest Hive-style `observation_date` partition per feature view.
+
+I deliberately did not use filesystem modification time:
+
+```text
+file modification time
+    !=
+feature business time
+```
+
+A file can be copied, restored, or rewritten without its feature values becoming more current. The newest `observation_date` represents the business time through which a feature snapshot is valid.
+
+The V1 freshness contract is:
+
+```text
+latest canonical observation partition
+        must be within
+configured maximum lag
+        of
+explicit timezone-aware UTC reference time
+```
+
+The local default maximum lag is 24 hours.
+
+Added the CLI command:
+
+```bash
+featureforge check-freshness \
+  --reference-time 2026-03-25T00:00:00+00:00 \
+  --max-lag-hours 24
+```
+
+Also added:
+
+```bash
+make check-freshness
+```
+
+The command:
+
+- Checks the canonical `output/offline_store/`.
+- Evaluates each required feature view independently.
+- Reports the newest partition and calculated lag.
+- Returns a non-zero exit code when a required view is stale or missing.
+
+Stable failed-check names include:
+
+```text
+user_engagement_features.freshness
+content_popularity_features.freshness
+```
+
+**Correctness vs. Freshness**
+
+The most important architecture decision today was keeping correctness and freshness separate.
+
+```text
+Correctness:
+Are persisted feature values structurally and semantically valid?
+
+Freshness:
+Is the newest persisted feature snapshot recent enough
+for the intended serving workflow?
+```
+
+The final contract is:
+
+```text
+Correctness gate:
+mandatory before every Feast materialization
+
+Freshness check:
+explicit serving-safety and operational gate for current workflows
+```
+
+This avoids applying a wall-clock freshness requirement to every historical materialization.
+
+A historical re-materialization can be legitimate when its feature data is correct for the requested historical interval, even if the newest canonical partition is not current enough for present-time serving.
+
+Therefore:
+
+- Correctness remains mandatory before every Feast write.
+- Freshness is an explicit gate for current serving, demos, scheduled workflows, and operational checks.
+- Historical reproducibility is preserved instead of being blocked by a global current-time requirement.
+
+**Controlled Failure Simulations**
+
+Added a dedicated failure-simulation package:
+
+```text
+tests/failure_simulations/
+├── test_stale_features.py
+├── test_failed_backfill.py
+└── test_failed_materialization.py
+```
+
+The controlled scenarios cover:
+
+- Stale offline partitions fail the freshness check.
+- Fresh offline partitions pass the freshness check.
+- A non-positive backfill window fails with a clear `ValueError`.
+- A reversed backfill date range fails with a clear `ValueError`.
+- An empty event stream remains valid and produces zero-count features.
+- Full materialization with a missing Feast repository fails visibly.
+- Incremental materialization with a missing Feast repository fails visibly.
+
+The reliability principle is now tested explicitly:
+
+```text
+Failure injection
+        ↓
+visible error
+        ↓
+no misleading successful run
+        ↓
+clear exception, manifest, or exit code
+        ↓
+documented recovery and verification
+```
+
+Focused failure-simulation suite:
+
+```text
+7 passed
+```
+
+**Operational Runbooks**
+
+Added version-controlled incident runbooks:
+
+```text
+docs/runbooks/
+├── stale-features.md
+├── failed-backfill.md
+└── failed-materialization.md
+```
+
+Each runbook follows the same incident-response lifecycle:
+
+```text
+Symptom
+→ Detection
+→ Likely causes
+→ Diagnosis
+→ Recovery
+→ Verification
+→ Prevention
+```
+
+The stale-feature recovery chain is now explicit:
+
+1. Run `make check-freshness`.
+2. Identify the failed feature-view check.
+3. Inspect the newest `observation_date` partition.
+4. Inspect the relevant backfill manifest.
+5. Verify source-data availability and the requested backfill range.
+6. Repair or rerun the canonical backfill.
+7. Rerun freshness validation.
+8. Rerun materialization if current online values are required.
+9. Verify online lookup or offline/online parity.
+
+The runbooks turn recovery knowledge into a repeatable operational process instead of leaving it implicit.
+
+**ADR-003 — Freshness SLOs and Fail-Safe Serving**
+
+Added:
+
+```text
+docs/adr/ADR-003-freshness-slos-and-fail-safe-serving.md
+```
+
+The ADR documents the durable decisions to:
+
+- Separate persisted-feature correctness from freshness.
+- Use `observation_date` rather than filesystem modification time as the freshness signal.
+- Use explicit timezone-aware UTC reference times.
+- Fail with stable check names and non-zero process statuses.
+- Keep historical materialization reproducible instead of globally requiring current wall-clock freshness.
+- Treat failure simulations and runbooks as platform artifacts.
+
+This reinforced that an ADR should capture the reasoning behind a durable architecture or reliability trade-off, not merely list implementation files.
+
+**Documentation and Git History**
+
+Updated:
+
+- `README.md`
+- `ARCHITECTURE.md`
+- `CONTRIBUTING.md`
+
+The documentation now describes:
+
+- The freshness contract.
+- Correctness versus freshness.
+- `make check-freshness`.
+- Controlled failure scenarios.
+- Operational runbooks.
+- ADR-003.
+- Current test coverage.
+- Future reliability work such as scheduling, alerting, escalation, external failure simulation, and CI.
+
+Finished with four focused commits:
+
+```text
+f66de73  feat: implement offline feature freshness checks
+1752253  feat: add failure simulations and operational runbooks
+b061032  docs: add ADR for freshness SLOs and fail-safe serving
+64c2171  docs: document freshness and failure handling
+```
+
+All changes were pushed to `main`, and the repository ended clean:
+
+```text
+nothing to commit, working tree clean
+```
+
+**What I Understood**
+
+- Feature correctness and feature freshness are separate reliability dimensions and should not be collapsed into one vague validation step.
+- Business-time partitions are a stronger freshness signal than filesystem timestamps for offline feature stores.
+- Explicit UTC reference times make freshness checks deterministic and suitable for local automation, schedulers, and future CI.
+- A non-zero exit code is part of an operational contract, not merely a CLI implementation detail.
+- Historical reproducibility and current serving safety can coexist when correctness and freshness are deliberately separated.
+- Failure simulation verifies not only that the system works when healthy, but also that it fails visibly and safely when assumptions break.
+- Runbooks are engineering artifacts because they turn recovery knowledge into a version-controlled and repeatable process.
+- ADRs should capture significant decisions, rejected alternatives, and consequences so future changes preserve the intended platform contracts.
+- A platform is not reliable only because it produces correct output; it must also know when output is too old and provide a safe recovery path.
+
+**Relevance to the L5 Roadmap**
+
+This work goes beyond implementing feature computation. It demonstrates how a Data & Feature Infrastructure or ML Platform Engineer thinks about the complete path from offline data to online serving:
+
+```text
+feature data
+        ↓
+correctness
+        ↓
+freshness
+        ↓
+materialization
+        ↓
+serving
+        ↓
+visible failure handling and recovery
+```
+
+The goal is not simply to make a feature pipeline run. The goal is to ensure that:
+
+- Invalid data cannot silently reach consumers.
+- Stale data is identified before it is used for current serving.
+- Failures leave clear evidence.
+- Exit codes allow automation to react safely.
+- Recovery steps are known before an incident occurs.
+- Architecture decisions remain visible and enforceable.
+
+**What I Deliberately Did Not Add Yet**
+
+- Freshness alerting and escalation.
+- Automated incident response.
+- Environment-owned S3 configuration.
+- DynamoDB online-store deployment.
+- Production lineage infrastructure.
+- Kafka, Flink, Kubernetes, or Terraform-heavy infrastructure.
+- External scheduling infrastructure.
+
+These remain future milestones. The local V1 reliability contract is intentionally focused:
+
+```text
+canonical offline source
+        ↓
+correctness validation
+        ↓
+freshness validation when required
+        ↓
+Feast materialization
+        ↓
+Redis serving
+        ↓
+visible failure and documented recovery
+```
+
+**Result**
+
+Completed FeatureForge Days 12.2 and 13 by implementing offline feature freshness checks, controlled failure simulations, operational runbooks, and ADR-003 for freshness SLOs and fail-safe serving.
+
+FeatureForge now distinguishes between valid feature data and sufficiently current feature data, uses business-time partitions instead of filesystem timestamps, returns stable failure signals, and documents recovery procedures for stale features, failed backfills, and failed materialization.
+
+---
+
 ## September 23, 2026
 
 **FeatureForge | Days 11–12.1 — Pre-Materialization Quality Gate & Canonical Offline Store Contract**

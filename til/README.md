@@ -7,6 +7,331 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 25, 2026
+
+**FeatureForge | Days 14–15 — Reproducible CI Baseline and AWS Production Profile Complete ✓**
+
+Today I completed two major FeatureForge milestones:
+
+- A reproducible GitHub Actions CI baseline.
+- A documented AWS production operating profile.
+
+The local platform is now validated end to end, the clean CI environment validates the infrastructure-free baseline, and the project has a defensible path from local Parquet and Redis to S3 and DynamoDB without changing its core feature contracts.
+
+**Day 14 — GitHub Actions CI Baseline**
+
+Added a GitHub Actions workflow that runs on:
+
+- Every push to `main`.
+- Every pull request.
+
+The workflow validates a clean Ubuntu runner with Python 3.13 instead of relying on my existing local `.venv`.
+
+The CI baseline now performs:
+
+- Fresh editable package installation from the `src/` layout.
+- Package import verification:
+
+  ```bash
+  import featureforge
+  ```
+
+- Repository-wide formatting validation:
+
+  ```bash
+  ruff format --check .
+  ```
+
+- Ruff linting:
+
+  ```bash
+  ruff check .
+  ```
+
+- Automated test execution:
+
+  ```bash
+  pytest -v
+  ```
+
+During the implementation, I found and fixed:
+
+- A clean-runner packaging issue in the setuptools `src/` package-discovery configuration.
+- A failure-simulation dependency on locally existing canonical offline-store state.
+- Missing-Feast-repository simulations that were not deterministic on clean GitHub Actions runners.
+
+I also added ADR-004:
+
+```text
+ADR-004: GitHub Actions CI for Reproducible Validation
+```
+
+Updated:
+
+- `README.md`
+- `ARCHITECTURE.md`
+- `CONTRIBUTING.md`
+
+The documentation now explains CI behavior, local serving prerequisites, and the separation between baseline CI and infrastructure-enabled integration validation.
+
+**CI Validation Result**
+
+GitHub Actions baseline:
+
+```text
+141 passed, 5 skipped, 0 failed
+```
+
+Local full integration environment:
+
+```text
+146 passed, 0 skipped, 0 failed
+```
+
+The five skipped GitHub Actions tests are intentional online-serving integration tests. They require:
+
+- Redis.
+- Applied Feast definitions.
+- Canonical offline feature snapshots.
+- Materialized online feature values.
+
+They run locally when the serving environment is prepared.
+
+The relationship is now explicit:
+
+```text
+146 local full-integration tests
+    =
+141 clean CI baseline contracts
+    +
+5 Redis / Feast / materialization-dependent serving contracts
+```
+
+This keeps the baseline CI job fast and infrastructure-light while still documenting which contracts require a prepared serving environment.
+
+**Day 15 — AWS Production Profile**
+
+Added ADR-005:
+
+```text
+ADR-005: AWS S3 Offline-Store Production Profile
+```
+
+Also added:
+
+```text
+docs/aws-production-profile.md
+```
+
+This documents a production architecture profile without provisioning real AWS infrastructure.
+
+The profile defines one environment-owned S3 bucket per environment:
+
+```text
+s3://featureforge-dev/
+s3://featureforge-staging/
+s3://featureforge-prod/
+```
+
+The canonical production offline-store URI is:
+
+```text
+s3://featureforge-<environment>/offline-store/
+```
+
+The local Hive-style partitioning remains unchanged:
+
+```text
+<feature_view>/observation_date=YYYY-MM-DD/features.parquet
+```
+
+This allows the local and AWS profiles to share the same feature semantics and storage contract.
+
+**AWS Storage Profile**
+
+Documented S3 locations for:
+
+- Raw data.
+- Validated source data.
+- Canonical offline features.
+- Backfill and materialization manifests.
+- Historical training data.
+- Model artifacts.
+
+Defined:
+
+- SSE-KMS encryption.
+- One customer-managed KMS key per environment.
+- S3 bucket versioning to protect against accidental overwrite or deletion.
+- Lifecycle transitions based on access patterns and retention requirements rather than blanket deletion.
+- Environment isolation through separate bucket ownership.
+
+The architecture intentionally preserves idempotent backfill behavior while adding cloud-level durability, encryption, versioning, and lifecycle controls.
+
+**Least-Privilege IAM Roles**
+
+Defined three dedicated IAM roles:
+
+```text
+featureforge-backfill-writer
+featureforge-materialization-writer
+featureforge-serving-reader
+```
+
+Each role has a separate responsibility:
+
+- The backfill writer produces and updates canonical offline feature data.
+- The materialization writer reads the validated offline store and promotes values through Feast.
+- The serving reader accesses only the data required for online serving.
+
+This makes access boundaries explicit rather than using one broad role for every workflow.
+
+**Online Store Profile**
+
+Documented DynamoDB as the managed AWS online-store profile while retaining Redis via Docker Compose for local development.
+
+The profiles are complementary:
+
+```text
+Local development:
+Redis via Docker Compose
+
+AWS production profile:
+DynamoDB as the managed online store
+```
+
+This avoids forcing local development to depend on AWS while still defining a credible production-serving architecture.
+
+**Canonical Source Contract**
+
+The most important invariant remains identical across local and AWS profiles:
+
+```text
+Backfill writer
+    =
+Correctness-gate input
+    =
+Freshness-check input
+    =
+Feast FileSource
+    =
+Materialization source
+    =
+Serving parity-test source
+```
+
+Only the resolved storage URI changes:
+
+```text
+Local:
+output/offline_store/
+
+AWS production profile:
+s3://featureforge-<environment>/offline-store/
+```
+
+This prevents split-brain data ownership. FeatureForge must never validate one offline source while Feast reads or materializes another.
+
+The cloud profile is therefore an evolution of the local architecture, not a separate system with different correctness rules.
+
+**What I Validated**
+
+```bash
+ruff format --check .
+ruff check .
+pytest -v
+git diff --check
+```
+
+Results:
+
+```text
+Local full integration environment:
+146 passed, 0 skipped, 0 failed
+
+GitHub Actions baseline:
+141 passed, 5 skipped, 0 failed
+```
+
+The repository passed formatting, linting, test, and Git hygiene checks.
+
+**Commits**
+
+```text
+4a6a558  test: make materialization failure simulations CI-safe
+ee3022e  docs: add ADR-004 for GitHub Actions CI
+7240c4a  docs: document CI validation and local serving prerequisites
+8ddfbdf  docs: define AWS S3 and DynamoDB production profile
+```
+
+The changes are pushed and the repository is synchronized.
+
+**What I Understood**
+
+- A project can pass locally while failing in a clean CI environment. Reproducible CI exposes hidden packaging, dependency, and environment assumptions.
+- A baseline CI job should remain fast and infrastructure-light while explicitly documenting tests that require Redis, Feast, and materialized feature values.
+- Local and AWS profiles can share the same feature semantics, partitioning strategy, correctness gate, freshness contract, and canonical-source ownership model.
+- Production architecture is not only about selecting AWS services. It also includes environment isolation, encryption, least-privilege IAM, lifecycle policy, versioning, lineage, resilience trade-offs, and explicit non-goals.
+- Local Redis and a DynamoDB production profile are complementary rather than contradictory.
+- A cloud migration is safer when the storage URI changes but the core feature contracts remain stable.
+- Infrastructure should not be provisioned before cost boundaries, IAM policies, deployment requirements, and operational ownership are understood.
+- CI should distinguish failures caused by code from tests that intentionally require external infrastructure.
+- A documented production profile can demonstrate architectural judgment before real infrastructure is created.
+
+**Relevance to the L5 Roadmap**
+
+This work demonstrates the ability to:
+
+- Build reproducible validation in a clean environment.
+- Separate baseline CI from infrastructure-dependent integration validation.
+- Design a local-to-cloud feature platform without changing core semantics.
+- Define environment boundaries and storage ownership.
+- Apply encryption, versioning, lifecycle, and least-privilege principles.
+- Document production trade-offs through ADRs.
+- Preserve a canonical source of truth across local and cloud profiles.
+- Build a credible architecture story instead of simply listing AWS services.
+
+FeatureForge now has a clean local-to-cloud architecture path:
+
+```text
+local Parquet + Redis
+        ↓
+reproducible CI baseline
+        ↓
+S3 canonical offline store
+        ↓
+Feast materialization
+        ↓
+DynamoDB online serving
+```
+
+**Next Focus**
+
+- Add a separate infrastructure-enabled CI integration job with Redis, Feast, canonical snapshots, materialization, and online-serving validation.
+- Extend materialization manifests with richer lineage and run metadata, including Git SHA and resolved input/output URIs.
+- Add scheduled freshness checks, feature-view ownership, alerting, and SLO escalation.
+- Add controlled failure simulations for Redis, Feast API, and object-storage failures.
+- Convert the documented AWS profile into infrastructure as code only after cost boundaries, IAM policies, and deployment requirements are ready.
+
+**Result**
+
+Completed FeatureForge Days 14 and 15 with a reproducible GitHub Actions CI baseline and a documented AWS production profile.
+
+The project now has:
+
+- A clean CI environment validated with Python 3.13.
+- 141 passing baseline tests and five intentionally skipped serving tests in GitHub Actions.
+- 146 passing tests in the full local integration environment.
+- An explicit separation between baseline and infrastructure-dependent validation.
+- A documented S3 offline-store production profile.
+- Environment-owned storage paths.
+- SSE-KMS encryption and versioning requirements.
+- Least-privilege IAM roles.
+- DynamoDB as the AWS online-store profile.
+- The same canonical offline-store contract across local and cloud architectures.
+
+---
+
 ## September 24, 2026
 
 **FeatureForge | Days 12.2–13 — Feature Freshness, Failure Handling & Operational Runbooks Complete ✓**

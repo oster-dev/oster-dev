@@ -7,6 +7,87 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 26, 2026
+
+**FeatureForge | Project 1 — Officially Completed & Released ✓**
+
+Today I completed and released the first major portfolio project in my L5 roadmap:
+[FeatureForge v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0) — a production-inspired feature platform for reproducible offline training data and low-latency online ML feature serving.
+
+This was not just a final `git push`. I validated the complete local platform flow, created an annotated Git tag, published a GitHub Release, and updated my portfolio roadmap so that Project 1 is now clearly marked as completed and publicly reviewable.
+
+**Release Validation**
+
+- Confirmed a clean Git working tree and that `main` was up to date with `origin/main`
+- Verified formatting with `ruff format --check .` — 59 files already formatted
+- Verified linting with `ruff check .` — all checks passed
+- Ran the full test suite with `pytest -v` — **146 passed** in 15.60 seconds
+- Started and verified the Redis online-store container with `docker compose up -d`
+- Applied Feast definitions successfully for both feature views:
+  - `user_engagement_features`
+  - `content_popularity_features`
+- Ran the complete `make demo` workflow successfully
+- Confirmed no whitespace or patch issues with `git diff --check`
+
+**What the End-to-End Demo Proved**
+
+- Generated a deterministic behavioral dataset with:
+  - 500 users
+  - 250 content items
+  - 10,200 events
+  - 1,000 labels
+  - 200 duplicate events
+  - 306 late events
+- Backfilled six daily partitions into the canonical offline feature store for March 20–25, 2026
+- Materialized the canonical offline features into Redis through Feast
+- Passed the offline freshness SLO for both feature views with a maximum permitted lag of 24 hours
+- Retrieved current user engagement features from the Feast online store for `user_000290`
+- Produced a deterministic engagement score of `0.0801` and assigned the user to the `low_engagement` segment
+- Ran online candidate ranking for nine content candidates and returned a deterministic top five list
+
+**Release Engineering**
+
+- Created an annotated Git tag:
+  ```bash
+  git tag -a v0.1.0 -m "FeatureForge v0.1.0: reproducible feature platform vertical slice"
+  ```
+- Pushed the tag to GitHub and verified that it resolves to commit `98384a0`
+- Published the GitHub Release:
+  [FeatureForge v0.1.0 — Reproducible Feature Platform Vertical Slice](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)
+- Verified that GitHub labels the release as **Latest**, not as a draft or pre-release
+
+**What FeatureForge Demonstrates**
+
+- Deterministic synthetic behavioral-data generation, including duplicates and late arrivals
+- Executable data contracts and data-quality validation for entities, events, and labels
+- Point-in-time-correct user and content feature computation
+- Partitioned, idempotent offline feature backfills with run manifests
+- Pandas and Spark feature-computation parity coverage
+- Feast feature definitions, historical retrieval, and Redis-backed online serving
+- Full and incremental materialization flows with explicit manifests
+- Freshness SLO checks and intentional failure simulations
+- Deterministic engagement scoring and content candidate ranking
+- Two CI layers: a fast baseline job and a Redis/Feast serving-integration job
+- Reproducible local demo, architecture documentation, ADRs, runbooks, reviewer evidence, and an AWS production profile
+
+**Portfolio & Roadmap Update**
+
+- Updated the main portfolio README table
+- Changed Project 1 from `🚧 In Progress` to `✅ Complete — v0.1.0`
+- Added direct links to the FeatureForge repository and its public release page
+- Project 1 is now a stable, versioned portfolio artifact rather than an open implementation task
+
+>**What I understood**
+
+>- A project is not truly portfolio-ready when the code merely works on my machine. It needs a reproducible validation path, documented operational assumptions, visible CI evidence, and a stable versioned release.
+>- An annotated Git tag creates an immutable reference to a specific code snapshot; a GitHub Release turns that snapshot into a public, reviewer-friendly product milestone.
+>- End-to-end validation matters because it tests the interfaces between components: source data, offline features, Feast definitions, Redis materialization, freshness checks, online lookup, and ranking.
+>- The difference between "implemented" and "released" is important engineering work: clean scope, verification, documentation, traceability, and an explicit decision that the artifact is ready for others to evaluate.
+
+Project 1 is officially done. Future FeatureForge work can be released as a deliberate follow-up version such as `v0.1.1` or `v0.2.0`; it is no longer unfinished roadmap scope.
+
+---
+
 ## September 25, 2026
 
 **FeatureForge | Days 14–15 — Reproducible CI Baseline and AWS Production Profile Complete ✓**

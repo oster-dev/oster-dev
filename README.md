@@ -99,9 +99,8 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | ✅ Completed |
 | Airflow | DAGs · Scheduling · Retry · XComs · Backfill | ✅ Completed |
 | System Design | DDD start · DIA book · Netflix Tech Blog notes | ✅ Active |
-| **Feature Store / Feast** | Offline / Online Feature Store, feature definitions, backfill logic | 🚧 In Progress |
 | **GitHub / CI-CD** | Repo hygiene, documentation, GitHub Actions pipeline | ✅ Foundation Complete |
-| **Project 1: Open Mini Feature Store** | Public, documented feature store with tests, architecture, CI/CD | 🚧 In Progress |
+| **Project 1: Open Mini Feature Store** | Public, documented feature store with tests, architecture, CI/CD | ✅ **Complete — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** |
 | **AWS SAA-C03** | AWS Certified Solutions Architect Certification | ✅ Passed |
 
 <br>
@@ -122,13 +121,15 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 <br>
 
-## **Portfolio Projects**
+## Portfolio Projects
 
 | # | Project | Stack | Status |
 |---|---|---|---|
-| 1 | Production-Grade Feature Store | Feast · Spark · AWS S3 · Python · GitHub Actions | 🚧 In Progress |
+| 1 | [FeatureForge — Production-Grade Feature Platform](https://github.com/oster-dev/featureforge) | Feast · Spark · Redis · AWS S3 · Python · GitHub Actions | ✅ **Complete — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** |
 | 2 | Real-Time Streaming Pipeline | Kafka · Flink · AWS · Schema Registry · Monitoring | 📅 Month 7 |
 | 3 | End-to-End ML Workflow | Metaflow · MLflow · AWS · Reproducible training pipeline | 📅 Month 8 |
+
+**Project 1 released:** [FeatureForge v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0) — a reproducible feature platform covering deterministic data generation, point-in-time-correct offline features, Feast and Redis online serving, freshness checks, CI, and an AWS production profile.
 
 Every project ships with architecture diagrams, full test coverage, CI/CD, and a reproducible local setup. No toy examples.
 

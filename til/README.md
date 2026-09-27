@@ -7,6 +7,321 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 27, 2026
+
+**MLflow | Model Lifecycle Tracking & Registry — First Hands-On Project**
+
+Today I moved from Feature Infrastructure into ML Lifecycle Infrastructure and built my first complete MLflow project: [mlflow-model-lifecycle-lab](https://github.com/oster-dev/mlflow-model-lifecycle-lab).
+
+This is a reproducible local lab that proves the full lifecycle from a tracked training run to a versioned, registry-served model.
+
+I intentionally kept this as a separate repository instead of extending FeatureForge. This keeps FeatureForge v0.1.0 as a clean, stable release while I build the next distinct competency: ML experiment tracking, model versioning, and registry-based serving.
+
+**MLflow Server & Tracking**
+
+Started a local MLflow Tracking Server with:
+
+```bash
+mlflow server \
+  --backend-store-uri sqlite:///mlflow.db \
+  --default-artifact-root ./mlartifacts
+```
+
+Important operational detail:
+
+- `mlflow server` is a blocking foreground process.
+- The server must remain running in one terminal.
+- Training and inference commands run from a second terminal.
+- Both scripts connect through `MLFLOW_TRACKING_URI`.
+
+Confirmed through the [MLflow UI](http://127.0.0.1:8080) that the following are correctly recorded:
+
+- Experiments.
+- Runs.
+- Parameters.
+- Metrics.
+- Tags.
+- Model artifacts.
+- Registry versions.
+
+This made the operational boundary clear: the tracking server is a long-running service, not a command that starts and exits after training.
+
+**Training, Logging & Run Comparison**
+
+Built a small, reproducible training pipeline using scikit-learn's breast-cancer dataset.
+
+The pipeline uses:
+
+- A deterministic, stratified train/test split.
+- Logged hyperparameters.
+- Logged evaluation metrics.
+- Custom run tags.
+- Persisted model artifacts.
+
+Logged parameters:
+
+```text
+C
+max_iter
+test_size
+random_state
+```
+
+Logged metrics:
+
+```text
+accuracy
+F1
+ROC-AUC
+```
+
+Used:
+
+```python
+mlflow.log_params(...)
+mlflow.log_metrics(...)
+mlflow.set_tags(...)
+```
+
+Ran two candidate experiments with different `C` values and compared them side by side in the MLflow UI using:
+
+- Run comparison.
+- Parallel-coordinates visualization.
+- Parameter and metric filtering.
+
+The main lesson was that experiment tracking is not simply model storage. It captures the complete evidence trail:
+
+```text
+exact configuration
+        +
+resulting metrics
+        +
+tags and context
+        +
+stored artifacts
+        =
+reproducible experiment evidence
+```
+
+**Model Registry**
+
+Registered a model for the first time using `registered_model_name` inside `mlflow.sklearn.log_model()`.
+
+MLflow automatically created incrementing model versions:
+
+```text
+v1
+v2
+v3
+```
+
+Each registered version is connected to its exact source run:
+
+```text
+v1 → silent-whale-342
+v2 → persistent-stork-75
+v3 → unruly-snail-652
+```
+
+Verified the version-to-run lineage directly in the MLflow Models view.
+
+Loaded a specific registered version for inference using:
+
+```text
+models:/engagement-classifier/3
+```
+
+Using an explicit version is more auditable than relying on an ambiguous `latest` reference.
+
+**Debugging a Real Convergence Issue**
+
+The first two Logistic Regression runs produced a genuine `ConvergenceWarning` from `lbfgs`.
+
+This was not a toy tutorial error. It was a realistic signal that the optimization process was not operating on well-conditioned input features.
+
+The root cause was:
+
+```text
+unscaled input features
+```
+
+not simply an insufficiently large `max_iter`.
+
+I fixed the issue by building a single scikit-learn pipeline:
+
+```text
+StandardScaler
+        ↓
+LogisticRegression
+```
+
+The complete pipeline was logged as one MLflow model artifact.
+
+This ensured that the exact scaling learned during training is automatically reapplied during inference.
+
+**Model Results**
+
+| Version | Pipeline | Accuracy | F1 | ROC-AUC | Observation |
+|---|---|---:|---:|---:|---|
+| v1 | Logistic Regression, `C=0.1` | 0.9474 | 0.9583 | 0.9937 | Convergence warning |
+| v2 | Logistic Regression, `C=1.0` | 0.9561 | 0.9655 | 0.9954 | Convergence warning |
+| v3 | `StandardScaler → LogisticRegression` | 0.9825 | 0.9861 | 0.9954 | Warning resolved |
+
+Version 3 trained without warnings and achieved the best accuracy and F1 score.
+
+The important point is that the improvement came from fixing the data-processing and optimization conditions, not from merely increasing iteration limits.
+
+**Model Signatures & Input Examples**
+
+Learned that MLflow model signatures document the expected input and output schema of a registered model.
+
+Used:
+
+```python
+mlflow.models.infer_signature(...)
+```
+
+together with an `input_example`.
+
+The registered model now carries an explicit, inspectable data contract describing:
+
+- Expected input columns.
+- Input data types.
+- Output structure.
+- Example inference data.
+
+Bundling preprocessing and the estimator together prevents training-serving skew:
+
+```text
+training-time scaling
+        =
+inference-time scaling
+```
+
+There is no separate manual preprocessing step that could drift from the logic used during training.
+
+**Engineering Hygiene**
+
+- Kept `mlflow.db`, `mlruns/`, and `mlartifacts/` out of Git through `.gitignore`.
+- Treated MLflow databases, runtime state, and artifacts as generated environment data rather than source code.
+- Ran Ruff formatting, Ruff linting, and pytest before every commit.
+- Added a deterministic-split test to prove that identical configuration produces identical train/test partitions.
+- Wrote a complete `README.md`.
+- Added `ARCHITECTURE.md` covering:
+  - Setup.
+  - Usage.
+  - Design decisions.
+  - Current limitations.
+  - Next steps toward Metaflow orchestration.
+
+A clean, documented lifecycle lab is more valuable for a portfolio than a more impressive but undocumented notebook.
+
+**What I Understood**
+
+- Experiment tracking and model registries are not bureaucratic overhead. They make a model's origin, configuration, evaluation results, and artifacts provable rather than anecdotal.
+- A `ConvergenceWarning` is a diagnostic signal, not something to silence. The correct response is to identify and fix the underlying cause.
+- Bundling preprocessing and the estimator into one pipeline artifact is a simple, high-leverage way to prevent training-serving skew.
+- Explicit registry versions such as `models:/engagement-classifier/3` are more auditable than implicit aliases such as `latest`.
+- A model version should remain connected to the exact run, parameters, metrics, and artifacts that produced it.
+- Model signatures turn an implicit Python assumption into an inspectable input/output contract.
+- MLflow requires operational thinking because the tracking server, artifact store, registry, and training scripts have different responsibilities.
+- A small reproducible lifecycle lab can demonstrate more engineering maturity than a large notebook with unclear provenance.
+- Deterministic data splitting is part of reproducibility and should be tested explicitly rather than assumed.
+
+**Why This Matters for the L5 Roadmap**
+
+This project marks the transition from Feature Infrastructure into ML Lifecycle Infrastructure.
+
+FeatureForge established:
+
+```text
+data contracts
+        ↓
+feature computation
+        ↓
+offline/online serving
+```
+
+The MLflow lab adds:
+
+```text
+tracked experiments
+        ↓
+model artifacts
+        ↓
+registered versions
+        ↓
+lineage-aware inference
+```
+
+Together, these competencies form a stronger ML Platform story:
+
+```text
+reproducible data
+        ↓
+reproducible features
+        ↓
+tracked training runs
+        ↓
+versioned models
+        ↓
+auditable serving
+```
+
+**Roadmap Status**
+
+```text
+Project 1: FeatureForge                         COMPLETE / RELEASED (v0.1.0)
+AWS SAA-C03                                      PASSED
+MLflow Model Lifecycle Lab                       COMPLETE
+Metaflow orchestration                           NEXT
+Open Source contribution (Feast / MLflow)        UPCOMING
+AWS MLA-C01                                      UPCOMING
+```
+
+**Next Step**
+
+Tomorrow I will take the same training use case and rebuild it as an orchestrated Metaflow flow:
+
+```text
+start
+  ↓
+load_data
+  ↓
+train_candidate
+  ↓
+evaluate
+  ↓
+quality_gate
+  ↓
+accepted / rejected
+  ↓
+end
+```
+
+The goal is to place MLflow tracking and Metaflow orchestration side by side in the same repository as one coherent ML lifecycle story.
+
+**Result**
+
+Completed the first hands-on MLflow model-lifecycle project.
+
+The repository now demonstrates:
+
+- A local MLflow Tracking Server.
+- Reproducible experiment tracking.
+- Parameter and metric logging.
+- Run comparison.
+- Model Registry versioning.
+- Version-to-run lineage.
+- Explicit model-version inference.
+- Model signatures and input examples.
+- A real convergence-warning diagnosis.
+- A persisted preprocessing-and-model pipeline.
+- Deterministic test splits.
+- Documentation and engineering hygiene.
+
+---
+
 ## September 26, 2026
 
 **FeatureForge | Project 1 — Officially Completed & Released ✓**

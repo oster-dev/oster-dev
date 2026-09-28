@@ -7,6 +7,284 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 28, 2026
+
+**MLflow + Metaflow | Lifecycle Lab Officially Closed ✓**
+
+Today I closed out the MLflow + Metaflow lifecycle lab properly instead of leaving it as “functionally done.”
+
+The candidate pipeline, quality gate, and accepted/rejected routing already worked from yesterday. Closing the project required more than a working demo: tests, clean documentation, a green CI run, and a repository that communicates its own architecture without requiring verbal explanation.
+
+**What I Actually Did**
+
+Extracted the quality-gate decision from the Metaflow step into a pure function:
+
+```python
+def decide_quality_gate(roc_auc: float, threshold: float) -> str:
+    if not 0.0 <= roc_auc <= 1.0:
+        raise ValueError("roc_auc must be between 0.0 and 1.0")
+    if not 0.0 <= threshold <= 1.0:
+        raise ValueError("threshold must be between 0.0 and 1.0")
+    return "accepted" if roc_auc >= threshold else "rejected"
+```
+
+The function now lives in:
+
+```text
+src/mlflow_lab/training.py
+```
+
+Before this change, the accept/reject logic was buried inside a Metaflow `@step`, which made it difficult to test in isolation.
+
+Now it is:
+
+- Deterministic.
+- Dependency-free.
+- Independently unit-testable.
+- Explicit about invalid inputs.
+- Reusable outside the orchestration layer.
+
+The function has seven tests covering:
+
+- Exact-threshold acceptance.
+- Above-threshold acceptance.
+- Below-threshold rejection.
+- Four invalid-input cases that must fail closed with `ValueError`.
+
+All seven tests passed locally, and the Metaflow graph validated successfully:
+
+```bash
+python flows/engagement_training_flow.py show
+```
+
+**Fixing a Real Linting Issue**
+
+Ruff caught an unsorted import block in the `evaluate` step. The project-specific import appeared above a standard-library or third-party import.
+
+This was a small issue, but it represented an important distinction:
+
+```text
+runs locally
+    !=
+passes CI on a clean checkout
+```
+
+I fixed the import order, reformatted the repository, and reran the complete validation:
+
+```text
+9 files already formatted
+All checks passed!
+7 passed in 1.23s
+```
+
+**GitHub Actions CI**
+
+Added a minimal GitHub Actions workflow that:
+
+- Checks out the repository.
+- Sets up Python.
+- Installs the project with development dependencies and Metaflow.
+- Runs Ruff formatting validation.
+- Runs Ruff linting.
+- Runs pytest.
+- Validates the Metaflow flow graph.
+
+The clean GitHub runner completed successfully:
+
+```text
+build
+succeeded in 59s
+```
+
+This was the real proof that the repository worked from a clean environment without relying on hidden local state.
+
+**Documentation as a Deliverable**
+
+Rewrote:
+
+- `README.md`
+- `ARCHITECTURE.md`
+
+The documentation now reflects the implemented lifecycle:
+
+```text
+train
+  ↓
+evaluate
+  ↓
+quality gate
+  ↓
+accepted / rejected
+  ↓
+register or skip
+  ↓
+load
+  ↓
+infer
+```
+
+It documents:
+
+- MLflow tracking-server setup.
+- Registry versions `v1` through `v4`.
+- The Metaflow DAG.
+- The accepted/rejected contract.
+- The quality-gate policy.
+- The distinction between correctness and orchestration.
+- Current limitations.
+- Next steps toward broader ML platform workflows.
+
+The architecture documentation now separates:
+
+```text
+correctness:
+does the quality-gate policy behave correctly?
+
+orchestration:
+does Metaflow route the workflow correctly?
+```
+
+This distinction is directly connected to the correctness-versus-freshness separation established earlier in FeatureForge.
+
+**Reflection: ML Lifecycle Tools vs. Data Infrastructure**
+
+Working through the full lab gave me a clearer and more honest view of MLflow and Metaflow.
+
+They are lighter-weight tools than I initially expected. Tracking a run, registering a model, and branching a workflow based on a metric threshold are important capabilities, but they are not the hardest part of ML Platform engineering.
+
+The more difficult engineering weight sits underneath:
+
+- Point-in-time correctness.
+- Offline/online feature parity.
+- Feature freshness.
+- Idempotent backfills.
+- Failure handling.
+- Exactly-once processing.
+- Watermarking.
+- Dead-letter handling.
+- Reliable data contracts.
+
+The comparison is:
+
+```text
+MLflow and Metaflow
+    → lifecycle tracking and orchestration layers
+
+Feature Infrastructure
+    → correctness, reliability, temporal semantics, and data movement foundation
+```
+
+This is not discouraging. It is a useful recalibration.
+
+It clarifies where the real complexity of the roadmap lies and why the next major challenge is the Month 7 streaming pipeline project, not another tracking-tool exercise.
+
+**Profile and Roadmap Updates**
+
+Also updated my GitHub profile and roadmap:
+
+- Added the MLflow Model Lifecycle Lab to the Projects section.
+- Added it to the Portfolio table.
+- Moved Current Status to Month 6 of 8.
+- Removed Terraform and Kubernetes badges that I could not yet defend with a completed project.
+- Softened the “full test coverage” claim into a statement I can substantiate.
+- Wrote the Month 5 review covering FeatureForge v0.1.0 and the SAA-C03 certification.
+
+This keeps the public profile aligned with demonstrated experience rather than future intentions.
+
+**Commit History**
+
+```text
+feat: complete MLflow+Metaflow lifecycle with testable quality-gate policy
+docs: finalize README and ARCHITECTURE for complete MLflow+Metaflow lifecycle
+docs: update profile with FeatureForge and ML platform progress
+docs: add Month 5 review for FeatureForge and SAA-C03
+```
+
+The commits separate implementation, project documentation, profile updates, and roadmap reflection.
+
+**What I Understood**
+
+- Closing a project means more than reaching a working demo. It requires tests, documentation, CI validation, traceability, and a repository that explains itself.
+- Extracting policy logic from orchestration steps makes it easier to test, reuse, and reason about independently.
+- Quality-gate functions should fail closed on invalid metric and threshold inputs.
+- A clean CI runner exposes hidden local assumptions that may remain invisible during development.
+- Correctness and orchestration are separate concerns and should be documented and tested separately.
+- MLflow and Metaflow provide valuable lifecycle layers, but the deeper complexity of ML Platform engineering lies in data and feature infrastructure.
+- Removing unsupported profile claims is part of engineering honesty.
+- A public portfolio should reflect demonstrated capabilities, not tools that have only been planned.
+- A project is complete when its core lifecycle is implemented, tested, documented, and reproducible from a clean environment.
+
+**Relevance to the L5 Roadmap**
+
+This project adds a new layer to the roadmap:
+
+```text
+FeatureForge:
+data and feature infrastructure
+
+MLflow:
+experiment tracking, artifacts, and model registry
+
+Metaflow:
+workflow orchestration and conditional routing
+```
+
+Together, the projects now demonstrate:
+
+- Reproducible data generation.
+- Point-in-time-correct feature computation.
+- Offline/online feature serving.
+- Quality and freshness gates.
+- Experiment tracking.
+- Model versioning.
+- Model lineage.
+- Workflow orchestration.
+- Testable policy decisions.
+- CI-validated lifecycle execution.
+
+**What Starts Next**
+
+- Scope Month 7.
+- Begin AWS MLA-C01 preparation.
+- Start the streaming-pipeline project with Kafka and Flink.
+- Find a genuine Feast or MLflow open-source issue rather than a cosmetic change.
+- Build STAR stories from concrete roadmap events, starting with the discipline of closing a project properly.
+
+The next serious complexity is expected in streaming infrastructure:
+
+- Exactly-once semantics.
+- Event-time processing.
+- Watermarking.
+- Late data.
+- Dead-letter handling.
+- Recovery under failure.
+
+**Result**
+
+Officially closed the MLflow + Metaflow lifecycle lab.
+
+The core lifecycle is now implemented, tested, documented, and validated in CI on a clean checkout:
+
+```text
+train
+  ↓
+evaluate
+  ↓
+quality gate
+  ↓
+accepted / rejected
+  ↓
+register or skip
+  ↓
+load
+  ↓
+infer
+```
+
+The project is complete not because every possible extension was built, but because the core competency is now demonstrated with reproducible code, explicit contracts, tests, documentation, and CI evidence.
+
+---
+
 ## September 27, 2026
 
 **MLflow | Model Lifecycle Tracking & Registry — First Hands-On Project**

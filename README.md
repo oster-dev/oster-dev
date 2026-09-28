@@ -16,11 +16,11 @@
 
 ## **About Me**
 
-I'm Nico Ostermann, 24 years old, originally from Germany, now based in Pitești, Romania.
+I'm Nico Ostermann, 24 years old, originally from Germany and now based in Pitești, Romania.
 
-Earlier this year I made a deliberate decision: leave everything comfortable behind and go all in on building a career in ML Platform and Data & Feature Infrastructure engineering. No CS degree. No prior industry experience. Just a structured roadmap, daily discipline, and the belief that what you can prove matters more than what you claim.
+Earlier this year, I made a deliberate decision to build toward ML Platform and Data & Feature Infrastructure engineering through a public, evidence-first roadmap. I learn by shipping: starting with focused systems, then progressing toward more production-oriented projects with tests, CI, architecture documentation, operational trade-offs, and reproducible local workflows.
 
-I document everything here! The roadmap, the projects, the certifications, the honest failures, and the incremental wins. If you're a recruiter, an engineer, or someone on a similar path: this repository is the most accurate picture of who I am and what I'm building.
+I document the roadmap, projects, certifications, failures, and incremental wins openly. This profile is a living record of what I build, how I reason about engineering decisions, and how I improve through execution.
 
 <br>
 
@@ -50,8 +50,6 @@ I document everything here! The roadmap, the projects, the certifications, the h
 <img src="https://img.shields.io/badge/Metaflow-FF8C00?style=flat-square" />
 <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
 <img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonaws&logoColor=white" />
-<img src="https://img.shields.io/badge/Terraform-7B42BC?style=flat-square&logo=terraform&logoColor=white" />
-<img src="https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white" />
 <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" />
 </p>
 
@@ -77,31 +75,37 @@ I document everything here! The roadmap, the projects, the certifications, the h
 
 **[FeatureForge](https://github.com/oster-dev/featureforge)** | Production-inspired feature platform for reproducible offline training data and low-latency online ML feature serving
 
-**[Kafka + Airflow + Postgres Project Month 4](https://github.com/oster-dev/projects/tree/main/event-stream-pipeline)** | End-to-End Event Stream Pipeline 
+**[MLflow Model Lifecycle Lab](https://github.com/oster-dev/mlflow-model-lifecycle-lab)** | Reproducible ML lifecycle with MLflow tracking, registry-based inference, Metaflow orchestration, testable quality-gate routing, and GitHub Actions CI
 
-**[PYSparkETL Project Month 3](https://github.com/oster-dev/projects/tree/main/Retaildata%20PYSparkETL)** | Retail Data ETL with PySpark
+**[Kafka + Airflow + PostgreSQL Event Stream Pipeline](https://github.com/oster-dev/projects/tree/main/event-stream-pipeline)** | End-to-end event-stream pipeline with orchestration and storage
 
-**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)** | API ingestion, validation, feature engineering, and JSON output pipeline built with Python.
+**[PySpark Retail Data ETL](https://github.com/oster-dev/projects/tree/main/Retaildata%20PYSparkETL)** | Retail data ETL pipeline built with PySpark
 
-## Current Status · Month 5 of 8
+**[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)** | API ingestion, validation, feature engineering, and JSON output pipeline built with Python
 
-| Area | Detail | Status |
+## Current Status · Month 6 of 8
+
+| Area | Evidence | Status |
 | :-- | :-- | :-- |
-| Python | Functional Programming, OOP, APIs, Data Structures | ✅ Completed |
-| SQL | Window Functions · CTEs · Query Optimization | ✅ Completed |
-| Git \& GitHub | Branching · PRs · Clean commit hygiene | ✅ Active |
-| AWS CLF-C02 | Cloud Practitioner Certification | ✅ Passed |
-| Docker | Dockerfile · Compose · Networking · Volumes | ✅ Completed |
-| Functional Programming | map · filter · reduce · Pure Functions · Immutability | ✅ Completed |
-| AWS DEA-C01 | Data Engineering Associate Exam | ✅ Passed |
-| Spark | DataFrames · RDDs · Transformations · Actions · ETL Project on GitHub | ✅ Completed |
-| Scala literacy | Read + adapt Spark-Scala code · No writing required | ✅ Completed |
-| Kafka | Topics · Partitions · Consumer Groups · Offsets · Exactly-Once Semantics | ✅ Completed |
-| Airflow | DAGs · Scheduling · Retry · XComs · Backfill | ✅ Completed |
-| System Design | DDD start · DIA book · Netflix Tech Blog notes | ✅ Active |
-| **GitHub / CI-CD** | Repo hygiene, documentation, GitHub Actions pipeline | ✅ Foundation Complete |
-| **Project 1: Open Mini Feature Store** | Public, documented feature store with tests, architecture, CI/CD | ✅ **Complete — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** |
-| **AWS SAA-C03** | AWS Certified Solutions Architect Certification | ✅ Passed |
+| Python | Functional programming, OOP, APIs, data structures, testable modules | ✅ Completed |
+| SQL | Window functions, CTEs, query optimization | ✅ Completed |
+| Git & GitHub | Branching, pull requests, conventional commits, clean repository hygiene | ✅ Active |
+| Docker | Dockerfile, Compose, networking, volumes | ✅ Completed |
+| AWS CLF-C02 | AWS Certified Cloud Practitioner | ✅ Passed |
+| AWS DEA-C01 | AWS Certified Data Engineer – Associate | ✅ Passed |
+| AWS SAA-C03 | AWS Certified Solutions Architect – Associate | ✅ Passed |
+| Apache Spark | DataFrames, RDDs, transformations, actions, public ETL project | ✅ Completed |
+| Scala literacy | Read and adapt Spark/Scala code | ✅ Completed |
+| Kafka | Topics, partitions, consumer groups, offsets, exactly-once concepts | ✅ Completed |
+| Airflow | DAGs, scheduling, retries, XCom, backfills | ✅ Completed |
+| System Design | DDIA, architecture sketches, Netflix Tech Blog notes | ✅ Active |
+| GitHub Actions | Linting, tests, workflow validation, reproducible CI | ✅ Implemented |
+| Project 1: FeatureForge | Feast, Spark, Redis, offline/online serving, freshness, CI, AWS production profile | ✅ **Released — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** |
+| MLflow | Tracking, artifacts, signatures, registry, registry-based inference | ✅ Implemented |
+| Metaflow | Local workflow orchestration, DAG validation, quality-gate routing | ✅ Implemented |
+| MLflow + Metaflow Lab | Tested quality gate, accepted/rejected model routing, GitHub Actions CI | ✅ **[Completed](https://github.com/oster-dev/mlflow-model-lifecycle-lab)** |
+| Open-source contribution | Feast or MLflow documentation, tests, or bug fix | 🔄 In progress |
+| AWS MLA-C01 | AWS Certified Machine Learning Engineer – Associate | 📅 Next |
 
 <br>
 
@@ -115,23 +119,24 @@ I document everything here! The roadmap, the projects, the certifications, the h
 | 3 · June 2026 | AWS DEA-C01 · Apache Spark · Scala literacy | Data Engineering foundation |
 | 4 · July 2026 | Kafka · Airflow · System Design | Streaming pipeline fundamentals |
 | 5 · August 2026 | AWS SAA-C03 · Project 1 launch | Feature Store live and documented |
-| 6 · September 2026 | MLflow · Metaflow · Open Source contribution | ML Platform layer complete |
+| 6 · September 2026 | MLflow · Metaflow · Open Source contribution | MLflow + Metaflow lifecycle lab completed; open-source PR in progress |
 | 7 · October 2026 | AWS MLA-C01 · Project 2 · Interview prep | Streaming pipeline live |
-| 8 · November 2026 | Project 3 · Application | Application submitted |
+| 8 · November 2026 | Project 3 · Applications | End-to-end ML workflow and applications submitted |
 
 <br>
 
 ## Portfolio Projects
 
-| # | Project | Stack | Status |
-|---|---|---|---|
-| 1 | [FeatureForge — Production-Grade Feature Platform](https://github.com/oster-dev/featureforge) | Feast · Spark · Redis · AWS S3 · Python · GitHub Actions | ✅ **Complete — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** |
-| 2 | Real-Time Streaming Pipeline | Kafka · Flink · AWS · Schema Registry · Monitoring | 📅 Month 7 |
-| 3 | End-to-End ML Workflow | Metaflow · MLflow · AWS · Reproducible training pipeline | 📅 Month 8 |
+| # | Project | Stack | Evidence | Status |
+|---|---|---|---|---|
+| 1 | [FeatureForge — Production-Grade Feature Platform](https://github.com/oster-dev/featureforge) | Feast · Spark · Redis · Parquet · Python · GitHub Actions | Point-in-time retrieval, offline/online serving, freshness checks, CI, AWS production profile | ✅ **Released — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** |
+| 2 | [MLflow Model Lifecycle Lab](https://github.com/oster-dev/mlflow-model-lifecycle-lab) | MLflow · Metaflow · scikit-learn · SQLite · GitHub Actions | Model tracking, Registry, accepted/rejected quality gate, seven tests, CI | ✅ Completed |
+| 3 | Real-Time Streaming Pipeline | Kafka · Flink · AWS · Schema Registry · Prometheus · Grafana | Idempotency, event-time handling, DLQ, monitoring | 📅 Month 7 |
+| 4 | End-to-End ML Workflow | Metaflow · MLflow · AWS · real dataset | Reproducible training, deployment demo, monitoring, rollback | 📅 Month 8 |
 
 **Project 1 released:** [FeatureForge v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0) — a reproducible feature platform covering deterministic data generation, point-in-time-correct offline features, Feast and Redis online serving, freshness checks, CI, and an AWS production profile.
 
-Every project ships with architecture diagrams, full test coverage, CI/CD, and a reproducible local setup. No toy examples.
+Each flagship project is designed to be reproducible, documented, and reviewable, with tests and CI where the project scope requires them. The goal is production-inspired engineering evidence.
 
 <br>
 
@@ -184,6 +189,6 @@ If this kind of trajectory is relevant to your team, I would be glad to connect.
 
 <br>
 
-<sub>Last updated: April 2026 · Everything here reflects real progress, not aspirational claims.</sub>
+<sub>Last updated: September 2026 · Everything here reflects real progress, not aspirational claims.</sub>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/oster-dev/oster-dev?style=flat-square)

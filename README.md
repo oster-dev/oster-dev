@@ -59,6 +59,8 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 
 ## **Monthly Updates & Learning Log**
 
+[Month 5 · August/September 2026](./monthly-updates/month-05.md) 
+
 [Month 4 · July 2026](./monthly-updates/month-04.md) 
 
 [Month 3 · June/July 2026](./monthly-updates/month-03.md) 

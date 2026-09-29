@@ -7,6 +7,181 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 29, 2026
+
+**MLflow OSS, Feast OSS & MLA-C01 |Tutorial Investigation and Open-Source Triage**
+
+Today I combined three related activities: reproducing an MLflow documentation issue, triaging a Feast serving-correctness issue, and starting the AWS Certified Machine Learning Engineer – Associate preparation track.
+
+**MLflow OSS — Model Registry Tutorial Investigation**
+
+I reproduced a documentation issue in the MLflow Model Registry tutorial after the default scikit-learn serialization changed to `skops`.
+
+The tutorial uses `RandomForestRegressor` with:
+
+```python
+mlflow.sklearn.log_model(...)
+```
+
+On MLflow 3.16.1, the default:
+
+```text
+serialization_format="skops"
+```
+
+caused the example to fail because the model includes:
+
+```text
+sklearn.tree._tree.Tree
+```
+
+The complete local lifecycle worked after explicitly trusting the reviewed tree type:
+
+```python
+mlflow.sklearn.log_model(
+    sk_model=model,
+    name="sklearn-model",
+    input_example=X_train[:2],
+    registered_model_name="docs-uri-repro-model",
+    skops_trusted_types=["sklearn.tree._tree.Tree"],
+)
+```
+
+Validated locally:
+
+```text
+HTTP Tracking Server
+        ↓
+SQLite backend store
+        ↓
+experiment and run logging
+        ↓
+model registration
+        ↓
+models:/... registry URI
+        ↓
+successful RandomForestRegressor load
+```
+
+Opened:
+
+```text
+MLflow #26256 — [DOC-FIX] Update Model Registry RandomForest tutorial for skops default serialization
+```
+
+Prepared a clean contribution branch:
+
+```text
+docs/fix-randomforest-skops-tutorial
+```
+
+The branch remains unchanged while waiting for MLflow maintainer triage before making or submitting the documentation change.
+
+**Feast OSS — Issue Triage**
+
+Reviewed Feast issue #6821:
+
+```text
+Feature view ttl is not applied on the standard online retrieval path
+```
+
+The issue is directly relevant to feature-serving correctness. Expired Feature View values can be returned as `PRESENT`, making stale values indistinguishable from fresh values during online retrieval.
+
+The issue had:
+
+- No formal assignee.
+- No linked branch.
+- No linked pull request.
+
+However, another contributor had already posted a detailed implementation plan and explicitly stated that they wanted to work on it.
+
+I did not claim or duplicate the work.
+
+The key lesson was:
+
+```text
+No assignee does not always mean an issue is available.
+
+Always check the full discussion for existing claims,
+proposed fixes, and active contributor work before starting implementation.
+```
+
+This is part of responsible open-source participation: check the full context, avoid duplicated effort, and respect existing contributor ownership even when the issue metadata is incomplete.
+
+**MLA-C01 — Preparation Started**
+
+Purchased Tutorials Dojo MLA-C01 practice exams and started the AWS Certified Machine Learning Engineer – Associate preparation track.
+
+The study process will follow the same evidence-based pattern that worked for SAA-C03:
+
+```text
+practice questions
+        ↓
+identify wrong decision rules
+        ↓
+analyze every answer option
+        ↓
+targeted documentation or hands-on review
+        ↓
+error log
+        ↓
+spaced repetition
+```
+
+The MLflow work today reinforced several MLA-C01-relevant ML Platform topics:
+
+- Model packaging and serialization.
+- Model Registry lifecycle.
+- Tracking-server and metadata-backend separation.
+- Model artifact retrieval through registry URIs.
+- Security-aware model persistence.
+- Version-to-run lineage.
+- Explicit model-version loading.
+
+**What I Learned**
+
+- MLflow tracking clients can write directly to SQLite or communicate through an HTTP tracking server using the same backend store.
+- A successful tracking run does not guarantee that model registration and registry-URI loading work; the complete lifecycle must be tested separately.
+- Secure serialization defaults can make existing tutorial examples non-runnable when required trusted types are not documented.
+- Open-source contribution requires reproduction, source inspection, duplicate checks, scope discipline, and respect for existing contributor claims.
+- Issue metadata alone is not enough to determine whether work is available.
+- External maintainer response time should not block roadmap execution.
+- A documentation bug can expose a real operational gap when library defaults change but examples do not evolve with them.
+- Model serialization is part of the ML platform contract because it affects portability, security, and reproducible loading.
+
+**Next Steps**
+
+```text
+1. Check MLflow issue #26256 once daily for triage or maintainer feedback.
+2. Keep the MLflow contribution branch unchanged until the requested approach is confirmed.
+3. Scan Feast issues for a maximum of 20–25 minutes each morning.
+4. Start MLA-C01 Tutorials Dojo review-mode diagnostics.
+5. Create a domain-based MLA-C01 error log.
+```
+
+The MLflow branch remains a clean reproduction branch rather than an unreviewed contribution, and the Feast issue remains intentionally unclaimed until the existing contributor's work is clarified.
+
+**Roadmap Status**
+
+```text
+Project 1: FeatureForge                         COMPLETE / RELEASED (v0.1.0)
+AWS SAA-C03                                      PASSED
+MLflow Model Lifecycle Lab                       COMPLETE
+Metaflow orchestration                           COMPLETE
+MLflow OSS contribution                          OPEN — issue #26256 under triage
+Feast OSS contribution                           TRIAGE ONLY — issue #6821 already claimed
+AWS MLA-C01                                      STARTED
+Kafka/Flink streaming project                    UPCOMING
+```
+
+**Result**
+
+Reproduced and isolated an MLflow documentation issue caused by the `skops` serialization default, validated the full Model Registry lifecycle with an explicit trusted type, and opened MLflow issue #26256 with a clean contribution branch prepared for maintainer feedback.
+
+Also triaged Feast issue #6821 without duplicating an existing contributor's work and started the MLA-C01 preparation track with a structured practice-question and error-log workflow.
+
+---
+
 ## September 28, 2026
 
 **MLflow + Metaflow | Lifecycle Lab Officially Closed ✓**

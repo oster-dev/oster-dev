@@ -9,7 +9,7 @@ TIL Started: April 13, 2026
 
 ## September 29, 2026
 
-**MLflow OSS, Feast OSS & MLA-C01 |Tutorial Investigation and Open-Source Triage**
+**MLflow OSS, Feast OSS & MLA-C01 | Tutorial Investigation and Open-Source Triage**
 
 Today I combined three related activities: reproducing an MLflow documentation issue, triaging a Feast serving-correctness issue, and starting the AWS Certified Machine Learning Engineer – Associate preparation track.
 

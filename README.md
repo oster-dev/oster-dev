@@ -59,6 +59,8 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 
 ## **Monthly Updates & Learning Log**
 
+[Month 6 · September 2026](./monthly-updates/month-06.md) 
+
 [Month 5 · August/September 2026](./monthly-updates/month-05.md) 
 
 [Month 4 · July 2026](./monthly-updates/month-04.md) 
@@ -85,7 +87,7 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 
 **[Jikan Feature Pipeline](https://github.com/oster-dev/projects/tree/main/jikan-feature-pipeline-dockerized)** | API ingestion, validation, feature engineering, and JSON output pipeline built with Python
 
-## Current Status · Month 6 of 8
+## Current Status · Month 7 of 8
 
 | Area | Evidence | Status |
 | :-- | :-- | :-- |
@@ -106,8 +108,10 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 | MLflow | Tracking, artifacts, signatures, registry, registry-based inference | ✅ Implemented |
 | Metaflow | Local workflow orchestration, DAG validation, quality-gate routing | ✅ Implemented |
 | MLflow + Metaflow Lab | Tested quality gate, accepted/rejected model routing, GitHub Actions CI | ✅ **[Completed](https://github.com/oster-dev/mlflow-model-lifecycle-lab)** |
-| Open-source contribution | Feast or MLflow documentation, tests, or bug fix | 🔄 In progress |
-| AWS MLA-C01 | AWS Certified Machine Learning Engineer – Associate | 📅 Next |
+| Open-source contribution | Reproduced MLflow Model Registry tutorial issue; documentation fix merged upstream | ✅ **[MLflow #26256](https://github.com/mlflow/mlflow/issues/26256) → [PR #26287](https://github.com/mlflow/mlflow/pull/26287) merged** |
+| AWS MLA-C01 | AWS Certified Machine Learning Engineer – Associate; Tutorial Dojo practice track started | 🔄 In progress |
+| Project 2: Streaming Pipeline | Kafka, Flink, Schema Registry, monitoring, idempotency, DLQ, watermarks | 📅 Next |
+| Netflix Culture | Freedom & Responsibility stories and STAR interview bank | 📅 Next |
 
 <br>
 

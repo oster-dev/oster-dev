@@ -7,6 +7,290 @@ TIL Started: April 13, 2026
 
 ---
 
+## September 30, 2026
+
+**MLflow OSS, Month 6 Closure & MLA-C01 Baseline**
+
+Today I reached an important milestone in three areas:
+
+- The MLflow documentation issue I opened was merged upstream.
+- Month 6 of my roadmap is officially complete.
+- I started MLA-C01 preparation and adjusted the learning strategy based on the first diagnostic result.
+
+**MLflow OSS — Documentation Issue Merged Upstream**
+
+The MLflow documentation issue I opened was completed upstream today.
+
+While validating the official Model Registry tutorial end to end, I found that the `RandomForestRegressor` example failed under the current default scikit-learn serialization behavior:
+
+```text
+mlflow.sklearn.log_model()
+        ↓
+default serialization_format="skops"
+        ↓
+RandomForest contains sklearn.tree._tree.Tree
+        ↓
+untrusted type error
+        ↓
+tutorial example does not complete
+```
+
+The issue was not caused by:
+
+- The tracking server.
+- The SQLite backend store.
+- The Model Registry.
+- The `models:/...` URI flow.
+
+I tested those layers independently:
+
+```text
+Direct SQLite tracking
+        ↓
+HTTP Tracking Server
+        ↓
+SQLite backend store
+        ↓
+experiment and run logging
+        ↓
+RandomForest model logging
+        ↓
+model registration
+        ↓
+models:/... model URI loading
+        ↓
+successful inference
+```
+
+The required security-aware configuration was:
+
+```python
+skops_trusted_types=["sklearn.tree._tree.Tree"]
+```
+
+After verifying the behavior locally, inspecting MLflow source code and tests, reviewing documentation and Git history, and checking for duplicate issues, I opened:
+
+```text
+MLflow Issue #26256
+[DOC-FIX] Update Model Registry RandomForest tutorial for skops default serialization
+```
+
+The issue was triaged by MLflow maintainer `harupy`.
+
+GitHub Copilot created the linked documentation pull request:
+
+```text
+MLflow PR #26287
+[DOC-FIX] Update Model Registry tutorial for skops serialization
+```
+
+The pull request implemented the minimal security-aware scope proposed in the issue:
+
+- Add `skops_trusted_types` to the RandomForest tutorial example.
+- Explain why `sklearn.tree._tree.Tree` must be explicitly trusted.
+- Remind users to trust only reviewed types.
+- Link to the Pickle-Free Model format documentation.
+
+The pull request was merged into:
+
+```text
+mlflow/mlflow:master
+```
+
+Issue #26256 was then closed as completed.
+
+This is my first merged upstream open-source contribution in the roadmap.
+
+**The Contribution Process**
+
+The contribution was small in code size, but complete in engineering process:
+
+```text
+Run official tutorial
+        ↓
+reproduce failure
+        ↓
+isolate the actual cause
+        ↓
+validate the full model lifecycle
+        ↓
+inspect source and tests
+        ↓
+check duplicates
+        ↓
+propose a narrow security-aware fix
+        ↓
+issue triaged
+        ↓
+upstream PR merged
+```
+
+The important part was not only identifying the missing parameter. I also had to prove that the rest of the lifecycle worked, confirm the behavior against the project source and tests, check that the issue was not already duplicated, and keep the proposed fix narrowly scoped.
+
+**Month 6 — Officially Closed**
+
+Month 6 is now fully complete:
+
+```text
+AWS SAA-C03
+        ↓
+passed
+
+FeatureForge
+        ↓
+released as v0.1.0
+
+MLflow + Metaflow lifecycle lab
+        ↓
+built, tested, documented, and published
+
+MLflow open-source contribution
+        ↓
+issue #26256
+        ↓
+PR #26287 merged upstream
+```
+
+The important proof from Month 6 is not only that I used MLflow and Metaflow. It is that I can validate a full ML lifecycle and recognize failures at the boundaries between tracking, storage, serialization, registration, and inference.
+
+```text
+Training data
+        ↓
+candidate model
+        ↓
+tracked experiment
+        ↓
+artifacts and signature
+        ↓
+quality decision
+        ↓
+model registry
+        ↓
+registry URI
+        ↓
+inference
+```
+
+Month 6 now contains externally visible evidence across certification, feature infrastructure, ML lifecycle tooling, and open-source contribution.
+
+**MLA-C01 — Baseline and Strategy Adjustment**
+
+Started the AWS Certified Machine Learning Engineer – Associate preparation track with Tutorials Dojo.
+
+First diagnostic result:
+
+```text
+20 questions
+60% correct
+```
+
+This is a small baseline, not an exam-readiness result.
+
+The first question set made one thing clear: working through practice questions without sufficient foundation is not the most efficient approach for MLA-C01. There are still broad conceptual gaps across:
+
+- AWS ML services.
+- ML development.
+- Deployment.
+- Workflow orchestration.
+- Monitoring.
+- Security.
+- Maintenance.
+
+For previous AWS certifications, practice-first learning worked because I already had enough foundation to interpret the feedback correctly. For MLA-C01, the learning sequence needs to be adjusted.
+
+The new approach is:
+
+```text
+Structured Skill Builder-style foundation material
+        ↓
+close broad blind spots
+        ↓
+build a domain map
+        ↓
+active recall and targeted notes
+        ↓
+Tutorial Dojo review-mode practice
+        ↓
+analyze wrong answers and distractors
+        ↓
+AWS documentation and hands-on labs for specific gaps
+        ↓
+full practice exams
+```
+
+Tutorials Dojo remains an important resource, but it will serve primarily as the validation and decision-rule practice layer rather than the first exposure to every topic.
+
+**MLA-C01 Exam Domains**
+
+| Domain | Weight |
+|---|---:|
+| Data Preparation for Machine Learning | 28% |
+| ML Model Development | 26% |
+| Deployment and Orchestration of ML Workflows | 22% |
+| ML Solution Monitoring, Maintenance, and Security | 24% |
+
+These domains map directly to the ML Platform profile I am building:
+
+```text
+Data preparation
+        ↓
+feature and training-data systems
+
+Model development
+        ↓
+experimentation, evaluation, artifacts, and quality gates
+
+Deployment and orchestration
+        ↓
+registry, pipelines, promotion, endpoints, and workflows
+
+Monitoring, maintenance, and security
+        ↓
+observability, drift, access control, reliable operations,
+and safe model handling
+```
+
+**What I Learned**
+
+- A merged upstream change can begin with a small, carefully reproduced user-path failure.
+- The quality of an open-source contribution is not measured only by the number of changed lines.
+- Secure serialization defaults can introduce explicit trust requirements that tutorials must document clearly.
+- Tracking, artifact storage, model registry, and model loading are separate contracts that should be validated independently.
+- A successful training run does not prove that registration and registry-URI inference will work.
+- Practice questions are most valuable once there is enough foundation to understand the decision rules behind each answer.
+- Learning strategies should adapt to the subject instead of being applied mechanically.
+- A low initial diagnostic score is useful when it reveals that the method needs adjustment before more practice volume is added.
+- Open-source participation requires technical reproduction, scope discipline, duplicate checks, and respect for existing contributor claims.
+- External maintainer response time should not block progress on the broader roadmap.
+
+**Roadmap Status**
+
+```text
+Project 1: FeatureForge                         COMPLETE / RELEASED (v0.1.0)
+AWS SAA-C03                                      PASSED
+MLflow Model Lifecycle Lab                       COMPLETE
+Metaflow orchestration                           COMPLETE
+MLflow OSS contribution                          MERGED — issue #26256, PR #26287
+AWS MLA-C01                                      STARTED — diagnostic 60% (20 questions)
+Kafka/Flink streaming project                    UPCOMING
+```
+
+**Result**
+
+Completed the first merged upstream open-source contribution in the roadmap by fixing the MLflow Model Registry RandomForest tutorial for `skops` serialization.
+
+Month 6 is now officially closed with:
+
+- AWS SAA-C03 passed.
+- FeatureForge released as v0.1.0.
+- MLflow and Metaflow lifecycle lab completed.
+- MLflow documentation PR merged upstream.
+- Public portfolio and roadmap updated.
+
+The first MLA-C01 diagnostic scored 60% on 20 questions. Rather than treating that result as an exam-readiness signal, I used it to adjust the preparation method toward structured foundation learning before intensive practice-question analysis.
+
+---
+
 ## September 29, 2026
 
 **MLflow OSS, Feast OSS & MLA-C01 | Tutorial Investigation and Open-Source Triage**

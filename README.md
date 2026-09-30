@@ -109,7 +109,7 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 | Metaflow | Local workflow orchestration, DAG validation, quality-gate routing | ✅ Implemented |
 | MLflow + Metaflow Lab | Tested quality gate, accepted/rejected model routing, GitHub Actions CI | ✅ **[Completed](https://github.com/oster-dev/mlflow-model-lifecycle-lab)** |
 | Open-source contribution | Reproduced MLflow Model Registry tutorial issue; documentation fix merged upstream | ✅ **[MLflow #26256](https://github.com/mlflow/mlflow/issues/26256) → [PR #26287](https://github.com/mlflow/mlflow/pull/26287) merged** |
-| AWS MLA-C01 | AWS Certified Machine Learning Engineer – Associate; Tutorial Dojo practice track started | 🔄 In progress |
+| AWS MLA-C02 | AWS Certified Machine Learning Engineer – Associate; Tutorial Dojo practice track started | 🔄 In progress |
 | Project 2: Streaming Pipeline | Kafka, Flink, Schema Registry, monitoring, idempotency, DLQ, watermarks | 📅 Next |
 | Netflix Culture | Freedom & Responsibility stories and STAR interview bank | 📅 Next |
 
@@ -126,7 +126,7 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 | 4 · July 2026 | Kafka · Airflow · System Design | Streaming pipeline fundamentals |
 | 5 · August 2026 | AWS SAA-C03 · Project 1 launch | Feature Store live and documented |
 | 6 · September 2026 | MLflow · Metaflow · Open Source contribution | MLflow + Metaflow lifecycle lab completed; open-source PR in progress |
-| 7 · October 2026 | AWS MLA-C01 · Project 2 · Interview prep | Streaming pipeline live |
+| 7 · October 2026 | AWS MLA-C02 · Project 2 · Interview prep | Streaming pipeline live |
 | 8 · November 2026 | Project 3 · Applications | End-to-end ML workflow and applications submitted |
 
 <br>
@@ -153,7 +153,7 @@ Each flagship project is designed to be reproducible, documented, and reviewable
 | Cloud Practitioner · CLF-C02 | Month 2 · May 2026 | ✅ [Passed](https://www.credly.com/badges/2c2b32e6-4bc9-4e60-ad56-3cf7bc2775bd/public_url) |
 | Data Engineer Associate · DEA-C01 | Month 3–4 · June/July 2026 | ✅ [Passed](https://www.credly.com/badges/76633228-8b19-4fb6-81bd-ebea0e96f087/public_url) |
 | Solutions Architect Associate · SAA-C03 | Month 5–6 · Aug/Sep 2026 | ✅ [Passed](https://www.credly.com/badges/323635b9-4840-4a90-8900-a2a86b8082c1/public_url) |
-| ML Engineer Associate · MLA-C01 | Month 7 · October 2026 | 📅 Upcoming |
+| ML Engineer Associate · MLA-C02 | Month 7 · October 2026 | 📅 Upcoming |
 
 <br>
 

@@ -7,6 +7,151 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 1, 2026
+
+**AWS Certification | MLA-C01 → MLA-C02 Transition**
+
+Today I continued the transition from AWS Certified Machine Learning Engineer – Associate MLA-C01 to the new MLA-C02 version.
+
+Because MLA-C01 was deprecated in September 2026, my certification goal now officially targets MLA-C02.
+
+**Exam-Version and Coupon Problem**
+
+The transition also exposed an uncomfortable practical issue:
+
+- The course or exam preparation material I already purchased still targets MLA-C01.
+- There is currently no clear solution from Udemy or Pearson VUE for transferring or reusing the related coupon.
+- An already-paid exam voucher or purchase may therefore become unusable.
+- Until an official resolution exists, I have to assume that part of the previous investment may be lost.
+
+This showed me that certification planning is not only about technical content. Exam-version changes can also affect:
+
+- Purchased courses.
+- Exam vouchers.
+- Coupon validity.
+- Exam-code expiration dates.
+- Version-specific eligibility.
+
+For future certifications, I should verify the exam-code validity period and whether a voucher is tied to a specific exam version before purchasing.
+
+**MLA-C02 Preparation App**
+
+I also started using the new MLA-C02 ML Engineer Prep App.
+
+The app costs €2.99 per month and currently contains 321 questions.
+
+Current progress:
+
+```text
+Questions answered: 45
+Recent accuracy: 68%
+Question pool seen: 14%
+Readiness score: 56/100
+```
+
+Open mistakes currently reduce the readiness score by one point each.
+
+The app is not a replacement for structured AWS learning material. It is a current and inexpensive tool for:
+
+- Short practice sessions.
+- Detecting knowledge gaps.
+- Repeating recently missed questions.
+- Building familiarity with the MLA-C02 question style.
+
+**First Technical Review: Choosing the Model Type**
+
+One question today tested the basic mapping between problem type and modeling approach:
+
+| Problem | Appropriate approach |
+|---|---|
+| Continuous numerical target, such as travel time in minutes | Regression |
+| Binary target, such as on time or delayed | Binary classification |
+| No target variable and automatic group discovery | Clustering |
+| Ordering candidates by relevance or priority | Ranking |
+
+The question was straightforward, but useful because it reinforced the foundational connection between:
+
+```text
+business problem
+        ↓
+target-variable structure
+        ↓
+machine-learning problem type
+        ↓
+modeling approach
+```
+
+These basic classifications are important because selecting the wrong problem type can invalidate the entire downstream training and evaluation strategy.
+
+**Roadmap Alignment**
+
+My certification focus now shifts from an MLA-C01-oriented question pool to MLA-C02:
+
+```text
+MLA-C02
+        ↓
+traditional ML fundamentals
+        ↓
+SageMaker workloads
+        ↓
+data preparation and feature engineering
+        ↓
+model training and evaluation
+        ↓
+deployment and monitoring
+        ↓
+foundation models and generative AI
+```
+
+This aligns directly with the work already completed in the roadmap:
+
+- FeatureForge covers data preparation, feature engineering, offline/online features, quality gates, freshness, and serving.
+- The MLflow and Metaflow lab covers experiment tracking, model versioning, registry workflows, orchestration, and quality-based routing.
+- MLA-C02 preparation will extend that foundation into AWS-native machine-learning services, SageMaker workflows, monitoring, deployment, and generative-AI concepts.
+
+**What I Learned**
+
+- A certification-version transition can affect both study materials and already-purchased exam products.
+- Exam vouchers should be checked for expiration dates and version restrictions before purchase.
+- A current practice app is useful for short diagnostic sessions, but it cannot replace structured foundational learning.
+- Model selection starts with correctly identifying the business problem and target-variable structure.
+- Regression, binary classification, clustering, and ranking represent different problem formulations and require different evaluation strategies.
+- The MLA-C02 transition is not only a change in exam code; it is an opportunity to align certification preparation with the ML Platform skills already developed through FeatureForge, MLflow, and Metaflow.
+- Staying current with the active exam version is part of certification engineering, not merely administrative work.
+
+**Current MLA-C02 Progress**
+
+```text
+Questions answered: 45 / 321
+Recent accuracy: 68%
+Question pool coverage: 14%
+Readiness score: 56 / 100
+Status: foundation and diagnostic phase
+```
+
+The app is useful for measuring current performance, but the readiness score is not yet an exam-readiness signal. The next phase is to build a structured MLA-C02 foundation before increasing practice volume.
+
+**Next Steps**
+
+```text
+1. Confirm whether the MLA-C01 purchase or coupon can be transferred or reused.
+2. Continue using the MLA-C02 app for short diagnostic practice sessions.
+3. Build a structured MLA-C02 domain map.
+4. Review traditional ML fundamentals before deeper AWS service practice.
+5. Connect each certification topic to FeatureForge, MLflow, and Metaflow examples.
+6. Create an MLA-C02 error log for wrong answers and recurring decision rules.
+```
+
+**Result**
+
+Started the transition from MLA-C01 to MLA-C02 after confirming that the active certification target has changed.
+
+I also completed the first MLA-C02 app session with 45 questions answered, 68% recent accuracy, 14% question-pool coverage, and a readiness score of 56/100.
+
+The most useful technical review today was the basic mapping between regression, binary classification, clustering, and ranking. More importantly, the MLA-C02 transition clarified that the next study phase should combine structured foundation learning with targeted question practice rather than relying on a question pool as the first exposure to every topic.
+
+---
+
 ## September 30, 2026
 
 **MLflow OSS, Month 6 Closure & MLA-C01 Baseline**

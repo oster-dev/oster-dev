@@ -109,7 +109,7 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 | Metaflow | Local workflow orchestration, DAG validation, quality-gate routing | ✅ Implemented |
 | MLflow + Metaflow Lab | Tested quality gate, accepted/rejected model routing, GitHub Actions CI | ✅ **[Completed](https://github.com/oster-dev/mlflow-model-lifecycle-lab)** |
 | Open-source contribution | Reproduced MLflow Model Registry tutorial issue; documentation fix merged upstream | ✅ **[MLflow #26256](https://github.com/mlflow/mlflow/issues/26256) → [PR #26287](https://github.com/mlflow/mlflow/pull/26287) merged** |
-| AWS MLA-C02 | AWS Certified Machine Learning Engineer – Associate; Tutorial Dojo practice track started | 🔄 In progress |
+| AWS MLA-C02 | AWS Certified Machine Learning Engineer – Associate (MLA-C01 deprecated September 2026) | 🔄 In progress |
 | Project 2: Streaming Pipeline | Kafka, Flink, Schema Registry, monitoring, idempotency, DLQ, watermarks | 📅 Next |
 | Netflix Culture | Freedom & Responsibility stories and STAR interview bank | 📅 Next |
 

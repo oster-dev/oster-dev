@@ -7,6 +7,34 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 2, 2026
+
+**AWS MLA-C02 | Extended Exam Simulation**
+
+Completed an extended exam in the MLA-C02 prep app: 30 questions, 90-minute timer, **73.3% correct**.
+
+- Existing AWS experience and earlier certifications already cover a good share of the material.
+- The result still shows clear knowledge gaps that need targeted work.
+
+**Study plan**
+
+1. Work through all 321 questions in the app once.
+2. Collect every incorrect answer across the full question bank.
+3. Deep-review each incorrect question: understand why the right answer is correct and why the distractors are wrong, then check the AWS documentation.
+4. Log the recurring decision rules and weak domains in the error log.
+
+**Voucher update**
+
+- Support confirmed that the voucher is valid for all Associate-level exams.
+- The only open issue is that the ME1-C02 beta exam (MLA-C02 beta) currently has problems with voucher redemption.
+- This should be fixed before I am exam-ready, so it is no longer a concern.
+
+**Takeaway**
+
+A practice score of 73.3% is a solid baseline but not yet exam-ready. The goal now is to turn every wrong answer into a reusable rule instead of just repeating questions.
+
+---
+
 ## October 1, 2026
 
 **AWS Certification | MLA-C01 → MLA-C02 Transition**

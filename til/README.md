@@ -7,6 +7,28 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 3, 2026
+
+**AWS MLA-C02 | Practice Questions**
+
+Answered 50 more questions in the MLA-C02 prep app. The accuracy score is still very high.
+
+- The app has no option to exclude previously missed questions and serve only new ones.
+- That is a small drawback for coverage, but it also works as a free spaced-repetition check on whether I really learned the missed topics.
+- Workaround: track unseen questions via the bank coverage metric and review the open mistakes separately.
+
+**Exam readiness**
+
+- Practice results and prior AWS experience suggest I could sit the MLA-C02 exam soon.
+- Before booking, I still want to finish the full 321-question pass and deep-review every incorrect answer.
+- Remaining focus: the GenAI/Foundation Model topics that go beyond the older MLA-C01 scope.
+
+**Takeaway**
+
+High practice scores only mean something if the weak spots are closed. Repeated questions test recall; new questions test understanding.
+
+---
+
 ## October 2, 2026
 
 **AWS MLA-C02 | Extended Exam Simulation**

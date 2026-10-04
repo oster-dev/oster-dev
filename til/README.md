@@ -7,6 +7,29 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 4, 2026
+
+**AWS MLA-C02 | Practice Questions**
+
+Answered 40 more questions in the MLA-C02 prep app.
+
+- The app still has no option to serve only new, unseen questions.
+- Mixing in repeated questions inflates the score, because some correct answers come from recognition rather than understanding.
+- Next step: send the developer a feature request for a "new questions only" mode, plus a filter for unseen or previously missed questions.
+
+**Study plan (unchanged)**
+
+1. Finish the full pass through all 321 questions.
+2. Collect every incorrect answer.
+3. Deep-review each one against the AWS documentation.
+4. Turn recurring mistakes into decision rules in the error log.
+
+**Takeaway**
+
+Practice tools shape how you measure progress. Without a "new questions only" mode, I need to track coverage and unseen-question accuracy myself.
+
+---
+
 ## October 3, 2026
 
 **AWS MLA-C02 | Practice Questions**

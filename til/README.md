@@ -7,6 +7,36 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 5, 2026
+
+**AWS MLA-C02 | Practice Questions & Developer Feedback**
+
+Today I answered 40 more questions in the MLA-C02 prep app.
+
+- Continued the full pass through the 321-question bank.
+- Still tracking bank coverage and accuracy on unseen questions myself, so repeated questions do not inflate my readiness picture.
+
+**Developer Feedback | "New Questions Only" Mode**
+
+I sent a feature request to the app developer asking for a practice mode that serves only unseen questions.
+
+- The developer accepted it into the backlog and asked whether it should be a toggle in settings.
+- My suggestion: a dedicated practice mode for new questions only, placed above or below the review-questions button.
+- **Status: not implemented yet.** The developer will notify me when it ships.
+
+**Next Steps**
+
+1. Finish the first pass through all 321 questions.
+2. Collect every incorrect answer.
+3. Deep-review each one against the AWS documentation.
+4. Turn recurring mistakes into decision rules in the error log.
+
+**Takeaway**
+
+A small, concrete feature request got a quick response. Until the feature ships, I measure progress through coverage and unseen-question accuracy instead of the overall score.
+
+---
+
 ## October 4, 2026
 
 **AWS MLA-C02 | Practice Questions**

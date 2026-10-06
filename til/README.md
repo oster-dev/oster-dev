@@ -7,6 +7,39 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 6, 2026
+
+**AWS MLA-C02 | Practice Questions & Reality Check**
+
+Today I answered 50 more questions in the MLA-C02 prep app. Current accuracy: **82%**.
+
+- If the app's question quality can be trusted, this score would already be a clear pass level.
+- The "new questions only" mode is **still not implemented**. The developer has not yet announced a release.
+
+**Repeated Questions: Upside and Downside**
+
+- Possible upside: seeing the same questions repeatedly reinforces the correct answers through spaced repetition.
+- Possible downside: repeated questions inflate the score, because some correct answers come from recognition rather than understanding.
+
+**Reality Check**
+
+- The app is a third-party question bank, not an official AWS source, so 82% is a signal and not a guarantee.
+- Before booking, I want to validate the result against the official MLA-C02 exam guide and a second source of questions.
+- I still plan to deep-review all incorrect answers, with a focus on GenAI and Foundation Model topics.
+
+**Next Steps**
+
+1. Finish the first pass through all 321 questions.
+2. Deep-review every incorrect answer against the AWS documentation.
+3. Check accuracy on unseen questions separately from repeated ones.
+4. Decide on a booking date for the ME1-C02 beta once the voucher redemption issue is fixed.
+
+**Takeaway**
+
+A high practice score is encouraging, but it only counts if it holds up on questions I have not seen before and matches the official exam scope.
+
+---
+
 ## October 5, 2026
 
 **AWS MLA-C02 | Practice Questions & Developer Feedback**

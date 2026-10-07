@@ -7,6 +7,41 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 7, 2026
+
+**AWS MLA-C02 | First Full Pass Complete ✓**
+
+Today I answered the remaining questions. I have now seen all **321 questions** in the MLA-C02 prep app.
+
+**Result of the First Pass**
+
+- **88 questions** are currently marked as missed, about **27%** of the bank.
+- That puts first-pass accuracy at roughly **73%** (233 of 321), counting each question once.
+- Recent accuracy in the app was higher, at about 82%. This suggests the weak spots are concentrated in specific topics and not spread evenly.
+
+```text
+Questions in bank:        321
+Questions currently missed: 88  (about 27%)
+First-pass accuracy:      about 73%  (233 / 321)
+Recent accuracy in app:   about 82%
+```
+
+**Next Steps**
+
+1. Deep-review all 88 missed questions over the coming days.
+2. For each one, write down why the correct answer is right and why each distractor is wrong.
+3. Check the AWS documentation for every topic I got wrong.
+4. Group the misses by exam domain and by service to find recurring gaps, especially around GenAI and Foundation Model topics.
+5. Add a decision rule for each recurring mistake to the error log.
+6. Re-run only the missed questions in the app until I answer them correctly without hesitation.
+7. **Book the exam** (ME1-C02 beta) once the review is finished and the voucher redemption issue is confirmed fixed.
+
+**Takeaway**
+
+Seeing every question once only gives a baseline. The real learning happens in the review of the misses, so that is where the time goes now.
+
+---
+
 ## October 6, 2026
 
 **AWS MLA-C02 | Practice Questions & Reality Check**

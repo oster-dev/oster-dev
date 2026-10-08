@@ -7,6 +7,94 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 8, 2026
+
+**AWS MLA-C02 | Missed Questions Review — Round 1**
+
+Today I re-answered 22 of the 88 previously missed MLA-C02 questions and read the full explanation for every question.
+
+**Round 1 Result**
+
+- **19/22 correct**
+- **86.36% accuracy**
+- **3 questions still incorrect**
+- Remaining missed-question backlog: **66**
+
+```text
+Previously missed: 88
+Reviewed today:    22
+Correct:           19
+Still incorrect:    3
+Remaining backlog: 66
+Second-attempt accuracy: 86.36%
+```
+
+The result shows that reviewing the full explanation and actively re-answering the questions is already improving recall. The remaining errors are becoming more precise and topic-specific.
+
+**Remaining Gaps Identified**
+
+### Regression vs. Classification
+
+- A continuous numeric target, such as travel time in minutes, requires **regression**.
+- Binary classification predicts discrete class labels, such as on time or delayed.
+
+```text
+Continuous numerical value → Regression
+Discrete class label       → Classification
+```
+
+### Precision and Recall Trade-Offs
+
+When false negatives are costly and false positives are acceptable:
+
+- Optimize for **recall**.
+- Use precision-recall analysis to choose an appropriate decision threshold.
+
+```text
+Costly false negatives
+        ↓
+prioritize recall
+        ↓
+select threshold using precision-recall analysis
+```
+
+### AWS Glue FindMatches
+
+Use AWS Glue FindMatches for entity resolution when records may represent the same real-world entity without sharing a unique identifier.
+
+The workflow includes:
+
+- Training with labeled examples.
+- Applying the transformation to candidate records.
+- Evaluating quality with labeled examples withheld from training.
+
+This distinguishes FindMatches from simple exact-key deduplication.
+
+**Additional Review Topics**
+
+Today’s explanations also covered:
+
+- SageMaker Model Cards vs. Data Cards.
+- Glue ML Transform lifecycle and `Ready for use` status.
+- Amazon Bedrock for managed foundation-model API access.
+- SageMaker Production Variants for weighted traffic routing and rollback.
+- SageMaker Autopilot default validation behavior.
+- Logarithmic hyperparameter ranges.
+- Foundation Model Evaluation with `fmeval`.
+- Lambda container-image packaging limits.
+- SageMaker Serverless Inference constraints.
+- SageMaker Data Wrangler class-balancing operators.
+- Fairness metric reference values.
+- AWS Glue Data Catalog and Glue Schema Registry.
+
+**Takeaway**
+
+Revisiting missed questions produced an **86.36% second-attempt score**. The remaining errors are no longer broad gaps but precise distinctions between ML problem types, evaluation metrics, and AWS service capabilities.
+
+I will continue reviewing the remaining 66 questions before booking the MLA-C02 exam.
+
+---
+
 ## October 7, 2026
 
 **AWS MLA-C02 | First Full Pass Complete ✓**

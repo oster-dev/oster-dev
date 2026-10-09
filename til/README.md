@@ -7,6 +7,45 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 9, 2026
+
+**AWS MLA-C02 | Missed Questions Review — Round 2**
+
+Today I re-answered 26 more of my previously missed questions.
+
+**Round 2 Result**
+
+- **21/26 correct** — 80.8%.
+- **5 questions** were still incorrect.
+- Across both review sessions, I have answered 48 questions and got **40 correct** — 83.3%.
+
+```text
+Round 1: 22 questions — 19 correct
+Round 2: 26 questions — 21 correct
+Combined: 48 questions — 40 correct (83.3%)
+Remaining missed-question backlog: 40
+```
+
+The repeated errors point to three areas: precision/recall threshold selection, choosing a model for a binary target, and AWS Glue `FillMissingValues`.
+
+**Decision Rules Added to My Error Log**
+
+- **Threshold selection:** When false negatives are costly, prioritize recall. Choose the threshold by comparing precision, recall, and the review team's capacity.
+- **Binary target:** For a labeled binary target that needs an interpretable baseline, use a classification model and inspect its coefficients and validation metrics.
+- **Glue `FillMissingValues`:** The transform creates a new column by default, such as `income_filled`, while retaining the original column.
+
+**Next Steps**
+
+1. Continue reviewing the remaining missed questions.
+2. Revisit the precision/recall threshold questions, which I have missed more than once.
+3. Verify service-specific details against AWS documentation before booking the MLA-C02 exam.
+
+**Takeaway**
+
+Repeated mistakes expose the concepts that need deeper review. The clearest pattern today was choosing evaluation thresholds based on business costs and operational capacity—not on a single metric in isolation.
+
+---
+
 ## October 8, 2026
 
 **AWS MLA-C02 | Missed Questions Review — Round 1**

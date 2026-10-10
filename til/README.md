@@ -7,6 +7,72 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 10, 2026
+
+**AWS MLA-C02 | Official Exam Guide Review & Knowledge Assessment**
+
+Today I reviewed the complete official MLA-C02 exam guide and used it to create a realistic 20-question diagnostic quiz across all four exam domains.
+
+**Quiz Result**
+
+```text
+15 / 20 correct — 75%
+```
+
+| Domain | Result | Assessment |
+|---|---:|---|
+| Domain 1 — Data Preparation for ML and AI | 4 / 6 | Solid data and cloud foundation |
+| Domain 2 — ML Model and Foundation Model Development | 2 / 5 | Main learning gap: ML evaluation, tuning, and GenAI-specific concepts |
+| Domain 3 — Deployment and Orchestration | 5 / 5 | Strong |
+| Domain 4 — Operating, Monitoring, and Securing | 4 / 4 | Strong |
+
+My previous AWS certifications, especially DEA-C01 and SAA-C03, clearly transfer well to:
+
+- Data ingestion.
+- Storage.
+- Deployment.
+- Orchestration.
+- Networking.
+- IAM.
+- Monitoring.
+- Cost optimization.
+
+The remaining work is concentrated in ML-specific decision-making and newer GenAI topics.
+
+**Gaps Identified**
+
+- SageMaker Clarify for pre-training bias analysis versus Model Monitor for production monitoring.
+- Amazon Comprehend PII detection and redaction versus Amazon Macie for sensitive-data discovery in S3.
+- SageMaker Automatic Model Tuning: Bayesian optimization and early stopping for expensive training jobs.
+- NLP evaluation metrics: ROUGE for recall-oriented summarization overlap and BERTScore for semantic similarity.
+- SageMaker Asynchronous Inference for large payloads and long-running inference with delayed results.
+- Precision/recall threshold selection based on business costs and manual-review capacity.
+
+**Decision Rules Added to the Error Log**
+
+- Training-data bias before model training → **SageMaker Clarify**.
+- Production drift or baseline deviation → **SageMaker Model Monitor**.
+- Text PII redaction before NLP or fine-tuning → **Amazon Comprehend**.
+- Sensitive-data discovery in S3 → **Amazon Macie**.
+- Expensive hyperparameter tuning → **Bayesian optimization plus automatic early stopping**.
+- Summarization evaluation → **ROUGE for recall-oriented overlap; BERTScore for semantic similarity**.
+- Large payload, long inference, delayed response → **SageMaker Asynchronous Inference**.
+- Costly false negatives → **prioritize recall and choose the classification threshold using precision-recall trade-offs and operational capacity**.
+
+**Next Steps**
+
+1. Finish the remaining missed-question review backlog.
+2. Prioritize Domain 2: traditional ML evaluation, tuning, Foundation Model selection, RAG, and GenAI evaluation.
+3. Review inference deployment patterns: real-time, serverless, asynchronous, batch, production variants, and shadow variants.
+4. Complete a second MLA-C02 diagnostic after the targeted review.
+5. Book the ME1-C02 beta exam once the remaining gaps are stable.
+
+**Takeaway**
+
+The exam guide confirmed that my data engineering, infrastructure, deployment, and security foundation is strong. The highest-value work now is not broad AWS revision; it is closing the specific ML, evaluation, RAG, and Foundation Model gaps that DEA-C01 and SAA-C03 did not cover.
+
+---
+
 ## October 9, 2026
 
 **AWS MLA-C02 | Missed Questions Review — Round 2**

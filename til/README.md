@@ -7,6 +7,79 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 11, 2026
+
+**AWS MLA-C02 | Second Diagnostic Quiz — Remaining Exam Guide Topics**
+
+Today I completed a second 20-question diagnostic quiz built from the official MLA-C02 exam guide. It covered skills that were not tested in the first quiz.
+
+**Quiz Result**
+
+```text
+18 / 20 correct — 90%
+```
+
+| Domain | Quiz 2 | Quiz 1 |
+|---|---:|---:|
+| Domain 1 — Data Preparation for ML and AI | 5 / 6 | 4 / 6 |
+| Domain 2 — ML Model and Foundation Model Development | 5 / 5 | 2 / 5 |
+| Domain 3 — Deployment and Orchestration | 5 / 5 | 5 / 5 |
+| Domain 4 — Operating, Monitoring, and Securing | 3 / 4 | 4 / 4 |
+| **Total** | **18 / 20 (90%)** | **15 / 20 (75%)** |
+
+The improvement in Domain 2 — from 2/5 to 5/5 — follows the targeted review of hyperparameter tuning, overfitting, evaluation metrics, and explainability.
+
+The quizzes used different questions and small samples, so I treat the result as a good signal rather than proof of readiness.
+
+**Gaps Identified**
+
+### Human Labeling
+
+- **SageMaker Ground Truth** organizes human labeling workflows for training data.
+- **Amazon Rekognition** analyzes image and video content using pre-built models and does not manage labeling jobs.
+
+### AWS Inference and Training Silicon
+
+- **AWS Inferentia2 (Inf2)** is designed for cost-efficient deep learning inference.
+- **AWS Trainium (Trn1)** is designed for deep learning training.
+
+```text
+Inferentia (Inf2) → inference
+Trainium (Trn1)   → training
+```
+
+**Decision Rules Added to the Error Log**
+
+- Human labeling workflow for training data → **SageMaker Ground Truth**.
+- Pre-built content analysis → **Rekognition** for image/video or **Comprehend** for text.
+- Cost-efficient deep learning inference on AWS silicon → **Inferentia (Inf2)**.
+- Deep learning training on AWS silicon → **Trainium (Trn1)**.
+
+**Coverage So Far**
+
+Both quizzes together cover roughly one third of the skills in the exam guide.
+
+Still untested:
+
+- Foundation Model selection and RAG architecture patterns.
+- Embedding models and multimodal data preparation.
+- Agent infrastructure, agent state, and agent deployment pipelines.
+- Prompt Management and prompt testing.
+- CloudWatch generative AI observability and agent monitoring.
+- Token cost management and CI/CD security.
+
+**Next Steps**
+
+1. Take a third quiz tomorrow focused on the untested GenAI, RAG, and agent skills.
+2. Book the MLA-C02 beta exam (ME1-C02) after reviewing the result of that quiz.
+3. Finish the remaining missed-question review backlog from the app.
+
+**Takeaway**
+
+Two diagnostic quizzes show a strong base in data, deployment, and security. The booking decision depends on the third quiz, because the beta is a single attempt and the untested GenAI and agent topics are the largest remaining risk.
+
+---
+
 ## October 10, 2026
 
 **AWS MLA-C02 | Official Exam Guide Review & Knowledge Assessment**

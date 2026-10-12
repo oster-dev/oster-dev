@@ -59,12 +59,6 @@ The results are encouraging, but I am treating them as diagnostic evidence rathe
 - Booking requires a call to Pearson VUE because the voucher cannot yet be redeemed online for the beta.
 - The beta is a single attempt: **85 questions in 170 minutes**.
 
-**Before the Exam**
-
-1. Finish the remaining missed-question backlog in the app, especially the precision/recall and threshold questions.
-2. Run one timed practice session at exam pace: about two minutes per question.
-3. Review the error log the day before the exam.
-
 **Takeaway**
 
 Three diagnostic quizzes moved my score from **75% to 100%** and closed the GenAI, RAG, and agent gaps I had identified. I feel exam-ready; the remaining steps are administrative—voucher redemption and booking—plus a final review of my error log.

@@ -7,6 +7,70 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 12, 2026
+
+**AWS MLA-C02 | Third Diagnostic Quiz — GenAI, RAG, and Agents**
+
+Today I completed a third 20-question diagnostic quiz focused on exam-guide skills that were not covered in the first two quizzes, with an emphasis on generative AI, RAG, and agents.
+
+**Quiz Result**
+
+```text
+20 / 20 correct — 100%
+```
+
+| Quiz | Focus | Result |
+|---|---|---:|
+| Quiz 1 | All domains, baseline | 15 / 20 (75%) |
+| Quiz 2 | Remaining standard skills | 18 / 20 (90%) |
+| Quiz 3 | GenAI, RAG, and agents | 20 / 20 (100%) |
+| **Total** | | **53 / 60 (88.3%)** |
+
+The topics covered included:
+
+- Embedding consistency in RAG.
+- Text preprocessing.
+- Training-data integrity.
+- Bias across multimodal data.
+- Foundation Model selection.
+- Reranking and hybrid retrieval.
+- MLflow on SageMaker AI.
+- Human evaluation in Amazon Bedrock.
+- Knowledge Base refresh cycles.
+- Agent sessions and versioning.
+- Prompt Management.
+- Prompt testing in CI/CD.
+- Bedrock observability and agent tracing.
+- Token-cost control.
+- Container vulnerability scanning.
+- Least-privilege IAM with `iam:PassRole`.
+
+**Assessment**
+
+- The earlier weaknesses in model tuning, evaluation metrics, and service boundaries are closed in these quizzes.
+- I wrote the quizzes with distinct answer options, so real exam questions with closer distractors may be harder.
+- A small number of exam-guide skills remain untested, mostly in areas covered by my DEA-C01 and SAA-C03 background.
+
+The results are encouraging, but I am treating them as diagnostic evidence rather than a guarantee of beta-exam performance.
+
+**Exam Booking**
+
+- I plan to book the MLA-C02 beta exam (ME1-C02) tomorrow.
+- Booking requires a call to Pearson VUE because the voucher cannot yet be redeemed online for the beta.
+- The beta is a single attempt: **85 questions in 170 minutes**.
+
+**Before the Exam**
+
+1. Finish the remaining missed-question backlog in the app, especially the precision/recall and threshold questions.
+2. Run one timed practice session at exam pace: about two minutes per question.
+3. Review the error log the day before the exam.
+
+**Takeaway**
+
+Three diagnostic quizzes moved my score from **75% to 100%** and closed the GenAI, RAG, and agent gaps I had identified. I feel exam-ready; the remaining steps are administrative—voucher redemption and booking—plus a final review of my error log.
+
+---
+
 ## October 11, 2026
 
 **AWS MLA-C02 | Second Diagnostic Quiz — Remaining Exam Guide Topics**

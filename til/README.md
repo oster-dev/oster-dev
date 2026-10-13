@@ -7,6 +7,51 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 13, 2026
+
+**AWS MLA-C02 | Exam Booking Blocked by Voucher Redemption**
+
+Today I tried to book the MLA-C02 beta exam (ME1-C02) with my exam voucher. Pearson VUE could not redeem the voucher for the beta, so I opened a support ticket with AWS Certification.
+
+**Booking Status**
+
+- AWS support is expected to reply within 24 hours.
+- If there is no solution, I will pay the beta exam fee directly. The beta costs less than the standard exam.
+- The exam is a single attempt, so I will not book a date until the payment path is clear.
+
+```text
+Voucher redemption via Pearson VUE → failed
+        ↓
+AWS Certification support ticket opened
+        ↓
+reply expected within 24 hours
+        ↓
+fallback: pay the beta fee directly
+        ↓
+book the exam date only after the payment path is clear
+```
+
+**Study Plan While Waiting**
+
+- Keep doing relaxed MLA-C02 practice questions to reinforce topics.
+- Continue working through the remaining missed-question backlog in the app.
+- Re-read the error log, especially:
+  - The precision/recall threshold rule.
+  - Clarify vs. Model Monitor.
+  - Comprehend vs. Macie.
+  - Inference deployment options.
+
+**Current Status**
+
+- Diagnostic quizzes: 15/20, 18/20, and 20/20 (53/60 total).
+- Readiness: I feel exam-ready; only the booking step is open.
+
+**Takeaway**
+
+Beta exams add administrative friction, and voucher issues are not something I can fix with more studying. The right response is to escalate through the correct channel (AWS support), keep a fallback (paying the fee), and use the waiting time to keep knowledge fresh without cramming.
+
+---
+
 ## October 12, 2026
 
 **AWS MLA-C02 | Third Diagnostic Quiz — GenAI, RAG, and Agents**

@@ -7,6 +7,96 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 14, 2026
+
+**AWS MLA-C02 | Two Diagnostic Quizzes — Remaining Exam Guide Topics**
+
+Today I completed two additional 20-question quizzes covering previously untested topics from the MLA-C02 exam guide.
+
+| Assessment | Result |
+|---|---:|
+| Quiz 4 — Additional data, training, deployment, and operations topics | 17 / 20 (85%) |
+| Quiz 5 — Remaining ML, GenAI, agent, and infrastructure topics | 18 / 20 (90%) |
+| Today's combined result | 35 / 40 (87.5%) |
+| All five diagnostic quizzes | 88 / 100 (88%) |
+
+**Quiz 4 — Topics Tested**
+
+- Training storage with FSx for Lustre and S3.
+- Kinesis hot partitions and ingestion throughput.
+- Firehose record transformation with Lambda.
+- Class imbalance, resampling, and evaluation without data leakage.
+- Missing-value imputation and outlier handling.
+- SageMaker built-in algorithms and PyTorch script mode.
+- Training instability, learning rates, and gradient clipping.
+- Managed Spot Training with checkpoints.
+- Large-model inference with multi-GPU tensor parallelism.
+- SageMaker hosting, boto3 deployment sequence, and VPC configuration.
+- Blue/green deployment, traffic shifting, and automatic rollback.
+- CodeBuild permissions for ECR.
+- Batch Transform, production A/B testing, latency metrics, and scheduled scaling.
+- S3 and KMS permissions for encrypted training data.
+
+Three incorrect answers:
+
+- Oversampling must happen after splitting, on the training split only.
+- XGBoost fits tabular churn prediction; BlazingText Word2Vec does not.
+- Training loss spikes or NaNs call for a lower learning rate and gradient clipping, not additional layers.
+
+**Quiz 5 — Topics Tested**
+
+- Spark broadcast joins and shared training storage with EFS.
+- Continued pre-training and model distillation data.
+- Data parallelism versus model parallelism.
+- Ensemble quality, latency, and cost trade-offs.
+- Batch size, optimizer updates, and training-memory requirements.
+- Production quality evaluation with delayed ground-truth labels.
+- Serial multi-container inference pipelines.
+- Infrastructure-as-code resource references.
+- GPU inference scaling and model-loading overhead.
+- Agent tool interfaces, authentication, and authorization.
+- CodeConnections, CodePipeline, and CodeBuild responsibilities.
+- Customized model versioning, evaluation, promotion, and rollback.
+- Distributed tracing and agent cost per completed task.
+- Incremental embedding updates.
+- CloudTrail versus Config.
+- Indirect prompt injection and least-privilege tool access.
+
+Two incorrect answers:
+
+- Evaluate a distilled student model on a separate held-out dataset, not only on its training examples.
+- Increasing batch size reduces optimizer updates per epoch; the number of examples processed per epoch stays unchanged.
+
+**Assessment**
+
+Deployment, operations, and security remain consistent strengths. The clearest remaining gaps are ML methodology: training mechanics, algorithm selection, resampling, and evaluation.
+
+These are self-created diagnostic quizzes, not official practice exams. I treat the results as evidence of progress, not a guarantee of passing.
+
+**AWS Support | Voucher Issue Still Unresolved**
+
+AWS has not yet responded to my support ticket about redeeming the voucher for the MLA-C02 beta exam (ME1-C02).
+
+- I already paid for the voucher at the beginning of this roadmap.
+- No other Associate-level exam is planned after MLA-C02, so using it for another certification is not a practical fallback.
+- The voucher expires on December 31, 2026.
+- Paying for the beta separately would leave the original voucher unused and potentially turn that purchase into a financial loss.
+
+A concrete resolution from AWS is therefore essential. The issue is not just booking convenience—it is being able to use an already-paid voucher before it expires.
+
+**Next Steps**
+
+1. Consolidate the five mistakes from today's quizzes in the error log.
+2. Reinforce ML fundamentals with new scenarios rather than memorized answers.
+3. Follow up with AWS on the unresolved voucher ticket.
+4. Complete the exam booking once the voucher issue is resolved.
+
+**Takeaway**
+
+Today's two quizzes broadened the assessment and produced an 87.5% combined score. The remaining learning work is focused, while the unresolved voucher issue remains the administrative blocker.
+
+---
+
 ## October 13, 2026
 
 **AWS MLA-C02 | Exam Booking Blocked by Voucher Redemption**

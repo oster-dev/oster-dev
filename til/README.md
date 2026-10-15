@@ -7,6 +7,53 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 15, 2026
+
+**AWS MLA-C02 | Final Coverage Quiz — 13 / 13 Correct**
+
+Today I completed the final 13-question coverage quiz, targeting the topics previously identified as untested or only partially tested.
+
+- Today's result: **13 / 13 correct (100%)**.
+- Combined result across all six diagnostic sessions: **101 / 113 correct (89.4%)**.
+- Completed the planned topic-level mapping across all four MLA-C02 domains. This marks the end of the coverage pass—not proof that every facet of every skill has been mastered.
+
+**Topics Tested Today**
+
+- Extracting RDS data without overloading production.
+- Serverless Spark ETL with AWS Glue and job bookmarks.
+- Automated data and model-quality tests in ML CI/CD.
+- Detecting invalid outputs and failures in data workflows.
+- CloudWatch dashboards and alarms for inference endpoints.
+- Interpretable model selection for credit decisions.
+- Prompt engineering before model fine-tuning.
+- Comprehensive RAG evaluation with automated and human assessment.
+- Managed GPU inference for steady, latency-sensitive traffic.
+- Bedrock Provisioned Throughput.
+- Query-time retrieval, filtering, reranking, and generation.
+- Agent runtime infrastructure, session isolation, and scoped tool access.
+- Bedrock credential options.
+
+**Exam Booking | AWS Support Still Unresolved**
+
+I still have not received a response from AWS about the exam voucher redemption issue.
+
+- The voucher was purchased at the beginning of this roadmap.
+- It expires on December 31, 2026.
+- No further Associate-level exam is planned after MLA-C02, so using it for another certification is not a practical alternative.
+- Paying separately would leave an already-paid voucher unused.
+
+I will set a firm deadline for a resolution. I cannot leave the roadmap on hold indefinitely while waiting for support. Once that deadline is reached, I will decide how to proceed with booking while continuing to pursue a solution for the voucher.
+
+**Roadmap Status**
+
+I feel exam-ready and am now in the final stretch of the roadmap. The focus shifts from broad topic coverage to keeping knowledge fresh, revisiting known mistakes, and resolving the booking blocker.
+
+**Takeaway**
+
+The final coverage quiz is complete with 13/13 correct. Preparation now needs a clear endpoint—and the unresolved voucher issue needs a deadline rather than an indefinite wait.
+
+---
+
 ## October 14, 2026
 
 **AWS MLA-C02 | Two Diagnostic Quizzes — Remaining Exam Guide Topics**

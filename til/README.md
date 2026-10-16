@@ -7,6 +7,61 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 16, 2026
+
+**AWS MLA-C02 | Targeted Retest — Previous Mistakes**
+
+Today I completed a 12-question retest covering the concepts I answered incorrectly in the earlier diagnostic quizzes.
+
+- Result: **9 / 12 correct (75%)**.
+- Correctly answered new scenarios on Clarify pre-training bias, asynchronous inference, leakage-safe resampling, XGBoost, Comprehend PII redaction, Inferentia, Ground Truth, distillation evaluation, and batch size.
+- Three topics still need reinforcement.
+
+**Remaining Weaknesses**
+
+### Hyperparameter Tuning
+
+Use **Bayesian optimization plus automatic early stopping** for expensive training jobs, not a wide grid search.
+
+### NLP Evaluation Metrics
+
+- **ROUGE** — recall-oriented overlap, useful for summarization.
+- **BLEU** — precision-oriented overlap.
+- **BERTScore** — semantic similarity.
+
+### Training Instability
+
+For loss spikes or NaN values:
+
+- Apply gradient clipping.
+- Lower the learning rate or use warm-up.
+- Do **not** remove input normalization.
+
+All three remaining mistakes were multiple-response questions where I selected one correct and one incorrect option. I need to justify each selected answer independently rather than recognize only the main concept.
+
+**AWS Support | Still No Response**
+
+AWS has still not replied to my support ticket about redeeming the exam voucher for the MLA-C02 beta exam (ME1-C02). I am becoming increasingly impatient with the unresolved booking issue.
+
+- I already paid for the voucher at the beginning of this roadmap.
+- It expires on December 31, 2026.
+- No further Associate-level exam is planned after MLA-C02.
+- Paying separately would mean leaving the original voucher unused.
+
+**Travel and Booking Deadline**
+
+I will be on a short holiday in Greece from Sunday, October 18, through Wednesday, October 21.
+
+I will continue studying in the meantime, focusing on the three remaining retest weaknesses and keeping the broader material fresh.
+
+If there is still no workable solution from AWS after the holiday, I will pay for the beta exam myself and proceed without using the already-purchased voucher. I do not want this administrative issue to delay the final stretch of my roadmap indefinitely.
+
+**Takeaway**
+
+The retest narrowed the remaining weaknesses to three specific concepts. I now also have a clear deadline for the voucher issue: after the holiday, I will move forward with the exam rather than keep waiting.
+
+---
+
 ## October 15, 2026
 
 **AWS MLA-C02 | Final Coverage Quiz — 13 / 13 Correct**

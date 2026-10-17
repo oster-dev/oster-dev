@@ -7,6 +7,65 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 17, 2026
+
+**AWS MLA-C02 | Continued Practice & Voucher Investigation**
+
+Today I answered 40 questions in the MLA-C02 prep app to reinforce knowledge while the exam booking issue remains unresolved.
+
+**Voucher Status — New Inconsistency Discovered**
+
+Discovered that my Machine Learning Engineer – Associate voucher is no longer visible in Udemy's certification voucher overview.
+
+- The original invoice still documents the purchase on April 29, 2026: €167.99 for the exam voucher plus a retake.
+- The purchase history shows a generic entry named `Certification Voucher 351 Prüfungsgutschein`.
+- The refunds section shows no pending or completed refunds.
+- The other AWS vouchers remain visible, but the MLA voucher is missing.
+
+There is no confirmed explanation yet. AWS may have coordinated with Udemy, but that is only speculation—not evidence of a refund or a resolution.
+
+Prepared a detailed message for Udemy requesting clarification of:
+
+- The voucher's current status.
+- The changed purchase description.
+- Any refund activity.
+- Whether AWS or Pearson VUE contacted them.
+
+**AWS Support & Booking Deadline**
+
+AWS has still not responded to my voucher support ticket.
+
+- The voucher expires on December 31, 2026.
+- No other Associate-level certification is planned after MLA-C02.
+- Leaving the voucher unused would mean losing an already-paid purchase.
+
+My deadline remains unchanged: if there is no workable solution after my Greece holiday, which ends on October 21, I will pay for the beta exam separately and proceed with the roadmap.
+
+**GitHub Profile Maintenance**
+
+Continued maintaining my GitHub profile and removed the outdated Romania location information. I am actively based in Cologne again, and my public profile should reflect that.
+
+**Open Source | LUML Outreach**
+
+Prepared a reply to Oleh about LUML, an open-source MLOps platform built around coding agents.
+
+- I have looked at the GitHub repository and was impressed by the first impression.
+- I have not yet tested the platform or its MLflow plugin.
+- The reply distinguishes initial interest from hands-on evaluation rather than claiming experience I do not have.
+
+**Next Steps**
+
+1. Clarify the missing voucher directly with Udemy and continue pursuing the AWS support case.
+2. Keep knowledge fresh through practice and targeted review of the remaining weaknesses.
+3. Move forward with exam booking after the holiday rather than wait indefinitely.
+4. Keep GitHub accurate and aligned with the final stretch of the roadmap.
+
+**Takeaway**
+
+Today combined continued exam practice, portfolio maintenance, and a closer investigation of the voucher issue. A missing voucher is not proof of a refund—I need a documented explanation, but I will not let the administrative blocker hold up the roadmap indefinitely.
+
+---
+
 ## October 16, 2026
 
 **AWS MLA-C02 | Targeted Retest — Previous Mistakes**

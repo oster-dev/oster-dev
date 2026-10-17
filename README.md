@@ -16,7 +16,7 @@
 
 ## **About Me**
 
-I'm Nico Ostermann, 24 years old, originally from Germany and now based in Pitești, Romania.
+I'm Nico Ostermann, 24 years old, based in Cologne, Germany.
 
 Earlier this year, I made a deliberate decision to build toward ML Platform and Data & Feature Infrastructure engineering through a public, evidence-first roadmap. I learn by shipping: starting with focused systems, then progressing toward more production-oriented projects with tests, CI, architecture documentation, operational trade-offs, and reproducible local workflows.
 
@@ -169,11 +169,9 @@ If this kind of trajectory is relevant to your team, I would be glad to connect.
 
 ## **Personal**
 
-🇩🇪 From Germany &nbsp;·&nbsp; 🇷🇴 Based in Pitești, Romania
+🇩🇪 Based in Cologne, Germany
 
 🌍 Open to remote positions worldwide
-
-🏋️ Consistent physical training is part of my performance system, not a footnote
 
 📬 ostermann.dev@gmail.com
 
@@ -195,6 +193,6 @@ If this kind of trajectory is relevant to your team, I would be glad to connect.
 
 <br>
 
-<sub>Last updated: September 2026 · Everything here reflects real progress, not aspirational claims.</sub>
+<sub>Last updated: October 2026 · Everything here reflects real progress, not aspirational claims.</sub>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/oster-dev/oster-dev?style=flat-square)

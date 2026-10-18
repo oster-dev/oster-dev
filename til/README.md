@@ -7,6 +7,51 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 18, 2026
+
+**AWS MLA-C02 | Final Practice Sprint on the Way to Corfu**
+
+Today I flew to Corfu and answered 100 MLA-C02 practice questions during the flight. The last stretch before the exam is well covered, and I feel ready.
+
+**Practice Session**
+
+- 100 questions answered in the MLA-C02 app during the flight.
+- This comes on top of the 40 questions from yesterday.
+- The goal now is to keep the knowledge fresh and not cram.
+
+```text
+Oct 17: 40 questions
+Oct 18: 100 questions
+Total over two days: 140 questions
+```
+
+**Corfu | Reset Before the Exam**
+
+Corfu is a good place to slow down. The people are relaxed, and the weather is better than in Cologne. A few calm days now should help me go into the exam focused.
+
+**Voucher Status — Still Unresolved**
+
+Neither AWS nor Udemy has replied yet, so I have no confirmed explanation for the missing MLA voucher and no refund confirmation.
+
+- The voucher expires on December 31, 2026.
+- My working assumption is that I will pay for the exam again once I am back in Cologne.
+- I will keep both support cases open and ask for a written answer on the old voucher and any possible refund.
+
+This is a pragmatic decision. The administrative blocker should not delay the roadmap, and any refund can still be pursued afterwards.
+
+**Next Steps**
+
+1. Rest and reset in Corfu, with light review only.
+2. Follow up with AWS and Udemy if they still have not answered.
+3. Book and pay for the MLA-C02 exam after returning to Cologne, unless the voucher is restored.
+4. Keep the GitHub profile and roadmap notes up to date.
+
+**Takeaway**
+
+140 practice questions in two days show the preparation is solid. The voucher problem is only a cost and logistics issue, not a knowledge issue, so I will resolve it separately and keep moving toward the exam.
+
+---
+
 ## October 17, 2026
 
 **AWS MLA-C02 | Continued Practice & Voucher Investigation**

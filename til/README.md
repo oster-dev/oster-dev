@@ -7,6 +7,54 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 19, 2026
+
+**AWS MLA-C02 | Practice Continues & Udemy Replies**
+
+Today I answered another 50 questions in the MLA-C02 app. Since October 17, that makes 190 practice questions in three days (40 + 100 + 50).
+
+**Practice Progress**
+
+```text
+Oct 17:  40 questions
+Oct 18: 100 questions
+Oct 19:  50 questions
+Total:  190 questions in three days
+```
+
+**Corfu | Blue Lagoon Boat Trip**
+
+I spent the day on a rental boat that I was allowed to drive. We went to the Blue Lagoon, an island near Kavos on Corfu. It was a good way to switch off before the exam, and I still fit in the practice session.
+
+**Voucher Status | First Reply from Udemy**
+
+Udemy replied for the first time. The email only says that they take my request seriously and have forwarded it to the department that handles it.
+
+- It contains no explanation of why the MLA voucher disappeared.
+- It does not say whether the voucher is still active, replaced, or cancelled.
+- It does not mention a refund or a timeline.
+
+This is an acknowledgement, not a resolution. I still have no written confirmation about the voucher or a possible refund, and AWS has not replied.
+
+**Plan**
+
+- My working assumption stays the same: if there is no solution by the time I am back in Cologne, I will pay for the exam again.
+- I will keep the Udemy case open and ask for a written answer once the department responds.
+- The voucher expires on December 31, 2026. Any refund can still be pursued after I book the exam.
+
+**Next Steps**
+
+1. Keep reviewing lightly and rest in Corfu.
+2. Follow up with Udemy and AWS if I hear nothing.
+3. Book the MLA-C02 exam after returning to Cologne, unless the voucher is restored.
+4. Keep the GitHub notes up to date.
+
+**Takeaway**
+
+Practice is on track at 190 questions in three days. Udemy has acknowledged the case, but nothing has changed yet. I will not let the open question hold up the exam.
+
+---
+
 ## October 18, 2026
 
 **AWS MLA-C02 | Final Practice Sprint on the Way to Corfu**

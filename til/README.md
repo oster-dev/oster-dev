@@ -7,6 +7,47 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 20, 2026
+
+**AWS MLA-C02 | Practice Continues, Voucher Still Open**
+
+Today I answered 40 more questions in the MLA-C02 app. Since October 17, that makes 230 practice questions in four days (40 + 100 + 50 + 40).
+
+**Practice Progress**
+
+```text
+Oct 17:  40 questions
+Oct 18: 100 questions
+Oct 19:  50 questions
+Oct 20:  40 questions
+Total:  230 questions in four days
+```
+
+**Corfu | Off-Road Day**
+
+It was an action-packed day on Corfu. I drove an off-road go-kart and rented a 600 cc buggy. I can recommend both. It was a good break from studying, and I still kept up the daily practice.
+
+**Voucher Status | No Updates**
+
+- Udemy has not sent any update since the acknowledgement email.
+- AWS has still not replied.
+- I have no written explanation for the missing MLA voucher and no refund confirmation.
+
+The most likely outcome is that I will have to pay for the exam again. I will decide on that once I am back in Cologne. I will keep both cases open and ask for a written answer, so I can still pursue a refund afterwards.
+
+**Next Steps**
+
+1. Keep reviewing lightly before the exam.
+2. Follow up with Udemy and AWS if they stay silent.
+3. Book and pay for the MLA-C02 exam after returning to Cologne, unless the voucher is restored.
+4. Keep the GitHub notes up to date.
+
+**Takeaway**
+
+Practice is steady at 230 questions in four days. The voucher problem is a cost issue and not a knowledge issue, so I will not let it delay the exam.
+
+---
+
 ## October 19, 2026
 
 **AWS MLA-C02 | Practice Continues & Udemy Replies**

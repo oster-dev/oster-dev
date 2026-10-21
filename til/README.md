@@ -7,6 +7,48 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 21, 2026
+
+**AWS MLA-C02 | Return Flight and Exam Decision**
+
+Today I flew back to Cologne. During the flight I answered 60 more questions in the MLA-C02 app. Since October 17, that makes 290 practice questions in five days (40 + 100 + 50 + 40 + 60).
+
+**Practice Progress**
+
+```text
+Oct 17:  40 questions
+Oct 18: 100 questions
+Oct 19:  50 questions
+Oct 20:  40 questions
+Oct 21:  60 questions
+Total:  290 questions in five days
+```
+
+**Corfu | Takeaways**
+
+Corfu is definitely worth a visit, but only for a few days. It is a small island, so the main attractions are limited. That length of stay was enough to relax before the exam.
+
+**Voucher Status | Decision**
+
+- AWS has still not replied.
+- Udemy has not sent anything beyond the acknowledgement email.
+- I have no written explanation for the missing MLA voucher and no refund confirmation.
+
+I will pay for the beta exam again, since waiting longer only risks delaying the roadmap. I am not giving up on the old voucher. I will keep both cases open and ask for a written answer, so I can still pursue a refund or reinstatement afterwards.
+
+**Next Steps**
+
+1. Book and pay for the MLA-C02 beta exam now that I am back in Cologne.
+2. Keep reviewing lightly until exam day.
+3. Follow up with AWS and Udemy in writing and keep the invoice and screenshots as evidence.
+4. Keep the GitHub notes up to date.
+
+**Takeaway**
+
+Practice is steady at 290 questions in five days. The voucher problem is only about cost and logistics, so I am paying again and moving on.
+
+---
+
 ## October 20, 2026
 
 **AWS MLA-C02 | Practice Continues, Voucher Still Open**

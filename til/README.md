@@ -7,6 +7,57 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 22, 2026
+
+**AWS MLA-C02 | Exam Booked for Tomorrow**
+
+No reply came from AWS or Udemy, so I followed through on my plan. I paid for and booked the beta exam ME1-C02. It is tomorrow, October 23, at 11:30 Berlin time.
+
+**Final Review**
+
+- Did a last review of the weak areas I collected over the past few weeks.
+- Went through the topics I had missed most often in practice.
+- Kept the session focused and did not try to learn anything new at this stage.
+
+The previous days added up to 290 practice questions between October 17 and 21, and today's review rounds off the preparation. I feel ready.
+
+```text
+Oct 17:  40 questions
+Oct 18: 100 questions
+Oct 19:  50 questions
+Oct 20:  40 questions
+Oct 21:  60 questions
+Total:  290 questions in five days
+Oct 22: final review of weak areas (no new topics)
+```
+
+**Voucher Status | Still Open**
+
+- AWS has still not replied.
+- Udemy has not sent anything beyond the acknowledgement email.
+- The old MLA voucher is still unexplained, and I have no refund confirmation.
+
+I paid for the exam separately so the open case would not delay the roadmap. I will keep both cases open, ask for a written answer, and pursue a refund or reinstatement after the exam. The invoice and screenshots stay saved as evidence.
+
+**Exam Day Checklist**
+
+1. Sleep well and eat before the exam.
+2. Check the booking details, time, and ID requirements.
+3. Prepare the testing environment, if I take it online.
+4. Stay calm and manage the time per question.
+
+**Next Steps**
+
+1. Take the MLA-C02 beta exam tomorrow at 11:30.
+2. Follow up with AWS and Udemy in writing afterwards.
+3. Update the roadmap and GitHub notes with the result.
+
+**Takeaway**
+
+The booking is done and the preparation is complete. The voucher problem is only a cost issue, so I will deal with it after the exam.
+
+---
+
 ## October 21, 2026
 
 **AWS MLA-C02 | Return Flight and Exam Decision**

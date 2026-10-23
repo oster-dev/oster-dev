@@ -7,6 +7,50 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 23, 2026
+
+**AWS MLA-C02 Beta | First Attempt: 667 / 720**
+
+Today I took the Beta AWS Certified Machine Learning Engineer – Associate exam (ME1-C02) at 11:30 Berlin time. I did not pass. My score was 667, and the minimum to pass is 720, so I am 53 points short.
+
+**Result Breakdown**
+
+| Domain | Weight | Result |
+|---|---|---|
+| 1: Data Preparation for ML and AI | 28% | Needs Improvement |
+| 2: ML Model and FM Development | 24% | Meets Competencies |
+| 3: Deployment and Orchestration of ML and AI Workflows | 24% | Needs Improvement |
+| 4: Operating, Monitoring, and Securing ML and AI Solutions | 24% | Needs Improvement |
+
+The exam uses compensatory scoring, so I do not have to pass each domain on its own. AWS also notes that section-level feedback is less reliable than the total score. I treat it as a direction and not as an exact measurement.
+
+**Reflection**
+
+I did not have a good feeling during the exam, and the result confirms it. I answered 85 questions by 12:50 and was on schedule. What was missing was depth, not time or knowledge of the basics.
+
+- Practice questions gave me breadth, but the scenarios required deeper reasoning about trade-offs.
+- Domains 1, 3, and 4 together make up 76% of the scored items, so that is where the lost points are.
+- Domain 2 is solid and does not need much more time.
+
+**Retake Plan**
+
+I can retake the exam after 14 days. By my own count that is November 6, 2026 at the earliest, and I will check the date when I book.
+
+1. Sort my missed-question lists by domain and focus on Domains 1, 3, and 4.
+2. Build small hands-on labs for data preparation, deployment options, pipelines, drift monitoring, and security.
+3. Read the explanations of wrong answers, especially why the other options are wrong.
+4. Keep only general topic notes and no exam questions, as required by the Candidate Code of Conduct.
+
+**Open Item | Udemy Voucher**
+
+The original voucher case with Udemy and AWS is still unresolved, and there is no written explanation yet. I will keep the case open, keep the invoice and screenshots as evidence, and check whether the retake needs to be paid for again.
+
+**Takeaway**
+
+667 against 720 is a clear and fixable gap. Two weeks of targeted, hands-on work on three domains is a better plan than more volume. The attempt gave me an honest map of what to fix.
+
+---
+
 ## October 22, 2026
 
 **AWS MLA-C02 | Exam Booked for Tomorrow**

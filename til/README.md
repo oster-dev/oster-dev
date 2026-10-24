@@ -7,6 +7,43 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 24, 2026
+
+**AWS MLA-C02 | New Study Material for the Retake**
+
+Today I spent the day searching for a course that works like the StackSessions-style material I used before, but for the MLA-C02 exam. I found one at last: "MLA-C02: AWS Certified Machine Learning Engineer Associate — Full Course" by Core Concept Learning, a YouTube playlist with 42 videos.
+
+**What the Course Covers**
+
+- 35 lessons that follow the official exam blueprint task by task.
+- 5 scenario walkthroughs and 2 practice exams.
+- Each lesson covers the key concepts, the exam traps, and self-check questions with answers.
+- It follows the four domains and weights of the exam guide: Domain 1 (28%), Domain 2 (24%), Domain 3 (24%), and Domain 4 (24%).
+- The first lessons cover Domain 1, for example data sources and storage (S3 modes, FSx, EFS), streaming ingestion (Kinesis, Firehose, Flink), and data formats (Parquet, CSV, JSON).
+
+The channel says the facts are checked against AWS documentation, but also that it is unofficial study material and is not affiliated with or endorsed by Amazon Web Services. I will treat the AWS documentation and the official exam guide as the final reference.
+
+**Why It Fits My Retake**
+
+The result from October 23 showed Domains 1, 3, and 4 as Needs Improvement and Domain 2 as Meets Competencies. The blueprint order of this course lets me go through those domains in a structured way. The exam traps in each lesson target the depth I was missing, and the self-check questions give me a direct check after each topic.
+
+**Retake Plan**
+
+1. Start tomorrow with the course, beginning with Domain 1, which has the highest weight.
+2. After each lesson, match it against my own missed-question lists and rework the weak spots.
+3. Use the two practice exams in the course as a checkpoint before booking the retake.
+4. Book the retake for after the 14-day waiting period.
+
+**Open Item | Udemy Voucher**
+
+The Udemy and AWS cases about the missing MLA voucher are still open. I will keep the invoice and screenshots as evidence and ask for a written answer.
+
+**Takeaway**
+
+The first attempt showed a gap in depth and not in effort. A course that follows the blueprint, explains the exam traps, and comes with practice exams is a better base for the retake than more volume alone.
+
+---
+
 ## October 23, 2026
 
 **AWS MLA-C02 Beta | First Attempt: 667 / 720**

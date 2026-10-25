@@ -7,6 +7,94 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 25, 2026
+
+**AWS MLA-C02 | Domain 1 Completed (Core Concept Learning, Lessons 01–10)**
+
+This was the first study day of the retake preparation. I worked through all of Domain 1, Data Preparation for ML and AI (28% of the exam), in the Core Concept Learning course. Domain 1 was marked Needs Improvement in my first attempt on October 23. Today covered lessons 01 to 10 of 35, and each lesson ends with exam traps and a self-check.
+
+**Storage and Data Sources (Lesson 01)**
+
+- S3 is the default data lake for ML. RDS and DynamoDB hold application data, EBS and EFS are block and shared file storage, and OpenSearch handles search indexes and vectors.
+- S3 input modes: File mode downloads everything first and only fits data that fits the disk. Fast file mode streams objects on demand, so training starts without a full download. Pipe mode is legacy and mostly replaced.
+- FSx for Lustre gives the highest throughput for repeated, heavy training. EFS is simpler and shared across jobs and users.
+- Capacity fixes: a full disk or a slow start points to fast file mode, an idle GPU points to FSx for Lustre, and millions of tiny files should be combined into larger ones.
+- Trap: ignoring compliance in the storage choice. Encryption, Region, and retention rules matter.
+
+**Streaming Ingestion (Lesson 02)**
+
+- Data Streams collect, Firehose delivers, Flink computes, and MSK fits an existing Kafka ecosystem.
+- Firehose lands a stream in S3 as files without servers, with optional Lambda transformation and conversion to Parquet.
+- Real-time features: Kinesis stream into Flink with 5-minute windows, into the online Feature Store, read by the endpoint for a fraud score in milliseconds.
+- Lambda handles light per-record transforms. Spark or Flink handle heavy, stateful logic.
+- Traps: Firehose for windowed analytics (the answer is managed Flink), Data Streams just to land files (the answer is Firehose), and hourly batch for second-level fraud.
+
+**Formats and Merging Sources (Lesson 03)**
+
+- Columnar formats (Parquet, ORC) read only the needed columns and suit wide tables. Row formats (CSV, JSON) suit streaming records and small data. JSON Lines is for events and FM fine-tuning data.
+- Merging: Glue for serverless Spark ETL, Spark on EMR for very large or custom joins, Athena for ad hoc SQL over S3.
+- Target leakage: join point-in-time on event time, and only use data known at prediction time. Joining on today's customer table gives great offline scores but fails in production.
+
+**Vector Stores and Multimodal Data (Lesson 04)**
+
+- A vector store embeds content, indexes the vectors with metadata, and returns the nearest top-k neighbours.
+- Options: OpenSearch for high query rates and hybrid search, RDS or Aurora pgvector for vectors beside tables, S3 Vectors for the lowest cost at scale.
+- The index dimension must equal the embedding model's output. Bedrock Knowledge Bases is the least-effort choice for RAG.
+- Multimodal: raw media in S3, metadata and vectors beside it. Exact codes need hybrid search and not semantic search alone.
+
+**Transformation Tools (Lesson 05)**
+
+| Need | Tool |
+|---|---|
+| Analyst, no code, repeatable | Glue DataBrew |
+| Nightly serverless code ETL | AWS Glue |
+| Petabytes, custom Spark tuning | Spark on EMR |
+| ML features and leakage check | Data Wrangler (now in Canvas) |
+| Custom script step in a pipeline | SageMaker Processing |
+
+**Feature Engineering and Feature Store (Lesson 06)**
+
+- Scaling: normalization to 0–1 for distances such as k-NN, standardization for linear models and neural nets, log transform for skewed values.
+- Binning, feature splitting, one-hot encoding for unordered categories, label encoding for ordered ones.
+- Split first, then fit transforms on the training set only, and apply the same code at serving.
+- Feature Store: the online store serves the latest record with low-millisecond reads for real-time inference. The offline store keeps full history in S3 for training and batch prediction.
+
+**Embeddings and RAG Document Prep (Lesson 07)**
+
+- Embeddings turn text or images into vectors, and similar meaning gives nearby vectors. Titan Text Embeddings V2 takes up to 8,192 tokens and uses 1,024 dimensions by default.
+- Use the same model and settings for indexing and querying.
+- Parsing: the default parser for plain text, Bedrock Data Automation or an FM parser for complex PDFs.
+- Chunking: fixed-size, hierarchical for precise match plus fuller context, semantic for topic-shifting text. Test per document type, and tag metadata for filters and citations.
+
+**Masking, PII and FM Training Data (Lesson 08)**
+
+- Masking hides part of a value, redaction removes it, and pseudonymization replaces identities.
+- Finding PII: Macie in S3, Comprehend in text, Bedrock Guardrails in prompts and responses, Glue and DataBrew to mask or hash columns.
+- Supervised fine-tuning needs labelled JSONL prompt-response pairs. Continued pre-training uses unlabelled domain text. Distillation uses prompts that a teacher model answers.
+- Validate schema, content, and length of every record, and screen the dataset for harmful content.
+
+**Data Quality, Cleaning and Labelling (Lesson 09)**
+
+- Glue Data Quality (DQDL rules) stops bad data automatically in pipelines. DataBrew offers profiles and rules for analysts.
+- Outliers: investigate before deleting. Fix data errors, cap real extremes, and keep the signal itself, such as the fraud you want to find.
+- Missing data: drop only when few rows are affected. Otherwise impute and add a missing flag.
+- Deduplicate on keys, check row counts after every join, and avoid duplicates across train and test splits.
+- Labelling: SageMaker Ground Truth (closed to new customers), FM pre-labelling with human review, clear instructions, and consensus plus audits.
+
+**Bias and Class Imbalance (Lesson 10)**
+
+- Bias sources: selection, measurement, label bias, and proxy features such as a postcode.
+- Clarify bias metrics: CI measures class imbalance of a facet, DPL the difference in label rates, KL and JS the distribution divergence.
+- Mitigation: stratified splitting, shuffling, augmentation, and removing proxies, not only the protected attribute.
+- Imbalance: oversample (duplicate or SMOTE) only after splitting, undersample loses information, class weights penalize minority errors.
+- Metrics: accuracy hides the minority class on rare events. Use precision, recall, F1, PR-AUC, and the confusion matrix.
+
+**Takeaway**
+
+Domain 1 comes down to one habit: match the service to scale, latency, and effort, and never leak information from the future or from the test set into training.
+
+---
+
 ## October 24, 2026
 
 **AWS MLA-C02 | New Study Material for the Retake**

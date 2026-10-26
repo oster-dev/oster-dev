@@ -7,6 +7,99 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 26, 2026
+
+**AWS MLA-C02 | Domain 2 Completed (Core Concept Learning, Lessons 11–20)**
+
+This was the second study day of the retake preparation. I worked through all of Domain 2, ML Model and Foundation Model (FM) Development (24% of the exam), in the Core Concept Learning course. Domain 2 was the one domain marked Meets Competencies in my first attempt, so this was a deepening pass and not a repair. Together with Domain 1 from yesterday, I am now through lessons 01 to 20 of 35.
+
+**Choosing the Approach (Lesson 11)**
+
+- Four options, from least to most effort: AI service (Textract, Rekognition), Bedrock FM, pre-trained model (JumpStart open models, when I need hosting control), and a custom model (for example an XGBoost churn model for narrow tabular prediction).
+- AI services: Textract for text, forms, and tables from documents, Rekognition for images and video, Comprehend for entities, sentiment, and PII in text, Transcribe for speech to text.
+- Selecting an FM: define needs, shortlist by context, latency, and price, evaluate on my own data, compare quality against cost, and choose the smallest model that passes.
+- Regulated tabular decisions (credit) need an interpretable custom model with Clarify attributions, and not an FM.
+- Traps: custom OCR instead of Textract, picking an FM by benchmark only, and choosing the largest FM by default.
+
+**Cost, Latency and Performance (Lesson 12)**
+
+- Performance, time, and cost trade off against each other. Improving one usually moves the others.
+- Traditional levers: bigger model (accuracy, but more time and cost), more data and epochs, early stopping, distributed training.
+- Managed Spot Training can be up to 90% cheaper, but needs checkpoints saved to S3 to resume after an interruption.
+- FM levers: a smaller or distilled model is fast and cheap, but quality needs validation. Bedrock batch inference is about 50% cheaper, but not interactive.
+- Decide with numbers: set the bar, measure candidates, filter out those that miss it, and pick the cheapest that remains.
+
+**RAG (Lesson 13)**
+
+- RAG flow: question, embed with the same model, retrieve top-k chunks, augment the prompt, generate a grounded answer.
+- Patterns: managed Knowledge Base (RetrieveAndGenerate) for standard document Q&A, retrieve-only (Retrieve API) for custom prompts and models, hybrid search (OpenSearch, Aurora) for exact codes plus meaning, text-to-SQL for structured data, and graph RAG (Neptune Analytics) for entity relationships.
+- Optimizing retrieval: chunking, embedding model, query reformulation, and number of results, changing one thing at a time.
+- Reranking improves the order, and metadata filters narrow the scope. Filters need metadata at ingestion.
+- Measure retrieval separately with test questions that have known relevant passages. Do not swap the FM to fix a retrieval problem.
+
+**SageMaker Algorithms (Lesson 14)**
+
+- Tabular: XGBoost, LightGBM, and CatBoost are the strong default. Linear Learner is fast and explainable. AutoGluon-Tabular and TabTransformer handle ensembles and deep tabular models. Factorization Machines and k-NN fit sparse data and neighbours.
+- No labels: K-Means for clusters, PCA for fewer dimensions, Random Cut Forest for anomalies, IP Insights for unusual IP usage.
+- Forecasting and text: DeepAR for many related time series, BlazingText for Word2Vec and text classification, LDA and Neural Topic Model for topics, Seq2Seq for sequence translation.
+- Vision: image classification (label per image), object detection (boxes and labels), semantic segmentation (label per pixel).
+- Script mode: my training script runs in an AWS-managed framework container through an Estimator, and the model artifact lands in S3. No custom container is needed for PyTorch code.
+
+**Tuning and Faster Training (Lesson 15)**
+
+- Automatic Model Tuning (AMT): define ranges, an objective metric, and a strategy. AMT runs the training jobs and returns the best settings.
+- Strategies: grid for few categorical options, random for maximum parallelism, Bayesian for expensive jobs with few runs, Hyperband for iterative algorithms that report per epoch.
+- Early stopping: in tuning jobs (setting AUTO) and in training itself, when validation loss stops falling.
+- Distributed training: data parallel for speed (a full model copy per GPU), model parallel for size (a model too big for one GPU).
+- Learning rate is the most sensitive hyperparameter. Traps: grid over continuous ranges, Hyperband for non-iterative jobs, and raising the learning rate when loss explodes.
+
+**Overfitting, Forgetting and Ensembles (Lesson 16)**
+
+- Overfitting (train high, validation low): regularize, add data, stop early. Underfitting (both low): more capacity or features. Adding regularization to an underfit model is a trap.
+- Regularization: L1 and L2, dropout, early stopping, augmentation.
+- Catastrophic forgetting: narrow fine-tuning degrades general skills. Prevent it with LoRA and adapters, mixing in general data, gentle training, and broad evaluation.
+- Ensembles: bagging lowers variance, boosting lowers bias, stacking uses a meta-model, and a cascade (cheap model first, big one for hard cases) lowers cost. Under tight latency, measure first.
+
+**FM Customization (Lesson 17)**
+
+- Customization ladder: prompting, RAG for current and private facts, fine-tuning for behaviour and format, pre-training for domain language, training from scratch (rarely needed). Climb only as high as needed.
+- Prompts: clear instructions, few-shot examples, output schema (JSON), and versioned iteration against a golden set with Prompt Management.
+- Fine-tuning by data: supervised (labelled pairs), reinforcement (prompts plus reward function), distillation (teacher answers prompts), continued pre-training (unlabelled domain text).
+- LoRA and adapters train a sliver of the weights, with less memory and a small file per task. Full fine-tuning updates all weights and carries the highest forgetting risk.
+- Costs: training tokens times epochs, storage per custom model, provisioned throughput for steady load, on-demand for supported models.
+- Traps: fine-tuning to add changing facts (use RAG), full fine-tune by default (use LoRA), and unlabelled text for supervised fine-tuning.
+
+**Experiments, Baselines and Shadow Tests (Lesson 18)**
+
+- Reproducible experiments: data version, code and config, random seeds, and metrics and artifacts logged per run.
+- Managed MLflow: track and compare runs, Model Registry (register and deploy to SageMaker), and tracing for GenAI applications.
+- Drift detection needs a baseline from training statistics. No baseline, no drift detection.
+- SageMaker Model Monitor is closed to new customers. New designs use scheduled Processing jobs, Clarify for bias drift, CloudWatch metrics and alarms, and pipelines to retrain.
+- Shadow testing copies live requests to a shadow variant, logs its responses, and never serves users. It is not an A/B test.
+
+**Explainability and Convergence Debugging (Lesson 19)**
+
+- Clarify attributions: local explanation for one prediction, global explanation for overall feature importance. Shapley values share credit among features.
+- Explaining FM outputs: citations in RAG, traces for agents and flows, LLM-as-a-judge explanations, and brief reasoning output.
+- Loss curves: exploding or NaN means lower the learning rate and check the data. Flat means raise the learning rate. Oscillating means lower it and use a bigger batch. Rising validation loss means overfitting.
+- SageMaker Debugger is closed to new customers, so alternatives are CloudWatch metrics, MLflow charts, TensorBoard, and framework profilers.
+- Workflow: check data, tiny run that overfits one batch, watch curves, adjust the learning rate first, then scale up.
+- Trap: a model card to explain one prediction (the answer is Clarify SHAP).
+
+**Evaluation (Lesson 20)**
+
+- Classification: precision (of flagged, how many are real), recall (of real, how many caught), F1, ROC-AUC, and PR-AUC for rare classes. Pick the metric for the costly error.
+- Regression: MAE, RMSE (big errors weigh more), R-squared.
+- GenAI evaluation: automatic metrics for scale, LLM-as-a-judge for open-ended quality with reasons, human evaluation for tone and high stakes, NLP metrics for overlap with references.
+- BLEU for translation, ROUGE for summaries, BERTScore for meaning with new words.
+- RAG evaluation: score retrieval (context relevance, coverage) and generation (correctness, faithfulness, completeness, citations) separately.
+
+**Takeaway**
+
+Domain 2 is a decision tree: use the least effort that meets the requirement. Service first, then prompting, then RAG, then fine-tuning, then a custom model, and measure on my own data before committing.
+
+---
+
 ## October 25, 2026
 
 **AWS MLA-C02 | Domain 1 Completed (Core Concept Learning, Lessons 01–10)**

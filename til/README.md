@@ -7,6 +7,97 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 27, 2026
+
+**AWS MLA-C02 | Domain 3 Completed (Core Concept Learning, Lessons 21–29)**
+
+This was the third study day of the retake preparation. I worked through all of Domain 3, Deployment and Orchestration of ML and AI Workflows (24% of the exam), in the Core Concept Learning course. Domain 3 was marked Needs Improvement in my first attempt on October 23. With Domains 1 and 2 from the previous days, I am now through lessons 01 to 29 of 35. Domain 4 is next.
+
+**Inference Options (Lesson 21)**
+
+- Four options: real-time (25 MB, 60 s, steady low latency), serverless (4 MB, 60 s, no idle cost, intermittent traffic), asynchronous (1 GB, up to 1 hour, large or slow requests), and batch transform (whole datasets, offline scoring).
+- Reading the clues: users waiting with steady load means real-time. A few requests per hour means serverless. 500 MB inputs that take minutes mean asynchronous. Scoring yesterday's table nightly means batch transform.
+- A multi-model endpoint hosts many similar models in one container, loaded from S3 on demand. It is cheap, but has a cold start on the first call. A dedicated endpoint keeps one model always loaded, with predictable latency and higher cost per model.
+- Multi-container endpoints chain different containers (prepare, model, format) in one call.
+- Compute and orchestration: SageMaker AI endpoints (CPU, GPU, Inferentia), Bedrock for managed FMs, Lambda, ECS, and EKS for light models or custom stacks, and SageMaker Pipelines, Step Functions, and MWAA as orchestrators.
+- Traps: real-time endpoint for nightly scoring, serverless for 100 MB payloads, a multi-model endpoint for mixed frameworks (use multi-container), and dedicated endpoints for 1,000 models.
+
+**Deploying FMs and External Models (Lesson 22)**
+
+- Bedrock billing: on-demand per token for variable traffic, provisioned throughput hourly per model unit for steady load and guaranteed capacity, batch inference about 50% lower for offline jobs.
+- Cross-Region inference: a geographic profile routes within a geography (for example the EU) and supports data residency. A global profile routes to any commercial Region for the highest throughput, with no residency boundary.
+- SageMaker AI for FMs: JumpStart for open-weight models, large model inference containers, GPU or Inferentia instances sized to the model, and my own scaling rules, VPC, and endpoints. It gives full control of model, GPU, and container.
+- Models built elsewhere: put weights in S3, use Custom Model Import, then call InvokeModel on demand, serverless with no endpoints.
+- Sizing: GPU memory holds the model weights plus the KV cache per request. Tensor parallelism splits large models across GPUs, and inference components let several models share an endpoint.
+- Traps: self-hosting a model Bedrock already offers, provisioned throughput for occasional traffic, a global profile with EU residency, and rebuilding infrastructure for an imported model.
+
+**Deploying Agents (Lesson 23)**
+
+- An agent is more than a model: it needs hosting with isolated sessions, tools, memory (short and long term), and observability.
+- AgentCore services: Runtime (serverless hosting, any framework), Gateway (turns APIs and Lambda into MCP tools), Memory (short-term session and long-term), and Identity, Policy, and Observability.
+- MCP connects an agent to tools. A2A connects an agent to other agents.
+- Managing state: session state in AgentCore Memory or DynamoDB with a TTL, long workflows with Step Functions checkpoints, summarized history to keep context small, and large artifacts in S3 with references.
+- Bedrock Agents is now called Agents Classic and is closed to new customers. New deployments start on AgentCore.
+- Traps: Agents Classic for a new build, A2A to call a tool API (the answer is MCP), and unbounded growing state.
+
+**Knowledge Bases and Retrieval Pipelines (Lesson 24)**
+
+- A managed knowledge base is the recommended starting point, with built-in connectors, document-level permissions, and agentic retrieval. A customer-managed one gives more control but means more to operate.
+- Vector store choices: OpenSearch for hybrid search and high query rates, Aurora PostgreSQL for vectors beside relational data, Neptune Analytics for graph RAG, and S3 Vectors or partner stores (Pinecone, Redis, MongoDB Atlas) for low cost.
+- Keeping it current: sync jobs are incremental, re-embed only changed documents, and delete removed ones from the index. Direct ingestion handles one-step updates when it is urgent.
+- Retrieval configuration: search type (semantic or hybrid), number of results, metadata filters, and a reranker model.
+- Retrieve API returns chunks and scores for my own prompt and any model. RetrieveAndGenerate returns a cited answer with a managed prompt and a Bedrock model, with the least code.
+
+**Provisioning, Containers and VPC Endpoints (Lesson 25)**
+
+- On-demand or serverless is pay per use for spiky or unknown load. Provisioned or committed capacity has a lower unit cost for steady, predictable load.
+- Infrastructure as code: CloudFormation (declarative templates), CDK (real code that synthesizes CloudFormation), outputs and exports to pass values between stacks, and pipelines that create and update stacks.
+- Containers: start from an AWS Deep Learning image, add pinned dependencies, scan with Amazon Inspector, push to ECR, and deploy to SageMaker, ECS, or EKS.
+- Endpoints in a VPC: VpcConfig on CreateModel with subnets and security groups, at least two subnets in different Availability Zones, interface VPC endpoints (PrivateLink) for the SageMaker API and runtime, and an S3 gateway endpoint to load model artifacts privately.
+- Deploying by code with Boto3 follows the order model, endpoint config, endpoint, then invoke once the endpoint is InService.
+- Traps: one subnet for a VPC endpoint, no S3 endpoint in a private VPC, console clicks for production (use CloudFormation or CDK), and a custom image for standard PyTorch (use the AWS framework container).
+
+**Auto Scaling (Lesson 26)**
+
+- Flow: CloudWatch metric, target value (for example 70 per instance), compare, add or remove instances, then a cooldown.
+- Metrics: InvocationsPerInstance for classic request-rate target tracking, high-resolution ConcurrentRequests for faster reaction, per inference component copy scaling, and CPU or GPU utilization.
+- Policies: target tracking is the default choice, step scaling suits sharp spikes, and scheduled scaling fits known daily peaks such as a 9 a.m. weekday spike.
+- LLMs are limited by concurrency and not CPU, so scale on concurrency or GPU with high-resolution metrics.
+- Cold starts: large models load slowly, so keep a warm minimum, scale early with lower targets and scheduled scaling, and use async scale to zero only for queued work that can wait.
+- Traps: CPU scaling for GPU LLMs, minimum zero on real-time LLMs, reactive scaling only for known peaks, and step scaling by default.
+
+**CI/CD and Deployment Strategies (Lesson 27)**
+
+- Developer tools: CodePipeline orchestrates stages, CodeBuild builds, tests, and scans, CodeDeploy automates deployment, and CodeCommit and CodeConnections handle Git repos and links to GitHub, GitLab, and Bitbucket.
+- SageMaker Projects give a ready-made MLOps template: model build pipeline code, registry approval, model deploy to staging and production, repeatable on every change.
+- Deployment guardrails use blue/green: a new green fleet, gradual traffic shifting, CloudWatch alarms, and automatic rollback.
+- Traffic shifting: all at once has the highest exposure, canary sends a small slice first (low risk, fast signal), and linear moves in equal steps (lowest risk, slower).
+- Testing gates: code and data tests, model quality against metric thresholds versus the current model, prompt and safety tests (golden prompts, guardrails), and load tests with Inference Recommender.
+- Traps: big-bang deploy with no alarms, no quality gate in the pipeline, CodeStar Connections by its old name (the answer is CodeConnections), and linear when a fast signal is needed (use canary).
+
+**Training Jobs, Retraining and Pipelines (Lesson 28)**
+
+- A training job needs an algorithm or image, input channels (S3 File, Fast file, Pipe, FSx, EFS), compute (instance type and count, optional Managed Spot), and an output path, IAM role, and max runtime.
+- Inference jobs: a batch transform job uses S3 input and output paths and leaves no endpoint running. An endpoint is always available, with auto scaling and real-time or async modes.
+- SageMaker Pipelines: process, train or tune, evaluate, condition (better than current?), then register and deploy.
+- Retraining triggers: a schedule through EventBridge Scheduler, drift through an alarm to EventBridge, and new data through an S3 event to the pipeline.
+- Ungated retraining can make things worse. A gated pipeline compares with the current model, lets a condition step decide, registers only winners, and can require manual approval.
+- Traps: retrain with no evaluation gate, manual notebook retraining, an endpoint for nightly scoring, and Spot without max wait or checkpoints (set both).
+
+**Versioning and Approval (Lesson 29)**
+
+- What to version: ML models in the Model Registry or MLflow (released by approval and pipeline), prompts in Prompt Management (a version per change), agents in Git with a pipeline to AgentCore, and knowledge bases through data source versions and scheduled sync.
+- Model Registry: model groups (one per use case), versions, metadata (metrics, training data, lineage), and approval status (Approved, PendingManualApproval, Rejected).
+- Approval as a gate: pipeline trains and evaluates, registers as pending, review (human or automatic), an approved event is emitted, and the pipeline deploys. Approval triggers deployment through an EventBridge event.
+- Testing AI artifacts: golden prompt set, schema validation, safety tests that check guardrails block what they should, and regression against the previous version with compared LLM-as-a-judge scores.
+- Traps: deploying unapproved versions, editing prompts in place, refreshing knowledge bases by hand, and no regression tests for prompts.
+
+**Takeaway**
+
+Domain 3 comes down to matching size, time, traffic, and model count to the right serving option, then automating everything with code, gates, and rollback. Nothing ships without passing tests, and retraining without an evaluation gate can make things worse.
+
+---
+
 ## October 26, 2026
 
 **AWS MLA-C02 | Domain 2 Completed (Core Concept Learning, Lessons 11–20)**

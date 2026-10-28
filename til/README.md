@@ -7,6 +7,82 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 28, 2026
+
+**AWS MLA-C02 | Domain 4 Completed (Core Concept Learning, Lessons 30–35)**
+
+This was the fourth study day of the retake preparation. I worked through all of Domain 4, Operating, Monitoring, and Securing ML and AI Solutions (24% of the exam), in the Core Concept Learning course. Domain 4 was marked Needs Improvement in my first attempt on October 23. With Domains 1 to 3 from the previous days, I am now through all lessons 01 to 35. Only the scenario walkthroughs and practice exams are left.
+
+**Monitoring Models in Production (Lesson 30)**
+
+- What to monitor: inputs (distribution drift), outputs (prediction mix), quality (against ground truth), and system (latency, errors).
+- Monitoring FM apps: CloudWatch GenAI observability (invocations, tokens, latency by model), invocation logging of prompts and responses to S3 or CloudWatch, sampled evaluations scored with Bedrock Evaluations, and user feedback as a quality signal.
+- Data drift means input features change (new customer segments, seasonality, new products) and is found with statistical distance tests. Concept drift means the input-output link changes (fraud patterns evolve, accuracy falls) and needs ground truth. In both cases, compare live data to the baseline.
+- Errors and ground truth: inference errors (4xx, 5xx, timeouts) get CloudWatch alarms, pipeline failures get EventBridge notifications, CloudWatch anomaly detection flags unusual metric patterns, and a ground-truth loop joins later labels to predictions.
+- An A/B test sends production variants real traffic (for example 90/10) and compares business metrics. A shadow test copies live requests, discards the shadow responses, has no user impact, and compares latency and errors.
+- Traps: no ground-truth loop (join labels to predictions), a shadow test to measure user impact (use an A/B test), infrastructure-only monitoring (add quality and drift), and Model Monitor for new customers (it is closed).
+
+**Monitoring Agents and Troubleshooting Tools (Lesson 31)**
+
+- Agent failure modes: coordination failures (agents hand off wrongly or wait forever), truncated streaming (timeouts or token limits), tool failures (errors, timeouts, bad parameters), and loops with runaway cost (too many steps, tokens, or tool calls).
+- Observability tools: CloudWatch for metrics, logs, and dashboards, AgentCore Observability for step-by-step agent traces (tool calls, reasoning steps), and AWS X-Ray for traces across services (slow or failing hops).
+- Reading a trace: request, plan, tool call (for example a 4.2 s error), retry, timeout with a truncated answer. Find the step that broke.
+- Dashboards: latency p50, p95, and p99, error and tool error rate by model, tool, and step, tokens and cost per request, and steps per task as a drift signal.
+- Troubleshooting flow: symptom, trace, logs (Logs Insights), fix, then an alarm to catch it next time.
+- Traps: checking only final answers (trace each step), no tracing across services (use X-Ray), average latency only (use p95 and p99), and no step or token limits (set limits and circuit breakers).
+
+**Instance Selection and Purchasing (Lesson 32)**
+
+- Instance families: CPU (C, M) for classic ML and small models, GPU (P, G) for deep learning and LLMs, Inferentia for cost-efficient inference, and Trainium for cost-efficient training of large models.
+- Inference Recommender: take the registered model, run load tests on many instance types, compare latency and throughput, compute cost per inference, and pick the best value. Load-test instead of guessing.
+- Right-sizing: pick size and count from measurements, use auto scaling with a sensible minimum and maximum, share instances (multi-model endpoints, inference components), and spread across multiple AZs for reliability.
+- Purchasing options: on-demand for variable or unknown load, Savings Plans for a lower price with commitment on steady SageMaker usage, Managed Spot (up to 90% off) for interruptible training, and provisioned throughput for committed FM capacity and steady Bedrock load.
+- SageMaker AI Savings Plans commit to dollars per hour and stay flexible across instance family, size, Region, and component (notebooks, training, hosting). Spot can be interrupted, so checkpoint to S3 and use it for training jobs and not for endpoints.
+- Traps: a GPU for a small XGBoost model (use a CPU instance), Spot for real-time endpoints (use it for training), guessing instance types (use Inference Recommender), and plans tied to one family.
+
+**Managing ML and FM Costs (Lesson 33)**
+
+- Visibility: Cost Explorer (spend by service, tag, and time), cost allocation tags (attribute spend to teams, projects, and models), Cost Anomaly Detection, and Trusted Advisor for idle and underused resources.
+- Budgets and limits: AWS Budgets (monthly or custom periods, alerts at thresholds, by service, tag, or account, actions on breach). Hard limits are Service Quotas, rate limits per app, max tokens per request, and step limits for agents.
+- FM cost levers: model routing (a small model for easy tasks), prompt caching (reuse long fixed prefixes), batch inference (about 50% cheaper for offline jobs), and shorter context (prune history, fewer chunks).
+- Tokens and embeddings: track tokens per feature with CloudWatch, embed incrementally (only changed documents), run batch embedding jobs for large corpora, and cap output length.
+- Vector storage costs: S3 Vectors for low-cost storage (best at low query rates), fewer dimensions for smaller vectors (some accuracy loss), binary vectors for much less storage (less precise), and a right-sized cluster (monitor latency).
+- Traps: re-embedding the whole corpus (use incremental sync), no tags or budgets, provisioned throughput for bursty traffic (use on-demand), and real-time calls for overnight jobs (use batch inference).
+
+**Access Control and Credentials (Lesson 34)**
+
+- Execution roles follow least privilege with one role per component: training job (read data, write model), endpoint (read model artifacts), pipeline (start jobs and pass roles), and data scientist (notebooks, experiments).
+- Scoping access: S3 prefixes, KMS key policies (who may decrypt artifacts), Bedrock model ARNs (InvokeModel only on approved models), and condition keys (require VPC, tags, or source).
+- Bedrock credentials: IAM role credentials (temporary through STS) are the default for apps, short-term API keys (up to 12 hours) fit production key use, and long-term API keys (until expiry, tied to an IAM user) are for exploration only. Roles first.
+- No hard-coded keys: keys in notebooks, container images, Git, or shared long-term keys are risky. Execution roles, Secrets Manager, short-lived credentials, and rotation and auditing are safe.
+- Auditing: CloudTrail (who called which API and when), IAM Access Analyzer (overly broad or external access), registry approvals (who approved each model version), and regular reviews that remove unused roles and permissions.
+- Traps: long-term API keys in production, one admin role for everything (use a role per component), and keys hard-coded in notebooks (use roles and Secrets Manager).
+
+**Network, Pipeline and AI Security (Lesson 35)**
+
+- Network isolation: training and endpoints run in private subnets in my VPC across two AZs, security groups allow only required traffic, VPC endpoints (PrivateLink) cover SageMaker and Bedrock, and an S3 gateway endpoint covers S3. Network isolation mode means training containers make no outbound calls, so there is no public internet path to models or data.
+- Pipeline and image security: Amazon Inspector scans ECR container images and Lambda functions for known vulnerabilities with continuous rescans. CodeGuru Reviewer finds code defects and secrets, but takes no new repository associations since November 7, 2025, so I choose other scanners. Scan what you ship.
+- Auditing and compliance: CloudTrail records API calls (who did what, when), AWS Config records resource configurations and rules (are we compliant over time), invocation logging records prompts and responses (what did the model see), and Macie finds sensitive data in S3 (where is the PII).
+- Troubleshooting security: most failures are permissions or paths. AccessDenied points to the role policy or KMS key policy, artifacts that will not load or a stuck endpoint point to the S3 endpoint or bucket policy, public exposure (an open bucket) points to Config rules and Macie, and prompt injection (odd model behaviour) points to Guardrails and input checks.
+- AI safeguards with Bedrock Guardrails: content filters (harmful categories, including prompt attacks), denied topics and word filters (block off-limits subjects and terms), sensitive information filters (mask or block PII), and grounding and reasoning checks (contextual grounding, Automated Reasoning). Filter inputs and outputs, mask PII, and check grounding.
+- Self-check answers: Scan container images in ECR with Amazon Inspector. Prove endpoints stay encrypted with AWS Config rules. Block outbound calls from training with network isolation mode. Mask PII in FM responses with the Guardrails sensitive information filter.
+- Closing rule: private, scanned, audited, guarded.
+
+**Where I Am Now**
+
+| Domain | Weight | First attempt (Oct 23) | Course status |
+|---|---|---|---|
+| 1: Data Preparation | 28% | Needs Improvement | Completed Oct 25 |
+| 2: Model and FM Development | 24% | Meets Competencies | Completed Oct 26 |
+| 3: Deployment and Orchestration | 24% | Needs Improvement | Completed Oct 27 |
+| 4: Operations, Monitoring, Security | 24% | Needs Improvement | Completed Oct 28 |
+
+**Takeaway**
+
+Domain 4 comes down to four habits: watch inputs, outputs, quality, and system against a baseline, pick compute and purchasing from measurements, give every component short-lived least-privilege access, and keep everything private, scanned, audited, and guarded.
+
+---
+
 ## October 27, 2026
 
 **AWS MLA-C02 | Domain 3 Completed (Core Concept Learning, Lessons 21–29)**

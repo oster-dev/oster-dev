@@ -7,6 +7,74 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 29, 2026
+
+**AWS MLA-C02 | All 5 Scenario Walkthroughs Completed (Core Concept Learning)**
+
+This was the fifth study day of the retake preparation. After the four domains and all 35 lessons, I worked through the five scenario walkthroughs in the Core Concept Learning course. Each one combines lessons from several domains into a realistic exam case, with exam traps and a self-check. All five are done, and the two practice exams are next.
+
+**Scenario 1: Fraud Detection from Stream to Endpoint**
+
+- Streaming features: Kinesis transactions go into Flink with 5-minute windows, then into the online store (latest per card) and the offline store (full history), with Firehose to S3 as a raw archive. Flink computes, and Feature Store serves (lessons 02 and 06).
+- Training on rare fraud: XGBoost as the strong tabular default, explainable with Clarify. Class weights (scale_pos_weight) with stratified, time-aware splits. Bayesian tuning for few expensive jobs. Judge by recall and PR-AUC, not accuracy, because 99.5% is easy by saying "never" (lessons 10, 14, 15, and 20).
+- Real-time serving: payment API, online store read, real-time XGBoost endpoint, auto scaling on an invocations target, and a score in under 50 ms (lessons 21 and 26).
+- Monitoring and retraining: baseline from feature statistics at launch, scheduled data drift checks, ground truth from chargebacks that join predictions weeks later, and a gated pipeline that retrains and deploys only if better (lessons 18, 28, and 30).
+- Traps: Firehose for windowed features (use managed Apache Flink), the offline store at serving time (use the online store), accuracy on 0.5% fraud (use recall and PR-AUC), and batch transform for live payments (use a real-time endpoint).
+- Self-check answers: 5-minute spend per card, live, is managed Apache Flink. Latest features in milliseconds come from the Feature Store online store. The metric for rare fraud is recall and PR-AUC. Fraud patterns that change over time are concept drift, handled by retraining with a gate.
+
+**Scenario 2: Fine-Tuning and Serving a Domain FM**
+
+- Prompting first: a clear template (sections, headings, abbreviation rules), two approved summaries as few-shot examples, and a golden set of 200 notes scored against the format. The format still drifted in 15% of cases, so fine-tuning was justified (lesson 17).
+- Training data: find PII with Comprehend and Macie, mask names, IDs, and dates, build JSONL pairs (note to summary), validate schema, length, and dupes, and screen for quality and safety (lesson 08).
+- Tuning safely: Bedrock supervised fine-tuning (labelled JSONL pairs, managed training, billed tokens times epochs, few epochs and a modest learning rate) or LoRA on SageMaker (open-weight model, small adapters with the base frozen, less forgetting, import to Bedrock or host) (lessons 16 and 17).
+- Evaluate and serve: ROUGE and BERTScore against approved summaries, LLM-as-a-judge plus clinicians reviewing a sample, general benchmarks to catch forgetting, and serving with on-demand deployment or provisioned throughput by load (lessons 20, 22, and 29).
+- Traps: fine-tune before trying prompts (prompt engineering first), train on raw patient data (mask PII first), fine-tune to add new facts (use RAG), and only task metrics (check general skills too).
+- Self-check answers: supervised fine-tuning data is JSONL prompt-response pairs. Limit forgetting with LoRA, few epochs, and a low learning rate. Compare with reference summaries using ROUGE and BERTScore. Serve steady high volume with provisioned throughput.
+
+**Scenario 3: Production RAG Pipeline on AWS**
+
+- Ingestion: S3 manuals (PDFs), Bedrock Data Automation for tables and diagrams, hierarchical chunking, metadata (model, year, access), and the vector store with embeddings. Retrieval quality is built at ingestion (lesson 07).
+- Retrieval: hybrid search so part numbers match exactly while meaning still counts, reranking (retrieve 20, keep the best 5), metadata filters (model and year, exclude retired manuals), and managed knowledge base permissions so partners see only what they may (lessons 13 and 24).
+- Evaluation and grounding: a retrieval test set of 300 engineer questions with expected passages, context relevance and coverage, tuning one change at a time, plus answer quality (correctness, faithfulness, citations required, contextual grounding check, and saying so when confidence is low) (lesson 20).
+- Freshness and cost: incremental sync for new and retired manuals on S3 events, direct ingestion for urgent safety bulletins, re-embedding only changed documents, and vector storage matched to query rate (lessons 24, 29, and 33).
+- Traps: default parser for table-heavy PDFs (use the Data Automation parser), semantic-only for part numbers (use hybrid search), swap the FM for vague answers (fix retrieval), and retired manuals still cited (sync deletions and filter).
+- Self-check answers: exact part numbers plus meaning is hybrid search. Partners see only allowed manuals through managed KB permissions. Block unsupported answers with the contextual grounding check. An urgent bulletin goes in through direct ingestion.
+
+**Scenario 4: MLOps Pipeline with Safe Deployments**
+
+- Training pipeline: Glue Data Quality, process features, train (tracked in MLflow), evaluate against the current model, and register if better (lessons 09, 18, and 28).
+- Approval and promotion: the registry holds the model as pending approval, the planner signs off, an EventBridge event fires, the pipeline deploys to staging and production, and CloudFormation stacks define the infrastructure (lessons 25, 27, and 29).
+- Shadow, then canary: a shadow test copies live requests, compares forecasts and latency, has no user impact, and catches surprises early. Canary guardrails send 10% to the new fleet, watch CloudWatch alarms, then shift the remaining 90%, with automatic rollback (lessons 18 and 27).
+- Automatic retraining: a weekly EventBridge Scheduler run, a drift alarm for an early run, actual sales as ground truth for forecast error, and the same gates every time (quality, approval, canary) (lessons 28 and 30).
+- Traps: retrain without data checks (data quality rules), deploy unapproved versions (registry approval), all-at-once without alarms (canary with rollback), and shadow to measure user impact (use an A/B test). No gate, no release.
+- Self-check answers: stop a corrupted extract with Glue Data Quality rules. Register only better models with a condition step. Approval starts deployment via an EventBridge event. 10% first with automatic rollback is canary guardrails.
+
+**Scenario 5: Securing and Cost-Optimizing an ML Platform**
+
+- Locking down the network: private subnets for training and endpoints across two AZs, VPC endpoints (PrivateLink for SageMaker and Bedrock, S3 gateway), network isolation mode so training containers make no outbound calls, and Inspector scans on ECR images in the pipeline (lessons 25 and 35).
+- Identity and credentials: execution roles per job, endpoint, pipeline, and team, scoped access (S3 prefixes, KMS keys, model ARNs), Bedrock credentials (roles and short-term keys, revoke the long-term key), and auditing with CloudTrail calls and Config rules over time (lesson 34).
+- Seeing the costs: cost allocation tags (team, project, and model on every resource), Cost Explorer for spend by tag, AWS Budgets with alerts per team at 80%, and Cost Anomaly Detection for sudden spikes (lesson 33).
+- Cutting the costs: idle endpoints (serverless, multi-model endpoints, batch), GPU training (Managed Spot with checkpoints, up to 90%), oversized hosts (Inference Recommender to right-size), and big prompts (caching, batch, routing) (lessons 12, 21, 32, and 33).
+- Traps: a long-term API key in production (roles or short-term keys), one shared admin role (a role per component), Spot for real-time endpoints (Spot for training), and cutting costs before tagging (tag and measure first). Private, least privilege, then lean.
+- Self-check answers: an endpoint reaches S3 privately through an S3 gateway endpoint. Prove encryption over time with AWS Config rules. GPU training at 90% off is Managed Spot with checkpoints. Steady hosting with flexible commitment is SageMaker AI Savings Plans.
+
+**Where I Am Now**
+
+| Block | Status |
+|---|---|
+| Domain 1: Data Preparation (28%) | Completed Oct 25 |
+| Domain 2: Model and FM Development (24%) | Completed Oct 26 |
+| Domain 3: Deployment and Orchestration (24%) | Completed Oct 27 |
+| Domain 4: Operations, Monitoring, Security (24%) | Completed Oct 28 |
+| 5 scenario walkthroughs | Completed Oct 29 |
+| 2 practice exams | Open |
+
+**Takeaway**
+
+The scenarios show how the domains connect: fresh features and honest metrics, prompt before fine-tune, fix retrieval and not the model, automate with gates and gradual rollout, and keep everything private, least privilege, and lean.
+
+---
+
 ## October 28, 2026
 
 **AWS MLA-C02 | Domain 4 Completed (Core Concept Learning, Lessons 30–35)**

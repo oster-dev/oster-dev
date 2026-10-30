@@ -7,6 +7,62 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 30, 2026
+
+**AWS MLA-C02 | Both Practice Exams Completed (Core Concept Learning)**
+
+This was the sixth study day of the retake preparation. After the four domains, all 35 lessons, and the 5 scenario walkthroughs, I took the two course practice exams today. Each has 12 questions across the four domains, with the answer, the rule, and the common trap shown after each question, and a "Missed one? Watch this lesson" map back to the course. The real exam has 65 questions (50 scored, 15 unscored), the beta had 85, and the pass mark is 720 of 1000.
+
+**Practice Exam 01**
+
+- Training data access (Domain 1): 6 TB of images with slow starts and "no space left on device" means fast file mode for the S3 input channel. The trap is Pipe mode, which is largely replaced (lesson 01).
+- Feature Store (Domain 1): latest features within milliseconds come from the online store. The offline store is for training history (lesson 06).
+- Class imbalance (Domain 1, two answers): stratified splits keep the 1% ratio in every split, and class weights plus recall, precision, and PR-AUC judge fairly. The trap is oversampling before splitting, which leaks copies into validation (lesson 10).
+- Hyperparameter tuning (Domain 2): per-epoch validation reports with early stopping of weak configurations means Hyperband. Grid search supports only categorical values (lesson 15).
+- FM customization (Domain 2): 10,000 approved request-and-contract pairs mean supervised fine-tuning with labelled pairs. Continued pre-training adds knowledge, not format (lesson 17).
+- GenAI evaluation (Domain 2): comparing summaries to human references is ROUGE. BLEU is the translation trap (lesson 20).
+- Hosting many models (Domain 3): 2,000 per-tenant XGBoost models called a few times an hour fit one multi-model endpoint. A multi-container endpoint is for different containers, not thousands of similar models (lesson 21).
+- Deployment strategies (Domain 3): 10% first, then the rest, with automatic rollback on alarms is blue/green deployment guardrails with canary traffic shifting. A shadow test never returns responses to users (lesson 27).
+- Agent deployment (Domain 3): serverless hosting with isolated sessions, MCP tools, and long-term memory is AgentCore Runtime, Gateway, and Memory. Agents Classic is closed to new customers (lesson 23).
+- Instance selection (Domain 4): the cheapest instance that keeps p95 latency under 100 ms comes from SageMaker Inference Recommender load tests. Managed Spot applies to training jobs (lesson 32).
+- FM credentials (Domain 4): a production app that must use an API key rather than SigV4 should use a short-term Bedrock API key (up to 12 hours). Long-term keys are for exploration only (lesson 34).
+- Compliance auditing (Domain 4): continuous evidence that every endpoint uses a customer managed KMS key, with history, comes from AWS Config with an encryption rule. CloudTrail records API calls, not configuration compliance (lesson 35).
+
+**Practice Exam 02**
+
+- Streaming data (Domain 1): card transactions per card over the last 5 minutes as a model feature are computed by Managed Service for Apache Flink. Firehose delivers streams but does not compute windows (lesson 02).
+- RAG document prep (Domain 1): wrong answers when facts sit in tables and charts need a Bedrock Data Automation or FM parser. A larger model cannot use information that was never extracted (lesson 07).
+- FM training data (Domain 1, two answers): before fine-tuning on transcripts with names and card numbers, use Macie to discover PII in S3 and mask or redact it, then build validated JSONL pairs. The trap is training on raw PII and relying on guardrails afterwards (lesson 08).
+- Retrieval optimization (Domain 2): queries like a part number need hybrid search combining keyword and vector matching. A bigger model does not fix what retrieval returns (lesson 13).
+- Overfitting (Domain 2): 98% training and 70% validation means add regularization and early stopping. Training longer makes it worse (lesson 16).
+- Model testing (Domain 2): comparing latency and outputs on real traffic without any user seeing responses is a SageMaker AI shadow test. An A/B test serves real users (lesson 18).
+- VPC hosting (Domain 3): an endpoint in private subnets that fails to load artifacts from S3 needs an S3 gateway VPC endpoint. Opening internet access breaks the isolation requirement (lesson 25).
+- Retraining (Domain 3): a drift metric that crosses a threshold should trigger a CloudWatch alarm, then EventBridge, then a SageMaker pipeline with a condition step. Always deploying the retrained model can ship a worse one (lesson 28).
+- GPU scaling (Domain 3): an LLM endpoint with low CPU but queued requests should scale on concurrent requests (high-resolution) or GPU utilization. Tuning CPU thresholds tracks the wrong resource (lesson 26).
+- Model monitoring (Domain 4): stable input distributions with rising missed fraud is concept drift, found by joining ground-truth labels to stored predictions as they arrive. Feature-distribution checks alone miss it (lesson 30).
+- FM cost (Domain 4): a 4,000-token system prompt repeated on every request is reduced by prompt caching. Provisioned throughput buys capacity but does not shrink repeated tokens (lesson 33).
+- Purchasing options (Domain 4): steady all-year SageMaker hosting with changing instance families and Regions fits SageMaker AI Savings Plans. Managed Spot is for interruptible training (lesson 32).
+
+**Patterns Across Both Exams**
+
+- Most questions have one clear service that fits the stated constraint (size, latency, traffic pattern, model count, commitment). The "common trap" is nearly always a service from the right family used for the wrong job.
+- The same trap types repeat: Spot for endpoints, shadow versus A/B, offline versus online store, feature drift versus concept drift, oversampling before splitting, and long-term keys in production.
+- The "Missed one? Watch this lesson" maps link every question back to one lesson, so any miss can be reviewed in a few minutes.
+
+**Status**
+
+| Block | Status |
+|---|---|
+| Domains 1 to 4 | Completed Oct 25–28 |
+| 5 scenario walkthroughs | Completed Oct 29 |
+| 2 practice exams | Completed Oct 30 |
+
+**Takeaway**
+
+Two practice exams in one day confirmed the pattern behind the questions. Read the constraint, find the one service that fits it, and check for the trap from the same family. The next step is targeted review of every miss, not more new material.
+
+---
+
 ## October 29, 2026
 
 **AWS MLA-C02 | All 5 Scenario Walkthroughs Completed (Core Concept Learning)**

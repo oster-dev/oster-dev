@@ -7,6 +7,50 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 1, 2026
+
+**AWS MLA-C02 | Domain 1 Worked Through with the Cheat Sheet (Active Recall)**
+
+I started the final review phase with Domain 1, Data Preparation for ML and AI (28% of the exam), using the pre-exam cheat sheet. Domain 1 was marked Needs Improvement in my first attempt on October 23, and it has the highest weight, so it comes first.
+
+**Method**
+
+- Reading 1 and 2: read the Domain 1 pages of the cheat sheet twice, covering the official task scope (1.1 collect and store data, 1.2 transform and engineer features, 1.3 validate quality and manage bias), the "clue -> pick" tables, and the trap table.
+- Reading 3: active recall using questions from the past practice exams. I said each answer out loud from memory before checking it against the cheat sheet.
+- This is the same method that worked for me before, so I will keep using it for the other domains and check the result with quizzes.
+
+**Domain 1 Anchors I Can Now Recite**
+
+- Storage: data bigger than disk means fast file mode. Highest throughput means FSx for Lustre. Shared file system with data already there means EFS. Millions of tiny files get combined into larger files.
+- Streaming: Data Streams collect, Firehose delivers, Flink computes (rolling 5-minute features), MSK fits an existing Kafka ecosystem.
+- Formats and joins: Parquet or ORC for few columns of many rows, JSONL for events and FM tuning data, CSV for small files. Glue for a serverless join, Athena for ad hoc SQL, EMR for huge custom Spark. Use point-in-time joins to avoid target leakage.
+- Vectors and RAG prep: S3 Vectors for a cheap archive, OpenSearch for high QPS and hybrid search, pgvector beside relational tables, Bedrock Knowledge Bases for the least effort. The index dimension must equal the embedding model's output. Complex PDFs need Data Automation or an FM parser.
+- Features: online store for latest features in milliseconds, offline store for history. Split first, then fit transforms on the training set only.
+- PII and tuning data: Macie finds PII in S3, Comprehend in text, Guardrails masks it in live responses. Mask or redact before fine-tuning. SFT data is JSONL prompt-response pairs.
+- Quality and bias: Glue Data Quality enforces rules in pipelines, impute and add a flag for missing values, keep outliers that are the real signal, dedupe on keys after joins. For a rare class use a stratified split and class weights, and judge by recall, precision, and PR-AUC.
+
+**Traps I Want to Avoid on the Exam**
+
+- Firehose for windowed features (the answer is managed Flink).
+- Joining on current values (use a point-in-time join).
+- Fitting a scaler or oversampling before splitting (split first).
+- Training on raw PII and relying on guardrails afterwards (mask or redact first).
+- Accuracy on rare-event data (use recall and PR-AUC).
+- Dropping only the protected attribute (remove the proxies too).
+
+**Next Steps**
+
+1. Do the same three-pass routine for Domain 3 and Domain 4, which were also marked Needs Improvement, then Domain 2.
+2. Build the domain quizzes from the cheat sheet and my missed-question lists, and track the score per domain.
+3. Redo every missed practice-exam question and check it against the matching lesson.
+4. Book the retake once the 14-day waiting period is over, which by my count is November 6, 2026 at the earliest. I will verify the date in the portal.
+
+**Takeaway**
+
+Reading twice and then answering aloud from memory is better than reading a third time. The test of whether Domain 1 holds is the quiz score, not how confident it feels.
+
+---
+
 ## October 31, 2026
 
 **AWS MLA-C02 | Pre-Exam Cheat Sheet Built for the Final Days**

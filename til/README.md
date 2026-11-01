@@ -7,6 +7,43 @@ TIL Started: April 13, 2026
 
 ---
 
+## October 31, 2026
+
+**AWS MLA-C02 | Pre-Exam Cheat Sheet Built for the Final Days**
+
+This was the seventh study day of the retake preparation. After the course content, the 5 scenarios, and both practice exams, I built a condensed pre-exam cheat sheet today. It is based on the official AWS exam guide for MLA-C02 and my Core Concept Learning notes. I will use it, together with self-made quizzes, for the remaining days until the retake.
+
+**What I Built**
+
+- A 10-page PDF organized by the four official domains: D1 Data Preparation (28%), D2 Model and FM Development (24%), D3 Deployment and Orchestration (24%), D4 Operating, Monitoring, and Securing (24%).
+- Page 1: exam facts, the scope, and 8 golden rules. Pages 2 to 9: two pages per domain. Page 10: key numbers, services closed to new builds, and a last-24-hours checklist.
+- Each domain page has the official task scope (1.1 to 4.3), a "clue in the question -> pick" table with the keywords and decision rules, and a red trap table with "wrong choice -> exam answer".
+- Earlier today I also compiled a longer master version of all 35 lessons, the 5 scenarios, and the practice-exam map. The 10-page version is the one meant for daily review.
+
+**Decision Habits I Want to Drill**
+
+1. Find the constraint first: size, latency, traffic pattern, model count, commitment, residency, or user impact.
+2. Pick the least effort that fits: AI service, then Bedrock plus prompts, then RAG, then fine-tuning with LoRA, then a custom model.
+3. Fix retrieval and not the model for bad RAG answers.
+4. Split before scaling or oversampling, and judge rare events with recall and PR-AUC.
+5. Release only through gates, approval, and a canary with alarm rollback. Retrain only through a condition step.
+6. Tag and measure before optimizing cost. Spot is for training only.
+7. Use one least-privilege role per component, private networking, and short-term credentials.
+
+**Plan Until the Retake**
+
+1. Read the cheat sheet daily, starting with the trap tables of D1, D3, and D4, which were my weak domains.
+2. Cover the right column of the "clue -> pick" tables and quiz myself.
+3. Create quizzes per domain from the cheat sheet and from my missed-question lists, and track the score per domain.
+4. Redo every missed practice-exam question and check it against the matching lesson.
+5. Book the retake once the 14-day waiting period is over, which by my count is November 6, 2026 at the earliest. I will verify the date in the portal.
+
+**Takeaway**
+
+Condensing everything into one cheat sheet turned the course into a drill tool. The next step is active recall: quizzes, trap tables, and missed questions, not more new material.
+
+---
+
 ## October 30, 2026
 
 **AWS MLA-C02 | Both Practice Exams Completed (Core Concept Learning)**

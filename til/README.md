@@ -7,6 +7,43 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 2, 2026
+
+**AWS MLA-C02 | Domain 2 Worked Through with the Cheat Sheet (Active Recall)**
+
+This was the second day of the final review phase. I worked through Domain 2, ML Model and Foundation Model Development (24% of the exam), with the pre-exam cheat sheet, using the same method as yesterday. Domain 2 was the one domain marked Meets Competencies in my first attempt on October 23, so the goal today was to lock it in and not to repair it.
+
+**Method**
+
+- Reading 1 and 2: read the Domain 2 pages twice, covering the official task scope (2.1 choose modeling approaches, 2.2 train, fine-tune, and customize, 2.3 analyze and evaluate), the "clue -> pick" tables, and the trap table.
+- Reading 3: active recall using questions from the past practice exams. I said each answer out loud from memory before checking it.
+
+**Domain 2 Anchors**
+
+- Choosing the approach: climb only as far as you must, from AI service to Bedrock FM to a pre-trained JumpStart model to a custom model. Textract extracts invoice fields without training. Regulated tabular decisions need an interpretable custom model with Clarify. Choose among FMs by evaluating on my own data and taking the smallest one that passes.
+- Cost levers: Managed Spot with checkpoints cuts training cost by up to 90%. Bedrock batch inference saves about 50% for overnight jobs. A smaller or distilled model fixes a model that is too slow for real time.
+- RAG patterns: RetrieveAndGenerate for standard document Q&A, Retrieve API for my own prompt, hybrid search for exact codes, text-to-SQL for tables, and Graph RAG with Neptune for entity relationships.
+- Algorithms: XGBoost, LightGBM, and CatBoost as the tabular default, Linear Learner when it must be explainable. K-Means, PCA, Random Cut Forest, and IP Insights when there are no labels. DeepAR for forecasts, BlazingText for text, and script mode for my own PyTorch code.
+- Tuning and training: Grid for few categorical options, Random for maximum parallelism, Bayesian for expensive jobs with few runs, Hyperband when the job reports per epoch. Model parallel when a model is too big for one GPU, data parallel for speed.
+- Overfitting and forgetting: 99% training and 72% validation means overfitting, so regularize, stop early, and add data. A fine-tuned model that lost general skills needs LoRA, mixed-in general data, and a low learning rate.
+- Customization: changing facts go to RAG, behaviour and format go to fine-tuning, domain language goes to continued pre-training. SFT for a strict house style, reinforcement fine-tuning for a scoring rule, distillation for big-model quality at small-model cost.
+- Evaluation: a baseline is needed before drift detection, a shadow test gives zero user impact, Clarify Shapley values explain one prediction. Loss NaN means lower the learning rate, flat loss means raise it. Use ROUGE for summaries, BLEU for translation, BERTScore for meaning, an LLM judge at scale, and score retrieval and generation separately for RAG.
+
+**Traps I Want to Avoid on the Exam**
+
+- Custom OCR instead of Textract, and an FM for a regulated tabular decision.
+- Picking an FM by benchmark or taking the largest one by default.
+- Swapping the FM to fix retrieval (tune retrieval instead).
+- Training longer to fix overfitting, or fine-tuning to add changing facts.
+- Promoting a model on offline metrics only, or treating a shadow test as an A/B test.
+- BLEU for summaries, and accuracy on rare classes.
+
+**Takeaway**
+
+Domain 2 holds together as one rule: use the least effort that meets the requirement, measure it on my own data, and fix the actual cause, whether that is retrieval, overfitting, or forgetting.
+
+---
+
 ## November 1, 2026
 
 **AWS MLA-C02 | Domain 1 Worked Through with the Cheat Sheet (Active Recall)**

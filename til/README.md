@@ -7,6 +7,43 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 3, 2026
+
+**AWS MLA-C02 | Domain 3 Worked Through with the Cheat Sheet (Active Recall)**
+
+This was the third day of the final review phase. I worked through Domain 3, Deployment and Orchestration of ML and AI Workflows (24% of the exam), with the pre-exam cheat sheet, using the same method as on the previous days. Domain 3 was marked Needs Improvement in my first attempt on October 23, so I treated it as a repair domain.
+
+**Method**
+
+- Reading 1 and 2: read the Domain 3 pages twice, covering the official task scope (3.1 manage deployment infrastructure, 3.2 provision and configure resources, 3.3 orchestration and CI/CD), the "clue -> pick" tables, and the trap table.
+- Reading 3: active recall using questions from the past practice exams. I said each answer out loud from memory before checking it.
+
+**Domain 3 Anchors**
+
+- Deployment targets: real-time for steady low latency (25 MB, 60 s), serverless for intermittent traffic (4 MB, 60 s), asynchronous for 500 MB inputs that take minutes (1 GB, up to 1 hour), batch transform for scoring a table nightly. 1,000 to 2,000 similar models go on a multi-model endpoint. Pre, model, and post containers in one call need a multi-container endpoint.
+- Bedrock serving: on-demand for variable traffic, provisioned throughput for steady guaranteed capacity, batch for offline jobs (about 50% cheaper). A geographic cross-Region profile keeps data in the EU, and a global profile has no residency boundary. Custom Model Import brings fine-tuned open weights into Bedrock.
+- Agents: AgentCore Runtime for serverless hosting with isolated sessions, Gateway to expose APIs as MCP tools, Memory for session and long-term state. MCP connects agents to tools and A2A connects agents to other agents. Agent state belongs in session memory or DynamoDB with a TTL, Step Functions checkpoints, summaries, and S3 for large artifacts.
+- Provisioning: on-demand or serverless for spiky load, provisioned or committed for steady load. CloudFormation for templates, CDK for code that synthesizes CloudFormation. Endpoints in a VPC need VpcConfig, at least two subnets in different AZs, interface endpoints, and an S3 gateway endpoint. Boto3 deploys in the order model, endpoint config, endpoint, then invoke.
+- Knowledge bases and scaling: a managed KB first, incremental sync for freshness and direct ingestion for urgent updates. Target tracking is the default scaling policy, step scaling for sharp spikes, scheduled scaling for known peaks. LLMs scale on high-resolution concurrency or GPU, with a warm minimum against cold starts.
+- CI/CD and MLOps: CodePipeline orchestrates, CodeBuild builds and tests, CodeDeploy deploys, CodeConnections links GitHub and GitLab. SageMaker Projects give a ready-made MLOps template, and SageMaker Pipelines register a model only through a condition step. Release with blue/green, CloudWatch alarms, and automatic rollback, and use canary for a fast signal and linear for the lowest risk.
+- Retraining and versions: triggers are EventBridge Scheduler, a drift alarm through EventBridge, or an S3 event for new data. The Model Registry (groups, versions, metadata, approval status) gates deployment through an approved event. Prompts are versioned in Prompt Management, agents in Git with a pipeline to AgentCore, and knowledge bases through scheduled or event sync.
+
+**Traps I Want to Avoid on the Exam**
+
+- Real-time endpoint for nightly scoring (use batch transform), and serverless for 100 MB payloads (use asynchronous).
+- A multi-model endpoint for mixed frameworks (use multi-container), and dedicated endpoints for 1,000 models.
+- A global profile when the question demands EU residency, and provisioned throughput for occasional traffic.
+- Agents Classic for a new build (use AgentCore), and A2A to call a tool API (use MCP).
+- One subnet, no S3 gateway endpoint in a private VPC, console clicks for production, and a custom image for standard PyTorch.
+- CPU scaling for GPU LLMs, minimum zero on real-time LLMs, and step scaling by default.
+- Big-bang deploys without alarms, no quality gate, retraining without a condition step, deploying unapproved versions, editing prompts in place, and Spot without max wait or checkpoints.
+
+**Takeaway**
+
+Domain 3 is a matching exercise between size, time, traffic, and model count and the right serving option, followed by automation with code, gates, approval, and rollback. Nothing ships without passing tests.
+
+---
+
 ## November 2, 2026
 
 **AWS MLA-C02 | Domain 2 Worked Through with the Cheat Sheet (Active Recall)**

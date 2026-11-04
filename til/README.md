@@ -7,6 +7,71 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 4, 2026
+
+**AWS MLA-C02 | Cheat Sheet Completed, 90% Quiz Score and a Big Roadmap Setback**
+
+I finished the remaining Domain 4 pages and the final checklist of the pre-exam cheat sheet today. That completes the full cheat sheet across all four domains. I continued with the same routine: read twice, then answer aloud from memory on the third pass.
+
+The day started with progress in preparation and ended with a serious problem: the beta exam is no longer visible in my booking portal, and the beta retake policy changes the plan I had built around November 6.
+
+**Domain 4 | Final Review Completed**
+
+Worked through Operating, Monitoring, and Securing ML and AI Solutions, including the keyword mappings, decision rules, and exam traps.
+
+- Monitoring: inputs, outputs, ground truth, and system performance; data drift versus concept drift; A/B versus shadow testing.
+- Agent troubleshooting: step-level traces, tool failures, timeouts, token limits, and runaway loops.
+- Cost and performance: instance selection, Inference Recommender, purchasing options, cost allocation tags, budgets, prompt caching, and incremental embedding.
+- Security: least-privilege execution roles, scoped access, temporary credentials, private networking, scanning, auditing, and Guardrails.
+- Finished with the numbers, limits, and last-day checklist.
+
+**Diagnostic Quiz | 18/20 Correct**
+
+Completed a 20-question quiz in English, based on the cheat sheet. Both multiple-response questions were fully correct.
+
+| Domain | Correct | Score |
+|---|---|---|
+| 1: Data Preparation | 6/6 | 100% |
+| 2: Model and FM Development | 2/4 | 50% |
+| 3: Deployment and Orchestration | 5/5 | 100% |
+| 4: Operations, Monitoring and Security | 5/5 | 100% |
+| Total | 18/20 | 90% |
+
+The two mistakes were specific:
+
+- Model selection: I chose Textract for a risk-prediction task on tabular data that required feature-level explanations. The correct choice was a custom gradient-boosted model with Clarify attributions. Extracting information from documents is not the same as predicting risk.
+- Hyperparameter tuning: I chose Hyperband when the question asked for maximum parallelism with independent trials and no per-epoch reporting. The correct choice was Random Search.
+
+The result is encouraging, especially in Domains 1, 3, and 4, which were marked Needs Improvement in my first attempt. It is still a small quiz based on familiar material, not a guarantee of passing.
+
+**Booking Portal | Beta Exam Missing**
+
+Checked the AWS Certification booking portal and could no longer find ME1-C02, the MLA-C02 beta exam.
+
+- MLA-C01 was still listed, but the beta was missing.
+- This was different from my previous DEA-C01 experience, where the exam remained visible during the retake waiting period.
+- The missing exam led me to investigate the beta-specific policy rather than assume it was just the 14-day restriction.
+
+The policy found today says a beta exam can be taken only once. A failed beta attempt must be followed by waiting for the standard version, rather than another beta attempt after 14 days.
+
+This conflicts with the general 14-day retake wording in my result report. I need AWS Certification Support to confirm my eligibility and the availability of the standard version. I do not have a confirmed new exam date.
+
+**Reflection | A Planning Mistake with Real Consequences**
+
+I had treated November 6 as the earliest retake date and organized my preparation around it without independently checking the beta-specific restriction.
+
+That was a serious planning mistake. I feel embarrassed, frustrated, and cornered by the timing. This is the first setback that materially disrupts the sequence of my roadmap, rather than simply adding another study session or another expense.
+
+My first attempt scored 667 against a passing threshold of 720. After the structured review, the scenarios, practice exams, and active recall, I now feel much better prepared and believe I could pass another attempt. Not being able to book it is particularly frustrating.
+
+But readiness and booking eligibility are separate dependencies. I checked one and assumed the other. I cannot undo that by studying harder.
+
+**Takeaway**
+
+Today showed progress in knowledge and a failure in planning. I completed the cheat sheet and scored 90% on the diagnostic quiz, but missed a policy dependency that blocks the planned retake. The lesson is not to excuse the mistake: verify eligibility, availability, and deadlines before making an external milestone a critical dependency in the roadmap.
+
+---
+
 ## November 3, 2026
 
 **AWS MLA-C02 | Domain 3 Worked Through with the Cheat Sheet (Active Recall)**

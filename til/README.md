@@ -7,6 +7,170 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 5, 2026
+
+**FeatureForge Stream | Project 2 — Event Contracts, Golden Reference & First CI Baseline**
+
+Today I established the first executable foundation of FeatureForge Stream: a validated interaction-event contract, a deterministic reference feature, and automated checks running successfully both locally and in GitHub Actions. The project extends the batch-first foundation of FeatureForge toward continuous feature computation. Today's focus was deliberately on input contracts and verifiable feature semantics before introducing distributed infrastructure.
+
+**Python Package & Development Foundation**
+
+- Created the `featureforge-stream` GitHub repository.
+- Set up an installable Python package using a `src` layout and `pyproject.toml`.
+- Established a Python 3.11 virtual environment.
+- Added package-import and installed-version tests.
+- Configured Ruff linting and formatting.
+- Added Makefile targets for lint, formatting, tests, and the combined `make check` quality gate.
+- Excluded virtual environments, caches, and generated packaging artifacts from version control.
+
+**Validated Interaction Event Contract**
+
+Implemented `InteractionEventV1` using Pydantic 2.
+
+The model validates:
+
+- UUID event identifiers.
+- Required fields and supported schema version.
+- Non-empty synthetic user and content IDs without whitespace.
+- Supported interaction types: `impression`, `play`, `skip`, and `complete`.
+- Supported sources: `web`, `mobile`, and `tv`.
+- Timezone-aware timestamps normalized to UTC.
+- Ingestion timestamps on or after event timestamps.
+- Strict non-negative integer playback durations.
+- Zero playback duration for impression events.
+- Rejection of unknown fields.
+
+Added tests for valid and invalid payloads, required fields, timestamp handling, JSON round trips, and normal field-assignment protection.
+
+A useful debugging lesson was distinguishing general lint guidance from framework-specific behavior: I retained `ValueError` inside Pydantic validators so invalid inputs remain validation failures, with narrowly scoped and documented Ruff exceptions.
+
+**First Feature Reference: user_play_count_1h**
+
+Implemented a readable, in-memory reference calculation for unique user play events within:
+
+```text
+(observation_time - 1 hour, observation_time]
+```
+
+The reference:
+
+- excludes the lower window boundary;
+- includes the observation timestamp;
+- counts only play events for the requested user;
+- counts repeated deliveries of the same logical event once;
+- rejects conflicting logical payloads sharing an event ID;
+- validates identities before applying query filters;
+- requires an explicit, timezone-aware observation time;
+- returns zero when no eligible events exist;
+- preserves input event objects.
+
+Logical-payload comparison excludes `ingested_at`, which is receipt metadata rather than part of the event's business identity.
+
+**Golden Fixture & Boundary Tests**
+
+Created a version-controlled JSONL fixture containing eight delivery records representing seven distinct logical events.
+
+At observation time `2026-01-01T12:00:00Z`, the hand-calculated results are:
+
+| Requested user | Expected count |
+|---|---|
+| `user_000001` | 3 |
+| `user_000002` | 1 |
+| `user_unknown` | 0 |
+
+The feature-reference tests cover:
+
+- Golden-fixture results.
+- Microsecond-level window boundaries.
+- Non-play event exclusion.
+- Empty input.
+- Repeated delivery.
+- Conflicting event identities.
+- Input-order independence.
+- Input preservation.
+- Equivalent timezone offsets.
+- Events received after the observation timestamp.
+- Invalid query inputs.
+- Expiry when the observation time advances.
+
+The expiry test verifies that a play contributes before the one-hour boundary and stops contributing exactly when it reaches the excluded lower boundary.
+
+**Important Distinction: Event Time vs. Availability**
+
+One of today's most important lessons was separating two different questions:
+
+```text
+Did the event happen inside the feature window?
+```
+
+and:
+
+```text
+Was the event already available to the platform at that time?
+```
+
+The current reference answers the first question.
+
+An event received after the observation timestamp can still contribute to event-time reconstruction. This does not mean the resulting value was available online at that historical moment.
+
+Making that distinction explicit prevents a stronger correctness claim than the implementation actually supports.
+
+**GitHub Actions Baseline**
+
+Added a baseline workflow with:
+
+- Python 3.11 on Ubuntu 24.04.
+- A fresh virtual environment.
+- Editable package installation with development dependencies.
+- Dependency compatibility checks.
+- Package-import verification.
+- The same `make check` command used locally.
+- A whitespace check for the checked-out commit.
+- Read-only repository permissions and disabled persisted checkout credentials.
+
+The first GitHub Actions run completed successfully.
+
+```text
+Dependency compatibility: passed
+Package import: passed
+Ruff lint: passed
+Ruff formatting: passed
+pytest: 90 passed in 0.21s
+Job duration: 24 seconds
+```
+
+**Documentation & Version Control**
+
+- Documented the implemented interaction-event contract.
+- Documented the rolling-hour reference semantics and golden results.
+- Updated the README with the current executable path, usage example, repository structure, and test evidence.
+- Kept unfinished infrastructure placeholders outside the commits.
+- Committed and pushed the implementation in focused steps.
+
+Verified commits include:
+
+```text
+21b27a6 chore: initialize Python package and local quality checks
+defae17 feat: add validated interaction event v1 contract
+d35a5cd feat: add golden fixture and user play count reference
+```
+
+**What I Understood**
+
+- A feature definition needs precise identity and time semantics, not just an aggregation name.
+- Duplicate delivery and conflicting event identity are different problems.
+- Hand-calculated fixtures provide an independent expectation for code.
+- Window expiry matters as much as adding new events.
+- Reference correctness and distributed execution are separate engineering responsibilities.
+- Documentation is strongest when it describes implemented and tested behavior.
+- A successful local run becomes stronger evidence when a fresh CI environment reproduces it.
+
+**Takeaway**
+
+Today's result is a tested correctness foundation for the streaming layer: validated events, explicit identity rules, a deterministic feature reference, and a successful CI baseline.
+
+---
+
 ## November 4, 2026
 
 **AWS MLA-C02 | Cheat Sheet Completed, 90% Quiz Score and a Big Roadmap Setback**

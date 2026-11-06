@@ -7,6 +7,67 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 6, 2026
+
+**FeatureForge Stream | Kafka → PyFlink → First Stateful Streaming Feature**
+
+Today I moved FeatureForge Stream from a tested Python reference into a working local streaming pipeline. The first feature now runs through Kafka and PyFlink, writes results back to Kafka, and matches the existing golden reference in an automated integration test.
+
+**Local Streaming Runtime**
+
+- Built a custom Flink 1.20.3 image with Python 3.11 and the application package installed.
+- Verified that Python operators execute successfully on the TaskManager.
+- Configured two task slots so the validation and feature jobs can run together.
+- Confirmed successful checkpoint creation through Flink's REST API.
+
+**Validation and Error Isolation**
+
+- Added validation of Kafka payloads against `InteractionEventV1`.
+- Routed normalized valid events and rejected payloads into separate topics.
+- Preserved original rejected payloads, reason codes, and validation details.
+- Verified that a malformed record does not block following valid records.
+- Made integration-test records unique per run so historical topic contents cannot accidentally satisfy assertions.
+
+**First Stateful Feature**
+
+- Implemented `user_play_count_1h` using Flink-managed state and sliding event-time windows.
+- Added deduplication keyed by `event_id`, excluding `ingested_at` from logical identity.
+- Made conflicting logical payloads fail visibly rather than silently corrupting counts.
+- Configured minute-aligned observations, a 10-minute watermark delay, 30-minute window lateness, and a bounded 24-hour deduplication TTL.
+- Added Kafka outputs for feature updates and events too late for all assigned windows.
+
+**Correctness and Integration Evidence**
+
+- Preserved the existing feature definition: `(observation_time - 1 hour, observation_time]`.
+- Added a tested timestamp mapping between that definition and Flink's native `[start, end)` windows, including microsecond boundary cases.
+- Reused the existing reference implementation instead of creating a second source of truth.
+- Compared actual Kafka/Flink output with the golden reference: `user_000001 → 3`, `user_000002 → 1`.
+- Used an explicit progress event to advance the watermark and trigger event-time output.
+
+**What I Learned**
+
+- A submitted or `RUNNING` job is not proof of correct feature values; end-to-end assertions are.
+- Event time does not advance just because wall-clock time passes.
+- Window boundaries are part of the feature contract, not an implementation detail.
+- Successful checkpoints do not automatically prove recovery or end-to-end exactly-once delivery.
+- Bounded deduplication state does not provide unlimited replay protection.
+- Production-inspired engineering means using Flink and Kafka's strengths, keeping guarantees explicit, and avoiding unnecessary framework layers.
+
+**Verified End-of-Day State**
+
+- Ruff lint and formatting: passed.
+- Default tests: `120 passed, 2 deselected`.
+- Both integration tests: `2 passed`.
+- README updated with setup, architecture, tested behavior, and limitations.
+- Feature milestone committed and pushed as `39ce0ac`.
+- Local Docker stack stopped after the session.
+
+**Takeaway**
+
+The first streaming feature works. The next step is proving its behavior under less orderly conditions—not adding more infrastructure.
+
+---
+
 ## November 5, 2026
 
 **FeatureForge Stream | Project 2 — Event Contracts, Golden Reference & First CI Baseline**

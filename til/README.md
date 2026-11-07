@@ -7,6 +7,130 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 7, 2026
+
+**FeatureForge Stream | Late-Event Correctness, Redis Guards & First Cross-Project Replay**
+
+Today I connected the existing FeatureForge source-event output to FeatureForge Stream and completed the first historical replay through Kafka and PyFlink.
+
+FeatureForge v0.1.0 remained unchanged. Project 2 reads its existing Parquet events through an explicit adapter rather than rebuilding the generator or batch platform.
+
+**Streaming Correctness**
+
+Extended the Kafka/Flink integration coverage to verify:
+
+- Late events correct previously emitted feature windows.
+- Repeated late-event delivery does not inflate play counts.
+- Valid events that are too late for all assigned windows reach the dedicated late-event topic with their original payload and reason code.
+
+All four streaming integration cases passed together before the later replay-configuration changes.
+
+**Redis Online-Store Foundation**
+
+Added Redis to the local Docker Compose stack and implemented validated storage for `user_play_count_1h`.
+
+Implemented and tested:
+
+- Round trips for zero and nonzero counts.
+- Missing-user lookup returning `None`.
+- Newer observation windows replacing older values.
+- Rejection of stale windows.
+- Identical deliveries leaving the value unchanged.
+- Increasing same-window corrections for the append-only play count.
+- Protection against an older value undoing a correction.
+- Optimistic locking with `WATCH` / `MULTI` / `EXEC`.
+- A real concurrent write causing `WatchError`, followed by a retry that preserves the newer value.
+
+The same-window merge policy is specific to append-only counts, not a general update policy for arbitrary features.
+
+**FeatureForge → Streaming Pipeline**
+
+Added a Parquet replay adapter that:
+
+- Reads the existing FeatureForge `events.parquet`.
+- Adapts `play` and `impression` events.
+- Explicitly reports excluded event types.
+- Maps source event IDs deterministically to UUIDs.
+- Preserves entity IDs and historical timestamps.
+- Orders deliveries by ingestion time.
+- Retains repeated deliveries for downstream deduplication.
+- Validates supported records before publication.
+- Checks Kafka delivery outcomes.
+
+Made both Flink jobs configurable through topic, consumer-group, and job-name arguments. Added bounded replay execution while retaining streaming runtime mode.
+
+**Completed Replay**
+
+```text
+FeatureForge events.parquet
+    → contract adapter
+    → Kafka replay input
+    → PyFlink validation
+    → validated-event topic
+    → PyFlink user_play_count_1h
+    → Kafka feature updates
+```
+
+Observed results:
+
+- Source dataset: 10,200 delivery records.
+- Adapted: 3,424 records — 1,668 plays and 1,756 impressions.
+- Explicitly excluded: 6,776 records across click, like, search, and watch.
+- Repeated event IDs in the adapted selection: 0.
+- Validated records: 3,424.
+- Rejected records: 0.
+- Validation replay: `FINISHED`.
+- Feature-computation replay: `FINISHED` in approximately 229 seconds.
+
+Compared five emitted feature values directly with unique play events from the original Parquet source. All five matched, including zero-count examples.
+
+**Validation**
+
+```text
+Ruff lint:                  passed
+Ruff format:                passed
+Default tests:              120 passed, 14 deselected
+Targeted Redis integration: 10 passed
+Source-verified examples:   5/5 matched
+git diff --check:           passed
+```
+
+The complete integration suite was not rerun after the job-configuration changes. The source comparisons are spot checks, not full batch-stream parity.
+
+**What I Learned**
+
+- An explicit adapter can connect separate projects without copying their implementations.
+- Historical replay needs fresh processing state when existing jobs have already advanced their watermarks.
+- Bounded Kafka input allows a finite replay to finish without shifting historical timestamps into the future.
+- Job submission and `RUNNING` status do not prove completed processing.
+- Task-level output metrics are not automatically counts of external Kafka writes; topic offsets and job state provide additional evidence.
+- Overlapping windows produce multiple feature updates per source event.
+- Green tests support specific guarantees, not blanket recovery or exactly-once claims.
+
+**Documentation & Commit**
+
+Updated the README with the connected architecture, replay procedure, Redis semantics, observed evidence, and remaining guarantee boundaries.
+
+Committed and pushed to `main`:
+
+```text
+a1221f8 — feat: connect FeatureForge source events to bounded streaming replay
+```
+
+Working tree was clean after the push.
+
+**Next**
+
+Connect the replay's Kafka feature output to the tested Redis store and demonstrate an online lookup.
+
+Kafka-to-Redis materialization, checkpoint recovery, and full parity remain open; they are not claimed by today's completed replay.
+
+**Takeaway**
+
+The first cross-project replay works: FeatureForge Parquet events now flow through Kafka and PyFlink into validated streaming feature updates, with Redis guards and late-event correctness tested. The next step is connecting the Kafka feature output to Redis for an online lookup.
+
+---
+
 ## November 6, 2026
 
 **FeatureForge Stream | Kafka → PyFlink → First Stateful Streaming Feature**

@@ -7,6 +7,68 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 8, 2026
+
+**FeatureForge Stream | Verified Online Materialization & Historical Stream Snapshots**
+
+Today I completed repeatable verification of the Kafka-to-Redis materialization and added a versioned Parquet export of historical streaming feature windows.
+
+FeatureForge v0.1.0 remained unchanged. Project 2 exports its own declared streaming output rather than rebuilding Project 1's canonical offline store.
+
+**Kafka-to-Redis Verification**
+
+- Added a parameterized checker accepting a Kafka topic and Redis key prefix.
+- Verified 200,399 feature records against 436 Redis user values.
+- Found zero differing or missing values and zero additional namespace keys.
+- Tested offset gaps, truncated ranges, tombstones, timeouts, changing Kafka watermarks, and missing or differing Redis values.
+- Kept verification read-only: no Redis feature writes or Kafka offset commits.
+
+**Historical Stream Snapshots**
+
+- Defined an explicit Parquet schema with UTC timestamps at microsecond precision.
+- Preserved one row per `(user_id, observation_time)`.
+- Consolidated same-window updates using the existing append-only maximum-count policy, while retaining different historical windows and zero-count values.
+- Exported and reloaded 200,399 historical window rows.
+- Compared the newest restored values for 436 users with Redis: zero mismatches.
+- Recorded Kafka partition and offset boundaries, row counts, and the Parquet SHA-256 in a verification report.
+- Protected existing export destinations from overwrites and excluded generated artifacts from Git.
+
+**Architecture and Scope**
+
+Confirmed that offline snapshots and consistency checks belong to Project 2, but a second canonical offline store does not.
+
+The streaming one-hour count is not schema-compatible with Project 1's existing multi-feature, day-window batch tables. Documented that boundary instead of claiming compatibility or changing Project 1 to force a match.
+
+**What I Learned**
+
+- Matching Kafka output with Redis proves materialization consistency, not independent correctness of the feature calculation.
+- Reading the Parquet file back before comparison verifies the persisted artifact, not just the in-memory values used to write it.
+- Historical event-time reconstruction is not historical online availability.
+- Maximum-count consolidation is specific to append-only counts without retractions; it is not a general feature revision policy.
+- A snapshot and its report are not crash-atomically published. Incomplete exports must not be treated as accepted artifacts.
+- Scope discipline means connecting existing responsibilities through explicit contracts—not duplicating an entire subsystem.
+
+**Validation and Delivery**
+
+- Ruff lint and formatting checks passed.
+- Final local suite: `212 passed, 14 deselected`.
+- Kafka-to-Redis verification committed as `cd4a253`.
+- Snapshot export and provenance reporting committed as `6acf4f6`.
+- Both commits pushed with successful GitHub checks.
+- Working tree clean; generated snapshot data remained local.
+
+**Next**
+
+Define an independent source-to-feature comparison with aligned window and late-event semantics. Checkpoint recovery remains a separate, unproven task.
+
+Today's completed proof is bounded replay snapshot-to-online consistency—not full batch-stream parity, historical training safety, or end-to-end exactly-once processing.
+
+**Takeaway**
+
+Today's result is verified online materialization and a reproducible historical snapshot path: 200,399 Kafka feature records matched Redis exactly, and the reloaded Parquet snapshot matched the newest Redis values for all 436 users. The proof is bounded replay snapshot-to-online consistency, not full batch-stream parity or exactly-once processing.
+
+---
+
 ## November 7, 2026
 
 **FeatureForge Stream | Late-Event Correctness, Redis Guards & First Cross-Project Replay**

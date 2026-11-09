@@ -7,6 +7,208 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 9, 2026
+
+**FeatureForge Stream | Source Reconciliation, Checkpoint Recovery & Verified Skip-Rate Serving**
+
+Today I strengthened the correctness evidence for FeatureForge Stream, implemented a second event-time feature, and verified its complete feature-job-to-Redis path.
+
+The focus was not adding infrastructure. It was proving how the existing system behaves under late arrivals, duplicate delivery, replay, concurrent writes, and a controlled TaskManager failure.
+
+**Source-to-Snapshot Verification**
+
+Compared the persisted play-count snapshot with independent Python event-time reconstruction, checking both feature counts and complete minute-aligned window coverage.
+
+The recorded replay contained:
+
+- 3,424 unique input events.
+- 200,399 existing snapshot rows whose counts matched reconstruction.
+- 240 additional windows expected by full-input reconstruction.
+- Four payload-verified late events explaining the difference.
+
+Reconstruction from the remaining 3,420 events matched both counts and complete window coverage.
+
+The full-input mismatch remains visible. Reconciliation explains the observed exclusions; it does not erase the mismatch or independently prove Flink watermark decisions.
+
+This is source-to-snapshot verification with observed late-output reconciliation—not a Spark-versus-Flink parity suite.
+
+**Manual TaskManager Checkpoint Recovery**
+
+Completed a controlled local recovery drill for `user_play_count_1h`.
+
+I killed and restarted the TaskManager while keeping the JobManager and Kafka running. The same job restored from checkpoint `23`.
+
+Repeating an original play and adding a new play produced the reference count `2`, with no excessive count observed during the following 15 seconds.
+
+Recorded the protocol, evidence, and limitations in a dedicated runbook.
+
+This proves the demonstrated local TaskManager recovery scenario. It is not an automated recovery suite, full-cluster disaster recovery, or an end-to-end exactly-once guarantee.
+
+**Second Feature: User Skip Rate 24h**
+
+Implemented a deterministic Python reference and a separate Flink job for:
+
+```text
+skip_count / (play_count + skip_count)
+```
+
+The feature uses the right-closed event-time window:
+
+```text
+(observation_time - 24 hours, observation_time]
+```
+
+Defined and tested:
+
+- Unique logical-event counting.
+- A zero denominator returning `0.0`.
+- Exclusion of impression and complete events from both counts.
+- Identity conflicts across the full reference input.
+- Repeated delivery without additional contribution.
+- Microsecond-level lower and upper window boundaries.
+- Late corrections that increase or decrease the rate.
+- Routing when all assigned windows have expired.
+
+The reference added 36 tests. All eight isolated Flink integration cases passed against the real local runtime.
+
+The streaming deduplication horizon is 48 hours of processing time. That is a finite retention policy, not unlimited event-time replay protection.
+
+**Guarded Redis Updates for a Non-Monotonic Feature**
+
+Added a validated skip-rate payload and an explicit update policy, covered by 45 payload and policy tests.
+
+The central design decision: compare the count vector, not the rate.
+
+For the same observation window:
+
+- Identical counts are unchanged.
+- Componentwise increasing counts are accepted.
+- Older count vectors are rejected.
+- Incomparable count vectors raise a conflict without modifying Redis.
+
+A newer observation window can replace an older value, including with `0/0 → 0.0`.
+
+An additional play can legitimately lower the rate. Keeping the maximum rate would reject a correct update.
+
+The policy does not invent merged count vectors and does not support retractions or repair inflated counts. Independent computations require independent namespaces.
+
+**Real Redis Concurrency Proof**
+
+Implemented a separate skip-rate Redis store using `WATCH`, `MULTI`, and `EXEC`, with bounded retries and a fresh policy decision after a concurrent modification.
+
+All twelve Redis integration cases passed, including:
+
+- Feature round trips and missing users.
+- Increasing and decreasing rates.
+- Newer zero-valued windows.
+- Stale and identical deliveries.
+- Incomparable-count conflicts.
+- Protection against invalid stored payloads.
+- A real `WATCH` conflict triggered through a second Redis connection.
+
+The concurrency test verified that the retry preserved the more advanced same-window count vector.
+
+**Kafka-to-Redis Materialization**
+
+Added a separate skip-rate materializer without changing the existing play-count materializer.
+
+Thirteen unit tests verified behavior including:
+
+- Redis processing before synchronous offset commit.
+- Resume from committed offsets.
+- Bounded input ranges.
+- Stale and unchanged outcomes.
+- Invalid payload rejection.
+- Count conflicts without committing the failed record.
+- Consumer cleanup.
+
+A real Kafka-to-Redis integration test also passed. It checked Redis values after each phase, read committed offsets through a separate consumer, verified caught-up behavior, and replayed the same output through a fresh consumer group.
+
+Redis writes and Kafka commits remain separate operations. Redelivery is possible if a failure occurs between them.
+
+**Joined Flink → Kafka → Redis Verification**
+
+Closed the remaining integration gap before finishing the day.
+
+The isolated test exercised:
+
+```text
+Interaction events → Flink → Feature Kafka → Materializer → Redis lookup
+```
+
+It used actual Flink output rather than publishing precomputed feature payloads directly to Kafka.
+
+Verified these states through to Redis:
+
+| Phase | Plays | Skips | Skip rate |
+|---|---:|---:|---:|
+| Initial output | 1 | 1 | 0.5 |
+| Additional allowed-late play | 2 | 1 | 1/3 |
+| Additional allowed-late skip | 2 | 2 | 0.5 |
+| Repeated events plus a distinct play | 3 | 2 | 0.4 |
+
+The test checked both counts, compared the rate with the Python reference at the stored observation time, and observed the target Kafka window for another 15 seconds after the final duplicate/probe phase.
+
+Replaying the retained Flink output through a fresh materializer consumer group preserved the final Redis feature.
+
+The joined test passed in 37.31 seconds, and its Flink job was successfully cancelled.
+
+This proof starts at the feature-job input. It does not include upstream validation, Project 1 source integration, Project 3 consumption, skip-rate snapshots, or checkpoint recovery.
+
+**Documentation and Validation**
+
+Updated `README.md` and `ARCHITECTURE.md` to reflect:
+
+- Both implemented features.
+- Feature-specific online update policies.
+- Processing-time deduplication limits.
+- Snapshot and reconciliation boundaries.
+- The manual recovery evidence.
+- The completed joined skip-rate integration proof.
+- Remaining cross-project and training integration work.
+
+Final confirmed local validation:
+
+- Ruff lint passed.
+- Formatting checks passed.
+- 380 standard tests passed.
+- 36 integration cases were deselected in the standard run.
+- 8 skip-rate Flink cases passed separately.
+- 12 skip-rate Redis cases passed separately.
+- 1 controlled Kafka-to-Redis case passed separately.
+- 1 joined Flink-to-Redis case passed separately.
+
+Code and documentation were committed and pushed. The working tree was clean.
+
+Earlier commits had successful GitHub checks. Checks for the final joined-test commit `1d92946` and documentation commit `aa622ec` were not yet confirmed at this checkpoint.
+
+Separately executed integration results remain distinct from CI evidence.
+
+**What I Learned**
+
+- A ratio can decrease while its underlying counts increase.
+- Feature-specific write policies matter more than a generic "keep the latest" or "keep the maximum" rule.
+- Event-time reconstruction is not historical online availability.
+- Reconciliation should explain a mismatch without hiding it.
+- Checkpoint configuration and successful recovery are separate proofs.
+- Independently tested components still need a joined integration test.
+- Replaying feature output is not the same as recomputing it from source events.
+- Separate repositories need explicit, tested contracts—not just arrows in an architecture diagram.
+
+**Next**
+
+Define the skip-rate snapshot contract and its consolidation policy, then continue toward the remaining features and an explicit training handoff.
+
+FeatureForge Batch remains unchanged. The existing source adapter connects Project 1 to Project 2, but canonical offline compatibility and the final handoff to Project 3 remain open.
+
+Today's completed milestone is a verified skip-rate feature-job-to-online-store path—not a claim that the entire three-project platform is finished.
+
+**Takeaway**
+
+Today's milestone is a verified skip-rate feature-job-to-online-store path: source reconciliation with visible late-event explanations, a controlled TaskManager recovery drill, and a joined Flink-to-Kafka-to-Redis integration test with real concurrency. The proof is bounded and specific, not a claim of full platform completion.
+
+---
+
 ## November 8, 2026
 
 **FeatureForge Stream | Verified Online Materialization & Historical Stream Snapshots**

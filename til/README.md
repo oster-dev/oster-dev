@@ -7,6 +7,510 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 10, 2026
+
+**FeatureForge | From a Separate Streaming Repository to One ML Platform**
+
+Today was a major consolidation day for FeatureForge. We stopped treating FeatureForge Stream as a separate repository and brought its proven streaming concepts, contracts, reference implementation, tests, and runtime into the main FeatureForge repository.
+
+The goal is no longer to maintain an isolated streaming experiment. FeatureForge is now being built as one complete ML platform: feature engineering, offline feature storage, online serving, streaming ingestion, streaming feature computation, online materialization, and integration verification.
+
+**What Changed Strategically**
+
+FeatureForge Stream had already established strong foundations:
+
+- Validated interaction-event contracts.
+- Event-time and right-closed window semantics.
+- A reference implementation for `user_play_count_1h`.
+- Structured event routing.
+- A guarded Redis online store.
+- Kafka-to-Redis materialization.
+- Unit and integration tests.
+
+Instead of keeping these concepts in a separate repository, we integrated the proven work directly into FeatureForge. This makes the streaming path part of the platform rather than a parallel prototype.
+
+**The Platform Boundary**
+
+FeatureForge now has a clearer end-to-end boundary:
+
+```text
+Raw events
+  -> Kafka
+  -> Flink validation and routing
+  -> Validated event topic
+  -> Flink feature computation
+  -> Feature topic
+  -> Redis materializer
+  -> Redis online store
+  -> Online feature retrieval
+```
+
+This is the foundation for a real ML feature platform. The offline path remains responsible for historical feature computation and snapshots, while the streaming path keeps online features current from event data.
+
+**First Merged PR: Redis Store Verification**
+
+The first merged PR added real Redis integration coverage for the streaming play-count store.
+
+It included:
+
+- Redis round-trip tests.
+- Window ordering tests.
+- Idempotency tests for identical deliveries.
+- Tests proving that older windows cannot replace newer features.
+- Tests proving that same-window corrections can only increase.
+- Concurrent `WATCH` retry coverage.
+
+The key guarantee is that the Redis store implements a deliberate policy:
+
+- Newer windows replace older windows.
+- For the same window, counts may only increase.
+- Identical deliveries do not change the stored value.
+- Concurrent modifications trigger bounded `WATCH` retries.
+
+This is not a generic revision policy for every feature. It is a policy specific to append-only counts without retractions.
+
+**CI Acceptance for Redis**
+
+The Redis integration tests were wired into the dedicated `Redis and Feast serving integration` CI job.
+
+That job explicitly runs both new test files:
+
+```text
+tests/integration/test_streaming_redis_online_store.py
+tests/integration/test_streaming_redis_online_store_concurrency.py
+```
+
+The job also validates the JUnit report and fails if any streaming Redis test is skipped, failed, or errored.
+
+That distinction matters. A skipped Redis test must not be allowed to look like a successful integration verification.
+
+**Second Merged PR: Flink Kafka-to-Redis Verification**
+
+The second merged PR added the Flink runtime and proved the joined Kafka-to-Redis flow.
+
+It added:
+
+- Docker Compose services for Kafka, Flink, and Redis.
+- A Flink image with PyFlink and the Kafka connector.
+- A validation and routing job.
+- A `user_play_count_1h` feature job.
+- A joined Kafka-to-Redis integration test.
+- Streaming migration provenance.
+
+The joined test verifies the full path:
+
+```text
+Kafka input event
+  -> validation job
+  -> validated event topic
+  -> user play-count job
+  -> feature topic
+  -> Redis materializer
+  -> Redis online store
+  -> Redis read
+```
+
+This was the first end-to-end proof that an event can travel from Kafka through Flink and become a readable online feature in Redis.
+
+**Flink Runtime Details**
+
+The Flink stack uses:
+
+- Apache Kafka 3.9.1.
+- Flink 1.20.3.
+- PyFlink.
+- Redis 7.4.
+- Docker Compose.
+
+The JobManager and TaskManager mount the local `jobs/` directory into the Flink containers. Kafka uses an internal listener for Flink and an external listener for host-side tools.
+
+The Flink jobs use:
+
+```text
+kafka:29092
+```
+
+while host-side Kafka clients use:
+
+```text
+127.0.0.1:9092
+```
+
+That distinction is important because Flink runs inside the Docker network, while the test runner and materializer run on the host.
+
+**Validation and Routing**
+
+The validation job separates valid events from invalid events.
+
+Valid events are written to:
+
+```text
+interaction-events.validated.v1
+```
+
+Invalid events are written to:
+
+```text
+interaction-events.rejected.v1
+```
+
+The routing function catches input-validation failures only. Unexpected programming errors remain visible rather than being silently converted into rejected records.
+
+This is an important reliability boundary. A malformed event should not poison the valid stream, but a real bug should still fail loudly.
+
+**User Play-Count Computation**
+
+The `user_play_count_1h` job computes minute-aligned one-hour play counts.
+
+Its pipeline is:
+
+```text
+Validated events
+  -> timestamp assignment
+  -> deduplication by event ID
+  -> keying by user ID
+  -> sliding one-hour windows
+  -> play-count aggregation
+  -> feature emission
+```
+
+The job emits features to:
+
+```text
+features.user-play-count-1h.v1
+```
+
+Late events are routed to:
+
+```text
+interaction-events.user-play-count-1h.late.v1
+```
+
+The deduplication state uses a 24-hour TTL. Repeated deliveries do not emit another event or extend the retention period.
+
+**Right-Closed Window Semantics**
+
+One of the most valuable lessons today was understanding the right-closed window behavior.
+
+An event at exactly `11:30:00` belongs to the window:
+
+```text
+11:29 <= event_time < 12:30
+```
+
+Therefore, the emitted feature has:
+
+```python
+window_start_exclusive = 2026-01-01T11:29:00Z
+observation_time = 2026-01-01T12:29:00Z
+```
+
+My first joined test expected:
+
+```python
+window_start_exclusive = 11:30
+observation_time = 12:30
+```
+
+That expectation was wrong. The right-closed mapping preserves the reference semantics: an event exactly on a boundary belongs to the preceding window.
+
+The corrected assertion is:
+
+```python
+assert feature.observation_time == datetime(
+    2026, 1, 1, 12, 29, tzinfo=UTC
+)
+assert feature.window_start_exclusive == datetime(
+    2026, 1, 1, 11, 29, tzinfo=UTC
+)
+```
+
+This was not a bug in Flink. It was a bug in my test expectation.
+
+**Package Adaptation**
+
+The source repository used:
+
+```python
+featureforge_stream
+```
+
+FeatureForge uses:
+
+```python
+featureforge
+```
+
+That required adapting imports in the Flink jobs, Dockerfile, and integration test.
+
+For example:
+
+```python
+from featureforge_stream.contracts.events import InteractionEventV1
+```
+
+became:
+
+```python
+from featureforge.streaming.contracts.events import InteractionEventV1
+```
+
+The materializer invocation also changed from:
+
+```bash
+python -m featureforge_stream.materialize
+```
+
+to:
+
+```bash
+python -m featureforge.streaming.materialize
+```
+
+This reinforced an important integration lesson: importing code from another repository is not complete until package names, module paths, fixtures, and test paths are consistent.
+
+**Docker Dependency Conflict**
+
+The first Flink image build failed because installing FeatureForge upgraded `pyarrow`.
+
+The Flink base image already contained Apache Beam, which requires:
+
+```text
+pyarrow < 12
+```
+
+FeatureForge requires:
+
+```text
+pyarrow >= 17
+```
+
+That created a dependency conflict.
+
+The solution was to install FeatureForge without transitive dependencies:
+
+```dockerfile
+RUN /opt/pyflink/bin/python -m pip install --no-deps --no-cache-dir . \
+    && /opt/pyflink/bin/python -m pip install --no-cache-dir "pydantic>=2.8,<3"
+```
+
+The Flink jobs only need Pydantic for the streaming contracts. The Kafka and Redis materializer runs on the host, so it does not need to be installed inside the Flink image.
+
+This avoided breaking Apache Beam inside the base image while still making the Flink jobs runnable.
+
+**Docker Compose Port Conflicts**
+
+The first attempt to start the streaming stack failed because the older `featureforge-redis` container already occupied host port `6379`.
+
+The correct approach was to identify the conflicting container first:
+
+```bash
+docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}'
+docker compose -p featureforge-stream ps
+```
+
+Then stop only the old Redis container:
+
+```bash
+docker stop featureforge-redis
+```
+
+After that, the streaming Redis service could start.
+
+A second issue appeared: the existing Redis container had been created without a host port mapping. The container was running, but its port output showed only:
+
+```text
+6379/tcp
+```
+
+instead of:
+
+```text
+127.0.0.1:6379->6379/tcp
+```
+
+The fix was to recreate only the Redis service:
+
+```bash
+docker compose -p featureforge-stream up -d --force-recreate redis
+```
+
+That restored the expected host port mapping.
+
+**Kafka Topic Naming**
+
+Kafka rejected my initial topic names because they contained colons:
+
+```text
+featureforge-stream:integration:input:...
+```
+
+Kafka topic names may contain ASCII alphanumerics, periods, underscores, and hyphens. Colons are not allowed.
+
+The test now uses valid topic names:
+
+```python
+featureforge-stream.integration.input.{run_id}
+featureforge-stream.integration.validated.{run_id}
+featureforge-stream.integration.features.{run_id}
+featureforge-stream.integration.late.{run_id}
+```
+
+Redis key prefixes can still use colons because Redis does not have the same topic-name restriction.
+
+**CI Test Boundaries**
+
+The baseline test job initially ran the full test suite with:
+
+```yaml
+pytest -v
+```
+
+That caused the new Redis integration tests to fail because the baseline job does not provide Redis.
+
+The correct fix was to exclude integration tests from the baseline job:
+
+```yaml
+pytest -v -m "not integration"
+```
+
+This does not remove the tests from CI. It assigns them to the correct CI job.
+
+The baseline job now reports:
+
+```text
+254 passed, 5 skipped, 11 deselected
+```
+
+- `254 passed`: unit and non-Redis integration tests.
+- `5 skipped`: existing online-serving tests that require Redis and materialized Feast snapshots.
+- `11 deselected`: the 10 Redis store tests plus the joined Kafka-to-Redis test.
+
+The streaming integration tests are explicitly executed in their dedicated CI jobs instead.
+
+**Skip Versus Failure**
+
+A key lesson today was the difference between a legitimate skip and a hidden integration failure.
+
+The online-serving tests skip in the baseline job because Redis and materialized offline snapshots are unavailable there. That is intentional and acceptable.
+
+However, the Redis store tests and joined Kafka-to-Redis test must not skip in their dedicated jobs. They must run and pass.
+
+That is why the Redis CI job validates its JUnit report and fails on:
+
+```text
+skipped
+failure
+error
+```
+
+A skipped integration test must never be mistaken for a proven integration path.
+
+**CI Architecture**
+
+The CI now separates work by infrastructure requirement:
+
+| CI job | Responsibility |
+|---|---|
+| `test` | Unit tests and tests that do not require Redis |
+| `serving-integration` | Redis store tests and Feast serving integration |
+| `streaming-flink-integration` | Joined Kafka-to-Flink-to-Redis verification |
+
+The new Flink job:
+
+- Starts the Docker Compose stack.
+- Waits for Kafka, JobManager, and Redis health.
+- Runs the joined Kafka-to-Redis test.
+- Uploads diagnostics if the job fails.
+
+This makes the streaming path a first-class part of the platform CI rather than a local-only experiment.
+
+**Local Validation**
+
+Before merging the Flink PR, the following checks passed:
+
+```text
+Ruff check: passed
+Ruff format: passed
+Baseline suite excluding integration tests: 254 passed
+Redis store tests: 10 passed
+Joined Kafka-to-Redis test: 1 passed
+Total streaming integration coverage: 11 passed, no skips
+```
+
+The joined test passed in approximately seven seconds once the stack was healthy.
+
+**What Was Merged**
+
+Two PRs were merged today:
+
+1. **Redis store verification**
+   - Added real Redis integration tests.
+   - Added concurrent `WATCH` retry coverage.
+   - Registered the `integration` pytest marker.
+   - Extended streaming migration provenance.
+
+2. **Flink Kafka-to-Redis verification**
+   - Added Docker Compose runtime.
+   - Added Flink validation and play-count jobs.
+   - Added the joined Kafka-to-Redis integration test.
+   - Added a dedicated CI job.
+   - Adapted package imports and runtime configuration.
+
+The final merged commit on `main` was:
+
+```text
+132e3d1
+```
+
+**What FeatureForge Is Becoming**
+
+FeatureForge is no longer just a batch feature platform.
+
+It is becoming an ML platform with two complementary paths:
+
+| Path | Responsibility |
+|---|---|
+| Offline path | Historical feature computation, backfills, snapshots, quality checks |
+| Streaming path | Event ingestion, validation, real-time computation, online materialization |
+| Serving path | Online feature retrieval, candidate ranking, batch lookups |
+| Platform path | Shared contracts, tests, CI, provenance, and operational guarantees |
+
+The streaming path now has a real execution boundary: events enter Kafka, are validated and transformed by Flink, materialized into Redis, and become available for online serving.
+
+**Next Steps**
+
+The next isolated step is replay idempotency.
+
+The goal is to send the same play event to Kafka twice and prove that:
+
+- Flink deduplicates the repeated event.
+- The feature topic does not produce a duplicate count.
+- The Redis materializer returns `unchanged`.
+- The Redis feature value remains stable.
+
+This directly tests an important production guarantee: repeated delivery must not inflate the play count or change the online feature value.
+
+**Reflection**
+
+Today moved FeatureForge from having streaming concepts in a separate repository to having a verified streaming path inside the platform.
+
+The biggest progress was not simply adding Flink files. It was establishing a clear, testable boundary:
+
+```text
+Kafka event -> Flink computation -> Redis online feature -> readable result
+```
+
+The work also reinforced an important engineering principle: a platform is not complete when the happy path works locally. It is complete when its infrastructure dependencies, failure modes, concurrency behavior, and CI verification are explicit.
+
+FeatureForge Stream is now officially part of FeatureForge. The next phase is to make the streaming path progressively more production-like: replay safety, late-event handling, operational diagnostics, and broader feature coverage.
+
+**Takeaway**
+
+FeatureForge is now one ML platform with a verified streaming path inside it: Kafka event -> Flink computation -> Redis online feature -> readable result. The next step is replay idempotency — proving that repeated delivery does not inflate the play count or change the online feature value.
+
+---
+
 ## November 9, 2026
 
 **FeatureForge Stream | Source Reconciliation, Checkpoint Recovery & Verified Skip-Rate Serving**

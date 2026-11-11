@@ -7,6 +7,312 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 11, 2026
+
+**FeatureForge | Streaming Routing, Late Events, and Skip Rate**
+
+Today I completed two major FeatureForge streaming milestones:
+
+1. Verified real Kafka/Flink routing, continuous late correction, and too-late event routing.
+2. Integrated `user_skip_rate_24h` as the second streaming feature in the platform.
+
+Both changes were merged into `main`.
+
+**PR #8: Streaming Routing and Late Events**
+
+PR #8 added real Kafka/Flink integration coverage for rejected-event routing, late corrections, and too-late event routing.
+
+It was squash-merged into `main` as:
+
+```text
+7a9851f test: verify streaming routing and late-event behavior (#8)
+```
+
+### Rejected-Event Routing
+
+The new routing test publishes invalid JSON, a valid play event, a contract-invalid event, and another valid play event.
+
+It verifies that:
+
+- Invalid JSON reaches the rejected topic.
+- Contract-invalid events reach the rejected topic.
+- Valid follow-up events continue through the validation job.
+- Rejections contain structured error information.
+- Both `INVALID_JSON` and `EVENT_CONTRACT_VIOLATION` reasons are produced.
+
+This proves that invalid records do not block subsequent valid records.
+
+### Continuous Late Correction
+
+The late-event test submits the existing play-count job to the Flink cluster in detached continuous mode.
+
+It publishes a play event, waits for the initial window output, then publishes a distinct second play for the same window.
+
+The test verifies that the emitted window advances from count one to count two.
+
+This is different from bounded replay: the correction arrives after the initial window has already been emitted.
+
+### Too-Late Event Routing
+
+After the correction, the test advances the watermark far enough that an additional event at the original timestamp is too late for all assigned windows.
+
+It verifies that the event reaches the late Kafka topic with:
+
+```text
+TOO_LATE_FOR_ALL_ASSIGNED_WINDOWS
+```
+
+The test waits for observable watermark-driven outputs rather than assuming progress after a fixed sleep.
+
+### Historical Fixture Timestamps
+
+The initial expanded CI run exposed a potential issue with historical Kafka record timestamps and retention.
+
+The tests now create isolated topics with:
+
+```text
+message.timestamp.type=LogAppendTime
+```
+
+This uses broker append timestamps for Kafka records while preserving historical `event_time` values inside JSON payloads.
+
+The Flink feature job still derives event time from the payload fields.
+
+### Local Verification
+
+The complete local suite passed:
+
+```text
+299 passed in 58.87s
+```
+
+There were no reported skips, failures, or deselected tests.
+
+After the run, Flink reported no running jobs.
+
+**PR #9: User Skip Rate 24h**
+
+PR #9 integrated `user_skip_rate_24h` as the second streaming feature in FeatureForge.
+
+It was squash-merged into `main` as:
+
+```text
+94cad8a feat: add user skip rate 24h streaming feature (#9)
+```
+
+The feature computes:
+
+```text
+skip_count / (play_count + skip_count)
+```
+
+over the right-closed event-time window:
+
+```text
+(observation_time - 24 hours, observation_time]
+```
+
+Unlike the play-count feature, the skip rate can move in either direction. An additional play can lower the rate, while an additional skip can raise it.
+
+**What I Integrated**
+
+I added the following components:
+
+- `src/featureforge/streaming/contracts/user_skip_rate.py`
+- `src/featureforge/streaming/reference/user_skip_rate.py`
+- `src/featureforge/streaming/skip_rate_store.py`
+- `src/featureforge/streaming/materialize_skip_rate.py`
+- `jobs/user_skip_rate_24h.py`
+- Unit and integration tests for every layer
+- CI selection for the new streaming tests
+- Streaming provenance documentation
+- ADR-007 for the skip-rate integration decision
+
+The source implementation came from the frozen `featureforge-stream` repository at tag `v0.1.0`, commit `a681c281806af492a05b2b4a141f2683f752e1a9`.
+
+I adapted package imports from `featureforge_stream` to `featureforge.streaming`, moved tests into FeatureForge's structure, and preserved the core semantics.
+
+**Event-Time Semantics**
+
+The feature uses event time, not Kafka arrival time.
+
+An event belongs to a 24-hour window when:
+
+```text
+observation_time - 24 hours < event_time <= observation_time
+```
+
+The lower boundary is excluded, while the upper boundary is included.
+
+Impression and complete events do not contribute to either count. The feature is user-level, so content IDs do not partition the result.
+
+A zero denominator returns `0.0`. The output is a float between `0.0` and `1.0`, not a percentage.
+
+**Identity and Deduplication**
+
+Logical event identity is `event_id`.
+
+Repeated identical logical events contribute once. The logical payload includes every event field except `ingested_at`, because ingestion time is receipt metadata rather than business meaning.
+
+Identity validation happens across the entire supplied input before user, event-type, or time-window filtering.
+
+Therefore, a conflicting payload outside the requested window or for another user still raises `EventIdentityConflictError`.
+
+The Flink job deduplicates by `event_id` with a 48-hour processing-time state TTL.
+
+This is finite-horizon duplicate protection, not unlimited replay protection.
+
+**Flink Job**
+
+`jobs/user_skip_rate_24h.py` uses:
+
+- 24-hour sliding windows
+- A one-minute slide
+- A 10-minute bounded-out-of-orderness watermark strategy
+- 30 minutes of allowed lateness
+- A side output for events too late for all assigned windows
+- Event-ID-based deduplication
+- Explicit failure for conflicting logical payloads
+- A 48-hour deduplication-state TTL
+- Checkpointing every 10 seconds
+- Continuous and bounded execution modes
+- An optional `--no-restart` fail-fast mode
+
+The job emits independent `play_count` and `skip_count` values plus the computed `skip_rate`.
+
+It does not collapse the two counts into a rate-only representation.
+
+**Redis Update Policy**
+
+The Redis store compares `(play_count, skip_count)` componentwise within the same observation window.
+
+It does not compare skip rates by magnitude.
+
+| Incoming feature | Decision |
+|---|---|
+| Newer observation time | `written` |
+| Older observation time | `stale` |
+| Same time, identical count vector | `unchanged` |
+| Both counts at least as large, one larger | `written` |
+| Both counts at most as large, one smaller | `stale` |
+| One count increases and the other decreases | `SkipRateUpdateConflictError` |
+
+For example:
+
+```text
+(1, 1) -> 0.5
+(2, 1) -> 1/3
+(2, 2) -> 0.5
+```
+
+Changing `(1, 1)` to `(2, 1)` lowers the rate, but is a valid correction because the play count increases.
+
+The store does not merge conflicting count vectors by taking componentwise maxima. That could manufacture a result the Flink job never emitted.
+
+A newer window with a zero count vector replaces an older nonzero window. This represents the current state of a rolling 24-hour window, not a retraction of historical data.
+
+**Materializer**
+
+`src/featureforge/streaming/materialize_skip_rate.py` consumes skip-rate feature records from Kafka and writes them through the guarded Redis store.
+
+The materializer:
+
+- Supports exactly one Kafka partition.
+- Rejects empty readable Kafka ranges.
+- Rejects feature tombstones.
+- Validates feature payloads before writing.
+- Processes Redis writes before committing Kafka offsets.
+- Does not commit a failed record as successfully processed.
+
+A Redis write and a Kafka offset commit are not one distributed transaction. A failure between them can cause redelivery.
+
+**Tests I Ran**
+
+| Test module | Result |
+|---|---|
+| `tests/unit/test_skip_rate_update_policy.py` | 81 passed |
+| `tests/integration/test_redis_skip_rate_store.py` | 12 passed in 0.74s |
+| `tests/integration/test_skip_rate_materialization.py` | 1 passed in 1.91s |
+| `tests/integration/test_skip_rate_flink_to_redis.py` | 1 passed in 40.90s |
+| `tests/integration/test_user_skip_rate_job.py` | 8 passed in 176.64s |
+
+The combined Flink-to-Redis test verified the path from actual Flink feature output through Kafka and the real materializer into Redis.
+
+It covered:
+
+- Late corrections in both rate directions
+- Duplicate suppression
+- Replay of retained feature output through a fresh materializer consumer group
+- Redis values, counts, rate, and window metadata
+
+The isolated Flink-job test verified golden reference values, late corrections, duplicate suppression, and too-late routing.
+
+**What I Learned**
+
+A feature's update policy must match its business semantics.
+
+A play count is naturally append-only: an additional play increases the count, but a count should not decrease.
+
+A skip rate is different: additional plays can lower the rate, while additional skips can raise it.
+
+Therefore, forcing every streaming feature into one generic monotonic-count policy would be wrong.
+
+The correct approach is to preserve the feature-specific count vector and define an explicit update policy for it.
+
+**Verification Boundaries**
+
+These tests establish the tested component and integration paths. They do not establish:
+
+- Checkpoint or savepoint recovery
+- Deduplication behavior after the 48-hour state TTL expires
+- Sustained continuous-operation behavior or performance targets
+- Multi-partition Kafka or Redis materialization
+- End-to-end exactly-once delivery
+- Versioned streaming-history publication
+- Skip-rate snapshot export or historical retrieval
+- Production readiness
+
+The Flink Kafka sinks remain configured for `AT_LEAST_ONCE` delivery.
+
+Passing replay, correction, duplicate, and guarded-write tests must not be described as an end-to-end exactly-once guarantee.
+
+**Current State**
+
+FeatureForge now has two integrated streaming features:
+
+| Feature | Same-window policy |
+|---|---|
+| `user_play_count_1h` | Append-only count; count may only increase |
+| `user_skip_rate_24h` | Componentwise count-vector ordering; rate may rise or fall |
+
+The platform now demonstrates:
+
+- Kafka validation and rejection routing
+- Real Flink event-time computation
+- Continuous late correction
+- Too-late event routing
+- Guarded Redis materialization
+- Bounded replay idempotency
+- Feature-specific update policies
+- Unified batch and streaming online access
+
+**Next Steps**
+
+The next platform work is:
+
+- Versioned streaming history and retrieval
+- Recovery evidence
+- Explicit TTL-boundary verification
+- A reproducible completion demonstration
+
+These items must be completed or explicitly scoped before declaring the broader blueprint-defined streaming phase finished.
+
+**Takeaway**
+
+Two merged PRs advanced FeatureForge's streaming path: PR #8 proved real Kafka/Flink routing with late corrections and too-late routing, and PR #9 integrated the second streaming feature with a feature-specific Redis update policy. The platform now demonstrates validation, event-time computation, late correction, too-late routing, guarded materialization, replay idempotency, and unified online access.
+
+---
+
 ## November 10, 2026
 
 **FeatureForge | From a Separate Streaming Repository to One ML Platform**

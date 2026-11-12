@@ -7,6 +7,125 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 12, 2026
+
+**FeatureForge WP1 Stages 1 to 3 | All Delivered in One Day**
+
+The declarative feature spec went from idea to execution today. Stage 1 (spec model and validation), Stage 2 (exact reference), and Stage 3 (golden fixture, parity, job plan, generic Flink job) were all merged to `main`. At least 19 commits landed on `main` through 7 squash-merged PRs (#11, #12, #16 to #20), and the unit suite grew from 441 to 468 tests during the evening. Stage 4 (late data, replay, Redis path, play-count spec, deleting the hand-written jobs) starts tomorrow.
+
+**Flink | Stabilising PyFlink Tests in CI (After Midnight)**
+
+- Recreated the Flink TaskManager before every skip-rate test to isolate PyFlink jobs.
+- Background: running many PyFlink jobs on one long-lived TaskManager became unstable in GitHub Actions after roughly 7 to 8 jobs. Jobs delivered no output and then failed with exhausted restart attempts.
+- Raising timeouts and metaspace only delayed the failure, so I stopped tuning numbers and isolated the tests instead.
+- Later hardened the CI workflow (PR #12): a fresh TaskManager per test module, `--parallelism 1`, waiting for a terminal job state after cancelling, metaspace logged per module, concurrency and timeouts, and Dependabot for Actions.
+- Learned to separate isolation from explanation: the failure is contained, but the root cause is still open, and the docs say so.
+
+**Docs | Rewriting the Documentation for the Current Platform State (Morning)**
+
+- Rewrote README, ARCHITECTURE, and CONTRIBUTING so they describe what exists and is tested, not what is planned.
+- Updated the platform blueprint with status, Mermaid diagrams, and alignment with the readiness plan: a bounded declarative spec with no universal SQL-to-Flink compiler, a serving service in WP4, and Metaflow and MLflow as Phase 3.
+- Added a streaming walkthrough and refreshed the CI evidence in the demo guide.
+- Updated the streaming provenance document through skip rate and the CI stabilisation.
+- Added a streaming profile to the AWS production profile and fixed its lifecycle rules (S3 objects under 128 KB do not transition by default, and DynamoDB needs its own guarded writes to match the Redis contract).
+- Added `STATUS.md` as the single place for delivered, in progress, and out of scope, so other documents link to it instead of repeating status.
+- Learned to check docs mechanically before committing: every linked file exists, every linked test path exists, and CLI flags in examples match `--help`.
+
+**Python | Declarative Feature Spec Model (Stage 1, PR #11)**
+
+- Designed the spec as data: strict, frozen Pydantic models that reject unknown fields, with durations like `24h` parsed by a small grammar.
+- Restricted expressions to a safe subset by walking the AST against an allow-list: comparisons, boolean logic, arithmetic, and conditional expressions, but no function calls and no attribute access.
+- Added cross-field rules that protect correctness: the window slide must divide the window size, the dedupe TTL must cover window size plus allowed lateness (otherwise dedupe state is evicted while an event can still change a window), and the online TTL must cover the window.
+- Learned why monotone update policies require count-only aggregations: only counts can never decrease when events are added. An average or a minimum needs a different policy, so the model rejects the combination.
+- Accepted ADR-008: YAML instead of a Python DSL, because a DSL cannot be validated without executing it and cannot be catalogued statically.
+- Noted the cost in the ADR: a 24 h window with a 1 minute slide assigns each event to 1,440 windows, so state growth has to be measured later.
+
+**Python | Exact Reference Evaluated from a Spec (Stage 2, PR #16)**
+
+- Wrote one reference that evaluates every operator over `(t − size, t]`, including composite keys, without `eval()`.
+- Validated event identities across the whole input before any filtering, so a conflict outside the window or for another user still fails loudly.
+- Returned `None`, never zero, for an empty average, minimum, or maximum.
+- Added the event-field check to the loader: a spec that references a field the event contract does not have is rejected with the list of available fields.
+- Added the `window_replace` update policy for non-count operators and documented that it has no store yet.
+- All five checks passed on the PR, including the new Python 3.11 and 3.12 compatibility jobs and the Flink integration job.
+
+**Python | Golden Fixture with Hand-Calculated Values (Stage 3a, PRs #17 and #18)**
+
+- Built a 10-event fixture around the right-closed window: events exactly on the lower edge (excluded) and the upper edge (included), a duplicate delivery with a different `ingested_at`, `impression` and `complete` events that count toward nothing, a second user, and expiry down to an empty window.
+- Calculated the expected values by hand before running code. For example, 2 plays and 2 skips give `0.5`, and one second later 1 play and 3 skips give `0.75`.
+- Added a parity test that sweeps every event time, every event time plus 24 h, and one second around both, for both users, comparing the spec reference with the hand-written reference.
+- Learned that expected values must never be generated from the code under test. Otherwise the test only proves that the code agrees with itself.
+
+**Python | Job Plan Derived from a Spec (Stage 3b, PR #19)**
+
+- Split the generic job into a pure Python plan module and the Flink job, so most of the logic is testable without Docker.
+- The plan turns a validated spec into window size and slide, watermark delay, allowed lateness, dedupe horizon, counters with filters, and derived expressions, all in milliseconds.
+- Supported `count` aggregations and one entity key. Anything else raises `UnsupportedSpecError` with a clear message instead of being computed approximately.
+- Reproduced the five golden values through the plan and checked that its output record has exactly the fields of the hand-written job.
+
+**Flink | Generic Spec-Driven Job and Its Integration Test (Stage 3c, PR #20)**
+
+- Wrote `jobs/feature_from_spec.py`: it loads the spec with `--spec`, builds the plan, and runs the same Kafka source, dedupe, sliding window, and sinks as the hand-written job.
+- Passed the plan into the Flink function classes through `__init__` and into `key_by` through lambdas so PyFlink can serialise it.
+- Built an integration test that sends the fixture through the job and compares **every** emitted window with both references. It requires five hand-calculated windows, forbids duplicate windows, and requires an empty late topic.
+- Sorted the input by event time and added one far-future `impression` event so the watermark passes all windows, since windows only fire when the watermark passes their end.
+- Created the test topics with `message.timestamp.type=LogAppendTime`, because old event timestamps otherwise interact badly with broker retention.
+- Submitted the job with `--no-restart`, because the cluster restart strategy allows 30 attempts and would hide a runtime error behind a long timeout.
+- Made the test delete its own topics in `finally`.
+
+**Docker | Why the First Run Failed: `No module named 'yaml'`**
+
+- The Flink image installs the project with `pip install --no-deps`, so every runtime dependency of the job path is listed by hand in the Dockerfile.
+- The spec loader is the first code on that path that imports `yaml`, so the dependency had never been needed.
+- Added `PyYAML` to the Dockerfile and extended the build-time import check with `load_spec` and `build_flink_plan`, so a missing module now fails the build and not the test run.
+- Learned the split: `jobs/` and `feature_repo/specs/` are mounted as volumes, but `src/` is copied into the image, so changes under `src/` need `docker compose up -d --build`.
+- Reviewed the CI file: no change was needed, because the Flink job already runs every module in `MODULES`, rebuilds the image on each run, and the new test only needed one new line in the module list.
+
+**Git | Branch Hygiene and Recovery**
+
+- Committed on `main` by accident because I had not created the branch, and the push failed with `src refspec ... does not match any`.
+- Recovered without losing anything: `git branch <name>`, `git reset --hard origin/main`, `git switch <name>`.
+- Learned to run `git switch -c <name>` and `git branch --show-current` before the first `git add`, and to run `ruff format .` before staging, not after.
+- Cleaned up after each squash merge with `git pull --ff-only`, `git branch -D`, and `git fetch --prune`, because a squash commit has different hashes and `-d` warns.
+- Noticed that macOS BSD `grep` has no `-P` option. Use `-E`.
+
+**Docs & Make | Aligning Tooling with CI and the New Engine (Evening)**
+
+- Updated STATUS, README, ARCHITECTURE, CONTRIBUTING, the blueprint, and the demo guide so they describe four CI layers, ADR-008, and the spec engine, each with its limits.
+- Found a stale command in the demo guide: it used a container name that does not exist in the current Compose project. Replaced it with `docker compose exec -T redis redis-cli ping`.
+- Found that `make test` also ran integration tests and that `make lint` skipped the format check. Aligned the Makefile with CI, set the install extras to match the docs, and added `validate-specs`, `test-spec`, and `test-streaming`.
+- Pushed the docs and the Makefile directly to `main` because this is a solo repository without branch protection. CONTRIBUTING still says never commit on `main`, so I will decide whether to keep that rule for myself.
+- Final check on `main`: 468 unit tests passed, 39 integration tests deselected, `make test-spec` 104 passed, Ruff clean, both specs valid.
+
+**Key Insight | A Test Only Proves What It Covers**
+
+The generic job is verified for one feature, on time-ordered input. It is **not** yet verified for late corrections, too-late routing, replay, the Redis path, recovery, or a single-counter spec like the play count. Writing these limits into `STATUS.md`, the README, and the architecture document is as important as the green test.
+
+**Relevance to Core Goal**
+
+Declarative feature definitions, an exact reference as oracle, hand-calculated golden data, and engine parity tests are the core of a trustworthy feature platform. The same pattern applies to any feature store or streaming system where several engines must agree on semantics. Explicit dependency lists in container images and fail-fast diagnostics are everyday platform engineering.
+
+**What I Deliberately Skipped**
+
+- Running the play-count spec on the generic job: needs the play-count fixture and a single-counter accumulator, moved to Stage 4.
+- Late-event, replay, and Redis-path tests for the generic job: planned as Stage 4a to 4c, by running the existing skip-rate scenarios against both jobs.
+- Deleting the hand-written jobs: only after parity is proven for both features.
+- Explaining the TaskManager instability: isolated, not solved.
+
+**Next**
+
+1. Confirm the CI run for the generic job on `main` finished green (it was at 4 of 5 checks when I closed the day).
+2. Stage 4a: parametrize the existing skip-rate job test over the hand-written and the generic job.
+3. Stage 4b: play-count spec on the generic job.
+4. Stage 4c: generic job output through the materializer into Redis.
+5. Stage 4d: switch to the generic job and delete the hand-written jobs.
+
+**Takeaway**
+
+Stages 1 to 3 of WP1 are delivered: a validated YAML spec, an exact reference, a hand-calculated golden fixture, and a generic Flink job whose every emitted window matches two independent references. The limits and the unexplained TaskManager instability are documented, not hidden, and Stage 4 closes the remaining gaps one by one.
+
+---
+
 ## November 11, 2026
 
 **FeatureForge | Streaming Routing, Late Events, and Skip Rate**

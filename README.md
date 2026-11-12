@@ -142,51 +142,104 @@ I document the roadmap, projects, certifications, failures, and incremental wins
 | 1 | [FeatureForge — Production-Grade ML Feature Platform](https://github.com/oster-dev/featureforge) | Feast · Spark · Kafka · Flink · Redis · Parquet · Python · GitHub Actions | Point-in-time retrieval, offline/online serving, freshness checks, streaming ingestion, Flink feature computation, Redis materialization, guarded online-store writes, joined integration tests, CI, AWS production profile | ✅ **Released — [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)** · 🔄 **Actively extended** |
 | 2 | [MLflow Model Lifecycle Lab](https://github.com/oster-dev/mlflow-model-lifecycle-lab) | MLflow · Metaflow · scikit-learn · SQLite · GitHub Actions | Model tracking, Registry, accepted/rejected quality gate, seven tests, CI | ✅ Completed |
 
-## **FeatureForge · One Platform, Three Phases**
+# FeatureForge Status
 
-**FeatureForge** is the flagship project of this roadmap. It is designed as a single, evolving ML feature platform rather than a collection of disconnected repositories.
+This file separates what is **delivered and verified**, what is **in
+progress**, and what is **planned**. A capability is listed as delivered only
+when a test, CI job, or committed evidence proves it.
 
-### Phase 1 · Feature Store Foundation — Released
+Last updated: 2026-11-12
 
-FeatureForge v0.1.0 established the reproducible feature-platform foundation:
+---
 
-- Deterministic data generation and reproducible local workflows
-- Point-in-time-correct offline feature preparation with Spark and Parquet
-- Feast-based feature definitions and offline/online feature retrieval
-- Redis-backed low-latency online feature serving
-- Freshness checks and CI-guarded quality controls
-- AWS-oriented production profile and architecture documentation
+## Phase 1 · Feature store foundation — Released
 
-**Evidence:** [FeatureForge v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0)
+Released as [v0.1.0](https://github.com/oster-dev/featureforge/releases/tag/v0.1.0).
 
-### Phase 2 · Streaming Feature Platform — In Progress
+- Deterministic synthetic data generation (independent and behavioral modes)
+- Executable source-data contracts and quality validation
+- Point-in-time feature computation with explicit lookback windows
+- Pandas reference engine and parity-tested PySpark engine
+- Idempotent, date-partitioned backfills with audit manifests
+- Canonical offline-store contract shared by backfill, gates, Feast, and parity tests
+- Feast definitions, historical retrieval, full and incremental materialization
+- Redis online serving, online lookup, deterministic ranking demo
+- Pre-materialization correctness gate and freshness SLO checks
+- Failure simulations and runbooks
+- Baseline training pipeline with time-based evaluation
+- Documented AWS production profile (S3, DynamoDB)
 
-The current expansion turns FeatureForge into a streaming-capable feature platform:
+## Phase 2 · Streaming feature platform — Core delivered
 
-- Kafka-based event ingestion
-- Flink-based streaming feature computation
-- Event-time-aware processing and bounded replay
-- Kafka-to-Redis materialization
-- Idempotent and guarded online-store writes
-- Joined integration tests covering the Kafka → Flink → Redis path
-- CI coverage for the streaming workflow
+### Delivered and verified
 
-**Evidence:** Streaming architecture, integration tests, and documentation are being added directly to FeatureForge.
+| Capability | Evidence |
+|---|---|
+| Streaming event and feature contracts | Unit tests in `tests/unit/test_streaming_*.py` |
+| Flink validation and rejected-event routing | `test_streaming_validation_routing.py` |
+| `user_play_count_1h` (1h sliding, event time, dedupe, late side output) | `test_user_play_count_*.py` |
+| `user_skip_rate_24h` (24h sliding, 1-minute slide, componentwise update policy) | `test_user_skip_rate_job.py`, `test_skip_rate_*.py`, `test_user_skip_rate.py` |
+| Window boundary semantics `(t − w, t]` | Boundary cases in `test_user_skip_rate_job.py` |
+| Late corrections and too-late routing | `test_user_play_count_late_events.py`, `test_user_skip_rate_job.py` |
+| Bounded replay idempotency and event-identity conflicts | `test_user_play_count_replay_idempotency.py` |
+| Guarded, concurrency-safe Redis writes | `test_streaming_redis_online_store*.py`, `test_redis_skip_rate_store.py` |
+| Kafka-to-Redis materialization with offset resume | `test_skip_rate_materialization.py` |
+| Joined Kafka → Flink → Redis path | `test_user_play_count_kafka_to_redis.py`, `test_skip_rate_flink_to_redis.py` |
+| Unified batch + streaming online client (`user_play_count_1h`) | `test_unified_online.py` |
+| Dedicated streaming CI job | `.github/workflows/ci.yml` |
 
-### Phase 3 · End-to-End ML Workflow — Planned
+### In progress
 
-The final expansion connects the feature platform to a complete ML lifecycle:
+1. Expose `user_skip_rate_24h` through the unified online client.
+2. Versioned streaming feature history in the offline store and historical retrieval.
+3. Checkpoint and savepoint recovery evidence (controlled failure → restore → result matches reference).
+4. Deduplication behavior at the state-TTL boundary.
+5. Reproducible end-to-end streaming demo.
 
-- Metaflow-based training and workflow orchestration
-- MLflow experiment tracking, artifact management, and model registry
+### Known limitations
+
+These are deliberate, documented boundaries, not hidden defects.
+
+- **Delivery semantics:** Kafka sinks use `AT_LEAST_ONCE`. Correctness under
+  duplicates comes from deduplication and guarded online-store writes.
+  End-to-end exactly-once is **not** claimed.
+- **Recovery:** Checkpointing is enabled, but restore from a checkpoint is
+  **not yet** proven by a test.
+- **Deduplication horizon:** Deduplication state uses a TTL (24h for play count,
+  48h for skip rate). Duplicates arriving after the TTL are not deduplicated by
+  Flink.
+- **Unified reads are non-atomic:** Combined batch and streaming reads report
+  `atomic: false`; there is no cross-backend snapshot.
+- **Materializers:** Support single-partition feature topics.
+- **CI isolation:** Each skip-rate Flink test runs on a freshly recreated
+  TaskManager. Without this, PyFlink jobs on a long-lived TaskManager became
+  unstable after roughly seven to eight job submissions. The root cause is
+  still under investigation; the isolation keeps tests independent but does
+  not prove long-lived TaskManager stability.
+- **Scale:** Local Docker Compose with synthetic data. No latency or throughput
+  benchmarks are published yet.
+
+## Phase 3 · End-to-end ML workflow — Planned
+
+- Metaflow training and workflow orchestration
+- MLflow experiment tracking, artifacts, and model registry
 - Model quality gates and controlled promotion
-- Registry-based inference and model serving
-- Monitoring and rollback-oriented operational workflows
+- Registry-based inference with online features
+- Monitoring and rollback workflows
 - Reproducible execution from raw data to a served model
 
-**Evidence:** Planned for Month 8 and will be implemented directly within FeatureForge.
+## Planned platform work
 
-The goal is not to maintain separate feature-store, streaming, and ML-workflow repositories. FeatureForge progressively becomes one coherent platform where data, features, models, serving, and operational safeguards belong to the same system.
+| Area | Goal |
+|---|---|
+| Declarative feature and label definitions | Define windowed aggregations and labels in a spec; the platform derives computation, storage, serving, and tests |
+| Offline store | Apache Iceberg for batch and streaming feature history, point-in-time training datasets |
+| Online stores | Cassandra as a second online backend behind the same contract test suite |
+| Serving | Feature-serving service with published latency and throughput benchmarks |
+| Operations | Prometheus/Grafana, alerts, recovery and chaos drills, soak test |
+| Discovery | Generated feature catalog with ownership, lineage, and consumers |
+| Embeddings | Versioned embedding store and embedding-based retrieval |
+| Practitioner experience | Executed Jupyter walkthrough |
 
 <br>
 

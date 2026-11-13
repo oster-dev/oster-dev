@@ -7,6 +7,100 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 13, 2026
+
+**FeatureForge | Streaming Core Runs on One Generic Spec-Driven Flink Job, Recovery Proven**
+
+Nine pull requests were merged today. Both streaming features (`user_play_count_1h`, `user_skip_rate_24h`) are computed by the same spec-driven job, the hand-written jobs are gone, and the job has been shown to survive both a planned stop (savepoint) and a hard TaskManager crash (checkpoint).
+
+| PR | Commit | What shipped |
+|---|---|---|
+| [#21](https://github.com/oster-dev/featureforge/pull/21) | `1ad56ce` | Skip-rate job scenarios run against the generic spec-driven job |
+| [#22](https://github.com/oster-dev/featureforge/pull/22) | `0ea7156` | Play-count spec reproduces its golden fixture on the generic job |
+| [#23](https://github.com/oster-dev/featureforge/pull/23) | `7d97afe` | Play-count late-event scenarios on the generic job |
+| [#24](https://github.com/oster-dev/featureforge/pull/24) | `a8cb607` | Play-count replay and identity-conflict scenarios on the generic job |
+| [#25](https://github.com/oster-dev/featureforge/pull/25) | `4535162` | Skip-rate Flink-to-Redis scenario on the generic job |
+| [#26](https://github.com/oster-dev/featureforge/pull/26) | `8058076` | Joined play-count flow (validation to Redis) on the generic job |
+| [#27](https://github.com/oster-dev/featureforge/pull/27) | `a3c2da2` | Hand-written feature jobs removed, tag `hand-written-jobs-final` keeps the last version |
+| [#28](https://github.com/oster-dev/featureforge/pull/28) | `c2e9365` | Generic job resumes from a savepoint with its state intact |
+| [#29](https://github.com/oster-dev/featureforge/pull/29) | `e56934d` | Generic job recovers from a TaskManager crash via checkpoint |
+
+**Flink | Replacing Hand-Written Jobs Safely (PRs #21 to #27)**
+
+- Moved both features onto one generic job in small steps: each PR ran the same scenarios on the hand-written job AND the generic job, so the old job served as a parity check until everything passed.
+- Only after all scenarios were green on the generic job did PR #27 delete the hand-written jobs.
+- Kept an independent oracle: the pure-Python references and hand-calculated golden fixtures never moved.
+- Tagged the last hand-written version (`hand-written-jobs-final`) so the removal is reversible and the history stays readable.
+- Scenario coverage that moved over: late corrections in both directions, too-late routing, both window edges, zero denominator, replay idempotency, event-identity conflict, Flink-to-Redis flow, and joined validation-to-Redis flow.
+
+**What I understood**
+
+- A refactor is only as safe as the evidence that it changes nothing: run old and new side by side first, delete second.
+- Golden values calculated by hand are the one thing that does not depend on the code under test.
+
+**Flink | Savepoint Resume (PR #28)**
+
+- Stopped the generic job with `flink stop --savepointPath` and started a NEW job with `-s <savepoint>`.
+- Needed a shared named volume (`flink-savepoints`) mounted into JobManager and TaskManager, plus `chown flink:flink` in the Dockerfile.
+- A pre-existing Docker volume keeps its old permissions, so a new volume name avoids an invisible permission bug.
+- Asserted the restore itself via the REST API (`/jobs/<id>/checkpoints` → `latest.restored.is_savepoint`).
+- Asserted that a redelivered event is not counted again (dedupe state survived) and that a late correction lands in the restored window state.
+
+> **Key insight:** the final counts alone prove nothing here. A job that replays from the earliest Kafka offset reaches exactly the same numbers as a job that restored state. Only the explicit "was a savepoint restored?" assertion separates the two.
+
+**Flink | Crash Recovery with Checkpoints (PR #29)**
+
+- Killed the TaskManager (`docker compose kill taskmanager`) while the job was running and started it again; the SAME job restarted by itself under the cluster restart strategy (fixed delay, 30 attempts).
+- Did not use `--no-restart` here: for a recovery test the restart is the thing under test.
+- Avoided a timing guess: checkpoint ids follow trigger order, so the test waits for a checkpoint with an id greater than `counts.total` at the moment the first output was observed. Only such a checkpoint contains the earlier state.
+- Asserted `latest.restored` is empty before the crash, set afterwards, `is_savepoint` is false, and the restored id is not older than the covering checkpoint.
+- Kafka sinks are `AT_LEAST_ONCE`, so the test checks the final value per window (waits for a count of at least 2, then asserts exactly 2) instead of counting emissions.
+- Cleanup restarts the TaskManager so a failing test does not leave the local stack broken.
+- Scope is deliberately narrow: JobManager keeps running and holds the checkpoints in memory, so JobManager failure is NOT covered.
+
+> **Note on isolation:** a test that kills a container gets its own CI module. The CI script recreates the TaskManager before every module, so the next module starts clean.
+
+**Docs | Writing Only What a Test Proves**
+
+- Updated README, ARCHITECTURE, STATUS, CONTRIBUTING, the demo guide, and the provenance document so every claim matches a test.
+- Split verification boundaries into "verified for the play-count spec" (savepoint resume, TaskManager crash recovery) and "not verified" (JobManager failure, dedupe after TTL expiry, multi-partition Kafka).
+- Added a contributing rule: a recovery test must prove the restore itself, not only the final values.
+- Added a second rule: a test that kills or restarts a container lives in its own module and restores the stack in its cleanup.
+- Mechanisms in code (checkpointing, state TTL, watermarks) do not count as evidence until a test exercises them.
+
+**Tooling | Two Small Bugs Worth Remembering**
+
+- Markdown links of the form `[URL](URL)` had ended up INSIDE code blocks (for example `git clone`), which silently breaks copy-paste. Found with a back-reference regex over all tracked files, fixed with a short Python script, and confirmed by an empty `grep` afterwards.
+- A chat or terminal display can add links that are not in the file, so the proof is a `grep` on the real bytes, not how the diff looks on screen.
+- Baseline test count stayed at `468 passed` while `deselected` grew from 40 to 42: new integration tests are marked `integration`, so the infrastructure-free suite is unchanged.
+
+**Git | Workflow Reminders**
+
+- Branch first (`git switch -c ...`), check with `git branch --show-current`, never commit on `main`.
+- Squash merge keeps one clean commit per step; `git pull --ff-only` after merging.
+- `git branch -d` may warn "merged to origin but not yet to HEAD" when the pull happened a moment earlier. Harmless if `git log` shows the squash commit on top.
+- Run `ruff format --check`, `ruff check`, the non-integration suite, and `git diff --check` before every commit; use `git status --short` and `git diff --cached --stat` to confirm exactly the expected files are staged.
+
+**What This Taught Me**
+
+- Tests that fail for the right reason matter more than tests that pass: asserting the restore, not only the result, is what makes a recovery test honest.
+- Small, parity-checked steps make a large refactor boring, which is the goal.
+- Stating clearly what is NOT proven is part of the evidence.
+
+**Next**
+
+1. Dedupe behavior after state TTL expiry (24 h and 48 h) with a controlled event-time jump instead of waiting.
+2. Savepoint resume and crash recovery for the skip-rate spec.
+3. Topic cleanup in the savepoint test.
+4. JobManager failure and checkpoints on a shared volume.
+5. Record the real merge hash for the crash-recovery stage in the provenance document.
+
+**Takeaway**
+
+The streaming core now runs on one generic spec-driven job, and the hand-written jobs were removed only after side-by-side parity. Recovery is proven for the play-count spec with assertions on the restore itself: savepoint resume and TaskManager crash recovery. JobManager failure, dedupe after TTL expiry, and multi-partition Kafka remain explicitly unproven.
+
+---
+
 ## November 12, 2026
 
 **FeatureForge WP1 Stages 1 to 3 | All Delivered in One Day**

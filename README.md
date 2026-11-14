@@ -1,49 +1,33 @@
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=venom&color=0:E50914,100:141414&height=240&section=header&text=Nico%20Ostermann&fontSize=62&fontColor=ffffff&animation=twinkling&fontAlignY=36&desc=Data%20%26%20Feature%20Infrastructure%20Engineer&descSize=20&descAlignY=58" alt="Nico Ostermann" />
+  <img src="./assets/header.svg" alt="Nico Ostermann, Data and Feature Infrastructure Engineer" width="100%" />
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=19&pause=1100&color=E50914&center=true&vCenter=true&width=780&lines=Hi%2C+I%27m+Nico.;I+write+down+what+I+learn+every+day.;Right+now%3A+a+feature+platform+on+Flink%2C+Kafka+and+Redis;Open+to+work+in+feature+infrastructure+and+ML+platforms" alt="Typing animation" />
+  <b>I write down what I learn, every day. Right now I'm building a feature platform on Flink, Kafka and Redis.</b><br>
+  Open to work in feature infrastructure and ML platforms.
 </p>
 
 <p align="center">
   <a href="./til/README.md"><img src="https://img.shields.io/badge/📓_Today_I_Learned-Daily_log-E50914?style=for-the-badge" /></a>
   <a href="https://github.com/oster-dev/featureforge"><img src="https://img.shields.io/badge/🚀_FeatureForge-Main_project-1a1a1a?style=for-the-badge" /></a>
-  <a href="#-the-roadmap"><img src="https://img.shields.io/badge/🗺️_Roadmap-8_months-222?style=for-the-badge" /></a>
+  <a href="#the-roadmap"><img src="https://img.shields.io/badge/🗺️_Roadmap-8_months-222?style=for-the-badge" /></a>
   <a href="mailto:ostermann.dev@gmail.com"><img src="https://img.shields.io/badge/✉️_Contact-D14836?style=for-the-badge" /></a>
 </p>
 
 ---
 
-## 📓 My daily log
+## My daily log
 
-Since April 13, 2026 I write a Today I Learned entry. It's my notebook: what I learned, what I built, what broke. All of it is public, including the mistakes. The three badges below are counted straight from the log by a small script, so I can't round them up.
-
-<p align="center">
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Foster-dev%2Foster-dev%2Foutput%2Ftil-coverage.json&style=for-the-badge" />
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Foster-dev%2Foster-dev%2Foutput%2Ftil-streak.json&style=for-the-badge" />
-  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Foster-dev%2Foster-dev%2Foutput%2Ftil-longest.json&style=for-the-badge" />
-</p>
-
-My routine is simple. I pick a topic from the roadmap, build something small so I know I really got it, and write the entry. I also write down what I skipped on purpose and what is still open.
+Since April 13, 2026 I write a Today I Learned entry. It's my notebook: what I learned, what I built, what broke. 
 
 **[→ Read the full log](./til/README.md)**
 
 ---
 
-## 🔥 Activity
+## Activity
 
 <p align="center">
-  <img src="https://streak-stats.demolab.com?user=oster-dev&theme=dark&hide_border=true&background=0d1117&ring=E50914&fire=E50914&currStreakLabel=E50914&sideLabels=ffffff&currStreakNum=ffffff&sideNums=ffffff&dates=8b949e" alt="Contribution streak" />
-</p>
-
-<p align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=oster-dev&show_icons=true&hide_border=true&bg_color=0d1117&title_color=E50914&icon_color=E50914&text_color=ffffff&count_private=true&include_all_commits=true" alt="GitHub stats" />
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=oster-dev&layout=compact&hide_border=true&bg_color=0d1117&title_color=E50914&text_color=ffffff" alt="Top languages" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=oster-dev&bg_color=0d1117&color=E50914&line=E50914&point=ffffff&area=true&hide_border=true" alt="Contribution activity graph" />
+  <img src="https://streak-stats.demolab.com?user=oster-dev&theme=dark&hide_border=true&background=0d1117&sideLabels=ffffff&sideNums=ffffff&dates=8b949e&hide_current_streak=true&hide_longest_streak=true&card_width=260&card_height=170" alt="Total contributions" />
 </p>
 
 <p align="center">
@@ -56,7 +40,7 @@ My routine is simple. I pick a topic from the roadmap, build something small so 
 
 ---
 
-## 🗺️ The roadmap
+## The roadmap
 
 Eight months, April to November 2026. I planned it at the start and track it here. Every month ends with a milestone and a short review. The plan changed a little along the way, and the reviews say where.
 
@@ -73,9 +57,39 @@ Eight months, April to November 2026. I planned it at the start and track it her
 
 ---
 
-## 🚀 FeatureForge
+## FeatureForge
 
 **[FeatureForge](https://github.com/oster-dev/featureforge)** is my main project. You describe a feature in a YAML file. The platform computes it from a Kafka stream with Flink, writes it to Redis and tests it. It runs on my laptop with Docker Compose and synthetic data, so it's a local build and not a production system.
+
+<p align="center">
+  <img src="./assets/pipeline.svg" alt="FeatureForge data flow: Kafka events, generic Flink job, Redis, online client. Iceberg and Cassandra are planned." width="100%" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/476-unit_tests-E50914?style=flat-square" />
+  <img src="https://img.shields.io/badge/44-integration_tests-E50914?style=flat-square" />
+  <img src="https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" />
+  <img src="https://img.shields.io/badge/runs_on-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white" />
+</p>
+
+Here is what works today, and which test proves it:
+
+| What works | Proof |
+| :-- | :-- |
+| One generic Flink job runs features from YAML specs, no code per feature | [`STATUS.md`](https://github.com/oster-dev/featureforge/blob/main/STATUS.md) |
+| A feature keyed by content instead of user, from a spec alone, matching hand-calculated windows | `test_generic_job_content_play_count.py` |
+| Event time, late events, dedupe, replays, conflicting events | `tests/integration/` |
+| Savepoint resume and recovery after a TaskManager crash | `test_generic_job_recovery.py`, `test_generic_job_checkpoint_recovery.py` |
+| Dedupe state expires after its TTL, shown with a short TTL | integration test, see STATUS |
+| Redis writes that stay correct under concurrency | `test_streaming_redis_online_store*.py` |
+| `featureforge validate-spec` with clear exit codes | `test_cli_validate_spec.py` |
+
+**What it can't do yet:** it only runs locally on synthetic data, I have no latency or throughput numbers, and the Kafka sinks are at-least-once, so I don't claim exactly-once.
+
+<details>
+<summary><b>Full architecture diagram</b></summary>
+
+<br>
 
 ```mermaid
 flowchart LR
@@ -90,22 +104,9 @@ flowchart LR
   J -.-> I[(Iceberg · planned)]
 ```
 
-Here is what works today, and which test proves it:
+</details>
 
-| What works | Proof |
-| :-- | :-- |
-| One generic Flink job runs features from YAML specs, no code per feature | [`STATUS.md`](https://github.com/oster-dev/featureforge/blob/main/STATUS.md) |
-| A feature keyed by content instead of user, from a spec alone, matching hand-calculated windows | `test_generic_job_content_play_count.py` |
-| Event time, late events, dedupe, replays, conflicting events | `tests/integration/` |
-| Savepoint resume and recovery after a TaskManager crash | `test_generic_job_recovery.py`, `test_generic_job_checkpoint_recovery.py` |
-| Dedupe state expires after its TTL, shown with a short TTL | integration test, see STATUS |
-| Redis writes that stay correct under concurrency | `test_streaming_redis_online_store*.py` |
-| `featureforge validate-spec` with clear exit codes | `test_cli_validate_spec.py` |
-| 476 unit tests and 44 integration tests, run in CI | `.github/workflows/ci.yml` |
-
-**What it can't do yet:** it only runs locally on synthetic data, I have no latency or throughput numbers, and the Kafka sinks are at-least-once, so I don't claim exactly-once.
-
-### 🧭 Where it stands
+### Where it stands
 
 The percentages are my own estimate.
 
@@ -120,7 +121,7 @@ The percentages are my own estimate.
 
 ---
 
-## 🛠️ Tools I use
+## Tools I use
 
 <p align="center">
 <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
@@ -140,7 +141,7 @@ The percentages are my own estimate.
 
 ---
 
-## 📁 Other projects
+## Other projects
 
 | Project | What it is |
 | :-- | :-- |
@@ -151,7 +152,7 @@ The percentages are my own estimate.
 
 ---
 
-## 🏅 Certifications and open source
+## Certifications and open source
 
 | | Status |
 | :-- | :-- |
@@ -163,7 +164,7 @@ The percentages are my own estimate.
 
 ---
 
-## 👋 About me
+## About me
 
 I'm Nico, 24, from Cologne. I started programming in March 2026 with a Python bootcamp and decided to aim at ML platform and feature infrastructure work. Since then I work on it every day: learn, build, write it down.
 
@@ -173,5 +174,5 @@ I like systems where the hard part is getting things right, like late events, du
 📬 [ostermann.dev@gmail.com](mailto:ostermann.dev@gmail.com) · 💼 [LinkedIn](https://www.linkedin.com/in/nico-ostermann-606a6b402)
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:E50914,100:141414&height=110&section=footer" alt="" />
+  <img src="./assets/footer.svg" alt="Built in public since April 2026" width="100%" />
 </p>

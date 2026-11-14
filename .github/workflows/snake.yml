@@ -1,4 +1,4 @@
-name: Generate snake
+name: Generate snake and TIL stats
 
 on:
   schedule:
@@ -15,6 +15,49 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute TIL stats
+        run: |
+          mkdir -p dist
+          python3 - <<'PY'
+          import json, re, pathlib, datetime as dt
+          text = pathlib.Path("til/README.md").read_text(encoding="utf-8")
+          days = set()
+          for m in re.finditer(r"^## ([A-Za-z]+) (\d{1,2}), (\d{4})\s*$", text, re.M):
+              try:
+                  days.add(dt.datetime.strptime(" ".join(m.groups()), "%B %d %Y").date())
+              except ValueError:
+                  pass
+          start = dt.date(2026, 4, 13)
+          today = dt.datetime.now(dt.timezone.utc).date()
+          span = (today - start).days + 1
+          logged = len([d for d in days if start <= d <= today])
+
+          def run_end(day):
+              n = 0
+              while day in days:
+                  n += 1
+                  day -= dt.timedelta(days=1)
+              return n
+
+          current = run_end(today) or run_end(today - dt.timedelta(days=1))
+          longest = run = 0
+          d = start
+          while d <= today:
+              run = run + 1 if d in days else 0
+              longest = max(longest, run)
+              d += dt.timedelta(days=1)
+
+          def badge(name, label, message):
+              payload = {"schemaVersion": 1, "label": label, "message": message, "color": "E50914"}
+              pathlib.Path(f"dist/{name}.json").write_text(json.dumps(payload))
+
+          badge("til-coverage", "TIL coverage", f"{logged}/{span} days")
+          badge("til-streak", "current streak", f"{current} days")
+          badge("til-longest", "longest streak", f"{longest} days")
+          PY
+
       - name: Generate snake SVGs
         uses: Platane/snk/svg-only@v3
         with:

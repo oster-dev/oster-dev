@@ -7,6 +7,89 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 14, 2026
+
+**FeatureForge | Dedupe Expiry Fixed, a Feature Defined by YAML Only, Two Practitioner Commands**
+
+Five pull requests were merged today. A test caught that the dedupe state never expired in PyFlink 1.20.3, and the job now enforces the retention with its own timer. A second feature, keyed by content instead of user, runs on the generic job from a YAML file alone. A spec can now be validated and tried on an event file without Docker.
+
+| PR | Commit | What shipped |
+|---|---|---|
+| [#30](https://github.com/oster-dev/featureforge/pull/30) | `de74e6d` | Dedupe state expires with a timer, TTL behavior covered by a test |
+| [#31](https://github.com/oster-dev/featureforge/pull/31) | `8146b70` | Merge commit of stage 4j recorded in the provenance document |
+| [#32](https://github.com/oster-dev/featureforge/pull/32) | `a108622` | Content-keyed play count runs on the generic job from a YAML spec only |
+| [#33](https://github.com/oster-dev/featureforge/pull/33) | `0386f97` | `validate-spec` command for feature specs |
+| [#34](https://github.com/oster-dev/featureforge/pull/34) | `8360f83` | `test-spec` command evaluates a spec on a JSONL event file |
+
+**Flink | Dedupe Expiry (PR #30)**
+
+- Ran the generic job with a copy of the play-count spec and shortened values: 20 s windows, 5 s slide, 10 s allowed lateness, 30 s dedupe TTL. The spec rule "dedupe TTL >= window + allowed lateness" still holds, so the copy passes validation.
+- A redelivery after about 15 s must not be counted. A second redelivery after about 36 s must be counted, so the window reaches 2.
+- The first version of the test failed. The job used Flink state TTL (`OnCreateAndWrite`, `NeverReturnExpired`), and the state did not expire in PyFlink 1.20.3. The redelivery stayed ignored after 80 s, while a fresh event with a new ID still updated the same window. This matches the reported issue FLINK-34625.
+- Fix: the job registers a processing-time timer when it first sees an event ID and clears the state when the timer fires.
+- The test also shows that an ignored duplicate does not refresh the retention, because the third delivery depends on it.
+- Replay protection is now explicitly bounded by the TTL: an event redelivered after expiry is counted again.
+- Production values (24 h and 48 h) are configuration and are not exercised. Only the shortened spec is tested.
+
+**What I understood**
+
+- State TTL was configured in the code, yet it did nothing. A mechanism in code is not evidence until a test exercises it, which is exactly the rule I wrote into CONTRIBUTING yesterday.
+- A shortened copy of the real spec tests the real code path in 40 seconds instead of waiting 24 hours.
+
+> **Key insight:** the first, failing version of the test was the most valuable part of the PR. A test that had passed on the first try would have confirmed a TTL that never expired.
+
+**Flink | A Second Entity from YAML Only (PR #32)**
+
+- Added `content_play_count_1h`: the play-count spec with `entity: content_id` and its own name. No new job code, no new reference function.
+- The plan assertions check that the entity key is `content_id` and the feature name is `content_play_count_1h`.
+- Two contents run side by side. Content A gets 3 plays from 2 users, one of them playing twice, so plays of different users count together. Content B gets 1 play and must not influence A.
+- Expected values are hand-calculated per window from the play offsets, and the test waits for a later event to move the watermark past the last window of both contents.
+- Also asserted: no window is emitted twice, every window has the expected fields, and the too-late topic stays empty.
+- This is the strongest evidence so far that the spec is the interface: a new feature for a different entity needs a YAML file, not platform code.
+
+**Python | Two Spec Commands (PRs #33 and #34)**
+
+- `validate-spec` checks a feature spec before anything runs.
+- `test-spec SPEC --events FILE --entity KEY=VALUE --at TIME [--expect NAME=VALUE]` runs the exact Python reference on a JSONL file for one entity and one observation time. It needs no Docker.
+- Exit codes: 0 ok, 1 invalid input or a failed expectation, 2 missing file. Event errors name the line.
+- Real run on the play-count fixture: `play_count = 3` for `user_000001` at 11:30 UTC, checked by hand against the three events in the window (10:30, 11:30].
+- Tested both directions: `--expect play_count=3` gives exit 0, and `--expect play_count=99` prints `expected 99, got 3` and exits 1.
+- Limit written into STATUS: the command runs the reference, not Flink or Spark. It proves the spec semantics, not engine parity.
+
+**Architecture | Reading the Code Before the Next ADR**
+
+- Next target: spec-driven online stores. Before writing the ADR I read the current code instead of assuming.
+- The two Kafka-to-Redis materializers (210 and 215 lines) differ only in names and constants: topic, key prefix, store class, feature model, client id. A generic materializer is a parametrisation, not a rewrite.
+- Both Redis stores share the same shell: `key_for`, `_decode`, `read`, and a `WATCH`/`MULTI` loop with at most 16 retries. Only the write decision differs. A play count is a count vector of length 1, a skip rate one of length 2.
+- Open points for the ADR: two return vocabularies (`WriteResult` vs `UpdateDecision`), different input validation strictness, and keeping the wire format of existing Redis and Kafka data unchanged.
+
+**Docs | Writing Only What a Test Proves**
+
+- STATUS and the provenance document now list dedupe expiry as "verified for the play-count spec with a shortened TTL", with the production values explicitly not exercised.
+- The merge commit of stage 4j is recorded in the provenance document (PR #31), which closes yesterday's last "Next" item.
+- README and STATUS describe `test-spec`, including that it runs the reference and not Flink.
+- Still marked not verified: JobManager failure, multi-partition Kafka, sustained operation, and exactly-once delivery (not claimed).
+
+**Tooling | Small Things Worth Remembering**
+
+- `zsh: no matches found` aborts the whole command, not only the failing pattern. Quote globs such as `--include='*.py'` or use explicit paths.
+- Squash merges change the hash, so `git branch -d` warns "not yet merged to HEAD" even though the PR is merged. Harmless if `git log` shows the squash commit on top.
+- Baseline suite: 468 passed yesterday, 487 passed today. Deselected grew from 42 to 44 because the two new Flink tests are marked `integration`.
+- A project export for sharing: exclude it in `.git/info/exclude` so it never lands in a commit.
+
+**What This Taught Me**
+
+- A failing test that exposes a real bug is worth more than ten passing ones.
+- A shortened copy of a real spec makes slow behavior testable without changing the code under test.
+- Reading the code before writing an ADR turns "I think they are similar" into "they differ in six constants".
+- Stating clearly what is NOT proven (production TTL values, engine parity) is part of the evidence.
+
+**Takeaway**
+
+The dedupe retention is now enforced by an explicit timer after a test proved that Flink state TTL did not expire in PyFlink 1.20.3. A content-keyed feature runs on the generic job from YAML alone, and practitioners can validate and try a spec in seconds. Production TTL values, JobManager failure, multi-partition Kafka, and engine parity remain explicitly unproven.
+
+---
+
 ## November 13, 2026
 
 **FeatureForge | Streaming Core Runs on One Generic Spec-Driven Flink Job, Recovery Proven**

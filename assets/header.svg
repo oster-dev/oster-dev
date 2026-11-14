@@ -1,29 +1,61 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="240" viewBox="0 0 1000 240" role="img" aria-label="Nico Ostermann, Data and Feature Infrastructure Engineer">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#E50914"/>
-      <stop offset="100%" stop-color="#141414"/>
-    </linearGradient>
-    <style>
-      .name { font: 700 58px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #ffffff; animation: rise 1.2s ease-out both; }
-      .role { font: 500 20px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #ffd9db; animation: rise 1.2s ease-out 0.4s both; }
-      .dot { fill: #ffffff; opacity: 0.1; animation: twinkle 4s ease-in-out infinite; }
-      .d2 { animation-delay: 1s; }
-      .d3 { animation-delay: 2s; }
-      .d4 { animation-delay: 3s; }
-      @keyframes rise { from { opacity: 0; } to { opacity: 1; } }
-      @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.85; } }
-    </style>
-  </defs>
-  <rect width="1000" height="240" rx="12" fill="url(#bg)"/>
-  <circle class="dot" cx="120" cy="60" r="3"/>
-  <circle class="dot d2" cx="260" cy="190" r="2.5"/>
-  <circle class="dot d3" cx="410" cy="40" r="2"/>
-  <circle class="dot d4" cx="620" cy="200" r="3"/>
-  <circle class="dot" cx="780" cy="55" r="2.5"/>
-  <circle class="dot d2" cx="900" cy="170" r="3"/>
-  <circle class="dot d3" cx="70" cy="180" r="2"/>
-  <circle class="dot d4" cx="930" cy="45" r="2"/>
-  <text class="name" x="500" y="118" text-anchor="middle">Nico Ostermann</text>
-  <text class="role" x="500" y="162" text-anchor="middle">Data &amp; Feature Infrastructure Engineer</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="Nico Ostermann, Data and Feature Infrastructure Engineer">
+<defs>
+<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+<linearGradient id="nameGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ffb6bc"/></linearGradient>
+<linearGradient id="sweep" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
+<stop offset="0" stop-color="#E50914" stop-opacity="0"/><stop offset="0.5" stop-color="#ff4d5a"/><stop offset="1" stop-color="#E50914" stop-opacity="0"/>
+<animateTransform attributeName="gradientTransform" type="translate" from="-1200 0" to="1200 0" dur="5s" repeatCount="indefinite"/>
+</linearGradient>
+<pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#ffffff" stroke-opacity="0.05"/></pattern>
+<clipPath id="clip"><rect width="1200" height="300" rx="22"/></clipPath>
+<style>
+.label{font:600 13px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:4px;fill:#ff5a64}
+.name{font:800 70px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-1.5px;fill:url(#nameGrad)}
+.sub{font:500 22px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;fill:#c9c9d4}
+.pill{font:600 13px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;fill:#ececf2}
+.code{font:500 15px 'JetBrains Mono','SF Mono',Menlo,Consolas,monospace}
+.file{font:500 12px 'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;fill:#7a7a88}
+@keyframes k0{0%{opacity:0}5.45%{opacity:0}8.45%{opacity:1}90%{opacity:1}98%{opacity:0}100%{opacity:0}}.ln0{opacity:0;animation:k0 11.0s linear infinite}
+@keyframes k1{0%{opacity:0}12.73%{opacity:0}15.73%{opacity:1}90%{opacity:1}98%{opacity:0}100%{opacity:0}}.ln1{opacity:0;animation:k1 11.0s linear infinite}
+@keyframes k2{0%{opacity:0}20.00%{opacity:0}23.00%{opacity:1}90%{opacity:1}98%{opacity:0}100%{opacity:0}}.ln2{opacity:0;animation:k2 11.0s linear infinite}
+@keyframes k3{0%{opacity:0}27.27%{opacity:0}30.27%{opacity:1}90%{opacity:1}98%{opacity:0}100%{opacity:0}}.ln3{opacity:0;animation:k3 11.0s linear infinite}
+@keyframes k4{0%{opacity:0}41.82%{opacity:0}44.82%{opacity:1}90%{opacity:1}98%{opacity:0}100%{opacity:0}}.ln4{opacity:0;animation:k4 11.0s linear infinite}
+@keyframes k5{0%{opacity:0}54.55%{opacity:0}57.55%{opacity:1}90%{opacity:1}98%{opacity:0}100%{opacity:0}}.ln5{opacity:0;animation:k5 11.0s linear infinite}
+</style>
+</defs>
+<g clip-path="url(#clip)">
+<rect width="1200" height="300" fill="#0a0a0f"/>
+<g filter="url(#blur)">
+<circle cx="160" cy="40" r="150" fill="#E50914" opacity="0.55"><animateTransform attributeName="transform" type="translate" values="0 0;70 35;0 0" dur="14s" repeatCount="indefinite"/></circle>
+<circle cx="1060" cy="270" r="190" fill="#8a0b1f" opacity="0.65"><animateTransform attributeName="transform" type="translate" values="0 0;-60 -30;0 0" dur="17s" repeatCount="indefinite"/></circle>
+<circle cx="660" cy="-30" r="120" fill="#ff2d55" opacity="0.25"><animateTransform attributeName="transform" type="translate" values="0 0;-40 40;0 0" dur="12s" repeatCount="indefinite"/></circle>
+</g>
+<rect width="1200" height="300" fill="url(#grid)"/>
+<rect width="1200" height="300" fill="#0a0a0f" opacity="0.25"/>
+<text x="70" y="86" class="label">ML PLATFORM  ·  FEATURE INFRASTRUCTURE</text>
+<text x="66" y="158" class="name">Nico Ostermann</text>
+<text x="70" y="200" class="sub">Data &amp; Feature Infrastructure Engineer</text>
+<rect x="70" y="236" width="71" height="30" rx="15" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.16"/>
+<text x="105.5" y="256" text-anchor="middle" class="pill">Flink</text>
+<rect x="151" y="236" width="71" height="30" rx="15" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.16"/>
+<text x="186.5" y="256" text-anchor="middle" class="pill">Kafka</text>
+<rect x="232" y="236" width="71" height="30" rx="15" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.16"/>
+<text x="267.5" y="256" text-anchor="middle" class="pill">Spark</text>
+<rect x="313" y="236" width="71" height="30" rx="15" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.16"/>
+<text x="348.5" y="256" text-anchor="middle" class="pill">Redis</text>
+<rect x="394" y="236" width="71" height="30" rx="15" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.16"/>
+<text x="429.5" y="256" text-anchor="middle" class="pill">Feast</text>
+<rect x="730" y="46" width="410" height="208" rx="14" fill="#0d0d13" fill-opacity="0.92" stroke="#ffffff" stroke-opacity="0.12"/>
+<circle cx="754" cy="68" r="5" fill="#ff5f56"/><circle cx="772" cy="68" r="5" fill="#ffbd2e"/><circle cx="790" cy="68" r="5" fill="#27c93f"/>
+<text x="935" y="72" text-anchor="middle" class="file">feature.yaml</text>
+<line x1="730" y1="86" x2="1140" y2="86" stroke="#ffffff" stroke-opacity="0.08"/>
+<text x="758" y="112" class="code ln0"><tspan fill="#ff7b86">name:</tspan><tspan fill="#e8e8ee"> user_play_count_1h</tspan></text>
+<text x="758" y="136" class="code ln1"><tspan fill="#ff7b86">entity:</tspan><tspan fill="#e8e8ee"> user_id</tspan></text>
+<text x="758" y="160" class="code ln2"><tspan fill="#ff7b86">window:</tspan><tspan fill="#e8e8ee"> 1h</tspan></text>
+<text x="758" y="184" class="code ln3"><tspan fill="#ff7b86">dedupe:</tspan><tspan fill="#e8e8ee"> event_id</tspan></text>
+<text x="758" y="218" class="code ln4"><tspan fill="#8b8b99">$ featureforge validate-spec</tspan></text>
+<text x="758" y="242" class="code ln5"><tspan fill="#27c93f">✓ user_play_count_1h v1</tspan></text>
+<rect x="0" y="296" width="1200" height="4" fill="#ffffff" fill-opacity="0.06"/>
+<rect x="0" y="296" width="1200" height="4" fill="url(#sweep)"/>
+</g>
 </svg>

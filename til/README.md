@@ -7,6 +7,93 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 15, 2026
+
+**FeatureForge | WP1 Closed: A YAML-Only Feature Reaches Redis, Proven End to End and Enforced by CI**
+
+Seven pull requests were merged today. A feature defined by a YAML spec alone now runs from raw events to Redis with no feature-specific Python file: one decision function, one store with a real Redis expiry and one materializer take the spec. The proof test is hand-calculated, and CI now runs it.
+
+| PR | Commit | What shipped |
+|---|---|---|
+| [#35](https://github.com/oster-dev/featureforge/pull/35) | `52b113a` | ADR-009: one decision function, one store and one materializer driven by the spec |
+| [#36](https://github.com/oster-dev/featureforge/pull/36) | `9e1324b` | `decide_count_vector_update`, compared with the hand-written skip-rate policy on 768 combinations |
+| [#37](https://github.com/oster-dev/featureforge/pull/37) | `d42230f` | Feature record parser and `RedisSpecStore` with `online.ttl` as Redis expiry |
+| [#38](https://github.com/oster-dev/featureforge/pull/38) | `9711627` | `materialize_spec`: Kafka feature topic to Redis for any count or ratio spec |
+| [#39](https://github.com/oster-dev/featureforge/pull/39) | `7513240` | End-to-end proof: `content_play_count_1h` from events to Redis, no new Python file |
+| [#40](https://github.com/oster-dev/featureforge/pull/40) | `764f779` | Nine documents updated so every claim matches a test |
+| [#41](https://github.com/oster-dev/featureforge/pull/41) | `efa0ead` | Three new integration modules added to the CI selection |
+
+**Architecture | Reading the Code Before Writing the ADR (PR #35)**
+
+- Printed both materializers and both Redis stores and compared them instead of assuming. The materializers (210 and 215 lines) differ only in docstring, default topic, key prefix, store class, feature model and Kafka client id.
+- Both stores share the same `WATCH`/`MULTI` shell with 16 retries. Only the write decision differs: inline for the play count, a function for the skip rate. A play count is a count vector of length 1, a skip rate one of length 2.
+- My own first assumption was wrong. I had called `WriteResult` and `UpdateDecision` two vocabularies. The code showed they are the same three literals (`written`, `unchanged`, `stale`) under two names, and an incomparable vector is an exception, not a return value.
+- Wrote ADR-009 with the open questions listed, then closed two of them by reading code: `EntityId` is `^\S+$`, so the stricter validation only affects direct callers, and the Flink plan emits the entity key as `spec.keys[0]`, so the content record carries `content_id`.
+- Existing keys (`featureforge-stream:online:v1:user_play_count_1h:{user_id}`) already equal `v{spec.version}:{spec.name}:{entity}`, so no migration is needed.
+
+**What I understood**
+
+- An ADR written against the real code names its own wrong assumptions before they become code.
+- The unit tests of the materializer patch module-level names (`module.Redis.from_url`, `module.Consumer`, `module.RedisUserPlayCountStore`). Turning the old module into a wrapper would have broken them, so the generic version is purely additive and the old code stays untouched until the wrappers.
+
+**Python | Decision Function, Record Parser and Store (PRs #36 and #37)**
+
+- `decide_count_vector_update` orders windows first, then compares same-window count vectors componentwise. One component is the append-only rule. Incomparable vectors raise `UpdateConflictError`. A rate is never ordered, because a falling rate can be a valid correction.
+- A test compares it with the hand-written skip-rate decision on all 768 combinations (16 stored vectors, 16 incoming vectors, three window positions).
+- `parse_feature_record` validates what the Flink job emits against the spec: field set, schema version, feature name, entity id, window length, non-negative integer counts (no booleans) and derived values recomputed from the spec expressions.
+- Wire format unchanged: the new parser reads what the hand-written Pydantic models write, and the old models read what the new store writes. Both directions are tests.
+- `RedisSpecStore` uses the same `WATCH`/`MULTI` loop with 16 retries. `online.ttl` is set with `SET ... EX` and refreshed only by a written update. Unchanged and stale deliveries do not extend it. An expired key reads as missing, never as zero.
+- Unit tests use a mocked pipeline for the retry, the 16-attempt limit and the TTL argument. Nine integration tests run against real Redis.
+
+**What I understood**
+
+- A pure decision function separates the ordering rules from the storage mechanism. That is what makes a second backend possible later.
+- A mock is honest about its limit: the `WATCH` retry is tested with a mocked pipeline, not with a real concurrent writer. I wrote that into STATUS as a known gap.
+
+**Flink | End-to-End Proof With Hand-Calculated Windows (PRs #38 and #39)**
+
+- `materialize_spec` derives the topic from the spec (`features.{name with hyphens}.v{version}`, equal to the two existing defaults), validates every record against the spec and keeps all guarantees of the hand-written materializers: single partition, empty ranges and tombstones refused, offsets committed only after a successful write.
+- The proof test sends two contents through the validation job, the generic Flink job on the mounted spec, the materializer and the store.
+- Content one has plays at 11:30 and 11:40 (the second delivered twice) and gives 70 windows ending 11:30 to 12:39. Content two has one play at 11:30 and gives 60 windows ending 11:30 to 12:29. Together 130 records.
+- Final windows 12:39 and 12:29 hold a count of 1. A counted duplicate would show 2 in the last window.
+- A second run with the same consumer group does nothing. A replay with a new group reads all 130 records and yields 128 `stale` and 2 `unchanged`, so a replay cannot undo the stored state.
+- The first attempt failed: `/opt/flink/specs` is a read-only mount, so copying a spec into it was rejected. Using the mounted original is better anyway, because it proves that the YAML file in the repo is what runs.
+
+> **Key insight:** the numbers were calculated by hand before the first run, and they matched on the first successful run. That is only possible if the expected values do not come from the code under test.
+
+**CI | A Test That CI Does Not Run Proves Nothing (PR #41)**
+
+- While updating CONTRIBUTING I read my own rule: a new Flink integration module must be added to `MODULES` in `scripts/ci/run_flink_integration.sh`, otherwise CI never runs it. Three tests from the day were not in it.
+- Added `test_spec_store_redis.py`, `test_materialize_spec_kafka_to_redis.py` and `test_content_play_count_end_to_end.py`. The list went from 13 to 16 modules. No workflow change was needed.
+- Checked locally first by running the three modules one after another, each after a TaskManager restart, exactly as the script does.
+- Honest note on the order: the documentation merged first and already said CI runs them, so for about half an hour `main` claimed more than CI did.
+
+**Docs | Writing Only What a Test Proves (PR #40)**
+
+- Updated README, STATUS, ARCHITECTURE, CONTRIBUTING, the platform blueprint, the demo guide, the streaming provenance, the AWS profile and ADR-009 (now Accepted, open items named).
+- Corrected statements that were no longer true: "stores and materializers are hand-written per feature", "`online.ttl` is declarative only", "`content_play_count_1h` is not materialized". The demo's expected spec list had been stale since PR #32 (three specs, not two).
+- Added the limits the tests show: the proof covers one feature, the `WATCH` retry is mock-tested, the hand-written stores remain for the two original features.
+- AWS profile: checked the new caveats against the AWS documentation. DynamoDB conditional writes replace `WATCH`/`MULTI`, DynamoDB TTL deletes expired items in the background and they keep appearing in reads until then, and Managed Flink enables checkpointing by default. The old claim that checkpoint recovery is not verified locally was outdated since stages 4h and 4i.
+
+**Tooling | Whitespace Noise and an Editor Warning**
+
+- My first docs diff showed 905 insertions instead of about 390. Text pasted into a chat shows doubled blank lines, and I had reproduced them. `git diff --stat -w --ignore-blank-lines` exposed it. A short script collapsing runs of three or more newlines restored the style in a second commit.
+- VS Code showed nine yellow `reportMissingImports` warnings in `jobs/feature_from_spec.py`. PyFlink lives only in the Flink image with its own Python 3.11 environment, and no `apache-flink` release lists Python 3.13, so the local `.venv` cannot resolve it. A warning from static analysis, not a defect.
+- Suite counts: 487 to 593 unit tests passed (+106: 24, 63 and 19 from #36 to #38), integration tests deselected from the baseline 44 to 55.
+
+**What This Taught Me**
+
+- An ADR is more useful when it is written after reading the code. My assumption about two vocabularies was wrong and cost nothing to fix before any code existed.
+- A guarantee counts only when CI runs it. A test file that is not in the selection is documentation, not enforcement.
+- Hand-calculated expectations make the first green run meaningful. A number copied from the code would also be green.
+- Diffs deserve a noise check. A formatting artifact can double a pull request.
+
+**Takeaway**
+
+A feature defined only by a YAML spec now reaches Redis from raw events with one decision function, one store with a real expiry and one materializer, and a hand-calculated end-to-end test proves it. CI runs that test. Still unproven: a real concurrent writer against the spec-driven store, JobManager failure, the production TTL values and Spark features from a spec.
+
+---
+
 ## November 14, 2026
 
 **FeatureForge | Dedupe Expiry Fixed, a Feature Defined by YAML Only, Two Practitioner Commands**

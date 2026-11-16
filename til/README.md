@@ -7,6 +7,79 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 16, 2026
+
+**FeatureForge | WP1 Completed: One Declarative Platform Under Both Streaming Features**
+
+A YAML spec now drives the generic Flink job, the generic Redis store and the generic materializer. Both original streaming features run on this shared code, and the unified online client reads both of them. WP2 (Iceberg history and training data) starts tomorrow.
+
+| PR | Commit | Change | CI |
+|---|---|---|---|
+| #42 | `a02a378` | ADR-010: time and availability model of the streaming features | 5/5 ✓ |
+| #43 | `a780341` | Original stores and materializers become thin wrappers over the spec-driven code | 5/5 ✓ |
+| #44 | `4858bc7` | Provenance for stage 4l and ADR-010 in the streaming migration document | 5/5 ✓ |
+| #45 | `09dc93d` | Skip rate in the unified client, identity-conflict test for the skip-rate job | merged ✓ |
+
+**Data & Feature Infrastructure | ADR-010: Time and Availability Model (#42)**
+
+- Wrote and accepted ADR-010 for the streaming time model before building any history table.
+- Kept three questions apart that are easy to mix up: when an event happened (`event_time`), when a value was computed, and when it was actually available online.
+- The rule that carries the design: availability time is never invented afterwards. A later backfill must not rewrite when an earlier online value became visible.
+- The open point is how Redis and the history table stay consistent when one write fails. I chose to make this observable and reconcilable instead of claiming atomic publication.
+
+**Data & Feature Infrastructure | Thin Wrappers over the Spec-Driven Store (#43)**
+
+- Turned `RedisUserPlayCountStore`, `RedisUserSkipRateStore` and both materializers into thin wrappers over `RedisSpecStore` and `materialize_spec`.
+- Constructors, typed models and command lines stayed the same, so no caller had to change.
+- Side effect: `online.ttl` is now a real Redis expiry for all three streaming features, not only for the newest one.
+- Left `decide_skip_rate_update` untouched as an independent oracle, so the generic decision function is still compared against an implementation it was not derived from.
+- Deleted an 11-test module only after mapping every case to a test in the new module. Four cases had no counterpart, and I added those tests first.
+- Takeaway: moving code is not the risky part, losing the tests that protected it is.
+
+**Data & Feature Infrastructure | Unified Client Reads the Skip Rate (#45)**
+
+- Added an optional `skip_rate_reader` to `OnlineFeatureClient`. Without it the client behaves exactly as before, so every existing test and caller still works.
+- One private method now reads both streaming features, so missing, error, entity mismatch and freshness are handled the same way for each.
+- A skip rate of `0.0` is a valid value and stays *present*. A missing key, including one that expired through its TTL, is reported as *missing*, never as zero.
+- A read for one user and one content item now returns 17 entries instead of 16. This is a documented contract change.
+- Wrote a Flink integration test showing that a conflicting payload for the same `event_id` fails the skip-rate job with `EventIdentityConflictError`. Before, this was proven for the play count only.
+
+| Guarantee | Evidence |
+|---|---|
+| Skip rate is read next to the play count with explicit availability and freshness | `test_online.py`, `test_unified_online.py` |
+| An expired or missing key is never reported as zero | `test_online.py` |
+| The CLI forwards the skip-rate key prefix | `test_online_cli.py` |
+| A conflicting payload for the same `event_id` fails the skip-rate job | `test_user_skip_rate_event_identity.py` |
+
+**CI | New Test Modules Must Be Registered**
+
+- The Flink integration job runs a fixed `MODULES` list in `scripts/ci/run_flink_integration.sh`. A new test file that is not on that list passes locally and never runs in CI.
+- Added the new module to the list in the same commit as the test.
+- Takeaway: a green test that CI never executes proves nothing.
+
+**Relevance to Core Goal**
+
+A platform guarantee only counts when a test exercises it and CI actually runs that test. Compatibility is a design choice, not an accident: an optional constructor argument kept every old caller working while the contract grew. Separating event time from availability time is the foundation of point-in-time correct training data, and it is what the Iceberg history in WP2 builds on.
+
+**What I Deliberately Skipped**
+
+- Further aggregation operators (`sum`, `avg`, `min`, `max`) with a `window_replace` store. They belong to a later phase and would have made today's PRs too large to review.
+- JobManager-failure recovery. It is an operations drill, not a requirement for finishing WP1.
+- Any claim about production scale. Everything here is local, synthetic and production-inspired.
+
+**What Starts Tomorrow**
+
+1. WP2: a local Iceberg catalog in Docker Compose that PyIceberg and Spark can both read.
+2. The history writer.
+3. The Spark backfill from the spec.
+4. The label spec.
+
+**Takeaway**
+
+WP1 is complete: the spec drives the Flink job, the Redis store and the materializer, both original streaming features run on that shared code, and the unified client reads both. ADR-010 fixes the time model (event time, computation time, availability time) before WP2 starts. Production scale, JobManager failure and further aggregation operators remain out of scope.
+
+---
+
 ## November 15, 2026
 
 **FeatureForge | WP1 Closed: A YAML-Only Feature Reaches Redis, Proven End to End and Enforced by CI**

@@ -9,16 +9,20 @@ TIL Started: April 13, 2026
 
 ## November 16, 2026
 
-**FeatureForge | WP1 Completed: One Declarative Platform Under Both Streaming Features**
+**FeatureForge | WP1 Completed, WP2 Started: From Declarative Specs to Recorded Availability**
 
-A YAML spec now drives the generic Flink job, the generic Redis store and the generic materializer. Both original streaming features run on this shared code, and the unified online client reads both of them. WP2 (Iceberg history and training data) starts tomorrow.
+A YAML spec now drives the generic Flink job, the generic Redis store and the generic materializer. Both original streaming features run on this shared code, and the unified online client reads both of them. WP2 started the same day: the materializer now records when each online value became available, in an Iceberg history table that PyIceberg writes and Spark reads, and a read function answers what serving held at a given time.
 
 | PR | Commit | Change | CI |
 |---|---|---|---|
 | #42 | `a02a378` | ADR-010: time and availability model of the streaming features | 5/5 ✓ |
 | #43 | `a780341` | Original stores and materializers become thin wrappers over the spec-driven code | 5/5 ✓ |
 | #44 | `4858bc7` | Provenance for stage 4l and ADR-010 in the streaming migration document | 5/5 ✓ |
-| #45 | `09dc93d` | Skip rate in the unified client, identity-conflict test for the skip-rate job | merged ✓ |
+| #45 | `09dc93d` | Skip rate in the unified client, identity-conflict test for the skip-rate job | 5/5 ✓ |
+| #46 | `8207da2` | ADR-011: history table layout and evidence append | 5/5 ✓ |
+| #47 | `870599a` | History table and idempotent evidence append for spec-driven features | 5/5 ✓ |
+| #48 | `fbcf2ad` | The spec-driven materializer appends publication evidence to the history table | 5/5 ✓ |
+| #49 | `3fc2dcf` | Published-as-of retrieval over the history table | merged ✓ |
 
 **Data & Feature Infrastructure | ADR-010: Time and Availability Model (#42)**
 
@@ -51,32 +55,109 @@ A YAML spec now drives the generic Flink job, the generic Redis store and the ge
 | The CLI forwards the skip-rate key prefix | `test_online_cli.py` |
 | A conflicting payload for the same `event_id` fails the skip-rate job | `test_user_skip_rate_event_identity.py` |
 
-**CI | New Test Modules Must Be Registered**
+**Data & Feature Infrastructure | ADR-011: History Table Layout and Evidence Append (#46)**
+
+- ADR-010 left four points open. ADR-011 decides them: who appends the evidence, the catalog for the local profile, the table layout, and the partitioning.
+- The spec-driven materializer appends the evidence itself. A second consumer reading the feature topic was rejected, because it cannot tell `written` from `stale` and has no reading of the store clock.
+- One table per spec, named by `offline.table` of the spec, with columns derived from the spec: entity key, counts, derived values, `published_at` and a hash `update_id`. A new spec yields its history table without platform code.
+- `update_id` is a SHA-256 over the update identity from ADR-010. Kafka offsets, `ingested_at`, `computed_at` and `published_at` are not part of it.
+- Partitioned by `day(published_at)`, because published-as-of queries filter on `published_at`.
+- Before writing the ADR I ran a feasibility check outside the repository: PyIceberg wrote a table through its SQL catalog on a SQLite file, and Spark 3.5 read the same table through the Iceberg JDBC catalog (`iceberg-spark-runtime-3.5_2.12` 1.12.0, `sqlite-jdbc` 3.46.1.3).
+- The REST catalog with an object store is deferred as a second profile. It needs two more services and the local profile does not.
+
+**Data & Feature Infrastructure | History Table and Idempotent Append (#47)**
+
+- `history.py` derives columns, Iceberg schema and the `day(published_at)` partition spec from the spec, and fails loudly if an existing table does not match the spec.
+- `HistoryTable.append` adds only evidence that the table does not hold yet. The first row of an update identity wins, also inside one batch. Check and append are not atomic, so one appender per table is safe.
+- The first test run failed: writing a partitioned table needs `pyiceberg-core`, and my extra did not include it. The feasibility check had passed only because its table was not partitioned. Added `pyiceberg-core` to the `streaming` extra.
+- The Iceberg catalog name is part of every catalog row. A Spark catalog that reads the table must use the same name, so the code fixes one constant for both sides.
+- Spark test: PyIceberg appends, Spark reads the same table, including `published_at` to the microsecond.
+
+| Guarantee | Evidence |
+|---|---|
+| Table, columns and partition come from the spec | `test_history.py` |
+| A redelivery adds no row and keeps the first `published_at` | `test_history.py` |
+| A table that does not match the spec fails loudly | `test_history.py` |
+| Spark reads what PyIceberg appended | `test_history_spark_read.py` |
+
+**Data & Feature Infrastructure | Evidence Append in the Materializer (#48)**
+
+- `materialize_spec` takes `--history-root`. Without it nothing changes. With it, the materializer records one evidence row per accepted update.
+- Per record: store write, then the UTC clock, buffered. `written` and `unchanged` are offered to the history, `stale` adds nothing. Per batch: the buffer is appended once, before the offset commit.
+- A failed append raises and the offset is not committed. The replay records a later `published_at`, never an earlier one, so after a recovery `published_at` is an upper bound of the real visibility.
+- The two original entry points read the new option defensively, so they stay unchanged.
+- Integration test with real Kafka, Redis and the history table: outcomes `written`, `written`, `stale`, wall-clock `published_at`, and a replay with a fresh consumer group that adds no rows.
+- CI failed on the first push. I had created two test files with the same name, one under `unit/` and one under `integration/`. Without `__init__.py` pytest imports modules by base name, and the collection of the whole directory stopped. Locally I had only run each file alone.
+- Fix: unique module name for the integration test. Verified with a collection over the whole `tests` directory and a check for duplicate file names.
+
+| Guarantee | Evidence |
+|---|---|
+| Evidence is appended after the store write and before the offset commit | `test_materialize_spec_history.py` |
+| A stale update adds no evidence | `test_materialize_spec_history.py` |
+| A failed append does not commit the offset | `test_materialize_spec_history.py` |
+| A replay after a failed append records a later `published_at` | `test_materialize_spec_history.py` |
+| Kafka to Redis to history, including a replay without new rows | `test_materialize_spec_kafka_to_history.py` |
+
+**Data & Feature Infrastructure | Published-as-of Retrieval (#49)**
+
+- `published_as_of(history, entities, as_of)` answers what serving held at a given time. The version with the latest `published_at` at or before `as_of` wins, ties go to the newer window.
+- The value is available while `as_of` is before `published_at + online.ttl`. The cutoff is exact: one microsecond before it is *present*, at the cutoff it is *expired*.
+- The result separates `present`, `not_published` and `expired`. A missing value carries no record, so it can never be mistaken for zero.
+- A later version extends the availability, because a new accepted write refreshes `online.ttl`. An unchanged delivery adds no evidence, so it does not.
+- The time filter runs in memory for now. Pushing it into the scan with partition pruning is a later optimization, because I could not verify how PyIceberg binds a `datetime` literal for `timestamptz`.
+- 13 unit tests on a real local Iceberg table, no Spark needed. The baseline suite shows 633 passed, and a collection over the whole `tests` directory is clean.
+
+| Guarantee | Evidence |
+|---|---|
+| Nothing is visible before the first publication | `test_published_as_of.py` |
+| A correction replaces the value only from its own `published_at` | `test_published_as_of.py` |
+| The TTL cutoff is exact to the microsecond | `test_published_as_of.py` |
+| A later version extends the availability | `test_published_as_of.py` |
+| A newer window replaces an older one, even with a lower count | `test_published_as_of.py` |
+| A missing or expired value carries no record | `test_published_as_of.py` |
+
+**CI | New Test Modules Must Be Registered and Named Uniquely**
 
 - The Flink integration job runs a fixed `MODULES` list in `scripts/ci/run_flink_integration.sh`. A new test file that is not on that list passes locally and never runs in CI.
-- Added the new module to the list in the same commit as the test.
-- Takeaway: a green test that CI never executes proves nothing.
+- Added each new module to the list in the same commit as the test, and to the matching list in CONTRIBUTING.
+- Test file names must be unique across `unit/` and `integration/`. A quick check: `find tests -name "*.py" ! -name "__init__.py" -exec basename {} \; | sort | uniq -d` prints nothing.
+- Takeaway: a green test that CI never executes proves nothing, and a collection over the whole directory is part of the check.
+
+**Git | Squash Merges and Documentation Hygiene**
+
+- A squash-merged branch is not "merged" for Git. `git branch -d` refuses, and `git branch -D` is the right command after checking the PR on GitHub.
+- Updated STATUS, ARCHITECTURE, README, demo guide and the streaming provenance across the PRs, so no document still describes the hand-written stores as current or the history as not started.
+- Used small Python scripts that assert every text pattern occurs exactly once. If a pattern did not match, the script stopped before writing anything.
+- A wrong file path in my own command (`scripts/ci_...` instead of `scripts/ci/...`) was caught by the `grep` output, not by guessing.
+
+**Shell | zsh and Pasted Commands**
+
+- zsh tried to expand a `?` inside a pasted comment and failed with `no matches found`. I keep comments out of pasted command blocks now.
+- A heredoc (`<<'EOF'`) has to run as one complete block. When only the Python part ran, the test file never existed, and `git status` showed no `??`. Checking `git status` before committing saved the PR.
 
 **Relevance to Core Goal**
 
-A platform guarantee only counts when a test exercises it and CI actually runs that test. Compatibility is a design choice, not an accident: an optional constructor argument kept every old caller working while the contract grew. Separating event time from availability time is the foundation of point-in-time correct training data, and it is what the Iceberg history in WP2 builds on.
+A platform guarantee only counts when a test exercises it and CI actually runs that test. Compatibility is a design choice, not an accident: an optional constructor argument kept every old caller working while the contract grew. Recording the moment a value became available, instead of reconstructing it later, is the foundation of point-in-time correct training data. The history table and the published-as-of rule are the first concrete step toward training data that contains only what serving could have known.
 
 **What I Deliberately Skipped**
 
-- Further aggregation operators (`sum`, `avg`, `min`, `max`) with a `window_replace` store. They belong to a later phase and would have made today's PRs too large to review.
+- Further aggregation operators (`sum`, `avg`, `min`, `max`) with a `window_replace` store. They belong to a later phase and would have made the PRs too large to review.
 - JobManager-failure recovery. It is an operations drill, not a requirement for finishing WP1.
+- A REST catalog with an object store. The local SQLite profile supports one writer, and a second profile comes when several writers matter.
+- Several materializer processes and compaction of the history table. Both are named as open items in ADR-011.
+- Pushing the time filter of the published-as-of read into the scan. Correctness first, optimization later.
 - Any claim about production scale. Everything here is local, synthetic and production-inspired.
 
 **What Starts Tomorrow**
 
-1. WP2: a local Iceberg catalog in Docker Compose that PyIceberg and Spark can both read.
-2. The history writer.
-3. The Spark backfill from the spec.
-4. The label spec.
+1. Spark backfill from the spec, with parity to the spec reference on the golden fixtures.
+2. A test that a backfill leaves recorded evidence unchanged.
+3. A CLI for the published-as-of read.
+4. The label spec and the training dataset API on top of the read.
 
 **Takeaway**
 
-WP1 is complete: the spec drives the Flink job, the Redis store and the materializer, both original streaming features run on that shared code, and the unified client reads both. ADR-010 fixes the time model (event time, computation time, availability time) before WP2 starts. Production scale, JobManager failure and further aggregation operators remain out of scope.
+WP1 is complete, and the first block of WP2 is in place: the materializer records when each value became available, the history table holds the evidence in a form that PyIceberg writes and Spark reads, and a read function applies the rule of ADR-010 to it, including the exact TTL cutoff. Two of today's failures came from assumptions I had not tested: a missing dependency for partitioned writes and two test files with the same name. Both showed up in the first run, and both are now covered by a check.
 
 ---
 

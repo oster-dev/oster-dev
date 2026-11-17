@@ -7,6 +7,69 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 17, 2026
+
+**FeatureForge | WP2: Nine PRs Merged in One Day (#50–#58), the Label Side of the Platform**
+
+Today `main` moved to `f9c30c0`. Every commit is signed (Verified). The day built the label side of the platform: ADR-012, the label spec, an exact reference and a Spark evaluation that matches it. Along the way it added the Spark backfill from the feature spec, a PostgreSQL catalog for the history table, a deterministic simulator and mypy in CI. The full suite grew from 747 to 769 to 786 tests.
+
+| PR | Commit | Change | CI |
+|----|--------|--------|----|
+| #50 | `9c83d93` | feat: add a spec-driven Spark backfill with parity to the spec reference | 5/5 ✓ |
+| #51 | `405f2b1` | feat: add `backfill-spec` to write spec-driven Spark backfills as Parquet | 5/5 ✓ |
+| #53 | `23c2e3b` | docs: add ADR-012 for label specs | 5/5 ✓ |
+| #52 | `eee8255` | feat: add a PostgreSQL catalog profile for the history table in Docker Compose | 5/5 ✓ |
+| #54 | `e605399` | feat: add a deterministic behavioral simulator for interaction events | 5/5 ✓ |
+| #55 | `421c1bb` | chore: add mypy to the dev tooling, fix type errors, run it in CI | 5/5 ✓ |
+| #56 | `bc15dda` | feat: add the LabelSpec model, loader and `validate-label-spec` (ADR-012) | 5/5 ✓ |
+| #57 | `a6f0ffc` | feat: add the exact label reference evaluation for ADR-012 | 5/5 ✓ |
+| #58 | `f9c30c0` | feat: add the Spark label evaluation with parity to the reference (ADR-012) | ⏳ |
+
+**FeatureForge | Labels: Window, Reference and Spark Parity**
+
+- A label looks forward: its window is `(t, t + horizon]`, the mirror of the feature window `(t - size, t]`. An event at `t` belongs to the features and never to the label. That is the leakage rule ADR-012 carries.
+- A window with `t + horizon > data_end` is unknown, not false. Such observations are excluded and counted in `excluded_incomplete`. A window ending exactly at `data_end` is complete.
+- A complete window without events gives `false` for `exists` and `0` for `count`, never null. This differs from the feature backfill, where a missing rate is null.
+- Identity conflicts are checked across all input events before any filtering. `ingested_at` is not part of the identity, so a redelivery with a later `ingested_at` counts once.
+- The reference (`evaluate_labels`) is the oracle. The Spark evaluation (`backfill_labels`) must return the same values for the same input, including the excluded count.
+- A repeated observation gives a repeated value in the reference. Spark would collapse it with `groupBy`, so every observation gets a row id before the join and the aggregation groups by it.
+
+**FeatureForge | Tests That Can Fail**
+
+- A test that passes on the first run proves nothing until it can fail. I changed one comparison at a time and checked which tests turned red.
+- Window start `>` to `>=` and `data_end` `<=` to `<` each made nine tests fail. The hand-calculated boundary tests name the broken rule, and the parity tests catch it as well.
+- The parity test checked its own data. The first random world had 5 users and almost every window held an event, so all values were true. The sanity assertions failed and showed that the test could not tell false from unknown. With 60 users, windows are empty in roughly one case in six.
+- Spark `collect()` returns naive timestamps in the local time zone of the Python process. The tests compare `unix_micros` integers instead.
+
+**Git and Shell**
+
+- Create the branch before the first commit. I nearly committed on `main` and caught it before pushing.
+- macOS `sed -i` needs an empty backup argument and read my expression as the suffix. A short Python replacement with `assert text.count(old) == 1` is portable and fails loudly if the line moved.
+- Commit before a mutation probe. `git checkout` cannot restore a file that was never committed.
+- `pytest | tail` shows nothing until the end. The full suite takes about nine minutes because the integration tests run Flink, Kafka and Redis in Docker. Low CPU on the host and no `java` process looked like a hang, but the JVM lives in the container. `docker ps` showed the recreated taskmanager. `tee` shows the progress live.
+- A squash merge makes `git branch -d` warn that the branch is not merged. The content is on `main`.
+
+**What I Deliberately Skipped**
+
+- A CLI command to run label backfills.
+- Extracting the shared identity check from reference and Spark into one function.
+- Any claim about label quality on real data. The sources are still synthetic.
+
+**What Starts Tomorrow**
+
+1. The training dataset: features from `(t - size, t]` as published at `t`, joined with the label from `(t, t + horizon]` for the same observation.
+2. An ADR for that join before the code.
+
+**Relevance to Core Goal**
+
+A feature platform is only as good as its training data. Features that look backward, labels that look forward and an exact rule for what counts as unknown are what keeps leakage out of that data. A Spark evaluation that matches an exact reference, with tests that were shown to fail when a boundary moves, is the evidence a platform team can trust.
+
+**Takeaway**
+
+The label side now has a spec, an oracle and a Spark implementation that must match it. The boundary rules are pinned by tests that fail when a rule is broken. PR #58 was still waiting for CI at the end of the day, so confirm it is green. Label quality on real data remains unproven because the sources are synthetic.
+
+---
+
 ## November 16, 2026
 
 **FeatureForge | WP1 Completed, WP2 Started: From Declarative Specs to Recorded Availability**

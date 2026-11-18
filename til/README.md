@@ -7,6 +7,74 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 18, 2026
+
+**FeatureForge | WP2: Training Datasets from Features and Labels, End to End**
+
+Both modes of ADR-014 (event time and published-as-of), the proof that Redis and `published_as_of` agree, and a command line entry point are on `main`. The CI run of the last PR was green.
+
+| PR | Commit | What |
+|----|--------|------|
+| #59 | `c2c15a8` | ADR-013 for the online store protocol and a Cassandra backend (decision only) |
+| #60 | `fa0dade` | ADR-014 for training datasets from features and labels |
+| #61 | `cd8ff57` | Event-time training dataset |
+| #62 | `a05be67` | Published-as-of mode with a pinned history snapshot |
+| #63 | `98c10c4` | CI runs the published-as-of and dataset integration tests |
+| #64 | `55d490d` | All documents brought up to date |
+| #65 | `2e6e1c2` | Parity test between Redis and `published_as_of` |
+| #66 | `03b1cc0` | Docs: parity test marked as done |
+| #67 | `dfa7d1f` | `build-training-dataset` command |
+
+**Training Datasets | ADR-014 in Two Modes**
+
+- Event time: features come from events over `(t - size, t]`, the label from events over `(t, t + horizon]`, and a label is never null.
+- An observation with an incomplete label window is excluded and counted.
+- The dataset is written as Parquet partitioned by the UTC day, and the manifest is written last, so a directory without `_manifest.json` is not a dataset.
+- Published-as-of: a Spark join reads the history at a pinned snapshot, adds status columns and records the snapshot ids in the manifest.
+- The Python `published_as_of` stays the oracle that the Spark join is checked against.
+- Full test run after #61: 798 passed in 561.60 s.
+
+**Online/Offline Parity | Redis vs `published_as_of` (#65)**
+
+- `published_at` is the wall-clock time the materializer stamps after a `written` result, so time travel needs two bounded runs with an `as_of` taken between them.
+- After run 1, Redis and the oracle agree on the counts and the observation time.
+- Before run 1, the oracle returns `not_published`, never a value.
+- After run 2, Redis holds 3 while `as_of` from between the runs still returns 2.
+- The test sits in a file that `scripts/ci/run_flink_integration.sh` already runs, so no CI entry was needed.
+
+**CLI | `build-training-dataset` (#67)**
+
+- Takes feature specs, a label spec, events and observations as JSONL, a mode, `--data-end` and a new output directory.
+- Exit codes follow `backfill-spec`: 0 ok, 1 invalid input or no complete label window, 2 a file or the history root is missing or PySpark is not installed.
+- Mode `published_as_of` pins the current snapshot of every feature and records it under `history` in the manifest.
+- Never overwrites an output: the second run prints `output already exists` and exits with 1.
+- `HistoryTable` calls `ensure_table`, which creates a missing namespace and table, so a read command has to check `table_exists` first.
+
+**Mutation Probes | Does the Test Really Test Something**
+
+| Change | Expected | Result |
+|--------|----------|--------|
+| Day partition shifted by one day | Only the manifest test fails | 1 failed, 11 passed |
+| `published_at > as_of` filter replaced by `if False:` | Parity test fails | Failed at the `not_published` check |
+| `table_exists` guard replaced by `if False:` | CLI test for a missing table fails | Failed: the table was created and the message was "has no snapshot" |
+
+**Testing & CI | What I Learned**
+
+- `spark.jars.packages` only counts for the session that starts the JVM. A unit test with a plain Spark session ran first in the same pytest process, and the Iceberg test then failed with `DATA_SOURCE_NOT_FOUND`. Run alone, both files passed.
+- A new integration module runs in CI only if it is in the pytest list and in `required_suites` of the report check.
+- The report check prints `len(cases)` and has no fixed count, so a new test needs no number changed.
+- `mypy` has `files = ["src"]`, so tests are not checked. Running it on a single test file gave `import-untyped` errors that CI never sees.
+
+**Relevance to Core Goal**
+
+A dataset that records its pinned history snapshot, its exclusion counts and its columns in a manifest is reproducible and auditable. That is the contract between a feature platform and the training code that reads from it. Proving that the online value equals the offline value at the same time is the core correctness claim of a feature store.
+
+**Takeaway**
+
+Training datasets can now be built end to end in both modes, with a manifest that records snapshots, exclusions and columns, and a command line entry point. Redis and `published_as_of` are shown to agree for one entity over two runs. Three mutation probes failed in the expected places. TTL expiry, several entities, the training loader and the Iceberg offline store remain open.
+
+---
+
 ## November 17, 2026
 
 **FeatureForge | WP2: Nine PRs Merged in One Day (#50–#58), the Label Side of the Platform**

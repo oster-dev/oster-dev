@@ -7,6 +7,146 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 19, 2026
+
+**FeatureForge | WP2: Loaders, the Iceberg Event Fact Store and Snapshot-Pinned Datasets (ADR-014, ADR-015)**
+
+Ten PRs landed on `main` today. The two dataset loaders of ADR-014 close the read side of the training datasets. ADR-015 then went from a proposal to a tested path: Kafka, validated events, an Iceberg fact table, and training datasets that read the table at a pinned snapshot and can be rebuilt at that snapshot. The benchmark found a real limit (the append gets slower with the number of data files), and the plan for the table maintenance is written down for tomorrow. Every merged PR showed green checks; one failure on the first ADR-015 run disappeared after a re-run.
+
+| PR | Commit | What |
+|----|--------|------|
+| #68 | `b59be75` | Training dataset loader (ADR-014) |
+| #69 | `bda7aab` | Arrow batch loader and its benchmark (ADR-014) |
+| #70 | `f297f12` | Docs: ADR-015 proposed for the Iceberg event fact store |
+| #71 | `9303f5d` | Event fact table contract |
+| #72 | `e5971a4` | Idempotent event append with identity conflicts |
+| #73 | `c0a079b` | Event writer that appends validated Kafka events |
+| #74 | `24d0340` | `event_time` datasets read from the event table at a pinned snapshot, ADR-015 accepted |
+| #75 | `2476fd3` | Rebuild a dataset at a chosen snapshot with `--events-snapshot-id` |
+| #76 | `bb5d4ef` | Benchmark for the event append |
+| #77 | `2535382` | `--max-batch-seconds` for the event writer |
+
+**Training Datasets | The Two Loaders (#68, #69)**
+
+- `load_training_dataset` reads a dataset directory written by `build-training-dataset` into a pandas frame.
+- `open_training_batches` reads the same directory as Arrow record batches, with a default batch size, for training code that must not hold the whole dataset in memory.
+- `scripts/benchmark_training_loaders.py` writes a synthetic dataset in the layout of `build-training-dataset` and reads it with each loader in its own process.
+- It reports the time to the first batch, the rows per second and the peak memory the read adds (defaults: 5 million rows, 30 days, 3 repeats).
+- The operating system caches the files, so the numbers describe a warm read. The pandas loader also sorts the rows by key, which the Arrow loader does not do, so the two are not a like-for-like comparison.
+
+**Event Fact Store | Table Contract (#71)**
+
+- The facts live in `facts.interaction_events`, partitioned by `day(event_time)`, with an `ingested_at` column next to the event payload.
+- `ensure_event_table` creates the table, `check_event_table` compares the schema and the partition spec with the expected signature and raises `EventLogSchemaError` on a difference, and `open_event_table` opens an existing table and never creates one.
+- The distinction matters for read commands: a read must not create a table as a side effect, the same lesson as `table_exists` for the history on November 18.
+- `pinned_events_snapshot_id` returns the current snapshot and fails on an empty table.
+
+**Event Fact Store | Idempotent Append (#72)**
+
+- `EventLog.append` first removes repeated ids inside the call and fails if two copies of an id carry different payloads.
+- It then refreshes the table, looks up the stored rows for the incoming ids with an `In("event_id", ...)` filter and appends only the ids it does not hold yet. It returns the number of rows added.
+- The first row of an id wins and keeps its `ingested_at`.
+- The same id with another payload (`ingested_at` excluded) raises `EventIdentityConflict` for the whole call and writes nothing.
+- The check and the append are not atomic, so the rule is one writer per table.
+
+**Streaming | Event Writer (#73)**
+
+- The writer reads a raw topic in its own consumer group with auto commit off and starts at the committed offset, or at the low watermark when nothing is committed.
+- `consume_batch` is the part that needs no Kafka: it validates every payload, appends the valid events and counts what happened to every payload. Rejected payloads are counted, not stored.
+- The offset of a batch is committed only after the append. A re-read after a crash then adds nothing, because the append is idempotent.
+- A bounded run stops at the high watermark, an unbounded run keeps polling and flushes a partial batch when the topic is idle.
+- The batch size defaults to 1,000, and the offset commit is the helper that `materialize_spec` already uses.
+
+**Training Datasets | Snapshot-Pinned Events (#74)**
+
+- `build-training-dataset --mode event_time --events-root` pins the snapshot that is current at the start and records the table and the snapshot id in the manifest under `events`.
+- `read_events` (new `events_spark.py`) reads the table at one snapshot and casts it to the frame of the JSONL path, so columns, order and types are equal.
+- A dataset from the table equals the dataset from the same JSONL events, and an append after the pin is not visible at the pin.
+- A missing or empty table fails and creates nothing. Exactly one of `--events` and `--events-root` is required, and `--events-root` is rejected in mode `published_as_of`.
+- A JSONL dataset has no `events` block, so existing manifests do not change.
+- The PR changed 11 files (428 insertions, 13 deletions): `cli.py`, `training_dataset.py`, `event_log.py`, the new module, and the tests `test_cli_training_dataset.py`, `test_events_spark_read.py` and `test_event_log_read.py`.
+- ADR-015 changed from "Nothing is implemented" to Accepted with the open items listed. ADR-014 now says that the table path records the snapshot id where the JSONL path has only the open content hash. README and STATUS list the event fact store as delivered, with its limitations.
+
+**Training Datasets | Rebuild at a Chosen Snapshot (#75)**
+
+- The manifest named a snapshot, but the command could not be told to use it, so a dataset could not be rebuilt.
+- `require_events_snapshot(table, snapshot_id)` returns the chosen snapshot if the table has it, the current one if none is given, and fails for an unknown id.
+- `--events-snapshot-id` rebuilds a dataset at the recorded snapshot after the table grew: manifest and frame equal the first run, and the dataset at the latest snapshot differs, so the append mattered.
+- An unknown id exits with 1 and writes nothing. The option needs `--events-root`.
+
+**Performance | Benchmark of the Event Append (#76)**
+
+- `scripts/benchmark_event_append.py` fills the table (one append per day) and measures `EventLog.append` for 1,000 new events and for 1,000 events the table already holds.
+- The lookup filters only by `event_id`. Random UUIDs cannot be pruned, so the lookup read every data file.
+
+| Rows | Data files | Files read by the lookup | 1,000 new events, median |
+|-----:|-----------:|-------------------------:|-------------------------:|
+| 999,990 | 30 | 30 | 0.14 s |
+| 100,000 | 100 | 100 | 0.40 s |
+| 99,900 | 300 | 300 | 1.18 s |
+
+- The cost follows the number of files (about 4 ms each), not the number of rows. 100,000 and 1 million rows in 30 files took the same time.
+- The duplicate column was not clean: at 300 files it was smaller than the new column. I could not explain it, so it is not part of the conclusion.
+- Nothing is measured beyond 300 files, so a larger count is an extrapolation. Extrapolated writer capacity is about `250,000 / files` events per second.
+- Decision: no filter on `event_time` in the lookup. It would prune partitions, but an event id that comes back with another time would no longer be found, which is the identity conflict the append must catch.
+
+**Streaming | Why the Idle Flush Creates Small Files (#77)**
+
+- The writer flushes a partial batch at the first idle poll, so every pause of one second writes its own append and its own file.
+- Modelled with Poisson arrivals (a model, not a measurement): about `86400 · λ · e^(−λ)` idle flushes per day plus `86400 · λ / 1000` full batches.
+
+| Rate | Data files per day (model) |
+|-----:|---------------------------:|
+| 0.1 events/s | about 7,800 |
+| 1 event/s | about 31,900 |
+| 10 events/s | about 900 |
+| 100 events/s | about 8,640 |
+
+- Low rates are worse than high rates: at 1 event per second nearly every pause writes a tiny file.
+- When the writer falls behind, the idle flush stops by itself and the batches fill to 1,000, but the throughput drops with the file count.
+- `--max-batch-seconds` (default 0 keeps today's behaviour) writes a partial batch on an idle poll only after its oldest event has waited that long. A default of 1 would have been worse: at 10 events per second it would flush every second.
+- The decision is a pure function, `idle_flush_due`, with a unit test. The loop keeps its default behaviour under the existing Kafka test. That the loop really waits for a larger value is not covered, because it needs real time.
+- There is no demo producer in `src` or `scripts`, only producers in tests, so the file growth is a property of the design and not an observed problem yet.
+
+**Iceberg | Table Maintenance (Research for ADR-016)**
+
+- Streaming ingestion creates many small files. The fix is compaction with the Spark procedure `rewrite_data_files`.
+- PyIceberg does not do compaction or orphan file cleanup at the time of writing, so this belongs to Spark, which is already in my stack (PySpark 3.5.9).
+- PyIceberg writes fast appends, so the manifest count grows too and `rewrite_manifests` becomes relevant.
+- Compaction alone keeps the old snapshots readable. `expire_snapshots` removes them and would silently break the reproducibility that the manifests promise.
+- Tags are named references to a snapshot with their own retention and protect it from expiry. PyIceberg 0.12.0 has `create_tag`, `remove_tag` and `create_branch`.
+- A rewrite conflicts with a writer that appends to the same partition, so compact past days only and use partial progress.
+- Order: compaction, then snapshot expiry, then orphan files with a 3 day safety window and a dry run first. The sources do not agree on the order and I follow the majority.
+
+**Testing, CI & Git | What I Learned**
+
+- The cost of an append in Iceberg is driven by the number of files, not by the number of rows. I expected rows to matter and the benchmark showed otherwise.
+- A decision that depends on time belongs in a pure function. `idle_flush_due` could be tested without Kafka.
+- Chaining Ruff, mypy, the tests, the commit and the push with `&&` means a red step stops the push.
+- Patch scripts that assert each anchor matches exactly once wrote nothing when one anchor was wrong, which made a day of documentation changes safe.
+- Before the CLI tests the state was Ruff, mypy, 45 unit tests and the Spark snapshot test green. Six new CLI integration tests then ran together with the three existing ones, nine in total.
+- `git branch -d` warns "not yet merged to HEAD" after a squash merge, because the squash commit has a different hash. The warning is harmless once the PR is merged and `main` is pulled.
+- `mypy` still checks only `src`, so tests and scripts are covered by Ruff only.
+
+**Relevance to Core Goal**
+
+A table that is correct but slows down with every commit is not production ready, and a dataset that cannot be rebuilt is not a feature store. Today's work gives both: facts that arrive exactly once, datasets that record and can replay their snapshot, and a measured limit with a written plan. Compaction, snapshot expiry and the link between snapshots and reproducible training data are core work of a Data & Feature Infrastructure engineer. Measuring the limit before fixing it, and refusing the fast filter that would weaken the identity guarantee, is the kind of decision this role needs.
+
+**What I Deliberately Skipped**
+
+- Compaction itself. ADR-016 for the maintenance of the event table comes first.
+- The parity test between the event writer and the Flink path on the same events.
+- A lag metric for the writer (end offset minus committed offset).
+- Anything beyond 300 files in the benchmark, and an explanation of the duplicate column.
+- A test that the writer loop waits for a larger `--max-batch-seconds`.
+- A demo producer, so the writer has only been run bounded in tests.
+
+**Takeaway**
+
+The event fact store is delivered from the table contract to snapshot-pinned datasets that can be rebuilt at a recorded snapshot, next to the two loaders of ADR-014. The append costs about 4 ms per data file, measured up to 300 files, and the writer can now hold partial batches to write fewer, larger files. Open decision for tomorrow: should a dataset run write a tag on its pinned snapshot? It guarantees reproducibility per dataset, but it changes table metadata and breaks the earlier rule that a dataset run leaves the table unchanged.
+
+---
+
 ## November 18, 2026
 
 **FeatureForge | WP2: Training Datasets from Features and Labels, End to End**

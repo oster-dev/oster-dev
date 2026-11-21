@@ -7,6 +7,82 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 21, 2026
+
+**FeatureForge | The Feature Serving Service Is Built, Measured and Observable**
+
+One service answers feature lookups from Redis with an explicit status per value. It has a reproducible load test, two measured optimizations, a container, metrics and a dashboard. The online store is now a contract that a second backend can implement.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #89 | `5f763a7` | test: drill a stopped and a slow Redis behind Toxiproxy for the feature service (ADR-016) |
+| #90 | `26c9a8f` | feat: add an open-load benchmark for the feature serving service (ADR-016) |
+| #91 | `20b3da0` | docs: record the first feature serving baseline (ADR-016) |
+| #92 | `b4f0306` | docs: update STATUS.md with the feature serving baseline and its limits (ADR-016) |
+| #93 | `ab6b3e5` | perf: parse each spec expression once and check text with one regex (ADR-016) |
+| #94 | `c400c3c` | perf: compile spec expressions once and decode records with a per-spec decoder (ADR-016) |
+| #95 | `a9dc5bc` | feat: run the feature service as a container in the Compose stack (ADR-016) |
+| #96 | `1178526` | feat: export lookup latency and entry status metrics from the feature service (ADR-016) |
+| #97 | `d3ee450` | feat: add Prometheus and a Grafana dashboard for the feature service (ADR-016) |
+| #98 | `f6edc82` | feat: add the OnlineStore protocol, a store factory and a backend contract suite (ADR-013), merged at 00:03 on Nov 22 |
+
+**Performance | Measuring a Service Under a Fixed Request Rate**
+
+- Ran an open-load benchmark: requests arrive at a fixed rate, whether or not the service keeps up, and latency counts from the time a request was due.
+- Reported p50, p95, p99 and p99.9 together with achieved rate, errors, not-ok entries and CPU cores of server and client.
+- Repeated every rate three times and wrote the raw runs to a JSON file with the commit and a dirty flag.
+- Fixed the rule for excluding a run before measuring: a run with a service p50 above 35 ms counts as a machine slowdown.
+- Compared before and after on a clean tree, with the same machine, the same method and the same rates.
+- Measured what the metrics cost: the saturation of one process fell from about 4,140 to about 4,020 requests per second (about 3 percent), inside the limit of 5 percent I had set up front.
+- Saw that 4,000 requests per second is now at the knee: before, three of three runs kept up, after, one of three.
+- Found three of 36 runs at 4,000 requests per second or more that fell to about 85 percent of the capacity, with a service p50 near 38 ms. The cause is unknown and written down as a limit.
+
+**Observability | Prometheus Metrics and a Grafana Dashboard**
+
+- Exported a latency histogram per backend, a counter per entry status (`ok`, `missing`, `stale`, `backend_error`) and a counter per request outcome.
+- Bound the counters once so that a lookup increments at most four of them.
+- Gave each app its own registry. A test that imports Feast sets `PROMETHEUS_MULTIPROC_DIR`, and `prometheus_client` then shares counter values between registries. The test module resets the value class.
+- Pinned Prometheus `v3.16.0` and Grafana `13.3.1` in Compose and bound both ports to `127.0.0.1`.
+- Provisioned the data source and the dashboard from files in the repo, so the dashboard survives a container rebuild.
+- Scraped the service that the benchmark starts on the host through `host.docker.internal`, so the dashboard shows a live benchmark run.
+- Read quantiles with `histogram_quantile` and learned that Prometheus interpolates inside a bucket, so a p99 between 2.5 and 5 ms is an estimate.
+- Learned what the latency panel measures: the time inside the lookup, without HTTP parsing, validation, the wait for a thread and the response. That is why it is lower than the benchmark's service time.
+
+> **Note: a benchmark with the stack open is a demonstration, not a measurement.**
+> With Prometheus, Grafana and a browser running on the same laptop, the tail at 3,000 requests per second got worse: p99 6.88 and 20.44 ms against 5.80 to 9.16 ms in the clean runs, p99.9 21.03 and 115.56 ms against 11.82 to 15.19 ms. These are two single runs, a hint and not proof. The rule: stop the stack before a run that is meant to be recorded.
+
+**Architecture | One Contract for Every Online Store**
+
+- Wrote the `OnlineStore` protocol with `read` and `write` using `typing.Protocol`, and a factory that returns the store for `online.store`.
+- Moved the materializer to the factory and left the serving read path untouched, so the hot path needed no new benchmark.
+- Turned the Redis store tests into one contract suite that runs once per backend: round trip, newer window, corrections, incomparable vectors, a record for another feature, replay, concurrent writers and expiry.
+- Tested expiry through a short TTL and not through Redis commands, so the same test works for Cassandra later.
+- Bounded the concurrent writer test with a proof: every failed `WATCH` attempt means another writer succeeded, so eight writers need at most seven retries, below the limit of 16.
+- Wrote the open question into ADR-013: the service reads Redis with one `MGET` and needs its own reader before it can run on Cassandra.
+- Checked that `cassandra-driver 3.30.1` installs and imports on Python 3.13. That only shows the import works, a connection comes with the real node.
+
+**What I understood**
+
+- A latency number without a load model, a run count and a rule for bad runs is not a result.
+- A change that touches the hot path needs a before and after measurement, even if it only adds metrics.
+- A contract suite is worth more than a second implementation without one: it decides what both stores must do.
+- Writing a limit down early is cheaper than explaining it in an interview later.
+
+**Debugging | What Went Wrong on the Way**
+
+- `zsh: no matches found: --include=*.py`: zsh expands the `*` before `grep` runs, so the pattern needs quotes.
+- Three integration tests timed out after 76 seconds with `Connection refused` on port 9092: Kafka was simply not running. The failure was in the environment, not in the refactoring.
+- A unit test failed after the move to the factory because it asserted the old call signature. The assertion, not the code, was outdated.
+- A link in `STATUS.md` pointed to an ADR file name I had guessed. I now check `ls` before I write a link.
+
+**Takeaway**
+
+The serving service now has a reproducible load test, two measured optimizations, a container, metrics and a dashboard. The cost of the metrics is measured (about 3 percent of saturation, within the 5 percent limit), and the online store is a protocol with a contract suite that a second backend must pass. Open limits: the unexplained slow runs at 4,000 requests per second or more, and a Cassandra reader for the service that does not exist yet.
+
+---
+
 ## November 20, 2026
 
 **FeatureForge | The Feature Serving Service Now Has a Measured Baseline (ADR-016)**

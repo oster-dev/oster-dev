@@ -7,6 +7,102 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 20, 2026
+
+**FeatureForge | The Feature Serving Service Now Has a Measured Baseline (ADR-016)**
+
+Today 15 PRs (#78 to #92) went into `main`, all with green CI. The serving service (ADR-016) got its tests, its failure drills and its first load benchmark. The numbers are documented with their limits.
+
+| PR | Type | Commit | Topic | CI |
+|---|---|---|---|---|
+| [#78](https://github.com/oster-dev/featureforge/pull/78) | docs | [`7f36b8d`](https://github.com/oster-dev/featureforge/commit/7f36b8d) | State only what is proven in the README head, show the event fact store | ✅ |
+| [#79](https://github.com/oster-dev/featureforge/pull/79) | docs | [`3b3707e`](https://github.com/oster-dev/featureforge/commit/3b3707e) | Describe work by topic instead of plan numbers | ✅ |
+| [#80](https://github.com/oster-dev/featureforge/pull/80) | docs | [`8d33741`](https://github.com/oster-dev/featureforge/commit/8d33741) | Label the streaming migration log by topic and PR | ✅ |
+| [#81](https://github.com/oster-dev/featureforge/pull/81) | test | [`59980a3`](https://github.com/oster-dev/featureforge/commit/59980a3) | Compare the Flink windows with the event table evaluation (ADR-015) | ✅ |
+| [#82](https://github.com/oster-dev/featureforge/pull/82) | test | [`cddbf7d`](https://github.com/oster-dev/featureforge/commit/cddbf7d) | Compare the Redis value with the event table evaluation for duplicate and invalid input (ADR-015) | ✅ |
+| [#83](https://github.com/oster-dev/featureforge/pull/83) | docs | [`cdcddc7`](https://github.com/oster-dev/featureforge/commit/cdcddc7) | Record the writer and Flink parity test in ADR-015 | ✅ |
+| [#84](https://github.com/oster-dev/featureforge/pull/84) | docs | [`0176e66`](https://github.com/oster-dev/featureforge/commit/0176e66) | Name the spec-driven path as the platform and Feast as batch path v1 | ✅ |
+| [#85](https://github.com/oster-dev/featureforge/pull/85) | docs | [`51f0058`](https://github.com/oster-dev/featureforge/commit/51f0058) | Describe the status by topic and drop plan-stage wording | ✅ |
+| [#86](https://github.com/oster-dev/featureforge/pull/86) | docs | [`4bdc49b`](https://github.com/oster-dev/featureforge/commit/4bdc49b) | Add ADR-016 for the feature serving service | ✅ |
+| [#87](https://github.com/oster-dev/featureforge/pull/87) | feat | [`b45ad00`](https://github.com/oster-dev/featureforge/commit/b45ad00) | Feature serving service with status per value and one round trip (ADR-016) | ✅ |
+| [#88](https://github.com/oster-dev/featureforge/pull/88) | test | [`6294466`](https://github.com/oster-dev/featureforge/commit/6294466) | Serve features from a real Redis, check status, expiry and one MGET (ADR-016) | ✅ |
+| [#89](https://github.com/oster-dev/featureforge/pull/89) | test | [`5f763a7`](https://github.com/oster-dev/featureforge/commit/5f763a7) | Drill a stopped and a slow Redis behind Toxiproxy (ADR-016) | ✅ |
+| [#90](https://github.com/oster-dev/featureforge/pull/90) | feat | [`26c9a8f`](https://github.com/oster-dev/featureforge/commit/26c9a8f) | Open-load benchmark for the feature serving service (ADR-016) | ✅ |
+| [#91](https://github.com/oster-dev/featureforge/pull/91) | docs | [`20b3da0`](https://github.com/oster-dev/featureforge/commit/20b3da0) | Record the first feature serving baseline (ADR-016) | ✅ |
+| [#92](https://github.com/oster-dev/featureforge/pull/92) | docs | [`b4f0306`](https://github.com/oster-dev/featureforge/commit/b4f0306) | Update STATUS.md with the baseline and its limits | ✅ |
+
+**Docs | README, STATUS and Plan Wording (#78 to #80, #84, #85)**
+
+- The README head now states only what is proven and shows the event fact store.
+- Work is described by topic instead of plan numbers, in the status and in the streaming migration log.
+- The spec-driven path is named as the platform, Feast as batch path v1.
+
+**Streaming | Parity Between the Writer, Flink and Redis (#81 to #83)**
+
+- Compared the Flink windows with the evaluation on the event table.
+- Compared the Redis value with the event table evaluation for duplicate and invalid input.
+- Recorded the writer and Flink parity test in ADR-015.
+
+**Serving | Service, Tests and Failure Drills (#86 to #89)**
+
+- Wrote ADR-016 first, then the service: one status per value and one round trip to Redis.
+- Tested against a real Redis: status, expiry and a single `MGET`.
+- Drilled a stopped and a slow Redis behind Toxiproxy: the service answers `backend_error` within the budget and recovers when Redis returns.
+
+**Benchmark | Open-Load Test and First Baseline (#90 to #92)**
+
+- The generator sends requests at fixed times from several client processes. Latency counts from the due time, so a slow service shows its queue in the numbers instead of slowing the clients down.
+- Each request asks for 2 features for 5 users, 10 entries, with Zipf-like access over 1,000,000 users in Redis.
+- The report states latency from the due time, service time from the actual send, errors, entries that are not ok, CPU of service and clients, package versions, Redis version and git state.
+- Three PRs on purpose: the tool (#90), the baseline run on a clean `main` (#91), the status (#92).
+
+**Result: baseline on one laptop (Apple M4 Pro, one uvicorn process, Redis 7.4.12 in Docker Desktop)**
+
+| Target req/s | Achieved req/s | p50 ms | p99 ms |
+|---|---|---|---|
+| 100 | 100 | 8.45 to 8.93 | 17.5 to 26.0 |
+| 500 | 500 | 3.18 to 3.61 | 12.8 to 19.5 |
+| 1000 | 1000 | 1.55 to 1.66 | 10.5 to 14.8 |
+| 2000 | 2000 | 1.12 to 1.38 | 9.6 to 13.0 |
+| 3000 | 2999 | 2.60 to 3.34 | 19.1 to 28.8 |
+| 4000 | 3250 to 3256 | 3.5 s | 6.8 s |
+| 6000 | 2816 to 3264 | 13 to 16 s | 24.9 to 33.6 s |
+
+- From 500 to 2000 req/s the p99 stayed below 20 ms in every run.
+- One process saturates at about 3,250 req/s. Above that the queue grows and the latency from the due time reaches seconds, while the service time stays near 36 ms (p50) and 55 ms (p99).
+- No request errors in any run.
+
+**What I understood**
+
+- With open load, a queue becomes visible in the latency. A test that waits for each answer before sending the next hides it.
+- The p99 target of at most 25 ms from 500 to 2000 req/s is a target, not a commitment. It holds in every run, but not at 100 req/s in one run (26.0 ms).
+- A run is only a baseline if the code is committed and the tree is clean. The first run came from uncommitted code, so I repeated it on `main` and checked `dirty: false` in the JSON.
+- The environment matters: I repeated one run with `caffeinate -dimsu` on AC power after the display went to sleep during it. Two runs show how much the same machine can differ at low load (p50 at 100 req/s: 4.7 to 8.9 ms).
+- The 50 ms budget is the Redis client's socket timeout, per operation. It is not an end-to-end deadline for a request.
+- A few requests hit this timeout and came back as `backend_error` (40 entries at 100 req/s in one run, 80 entries at 4000 req/s in the second run). The cause is not known.
+
+**Relevance to Core Goal**
+
+Feature serving is the online half of a feature store, and its latency under load is the number a platform team is asked for. Knowing how to measure it honestly (open load, due-time latency, clean commit, stated limits) matters as much as the number itself.
+
+**What I Deliberately Did Not Do**
+
+- No optimization before the baseline. Tool, baseline and optimizations stay in separate PRs, each with a before and after measurement and a parity test.
+- No "low-latency" claim in the README. It says "measured on one laptop" and links to the limits.
+
+**What Comes Next**
+
+1. Profile the service with `py-spy` to see where one process spends its 1.2 CPU cores.
+2. Choose the first optimization from the profile (`uvicorn[standard]` or the response without a Pydantic model).
+3. Find out why some Redis calls exceed 50 ms (Redis latency monitor, AOF, Docker Desktop).
+4. Run the service as a container in the Compose stack, for the demo video and the quickstart.
+
+**Takeaway**
+
+The serving service has tests against a real Redis, failure drills for a stopped and a slow Redis, and a baseline measured with open load on a clean commit. One uvicorn process holds a p99 below 20 ms from 500 to 2000 req/s and saturates at about 3,250 req/s. The numbers come from one laptop, and the cause of the occasional 50 ms timeouts is still unknown.
+
+---
+
 ## November 19, 2026
 
 **FeatureForge | WP2: Loaders, the Iceberg Event Fact Store and Snapshot-Pinned Datasets (ADR-014, ADR-015)**

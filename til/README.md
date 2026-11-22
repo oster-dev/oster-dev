@@ -7,6 +7,101 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 22, 2026
+
+**FeatureForge | The Serving Read Path Runs on Redis or Cassandra Behind One Contract**
+
+The feature serving service now reads through a `ServingReader`, with one reader per backend. The Redis reader moved behind the contract at a measured cost of about 1 percent of saturation, and a Cassandra reader answers from the same service. One end-to-end test runs a spec from raw events to the service answer on Cassandra with only `online.store` changed.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #99 | `8e61bc0` | ci: run the online store contract suite in the serving integration job |
+| #100 | `9ceccc2` | feat: run a local Cassandra node and check the table schema and conditional writes (ADR-013) |
+| #101 | `af9aabb` | feat: add CassandraSpecStore and run the store contract suite for both backends (ADR-013) |
+| #102 | `3746261` | feat: let the materializer write to the online store that the spec names (ADR-013) |
+| #103 | `25bd4b2` | docs: decide how the feature serving service reads from more than one backend (ADR-016) |
+| #104 | `127378e` | refactor: read through a ServingReader and move the Redis read behind it (ADR-016) |
+| #105 | `436a9c0` | docs: bring STATUS.md up to date and sort the open items of ADR-015 |
+| #106 | `16f8a01` | feat: read from Cassandra in the feature serving service (ADR-016), merged around midnight on Nov 23 |
+| #107 | `c668ebe` | test: run a spec from events to the service on Cassandra (ADR-013, ADR-016), merged after midnight on Nov 23 |
+
+**Performance | Measuring a Refactor Against a Limit Set in Advance**
+
+- Fixed the acceptance rule before measuring: the saturation point of one process may drop by at most 3 percent, which is about 3,910 requests per second.
+- Measured before (`3746261`) and after (`54ae65f`) on a clean tree, with the same machine, the same method and the same rates: 2000, 3000, 4000, 4500 and 5000 requests per second, three runs of 30 seconds each, after a 10 second warm-up.
+- Saturation of one process: 4,032 requests per second before, 3,988 after. That is minus 1.1 percent, and minus 0.5 percent without one slow run.
+- CPU per request at 3,000 requests per second: 0.302 ms before, 0.287 ms after.
+- Wrote down that differences below about 1 percent cannot be resolved with three runs per rate.
+- Found one run at 2,000 requests per second with 1,850 not-ok entries and a p99 of 65 ms in the first after-run. The cause is unknown and it did not repeat in a second full run. I excluded it from the numbers, kept both raw JSON files in the repo and listed it as a known gap.
+- Checked what the benchmark really hit: the metrics of the Docker container stayed at zero after eight minutes of load, because the benchmark starts its own uvicorn process on port 18080. Rebuilding the image was unnecessary.
+- Ruled out key expiry as the cause: 2,000,001 keys with about 24 hours of TTL left, and the seed marker expires five minutes before the data.
+
+> **Note: check what the benchmark really hit before you read its numbers.**
+> Zero counters in the container I had just rebuilt showed that the load never reached it. The comparison stayed valid, because both runs used the code of their own commit, but I only knew that after I looked.
+
+**Architecture | One Reader per Backend (ADR-016)**
+
+- Wrote the decision first (#103): the service reads through a `ServingReader`, and the reader is chosen by `online.store`.
+- Defined `ServingReader` with `fetch(plan)`, which returns one `RecordRead` per pair of spec and entity in the same order, and `ping()` for `readyz`.
+- Made a reader raise when its backend fails and never return a partial result. The service turns the exception into `backend_error` for every entry of the request, and a wrong number of items is a `ProtocolError`.
+- Built `RedisServingReader` with one `MGET` over all keys, and `FeatureServer.for_redis` to construct it. `FeatureServer(reader, specs)` takes any reader.
+- Removed a test helper that read the private `_stores` of the server and built the key from namespace, version, name and entity instead.
+- Moved `decode_read` into `store_common` so both backends decode the same way, and wrote a parity test against the Redis store for no payload, a valid payload, a broken payload and a payload of another entity.
+- Went from 964 to 979 unit tests, and the 12 integration tests with the Toxiproxy fault tests stayed green.
+
+**Cassandra | Write Path and Read Path**
+
+- Wrote to Cassandra with a lightweight transaction: `INSERT ... IF NOT EXISTS` for a first value, `UPDATE ... IF payload = <value read>` for a replacement, at most 16 attempts, with serial consistency (#101).
+- Let the materializer write to the backend that the spec names (#102), and proved it from Kafka to Cassandra in an integration test.
+- Modelled the table with the partition `(entity_key, entity_value)` and the clustering column `feature`, so all features of one entity are one partition read.
+- Read with one prepared statement `SELECT feature, payload ... AND feature IN ?` per entity, run concurrently with `execute_async`. Any failing query fails the whole request, because a partial result would depend on timing.
+- Learned that a prepared statement binds a list to `IN ?`, while a simple statement needs a tuple. Preparing at construction also means a missing table fails at startup.
+- Learned that the driver `timeout` is client-side: the node may keep working after the driver gave up, and the node has its own read timeout.
+- Made `featureforge-serve` read the specs first and pick the reader from `online.store`. One process serves one backend, and specs that name different stores fail at startup.
+
+**Testing | Reader Tests and the End-to-End Run on Cassandra**
+
+- Wrote 15 unit tests with a fake session: one prepared statement and its consistency, other backends and composite keys rejected, one query per entity with the prefixes of all features, results in the order of the plan, separate queries for different entity keys, a failing query failing the request, undecodable payloads as error reads and `ping`.
+- Wrote 4 integration tests against a real node that compare the reader with `CassandraSpecStore.read`, including a request over two features of one entity with the real `IN ?` binding.
+- Ran the Redis end-to-end spec on Cassandra with a temporary copy that changes only `store: redis` to `store: cassandra`. The Flink job stayed unchanged and the materializer created the schema.
+- Started `featureforge-serve` as a real process with `--cassandra-host` and asked it over HTTP: two entities came back `ok` with the hand-calculated count, one without a row came back `missing`.
+- Found a real bug with the test: `ServiceMetrics` defaulted to `backend="redis"`, so a Cassandra service labelled its numbers as Redis. Fixed it in `main` and asserted `backend="cassandra"` through `/metrics`.
+- Installed the Cassandra driver in the service image and checked it in the built image (version 3.30.1).
+
+**What I understood**
+
+- A refactor of a hot path needs a limit before the measurement, not after it.
+- A reader that fails as a whole is simpler to reason about than partial results that depend on timing.
+- Two backends need one shared decoder, or they drift apart in the error cases.
+- A CI job that leaves a library out on purpose only protects the independence of the backends if the tests do not import across.
+- An outlier without a cause belongs in the known gaps, not in the bin.
+
+**Debugging | What Went Wrong on the Way**
+
+- A patch script looked for `\\n` instead of `\n`, found no anchor and stopped without changing a file. Asserting that an anchor occurs exactly once before writing saved the file.
+- `ruff` flagged `object()` as a default argument (B008). A module-level sentinel fixed it.
+- A test for composite keys did not raise, because `keys` is a property derived from the field `entity`. I changed the source field and not the result.
+- `ruff --fix` removed an import that I needed again for a later test.
+- Two test files with the same name in `tests/unit` and `tests/integration` failed the full collection in CI with "import file mismatch". Locally I had run the two folders separately.
+- The Cassandra CI job installs no `redis` on purpose. My integration test imported a unit test module that imports `RedisSpecStore`, and failed there. I reproduced it locally by setting `sys.modules["redis"] = None`.
+- My first end-to-end version asked all entities with one reference time, and one value came back stale, because freshness is judged at request time.
+
+**What I Deliberately Skipped**
+
+- The load test against Cassandra and the cost of the lightweight transactions in the write path: the benchmark tool comes first as its own PR, then the measurement on a clean `main`.
+- A Cassandra-backed service in the Compose stack.
+- A budget as a deadline over the whole request instead of a timeout per call.
+- Finding the cause of the 1,850 not-ok entries.
+- A flamegraph of the serving hot path.
+
+**Takeaway**
+
+The serving read path now runs on Redis or Cassandra behind one contract. Moving the Redis read behind it cost about 1 percent of saturation, inside the 3 percent limit, and an end-to-end test proves that the same spec works on Cassandra from raw events to the service answer. Open limits: no load numbers for Cassandra yet, no deadline over the whole request, and one unexplained run with 1,850 not-ok entries.
+
+---
+
 ## November 21, 2026
 
 **FeatureForge | The Feature Serving Service Is Built, Measured and Observable**

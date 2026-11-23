@@ -7,6 +7,116 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 23, 2026
+
+**FeatureForge | Cassandra Against Redis, Measured: Plain Tuple Rows, a Compare Tool, a Runner and the Serving Baselines**
+
+The Cassandra reader got its numbers today. A benchmark that drives both backends showed that one process saturates at about 1,660 requests per second with Cassandra against about 4,000 with Redis. Reading plain tuple rows raised the Cassandra saturation to about 2,110. A compare script with a noise rule and a runner with presets and safety checks turned the measurement into a repeatable command. The baselines were recorded on a clean `main` and written down with their limits. At the end the docs lost six statements that these results had made stale.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #108 | `5ae169a` | bench: run the feature serving benchmark against Cassandra (ADR-016) |
+| #109 | `d465dd5` | docs: benchmark the Cassandra serving reader against Redis (ADR-016) |
+| #110 | `f4076ce` | bench: compare two benchmark reports with a noise rule (ADR-016) |
+| #111 | `209da76` | perf: read serving rows as plain tuples from Cassandra (ADR-016) |
+| #112 | `f6c102a` | docs: measure plain tuple rows for the Cassandra reader (ADR-016) |
+| #113 | `5af38e1` | bench: set the comparison threshold to 10 percent and add make bench-compare (ADR-016) |
+| #114 | `8989796` | bench: add a runner with presets and safety checks and a CI smoke job (ADR-016) |
+| #115 | `19eb273` | docs: record the serving baselines of Redis and Cassandra after change 5 (ADR-016) |
+| #116 | `1aa83e9` | docs: remove statements that the Cassandra reader and the benchmarks made stale |
+
+PRs #105 to #107 were merged around midnight and are in the entry of Nov 22.
+
+**Benchmark | Cassandra Against Redis on One Laptop (#108, #109)**
+
+- Let the benchmark script start its own service against a second backend (`--backend cassandra`): 1,000,000 users with 2 features each, 5 entities per request, one uvicorn process with a 50 ms budget, open load from 4 client processes, 10 s warm-up, 30 s per run, 3 runs per rate, on a clean tree.
+- Seeded Cassandra with 2,000,000 rows in 147 s, then ran `nodetool flush` and waited until no compaction was pending. Seeded Redis in 8 s.
+- Redis held 3,000 req/s with a p99 below 10 ms in every run and reached 3,995 to 3,997 req/s at 4,000, with a queue (service p50 29 ms, 1.25 cores).
+- Cassandra held 1,500 req/s and saturated at 1,662 to 1,674 req/s at 0.98 CPU cores. At saturation the service time was 72 ms p50 and 116 to 121 ms p99.
+- Below the limit Cassandra had the higher tail at every rate: p99 of 12.0 to 15.7 ms against 6.5 to 8.0 ms at 500 req/s, and 40.2 to 46.6 ms against 4.5 to 7.5 ms at 1,500 req/s.
+- CPU per request in the service at 1,500 req/s: 0.35 to 0.37 ms with Redis, 0.61 to 0.66 ms with Cassandra.
+- Located the limit: the Cassandra container used 33 to 79 percent of one core, while the service process was at 0.98 cores. The ceiling is in the service process, not in the database.
+- Read the failures: every count of not-ok entries was a multiple of 10 (5 entities times 2 features), so whole requests failed. That matches a reader that raises, and the reader is built that way.
+- Wrote the limits next to the numbers: client and service share one machine, Cassandra is one node in Docker Desktop, Cassandra's own capacity was not measured, one service process only.
+
+**Performance | Plain Tuple Rows from Cassandra (#111, #112)**
+
+- Switched the row factory of the Cassandra session to plain tuples instead of named tuples.
+- Measured it as an A/B on a clean tree, alternating base (`f4076ce`) and new (`209da76`) in two rounds, with 3 runs of 30 s at 1,500, 2,000, 2,250 and 2,500 req/s.
+- Saturation went from about 1,660 to about 2,110 req/s (+27 percent). CPU per request fell by about 10 percent at 1,500 req/s and by 16 to 22 percent from 2,000 req/s. The p50 at 1,500 req/s fell from about 9 ms to about 3 ms.
+- Did not claim the tail: the p99 at 1,500 req/s was 15.9 ms in round 1 and 42.8 ms in round 2 (base: 45.6 and 42.4), so the gain in the tail did not repeat.
+- Tested two variants on a dirty tree and did not adopt them. Protocol version 4 instead of 5 changed the CPU by at most 6 percent, within the noise of two baselines. A switch interval of 1 ms was worse from 1,750 req/s on.
+- Wrote down what I do not know: why the saturation point rose by more (27 percent) than the CPU per request fell (up to 22 percent).
+
+**Tooling | A Noise Rule, a Threshold and a Runner (#110, #113, #114)**
+
+- Wrote `scripts/compare_benchmarks.py`: it reduces the repeats of a rate to their median and marks a change as better or worse only when it is at least 10 percent and the ranges of the repeats do not overlap. With fewer than 3 repeats on one side it says inconclusive.
+- Chose the threshold from data: two runs of the same code differed by 7 percent in the p50 near saturation. A second pair of runs of the base commit then showed no change at any rate at 10 percent (p50 differed by 4 percent, the highest achieved rate by 0.4 percent).
+- Let each report state up to which rate it stays within the latency target (p99 at most 25 ms in every repeat, at most 0.1 percent of entries not ok, at least 99 percent of the rate achieved).
+- Set the exit code to 1 only when the new report has not-ok entries beyond that budget where the base had none, or request errors where the base had none. Speed never changes the exit code. The script warns when the machine, setup or rates differ and when a report was measured on a dirty tree.
+- Added `make bench-compare` and a runner, `scripts/run_serving_benchmark.py`, with two presets.
+- `smoke` (2,000 users, 5 s per run, about 1 minute) only shows that the tool and the backend work and its numbers are not published.
+- `record` (about 20 minutes) needs a clean working tree and only the services of the backend, because Kafka, Flink or Grafana change the result. It seeds fresh data, because the data expires after two hours. With Cassandra it flushes the table and waits for compaction, because compaction right after the seed had caused errors in the first runs.
+- Added a CI job that runs the smoke preset against Redis.
+
+**Baselines | Recorded on a Clean main (#115)**
+
+- Recorded the baselines only after the runner was merged, on commit `8989796` with a clean tree. Everything measured before that was a preliminary before-measurement.
+- Redis held 3,000 req/s with a p99 of at most 7.75 ms in every run. At 4,000 req/s it kept the rate (3,993 to 3,996) with a p50 of 35.0 to 37.5 ms.
+- Cassandra held 1,500 req/s with a p99 of 16 to 23 ms, kept 2,000 req/s with a p99 of 69 to 216 ms, and saturated at about 2,090 req/s (2,085 to 2,098 at 2,500 req/s).
+- Judged by the median of the runs, the p99 target of 25 ms held up to 3,000 req/s for Redis and at 500, 1,000 and 1,500 req/s for Cassandra.
+- CPU per request from 2,000 req/s: 0.28 to 0.33 ms with Redis and 0.46 to 0.50 ms with Cassandra. That is about 1.5 times as much, and it was about 2 times before the tuple rows.
+- Wrote down the bursts instead of hiding them: single runs had short bursts of `backend_error` with both backends (Redis at 1,000 req/s run 2: 400 entries, p99 39.3 ms; Cassandra at 500 req/s runs 1 and 2: 520 and 430 entries). The cause is unknown, Docker Desktop on macOS is a suspect, and the benchmark does not yet record the `error_type`.
+- Changed the saturation figure in `STATUS.md` from 2,110 to 2,100 req/s, because the two series gave 2,107 to 2,118 and 2,085 to 2,098.
+
+**Documentation | Six Stale Statements (#116)**
+
+- Exported the whole project into one text file (283 files, and the number of sections matched the number of files Git knows) and checked the docs against it.
+- Found six statements that were no longer true: the roadmap in `ARCHITECTURE.md` still listed a Cassandra backend and a serving service with load tests as planned, ADR-016 called the Cassandra measurement open, ADR-013 said the service does not read Cassandra yet, `STATUS.md` said the service still reads Redis only, its last-updated date was a day old, and it said the benchmark does not record statuses.
+- Applied all six with one script that fails unless every pattern occurs exactly once and writes only after all of them matched.
+- Found no keys or tokens. Compose holds only local defaults (a Postgres password for the Iceberg catalog, a Grafana admin default, anonymous viewer), which are documented as local only.
+
+**Git | Cleaning Up After Squash Merges**
+
+- Deleted the two merged branches and nine older ones, locally. `git branch -d` does not work after a squash merge, because the commits are rewritten.
+- `gh` was not installed, so I used `git merge-tree --write-tree` to test whether merging a branch into `main` would change anything. If the result tree equals the tree of `main`, the content is already there.
+- Matched four more branches by commit title in `git log main --grep`. One branch (replay idempotency) was not found by title, because the squash commit had a combined title of its two commits. `git log --diff-filter=A` on its test file found the commit that added it to `main`.
+- The remote branches on GitHub are still there as a backup.
+
+**Debugging | What Went Wrong on the Way**
+
+- My first `grep` for two of the stale statements found nothing, because the prose in `STATUS.md` is hard-wrapped and a sentence runs over two lines. Whitespace-tolerant patterns (`\s+` between words) fixed it.
+- I checked the key `entry_statuses` in a baseline JSON that was not on `main` yet, because #115 was not merged. I checked the benchmark script instead (it holds the key in three places).
+- A comparison of an earlier recorded pair said that Cassandra is within the target at no rate and Redis only up to 500 req/s. A strict rule (every repeat must pass) turned single bursts of not-ok entries (950 and 400) into a verdict about the backend. The medians in the docs are the better summary, and I wrote that next to the table.
+- I started the whole Compose stack after the comparison. A recorded run needs only the services of its backend, so I stopped Prometheus, Grafana, Kafka and Flink again before closing the day.
+
+**What I Deliberately Skipped**
+
+- The cause of the `backend_error` bursts: the benchmark has to count the `error_type` first.
+- A longer warm-up after the seed, to see whether it avoids the bursts at the first rate.
+- The write path: the cost of lightweight transactions with and without a concurrent writer.
+- A profile of the Cassandra reader to see whether the partition reads, the driver or the row conversion take the CPU.
+- A Cassandra-backed service in the Compose stack, and a deadline over the whole request.
+- More than one service process.
+- Deleting the old remote branches on GitHub.
+
+**What I Understood**
+
+- A baseline comes from a clean commit that is in `main`. A number from a dirty tree or from before the tool was merged is a hint.
+- Measure the same code twice before you compare different code. The 7 percent difference between two identical runs set the threshold.
+- A strict "every repeat must pass" rule and a median summary answer different questions. Know which one you read.
+- When whole requests fail in multiples of the entries per request, the reader raised and did not return a partial result.
+- A squash merge rewrites commits, so "merged" has to be checked by content or by title, not by ancestry.
+- A limit that I cannot explain (+27 percent against up to 22 percent less CPU) goes into the docs as an open question.
+
+**Takeaway**
+
+In one process on one laptop, Redis holds 3,000 req/s with a p99 below 10 ms and saturates near 4,000, and Cassandra holds 1,500 req/s with a p99 of 16 to 23 ms and saturates near 2,100. Plain tuple rows gave Cassandra +27 percent. Open limits: bursts of `backend_error` without a known cause, no write-path numbers, and one machine, one node, one process.
+
+---
+
 ## November 22, 2026
 
 **FeatureForge | The Serving Read Path Runs on Redis or Cassandra Behind One Contract**

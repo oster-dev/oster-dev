@@ -7,6 +7,103 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 24, 2026
+
+**FeatureForge | Redis on the Event Loop, a Dev Container, a Quickstart, a Design Document and a Warm-up Test**
+
+The Redis read path of the serving service moved from a worker thread to the event loop. A profile showed that two thirds of the CPU sat in worker threads, an A/B on a clean tree showed one process saturating at about 4,880 requests per second instead of about 4,030, and the p99 target held up to 4,500 instead of 3,000 in that series. Around it, the repo got the things a reviewer touches first: a design document, a `make quickstart`, a dev container that a Codespace builds, and a README that links the documents and shows both backends. A warm-up test closed an open question from the day before.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #117 | `575d958` | bench: count the error type of failed entries and judge the capacity by the median too (ADR-016) |
+| #118 | `d852555` | bench: let the runner replace the warm-up of a preset (ADR-016) |
+| #119 | `2205a4b` | docs: test whether a longer warm-up avoids the bursts after the seed (ADR-016) |
+| #120 | `8b6cfc8` | docs: show Redis and Cassandra serving numbers and the serving path in the README (ADR-016) |
+| #121 | `8a431e3` | docs: add the design document with the time model, store contract and comparison (ADR-016) |
+| #122 | `6908063` | feat: add make quickstart that writes three demo values and reads them through the feature service (ADR-016) |
+| #123 | `fc7ce15` | feat: add a dev container with Python, Docker and the quickstart (ADR-016) |
+| #124 | `4ff9a2c` | docs: link the design, benchmarks and observability documents in the README (ADR-016) |
+| #125 | `fa74891` | fix: pin the dev container base image to a distribution release |
+| #126 | `514f735` | docs: add the measured Codespace setup and quickstart times |
+| #127 | `5386727` | perf: read Redis on the event loop instead of a worker thread (ADR-016) |
+
+#127 was merged a few minutes before midnight, GitHub lists it under Nov 25.
+
+**Performance | Redis on the Event Loop (#127)**
+
+- Profiled the running service before touching it. A sampler thread inside the service (200 Hz, all threads) showed about 85 percent of the thread samples in workers waiting for work and about 13 percent in `lookup` → `mget`, mostly socket reads. The feature code (`feature_service`, the value evaluation) did not show up as a leaf at all, which fits the two earlier optimizations.
+- Asked where the CPU goes instead of guessing. Per-thread CPU time over 30 s at 3,500 req/s: 1.05 cores in total, 0.36 in the busiest thread (probably the event loop) and 0.69 in 45 other threads, and 27 percent of all CPU time was system time. That is the signature of a thread hop per request.
+- Tested the idea in isolation before changing the service. A throwaway script that only compares the client path (10 keys per MGET, 60,000 requests, concurrency 32): 0.153 ms of CPU per request with a worker thread and blocking `redis-py`, 0.070 ms with `redis.asyncio`. Both rounds gave the same three digits.
+- Added `fetch_async` to the Redis reader and `lookup_async` to the server, next to the synchronous path, which is unchanged. The endpoint is `async def` and falls back to the thread pool when the reader has no async client, so the Cassandra reader is untouched.
+- Kept the behavior under overload: a pool of 40 connections (like the 40 worker threads before), no wait limit for a free connection, and the budget as socket timeout.
+- Wrote 11 parity tests: reader, server and endpoint give the same entries on both paths for ok, missing and stale values, a wrong number of values and a failing backend, and the endpoint test checks which client was called. 1,054 tests passed.
+- Fixed the acceptance rule before the run: saturation at least 5 percent higher in both rounds, no new entries that are not ok and no request errors, and no rise in CPU per request at 3,000 req/s.
+- Measured an A/B on a clean tree, alternately base (`514f735`, in a git worktree), new (`5793a15`), base, new. 1,000,000 users, one uvicorn process, rates 3,000 to 6,000 req/s, 3 runs of 30 s per rate, only Redis running.
+- Saturation went from about 4,030 (highest achieved 4,033 and 4,031) to about 4,880 req/s (4,881 and 4,887), +21 percent in both rounds. CPU per request fell from 0.30 and 0.29 ms to 0.24 and 0.23 ms at 3,000 req/s, and from 0.31 to 0.19 ms at 5,000 and 6,000 req/s (39 percent).
+- The p99 at 3,000 req/s fell from about 11 ms to about 5 ms. The p99 target of 25 ms held in every run up to 4,500 req/s with the new code, with the base up to 3,000. The rates between 3,000 and 4,000 were not measured, so the exact point where the base stops is unknown.
+- No request error and no entry that is not ok in all 60 runs. Two base runs against each other showed no change at any rate, so the 21 percent is far outside the noise.
+- Wrote down what I do not know: the service saturates at 0.93 cores and not at one, and the cause is open. One thread at its limit would fit, but I did not test it.
+
+**Tooling | Error Types, Median Verdicts and a Warm-up Test (#117, #118, #119)**
+
+- Let the benchmark count the error type of failed entries (the report holds `entry_error_types`), so the next burst of `backend_error` says what failed instead of only that it failed (#117).
+- Let the compare output judge the capacity by the median of the repeats as well as by the strict rule, because the strict rule turned single bursts into a verdict about a backend (#117).
+- Let the runner replace the warm-up of a preset, so 30 s and 120 s can be compared with the same tool (#118).
+- Tested whether a longer warm-up avoids the bursts after the seed: Cassandra at 500 req/s, three series per condition, nine runs each, 18 runs in total (#119).
+- No entry was not ok in any of the 18 runs. The median p99 was 12.1 ms with 30 s and 11.9 ms with 120 s, so by the rule the warm-up has no effect here and the `record` preset keeps 30 s.
+- The bursts did not repeat. Before, 3 of 6 runs at 500 req/s had entries that were not ok. Nine clean runs with 30 s in a row would happen in about 0.2 percent of cases, so something in the state of the machine was different then, and the warm-up was not the cause.
+- One event remains open: the seed step of series 1 had 30 entries that were not ok at 100 req/s, the first measurement after a fresh start of the Cassandra container. Its error type was not kept, and a cold node is an untested guess.
+- Wrote the limits: one machine, one node, one process, only 500 req/s, and nine runs per condition cannot exclude a rare event (a rate of up to about 15 percent per run is still possible).
+
+**Visibility | README, Design Document, Quickstart, Dev Container (#120 to #126)**
+
+- Put both backends into the README head (#120): Redis holds 3,000 req/s with a p99 of 6.8 to 7.7 ms and saturates near 4,000, Cassandra holds 1,500 req/s with a p99 of 16 to 23 ms and saturates near 2,100. Next to it: the machine, the commit, and the sentence that these are local measurements and that p99 at most 25 ms is a target, not an SLO.
+- Wrote `docs/DESIGN.md` (#121): the time model, the store contract, serving, known limits and a comparison with Feast and Chronon, so a reviewer reads the trade-offs without opening ADRs.
+- Added `make quickstart` (#122): it writes demo values for two users, leaves a third unknown, and reads all three through the feature service. The expected output is `ok` (7 plays, 60 s old, fresh), `stale` (4 plays, 1,200 s old) and `missing`. Without a running Redis it prints `backend_error` with the exception name instead of crashing. 94 lines of unit tests.
+- Added a dev container (#123): Python 3.13, Docker-in-Docker, `make` and `pip install -e ".[serve]"` after creation, port 8080 forwarded, and a minimum of 4 CPUs, 8 GB and 32 GB for a Codespace. A unit test keeps the file valid and keeps what the quickstart needs.
+- Linked `DESIGN.md`, `benchmarks.md` and `observability.md` in the README table (#124) and corrected the runbook names in `DESIGN.md`: it had named the failure simulations of `ARCHITECTURE.md`, and the runbooks are stale features, failed backfill and failed materialization.
+- Built a Codespace for the first time and it failed (#125). The floating `base:ubuntu` tag now points to a newer Ubuntu release that the Docker-in-Docker feature does not support, and Codespaces fell back to a recovery container without Docker, Python or `make`. Pinned the image to `base:bookworm` and added a test that rejects floating tags such as `ubuntu`, `debian`, `alpine` and `latest`.
+- Measured a fresh Codespace on `main` (#126): 4 minutes 22 seconds until the workspace was ready, and `make quickstart` took 1 minute 14.7 seconds, with the image pulls, and printed the expected table. The README says about 4 minutes 20 seconds and about 1 minute 15 seconds, and says it is one measurement without a prebuild.
+
+**Debugging | What Went Wrong on the Way**
+
+- The first Codespace did not build and I had not tested the config. A floating base-image tag is a dependency that moves without a commit. Now a test forbids it.
+- `BusyLoadingError` right after `docker compose up -d redis`: the container loads its AOF file and answers with an error until it is done. Wait for `PONG` first.
+- `pgrep -f uvicorn` found nothing. The benchmark starts the service as `python -m featureforge.service_api`, so uvicorn does not appear in the command line.
+- `py-spy` failed with "Operation timed out" even with `sudo`. The service ran on the python.org framework Python, and macOS does not let a process attach to it.
+- `yappi` in the service brought it down to 459 req/s at a target of 2,000, and no file was written, because uvicorn re-raises SIGTERM after shutdown and `atexit` never ran. A sampler thread that writes its own file after a fixed time worked, and per-thread CPU time answered the real question.
+- Four identical runs at 3,500 req/s gave a p99 of 35.6, 21.2, 65.1 and 68.3 ms with almost the same CPU. The p99 near saturation is not a stable number. The comparison uses the saturation rate, the CPU per request and the service time.
+- The base reports in the A/B carry the wrong commit. The base ran from a worktree, and the script reads the git state of the working directory. An import-path check before the run showed that the base loaded the worktree code, and the numbers matched the earlier baselines. The raw files are unchanged and the limit is written next to the numbers.
+- The `awk` and one-liner checks were cheap, but every one of them needed the right process, the right file and the right terminal. Two failed runs were a second command typed into a terminal where the first was not running.
+
+**What I Deliberately Skipped**
+
+- Fixing the benchmark script so that it records the commit of its own tree, with a test.
+- A fresh `make bench-record` on `main` after #127. The README table, `STATUS.md` and the Serving paragraph still show the numbers from before the change.
+- An asynchronous Cassandra reader, which would need the driver's futures on the loop.
+- The reason for the saturation at 0.93 cores, and the behavior of the pool under longer overload.
+- The cause of the `backend_error` bursts. The counter exists now, and no burst has happened since.
+- More than one service process.
+- The notebook and the video of the visibility package.
+
+**What I Understood**
+
+- Ask where the CPU goes before you optimize. Per-thread CPU time and a sampler said more in ten minutes than reading the code would have.
+- Test an idea in isolation first. A 40-line script showed 0.153 against 0.070 ms before one line of the service changed.
+- Fix the acceptance rule before the run, and compare against a second run of the same code.
+- A number you cannot reproduce (a p99 between 21 and 68 ms) is not a metric. Use one that is stable.
+- A floating tag moves without a commit, so pin it and test the pin.
+- A sampler inside the process is a fallback when the OS blocks the profiler, and a process that is killed by a signal does not run `atexit`.
+- A report that carries the wrong commit is a reason to write the limit down, not to edit the data.
+
+**Takeaway**
+
+One uvicorn process on one laptop now saturates at about 4,880 req/s with Redis instead of about 4,030, with 0.19 instead of 0.31 ms of CPU per request at saturation, because the read no longer hops to a worker thread. The p99 target of 25 ms held up to 4,500 req/s in this series. The README still shows the numbers from before until a fresh baseline is recorded. Open limits: one machine, one process, a saturation at 0.93 cores that I cannot explain, and base reports with the wrong commit.
+
+---
+
 ## November 23, 2026
 
 **FeatureForge | Cassandra Against Redis, Measured: Plain Tuple Rows, a Compare Tool, a Runner and the Serving Baselines**

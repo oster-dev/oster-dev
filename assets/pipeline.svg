@@ -1,46 +1,129 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="270" viewBox="0 0 1200 270" role="img" aria-label="FeatureForge data flow: Kafka events, generic Flink job, Redis, online client. Iceberg and Cassandra are planned.">
-<defs><style>
-.tag{font:700 11px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:3px;fill:#ff5a64}
-.title{font:700 18px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;fill:#ffffff}
-.desc{font:500 13px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;fill:#9a9aa8}
-.plan{font:600 13px 'Inter','Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif;fill:#8b8b99}
-.dash{animation:flow 1s linear infinite}
-@keyframes flow{to{stroke-dashoffset:-12}}
-</style></defs>
-<rect width="1200" height="270" rx="20" fill="#0a0a0f"/>
-<line x1="250.0" y1="104.0" x2="343.3" y2="104.0" stroke="#E50914" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 6" class="dash"/>
-<circle r="5" fill="#ff4d5a"><animateMotion dur="2.4s" begin="0.0s" repeatCount="indefinite" path="M250.0 104.0 L343.3 104.0"/></circle>
-<circle r="5" fill="#ff4d5a" opacity="0.5"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M250.0 104.0 L343.3 104.0"/></circle>
-<line x1="553.3" y1="104.0" x2="646.7" y2="104.0" stroke="#E50914" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 6" class="dash"/>
-<circle r="5" fill="#ff4d5a"><animateMotion dur="2.4s" begin="0.8s" repeatCount="indefinite" path="M553.3 104.0 L646.7 104.0"/></circle>
-<circle r="5" fill="#ff4d5a" opacity="0.5"><animateMotion dur="2.4s" begin="2.0s" repeatCount="indefinite" path="M553.3 104.0 L646.7 104.0"/></circle>
-<line x1="856.7" y1="104.0" x2="950.0" y2="104.0" stroke="#E50914" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 6" class="dash"/>
-<circle r="5" fill="#ff4d5a"><animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite" path="M856.7 104.0 L950.0 104.0"/></circle>
-<circle r="5" fill="#ff4d5a" opacity="0.5"><animateMotion dur="2.4s" begin="2.8s" repeatCount="indefinite" path="M856.7 104.0 L950.0 104.0"/></circle>
-<rect x="40.0" y="56" width="210" height="96" rx="14" fill="#101017" stroke="#ffffff" stroke-opacity="0.12"/>
-<rect x="40.0" y="56" width="4" height="96" rx="2" fill="#E50914"/>
-<text x="62.0" y="84" class="tag">SOURCE</text>
-<text x="62.0" y="111" class="title">Kafka events</text>
-<text x="62.0" y="132" class="desc">validated interaction events</text>
-<rect x="343.3" y="56" width="210" height="96" rx="14" fill="#101017" stroke="#ffffff" stroke-opacity="0.12"/>
-<rect x="343.3" y="56" width="4" height="96" rx="2" fill="#E50914"/>
-<text x="365.3" y="84" class="tag">COMPUTE</text>
-<text x="365.3" y="111" class="title">Generic Flink job</text>
-<text x="365.3" y="132" class="desc">built from a YAML spec</text>
-<rect x="646.7" y="56" width="210" height="96" rx="14" fill="#101017" stroke="#ffffff" stroke-opacity="0.12"/>
-<rect x="646.7" y="56" width="4" height="96" rx="2" fill="#E50914"/>
-<text x="668.7" y="84" class="tag">ONLINE STORE</text>
-<text x="668.7" y="111" class="title">Redis</text>
-<text x="668.7" y="132" class="desc">guarded writes</text>
-<rect x="950.0" y="56" width="210" height="96" rx="14" fill="#101017" stroke="#ffffff" stroke-opacity="0.12"/>
-<rect x="950.0" y="56" width="4" height="96" rx="2" fill="#E50914"/>
-<text x="972.0" y="84" class="tag">SERVING</text>
-<text x="972.0" y="111" class="title">Online client</text>
-<text x="972.0" y="132" class="desc">batch and streaming reads</text>
-<line x1="448.3" y1="152" x2="448.3" y2="186" stroke="#ffffff" stroke-opacity="0.25" stroke-dasharray="4 5"/>
-<rect x="343.3" y="186" width="210" height="44" rx="12" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-dasharray="5 5"/>
-<text x="448.3" y="213" text-anchor="middle" class="plan">Iceberg · planned</text>
-<line x1="751.7" y1="152" x2="751.7" y2="186" stroke="#ffffff" stroke-opacity="0.25" stroke-dasharray="4 5"/>
-<rect x="646.7" y="186" width="210" height="44" rx="12" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-dasharray="5 5"/>
-<text x="751.7" y="213" text-anchor="middle" class="plan">Cassandra · planned</text>
+<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="t d" height="500" role="img" viewBox="0 0 1200 500" width="1200">
+  <title id="t">FeatureForge data flow</title>
+  <desc id="d">A YAML spec drives one generic Flink job and a Spark backfill. Kafka events pass a validation job, the Flink job and a guarded materializer into Redis or Cassandra behind one store contract, and a feature service returns a status for every value. The materializer appends a publication history in Iceberg, an event writer stores event facts in Iceberg, and a Spark dataset builder writes training datasets in two modes. Local build on Docker Compose with synthetic data.</desc>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    .lbl{font-size:9.5px;font-weight:700;letter-spacing:2px}
+    .ttl{font-size:15px;font-weight:700;fill:#f2f2f3}
+    .ttl.dim{fill:#a9a9b1}
+    .sub{font-size:10.5px;fill:#8b8b93}
+    .edge{font-size:10px;fill:#8b8b93;font-style:italic}
+    .foot{font-size:10.5px;fill:#6e6e76}
+    .flow{fill:none;stroke:#E50914;stroke-width:1.6;stroke-dasharray:5 6;animation:run 1.2s linear infinite}
+    .soft{fill:none;stroke:#5a1a1e;stroke-width:1.4;stroke-dasharray:3 5}
+    @keyframes run{to{stroke-dashoffset:-22}}
+    @media (prefers-reduced-motion:reduce){.flow{animation:none}}
+  </style>
+  <rect fill="#0b0b0e" height="498" rx="16" stroke="#1f1f24" width="1198" x="1" y="1"/>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="265" y="44"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="265" y="54"/>
+  <text class="lbl" fill="#E50914" x="281" y="64">SPEC</text>
+  <text class="ttl" x="281" y="84">YAML feature spec</text>
+  <text class="sub" x="281" y="101">validate-spec · test-spec, no Docker</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="499" y="44"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="499" y="54"/>
+  <text class="lbl" fill="#E50914" x="515" y="64">BACKFILL</text>
+  <text class="ttl" x="515" y="84">Spark backfill</text>
+  <text class="sub" x="515" y="101">same spec, explicit observation times</text>
+  <rect fill="none" height="68" rx="8" stroke="#3a3a42" stroke-dasharray="5 5" width="202" x="733" y="44"/>
+  <text class="lbl" fill="#8b8b93" x="749" y="64">NEXT</text>
+  <text class="ttl dim" x="749" y="84">More operators</text>
+  <text class="sub" x="749" y="101">sum, avg, min, max · composite keys</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="967" y="44"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="967" y="54"/>
+  <text class="lbl" fill="#E50914" x="983" y="64">MEASURED</text>
+  <text class="ttl" x="983" y="84">Measured locally</text>
+  <text class="sub" x="983" y="101">Redis 4,000 · Cassandra 1,500 req/s</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="31" y="160"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="31" y="170"/>
+  <text class="lbl" fill="#E50914" x="47" y="180">SOURCE</text>
+  <text class="ttl" x="47" y="200">Kafka events</text>
+  <text class="sub" x="47" y="217">validation job · rejected topic</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="265" y="160"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="265" y="170"/>
+  <text class="lbl" fill="#E50914" x="281" y="180">COMPUTE</text>
+  <text class="ttl" x="281" y="200">Generic Flink job</text>
+  <text class="sub" x="281" y="217">one job for every spec · late topic</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="499" y="160"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="499" y="170"/>
+  <text class="lbl" fill="#E50914" x="515" y="180">MATERIALIZE</text>
+  <text class="ttl" x="515" y="200">Guarded materializer</text>
+  <text class="sub" x="515" y="217">feature topic in, ordered writes</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="733" y="160"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="733" y="170"/>
+  <text class="lbl" fill="#E50914" x="749" y="180">ONLINE STORE</text>
+  <text class="ttl" x="749" y="200">Redis | Cassandra</text>
+  <text class="sub" x="749" y="217">one store contract, one setting</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="967" y="160"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="967" y="170"/>
+  <text class="lbl" fill="#E50914" x="983" y="180">SERVING</text>
+  <text class="ttl" x="983" y="200">Feature service</text>
+  <text class="sub" x="983" y="217">ok · stale · missing · backend_error</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="499" y="272"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="499" y="282"/>
+  <text class="lbl" fill="#E50914" x="515" y="292">HISTORY</text>
+  <text class="ttl" x="515" y="312">Publication history</text>
+  <text class="sub" x="515" y="329">Iceberg · what was served when</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="967" y="272"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="967" y="282"/>
+  <text class="lbl" fill="#E50914" x="983" y="292">OBSERVE</text>
+  <text class="ttl" x="983" y="312">/metrics · Grafana</text>
+  <text class="sub" x="983" y="329">latency, entry status, loop lag</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="31" y="384"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="31" y="394"/>
+  <text class="lbl" fill="#E50914" x="47" y="404">EVENT FACTS</text>
+  <text class="ttl" x="47" y="424">Iceberg event facts</text>
+  <text class="sub" x="47" y="441">written by the event writer</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="202" x="499" y="384"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="499" y="394"/>
+  <text class="lbl" fill="#E50914" x="515" y="404">DATASETS</text>
+  <text class="ttl" x="515" y="424">Spark dataset builder</text>
+  <text class="sub" x="515" y="441">event_time · published_as_of</text>
+  <rect fill="#16161b" height="68" rx="8" stroke="#2a2a31" width="436" x="733" y="384"/>
+  <rect fill="#E50914" height="48" rx="1.5" width="3" x="733" y="394"/>
+  <text class="lbl" fill="#E50914" x="749" y="404">TRAINING</text>
+  <text class="ttl" x="749" y="424">Training dataset</text>
+  <text class="sub" x="749" y="441">Parquet + _manifest.json</text>
+  <path class="flow" d="M233,194 L265,194"/>
+  <circle cx="233" cy="194" fill="#E50914" r="3"/>
+  <circle cx="265" cy="194" fill="#E50914" r="3"/>
+  <path class="flow" d="M467,194 L499,194"/>
+  <circle cx="467" cy="194" fill="#E50914" r="3"/>
+  <circle cx="499" cy="194" fill="#E50914" r="3"/>
+  <path class="flow" d="M701,194 L733,194"/>
+  <circle cx="701" cy="194" fill="#E50914" r="3"/>
+  <circle cx="733" cy="194" fill="#E50914" r="3"/>
+  <path class="flow" d="M935,194 L967,194"/>
+  <circle cx="935" cy="194" fill="#E50914" r="3"/>
+  <circle cx="967" cy="194" fill="#E50914" r="3"/>
+  <path class="flow" d="M366,112 L366,160"/>
+  <circle cx="366" cy="112" fill="#E50914" r="3"/>
+  <circle cx="366" cy="160" fill="#E50914" r="3"/>
+  <path class="flow" d="M467,78 L499,78"/>
+  <circle cx="467" cy="78" fill="#E50914" r="3"/>
+  <circle cx="499" cy="78" fill="#E50914" r="3"/>
+  <path class="soft" d="M1068,112 L1068,160"/>
+  <circle cx="1068" cy="112" fill="#E50914" r="3"/>
+  <circle cx="1068" cy="160" fill="#E50914" r="3"/>
+  <path class="soft" d="M1068,228 L1068,272"/>
+  <circle cx="1068" cy="228" fill="#E50914" r="3"/>
+  <circle cx="1068" cy="272" fill="#E50914" r="3"/>
+  <path class="flow" d="M600,228 L600,272"/>
+  <circle cx="600" cy="228" fill="#E50914" r="3"/>
+  <circle cx="600" cy="272" fill="#E50914" r="3"/>
+  <path class="flow" d="M600,340 L600,384"/>
+  <circle cx="600" cy="340" fill="#E50914" r="3"/>
+  <circle cx="600" cy="384" fill="#E50914" r="3"/>
+  <path class="flow" d="M132,228 L132,384"/>
+  <circle cx="132" cy="228" fill="#E50914" r="3"/>
+  <circle cx="132" cy="384" fill="#E50914" r="3"/>
+  <text class="edge" x="142" y="310">event writer</text>
+  <path class="flow" d="M233,418 L499,418"/>
+  <circle cx="233" cy="418" fill="#E50914" r="3"/>
+  <circle cx="499" cy="418" fill="#E50914" r="3"/>
+  <path class="flow" d="M701,418 L733,418"/>
+  <circle cx="701" cy="418" fill="#E50914" r="3"/>
+  <circle cx="733" cy="418" fill="#E50914" r="3"/>
+  <text class="foot" x="31" y="480">Local build · Docker Compose · synthetic data · numbers are local measurements, not production</text>
+  <text class="foot" text-anchor="end" x="1169" y="480">solid: built · dashed: next</text>
 </svg>

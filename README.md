@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <b>I write down what I learn, every day. Right now I'm building a feature platform on Flink, Kafka and Redis.</b><br>
+  <b>I write down what I learn, every day. Right now I'm building a feature platform on Flink, Kafka, Redis and Cassandra.</b><br>
   Open to work in feature infrastructure and ML platforms.
 </p>
 
@@ -53,26 +53,30 @@ Eight months, April to November 2026. I planned it at the start and track it her
 | 5 · Aug | AWS SAA-C03, FeatureForge launch | FeatureForge v0.1.0 | ✅ [Review](./monthly-updates/month-05.md) |
 | 6 · Sep | MLflow, Metaflow, open source | Lifecycle lab, merged MLflow PR | ✅ [Review](./monthly-updates/month-06.md) |
 | 7 · Oct | FeatureForge streaming | Generic spec-driven Flink job, recovery tests | ✅ |
-| 8 · Nov | FeatureForge spec platform, applications | Plan: Iceberg datasets, Cassandra, serving numbers | 🔄 In progress |
+| 8 · Nov | FeatureForge spec platform, applications | Iceberg datasets, Cassandra, a serving service with measured latency | 🔄 In progress |
+
+**Next:** more spec operators and composite keys, operations (alerts, recovery drills, a soak run), practitioner tooling and a v1.0 release. The order and the proof for each step are in [`STATUS.md`](https://github.com/oster-dev/featureforge/blob/main/STATUS.md).
 
 ---
 
 ## FeatureForge
 
-**[FeatureForge](https://github.com/oster-dev/featureforge)** is my main project. You describe a feature in a YAML file. The platform computes it from a Kafka stream with Flink, writes it to Redis and tests it. It runs on my laptop with Docker Compose and synthetic data, so it's a local build and not a production system.
+**[FeatureForge](https://github.com/oster-dev/featureforge)** is my main project. You describe a feature in a YAML file. The platform computes it from a Kafka stream with Flink, writes it to Redis or Cassandra, serves it through a service that returns a status for every value, and builds point-in-time training data from an Iceberg history. It runs on my laptop with Docker Compose and synthetic data, so it's a local build and not a production system.
 
 <p align="center">
-  <img src="./assets/pipeline.svg" alt="FeatureForge data flow: Kafka events, generic Flink job, Redis, online client. Iceberg and Cassandra are planned." width="100%" />
+  <img src="./assets/pipeline.svg" alt="FeatureForge data flow: a YAML spec drives a generic Flink job. Kafka events pass a validation job, the Flink job and a materializer into Redis or Cassandra, and a feature service reads them. Iceberg tables hold the event facts and the publication history, and a Spark dataset builder writes training datasets." width="100%" />
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/476-unit_tests-E50914?style=flat-square" />
-  <img src="https://img.shields.io/badge/44-integration_tests-E50914?style=flat-square" />
+  <img src="https://img.shields.io/badge/Redis-4,000_req%2Fs_at_p99_5.1_to_7.3_ms-1a1a1a?style=flat-square" />
+  <img src="https://img.shields.io/badge/Cassandra-1,500_req%2Fs_at_p99_14.2_to_14.8_ms-1a1a1a?style=flat-square" />
   <img src="https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" />
   <img src="https://img.shields.io/badge/runs_on-Docker_Compose-2496ED?style=flat-square&logo=docker&logoColor=white" />
 </p>
 
-Here is what works today, and which test proves it:
+The latency numbers are local measurements: one laptop, one service process, Redis and Cassandra in Docker. They are not production numbers.
+
+Here is what works today, and which test or document proves it:
 
 | What works | Proof |
 | :-- | :-- |
@@ -80,11 +84,14 @@ Here is what works today, and which test proves it:
 | A feature keyed by content instead of user, from a spec alone, matching hand-calculated windows | `test_generic_job_content_play_count.py` |
 | Event time, late events, dedupe, replays, conflicting events | `tests/integration/` |
 | Savepoint resume and recovery after a TaskManager crash | `test_generic_job_recovery.py`, `test_generic_job_checkpoint_recovery.py` |
-| Dedupe state expires after its TTL, shown with a short TTL | integration test, see STATUS |
 | Redis writes that stay correct under concurrency | `test_streaming_redis_online_store*.py` |
-| `featureforge validate-spec` with clear exit codes | `test_cli_validate_spec.py` |
+| Redis and Cassandra behind one store contract, and the same spec runs on both by changing one setting | `test_online_store_contract.py`, `test_cassandra_end_to_end.py` |
+| A serving service with a status per value (`ok`, `missing`, `stale`, `backend_error`), never a silent zero, that survives a stopped or slow Redis | `test_feature_service_redis.py`, `test_feature_service_faults.py` |
+| Training datasets in two explicit modes (event time and published as of) from an Iceberg history, with a pinned snapshot | `test_training_dataset_published.py`, `test_event_writer_kafka.py` |
+| Measured latency and the saturation point on one laptop | [`docs/benchmarks.md`](https://github.com/oster-dev/featureforge/blob/main/docs/benchmarks.md) |
+| `validate-spec` and `test-spec` with clear exit codes, no Docker needed | `test_cli_validate_spec.py`, `test_cli_test_spec.py` |
 
-**What it can't do yet:** it only runs locally on synthetic data, I have no latency or throughput numbers, and the Kafka sinks are at-least-once, so I don't claim exactly-once.
+**What it can't do yet:** it runs locally on synthetic data, so I have no production numbers. Flink and Spark support count and ratio features only, JobManager failure is not proven, there are no alert rules or soak run yet, and the Kafka sinks are at-least-once, so I don't claim exactly-once.
 
 <details>
 <summary><b>Full architecture diagram</b></summary>
@@ -93,15 +100,22 @@ Here is what works today, and which test proves it:
 
 ```mermaid
 flowchart LR
-  S[YAML feature spec] --> V[validate-spec]
+  S[YAML feature spec] --> V[validate-spec · test-spec]
   S --> J[Generic Flink job]
+  S --> BF[Spark backfill]
   E[Kafka events] --> J
+  E --> W[Event writer]
   J --> F[Kafka feature topic]
   F --> M[Materializer]
   M --> R[(Redis)]
-  R --> C[Unified online client]
-  B[Offline Parquet · Feast] --> C
-  J -.-> I[(Iceberg · planned)]
+  M --> C[(Cassandra)]
+  M --> H[(Iceberg history)]
+  W --> EF[(Iceberg event facts)]
+  R --> SV[Feature service]
+  C --> SV
+  H --> D[Spark dataset builder]
+  EF --> D
+  D --> T[Training dataset · Parquet + manifest]
 ```
 
 </details>
@@ -112,12 +126,14 @@ The percentages are my own estimate.
 
 | What | Progress | Note |
 | :-- | :-- | :-- |
-| Streaming core (Kafka, Flink, Redis) | ![](https://geps.dev/progress/90?dangerouscolor=E50914&color=E50914) | Done |
-| Declarative specs and generic job | ![](https://geps.dev/progress/60?dangerouscolor=E50914&color=E50914) | Stores and Spark backfill still open |
+| Streaming core (Kafka, Flink, Redis) | ![](https://geps.dev/progress/95?dangerouscolor=E50914&color=E50914) | Done |
+| Declarative specs and generic job | ![](https://geps.dev/progress/65?dangerouscolor=E50914&color=E50914) | Count and ratio only, more operators next |
 | Recovery | ![](https://geps.dev/progress/60?dangerouscolor=E50914&color=E50914) | TaskManager and savepoint done, JobManager open |
-| Iceberg training datasets | ![](https://geps.dev/progress/0?dangerouscolor=E50914&color=E50914) | Next |
-| Cassandra as a second online store | ![](https://geps.dev/progress/0?dangerouscolor=E50914&color=E50914) | Planned |
-| Serving service with p99 latency | ![](https://geps.dev/progress/0?dangerouscolor=E50914&color=E50914) | Planned |
+| Iceberg history and training datasets | ![](https://geps.dev/progress/85?dangerouscolor=E50914&color=E50914) | Both modes done, operators beyond count open |
+| Cassandra as a second online store | ![](https://geps.dev/progress/90?dangerouscolor=E50914&color=E50914) | Behind one contract, a Compose service is open |
+| Serving service with p99 latency | ![](https://geps.dev/progress/85?dangerouscolor=E50914&color=E50914) | Measured on one laptop, one process |
+| Operations | ![](https://geps.dev/progress/30?dangerouscolor=E50914&color=E50914) | Metrics and a dashboard, no alerts or soak run |
+| Catalog, embeddings, ML workflow | ![](https://geps.dev/progress/0?dangerouscolor=E50914&color=E50914) | Planned |
 
 ---
 
@@ -130,6 +146,10 @@ The percentages are my own estimate.
 <img src="https://img.shields.io/badge/Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white" />
 <img src="https://img.shields.io/badge/Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white" />
 <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+<img src="https://img.shields.io/badge/Cassandra-1287B1?style=for-the-badge&logo=apachecassandra&logoColor=white" />
+<img src="https://img.shields.io/badge/Iceberg-4A90D9?style=for-the-badge" />
+<img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+<img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" />
 <img src="https://img.shields.io/badge/Feast-FF6B35?style=for-the-badge" />
 <img src="https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white" />
 <img src="https://img.shields.io/badge/MLflow-0194E2?style=for-the-badge" />

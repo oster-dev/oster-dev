@@ -7,6 +7,89 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 25, 2026
+
+**FeatureForge | Baselines after the Event-Loop Read, a Lag Metric, a Tour Notebook and a Documentation Refresh**
+
+The day after the Redis read moved to the event loop, the numbers had to catch up with the code. I recorded fresh baselines for Redis and Cassandra on a clean `main` with the benchmark runner, added a metric that shows how late the event loop runs, and put a tour notebook and a refresh of nine platform documents on top. The repo now shows what the service does today, with ranges instead of single numbers and with the limits next to them.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #128 | `c40d4b6` | fix: record the git state of the benchmark script's own tree |
+| #129 | `94625c4` | bench: extend the Redis rates of the record preset to 6,000 req/s (ADR-016) |
+| #130 | `dca0138` | docs: record the Redis serving baseline after change 6 (ADR-016) |
+| #131 | `3a31f56` | docs: add the second Redis record run and the latency monitor result (ADR-016) |
+| #132 | `734f747` | docs: record the Cassandra serving baseline after change 6 (ADR-016) |
+| #133 | `5420fb4` | feat: export the event loop lag of the feature service (ADR-016) |
+| #134 | `6f259c0` | docs: add a tour notebook from a spec to a measured service (#134) |
+| #135 | `9d473a8` | docs: refresh the nine platform documents for the current state |
+
+#127 (`5386727`) is listed under Nov 25 by GitHub as well, but it belongs to the Nov 24 entry.
+
+**Measurement | Baselines on a Clean main (#128 to #132)**
+
+- Fixed the wrong commit first (#128). The A/B reports of change 6 named the commit of the working directory, while the base had run from a git worktree. The script now records the git state of its own tree (11 changed lines), and a new test of 59 lines covers it. The raw files of the three new reports carry the right commits in their names.
+- Extended the Redis rates of the `record` preset to 6,000 req/s (#129), a one-line change. With a saturation near 4,900 the old top rate of 4,000 no longer showed where the service gives up.
+- Recorded the Redis baseline with `make bench-record` on a clean `main`, one uvicorn process, 1,000,000 users, a 30 s warm-up and then 3 runs of 30 s per rate (#130). Redis holds 4,000 req/s with a p99 of 5.1 to 7.3 ms and saturates at about 4,600 to 4,900 req/s. CPU per request is 0.19 to 0.29 ms.
+- Recorded a second Redis run of the same code (#131). The first run saturated at 4,824 to 4,871 req/s, the second at 4,611 to 4,744, about 4 percent lower. That is more than the 1 to 2 percent that earlier series showed, so the documents carry the range and not one value.
+- Recorded the Cassandra baseline the same way (#132). The service holds 1,500 req/s with a p99 of 14.2 to 14.8 ms and saturates at about 2,100 req/s. CPU per request is 0.46 to 0.51 ms, still higher than with Redis.
+- Updated the README and STATUS with the numbers in the same PRs (#130, #131, #132), so the front page no longer showed the numbers from before change 6.
+- Counted the bursts of `backend_error` entries. Of 42 Redis runs, 3 had one: 1,200 entries at 2,000 req/s, 400 at 6,000 and 340 at 5,000, all `TimeoutError`. Three Cassandra runs had one (80 entries at 500 req/s, 700 and 90 at 2,500), all `OperationTimedOut`. In every case whole requests failed.
+- The bursts sit in two groups. Two hit rates far below saturation: Redis at 2,000 req/s and Cassandra at 500 req/s, the first rate after the seed. Four hit at or above saturation (Redis at 5,000 and 6,000, Cassandra at 2,500), where the socket timeout of the async client also counts the time the event loop needs to come back to the call. That was not measured.
+- Switched the Redis latency monitor on with a 20 ms threshold for the second run. It recorded two events of 20 ms or more in the whole run. That run had its own burst, 340 entries at 5,000 req/s, and the first run had no monitor.
+
+**Observability | The Event Loop Lag (#133)**
+
+- Moving the Redis read onto the event loop creates one new question: if a call times out, is Redis slow, or is the loop delayed? The metric `featureforge_event_loop_lag_seconds` is a histogram of how late the loop wakes a task that sleeps for 20 ms, about 50 times per second. The cost is estimated as very small and was not measured with an A/B.
+- The PR has the metric in `service_metrics.py`, the start of the watcher in `service_api.py`, a 76-line unit test, a section in `observability.md` and the raw data of one run.
+- Measured it once with Redis (60 s per rate, one uvicorn process). At saturation the loop woke the task 1.0 to 1.7 ms late on average, and in none of the 27 windows was a wakeup late by 25 ms or more. At 3,000 req/s the lag was close to zero.
+- The run had no entries that were not ok, so the lag during a timeout burst is not measured. The result does not support the idea that the timeouts at saturation come from a stalled loop, and it does not rule it out.
+
+**Visibility | The Tour Notebook and the Documentation Refresh (#134, #135)**
+
+- Added `notebooks/featureforge-tour.ipynb` (#134), a walk from a spec to a measured service. It needs no Docker: the reference implementation needs no infrastructure, and the serving part uses a stand-in for Redis.
+- The notebook is checked in with its outputs. A test (`test_tour_notebook.py`) checks the stored file: every code cell was executed, no output is an error, and no local path like `/Users/` is in it. It does not run the notebook again.
+- Refreshed nine documents (#135): README, STATUS, CONTRIBUTING, ARCHITECTURE, DESIGN, PLATFORM_BLUEPRINT, demo, observability and streaming-migration. The diff is 1,904 insertions and 510 deletions, plus twelve SVGs (a hero, a quickstart terminal, a card with the serving numbers, a time-model diagram and one banner per document).
+- The documents now describe the work by topic. Stage letters and step labels are gone, and the import steps of the streaming history keep their names, because those are the names of real steps.
+- Fixed three stale facts: an old number table in `DESIGN.md` (now Redis 4,000 and Cassandra 1,500), the manifest name (`_manifest.json`) and the clone URL in `demo.md` and `CONTRIBUTING.md`.
+- Added Demo E (feature serving) to the demo guide and listed all six CI jobs. `STATUS.md` has a new gap row for operations: no alert rules, runbooks only for the batch path, no soak run.
+- Checked the result before the commit. The numbers on the SVG card match the baselines. A search for alert rules in `docker/prometheus` was empty, which confirms the new gap row. After the merge, every page, diagram and image rendered correctly on GitHub.
+  
+**Debugging | What Went Wrong on the Way**
+
+- I ran the check commands on `main`, but the branch for the documentation change existed already at the same commit. `git branch --show-current` showed `main`, and the uncommitted files would have gone into a commit on `main`. Uncommitted changes follow `git switch`, so the fix was a switch before the commit.
+- A `grep` with `':!docs/benchmarks'` failed with "No such file or directory". That exclusion is git pathspec syntax, not `grep` syntax.
+- The first Redis record run had two bursts in 21 runs (1,200 and 400 entries). A single run cannot tell a defect from an artifact of the machine, which is why the second run was needed (#131).
+- The reports of change 6 still name the wrong commit. I did not edit them. The limit is written next to the numbers, and #128 prevents it for new reports.
+
+**What I Deliberately Skipped**
+
+- An asynchronous Cassandra reader. The Cassandra reader still runs in the thread pool, and the effect of a change is not measured.
+- The reason for the saturation at about 0.93 cores, and the behavior of the connection pool under longer overload.
+- The cause of the `backend_error` bursts. The error type and the loop lag exist now, and the lag during a burst is not measured.
+- A Cassandra-backed service in the Compose stack, a deadline over the whole request, and more than one service process.
+- A repeatable profiling script. The profiles of change 6 used throwaway code.
+- The video. It starts tomorrow, on top of a README that already shows what it will say.
+
+**What I Understood**
+
+- Fix the tool before you record a baseline, so the report carries the right commit. The file names of the three reports show that it worked.
+- A record run is a distribution, not a number. Two runs of the same code were 4 percent apart, so the honest number is a range.
+- Sort the bursts by where they happen before you explain them. Two hit far below saturation, four at or above it, and the second group has a plausible mechanism that was not measured.
+- A metric can weaken a suspect without clearing it. The lag run had no burst, so it does not rule out the loop.
+- After a large change, update the documents with the new numbers on the same day, or they describe the code of the day before.
+- Check a long document refresh claim by claim. The numbers on the card had to match the baselines, and the claim about alert rules had to survive a search.
+- Check my own entry against the sources before I publish it. Four of my statements were stronger than `benchmarks.md`.
+- Run `git branch --show-current` before you commit. Changes do not belong to a branch until they are committed.
+
+**Takeaway**
+
+`main` now carries fresh baselines for both backends: Redis holds 4,000 req/s with a p99 of 5.1 to 7.3 ms and saturates at about 4,600 to 4,900 req/s, and Cassandra holds 1,500 req/s with a p99 of 14.2 to 14.8 ms and saturates at about 2,100 req/s. All numbers are local, from one laptop and one process, and the documents say so. A lag metric, a tour notebook and nine refreshed documents show it. Open limits: one machine, one process, a saturation at about 0.93 cores that I cannot explain, and bursts of timeouts with an open cause.
+
+---
+
 ## November 24, 2026
 
 **FeatureForge | Redis on the Event Loop, a Dev Container, a Quickstart, a Design Document and a Warm-up Test**

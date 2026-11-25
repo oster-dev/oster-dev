@@ -71,7 +71,6 @@ The day after the Redis read moved to the event loop, the numbers had to catch u
 - The cause of the `backend_error` bursts. The error type and the loop lag exist now, and the lag during a burst is not measured.
 - A Cassandra-backed service in the Compose stack, a deadline over the whole request, and more than one service process.
 - A repeatable profiling script. The profiles of change 6 used throwaway code.
-- The video. It starts tomorrow, on top of a README that already shows what it will say.
 
 **What I Understood**
 
@@ -169,7 +168,7 @@ The Redis read path of the serving service moved from a worker thread to the eve
 - The reason for the saturation at 0.93 cores, and the behavior of the pool under longer overload.
 - The cause of the `backend_error` bursts. The counter exists now, and no burst has happened since.
 - More than one service process.
-- The notebook and the video of the visibility package.
+- The notebook.
 
 **What I Understood**
 

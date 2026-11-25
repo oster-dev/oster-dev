@@ -52,7 +52,7 @@ Eight months, April to November 2026. I planned it at the start and track it her
 | 4 · Jul | Kafka, Airflow, system design | Streaming fundamentals | ✅ [Review](./monthly-updates/month-04.md) |
 | 5 · Aug | AWS SAA-C03, FeatureForge launch | FeatureForge v0.1.0 | ✅ [Review](./monthly-updates/month-05.md) |
 | 6 · Sep | MLflow, Metaflow, open source | Lifecycle lab, merged MLflow PR | ✅ [Review](./monthly-updates/month-06.md) |
-| 7 · Oct | FeatureForge streaming | Generic spec-driven Flink job, recovery tests | ✅ |
+| 7 · Oct | FeatureForge streaming | Generic spec-driven Flink job, recovery tests | ✅ [Review](./monthly-updates/month-07.md) |
 | 8 · Nov | FeatureForge spec platform, applications | Iceberg datasets, Cassandra, a serving service with measured latency | 🔄 In progress |
 
 **Next:** more spec operators and composite keys, operations (alerts, recovery drills, a soak run), practitioner tooling and a v1.0 release. The order and the proof for each step are in [`STATUS.md`](https://github.com/oster-dev/featureforge/blob/main/STATUS.md).

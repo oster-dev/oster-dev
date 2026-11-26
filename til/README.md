@@ -7,6 +7,72 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 26, 2026
+
+**FeatureForge | Phase 3 Starts: ADR-017, sum and avg in the Spark Backfill and a Cassandra TTL Flake**
+
+The first step of Phase 3 is the spec language beyond count. I wrote the decision first (ADR-017), pinned `sum` and `avg` to values calculated by hand, and then let the Spark backfill compute them. The event-time training dataset builder reuses that backfill, so it picked up the two operators as well, and a test now covers that path. On the way, an unrelated Cassandra test failed in CI, and its cause was in the test, not in the store.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #136 | `156c59f` | docs: propose how the engines and stores handle operators beyond count (ADR-017) |
+| #137 | `e1754a9` | test: pin sum and avg to hand-calculated values in the spec reference (ADR-017) |
+| #138 | `68fe387` | docs: record the first two answers of ADR-017 and accept it |
+| #139 | `9d8d7bc` | test: give the TTL contract tests room for one-second Cassandra TTL precision |
+| #140 | `a458cc7` | feat: let the Spark backfill compute sum and avg (ADR-017) |
+
+**Design | ADR-017: Operators beyond Count (#136, #138)**
+
+- Started the day by checking `main`: `make check` passed with 1,069 tests, 5 skipped (they need Redis and Feast) and 113 integration tests deselected.
+- Read the code before writing the decision. The Flink plan rejects every operator except count (`UnsupportedSpecError`), the Spark backfill raised `NotImplementedError` for it, and the spec model rejects the monotone update policies for non-count operators, because ADR-008 says only counts are monotone under added events.
+- Noticed that this rule is stricter than it needs to be. Identity conflicts fail the job, so events are only ever added to a window. Then `count`, `sum` over a non-negative field and `max` can only grow, and `min` can only fall.
+- Decided in ADR-017 that these four may use `componentwise_monotonic`, with one direction per component, and that `avg` is a derived value over a `sum` and a `count`, like the skip rate. It is never stored as a component.
+- Also decided that `last_k` and `approx_distinct` need `window_replace`, and that a record carries an events-seen count. The rule of ADR-008, "accept a re-emission in the same window only if it is identical", would reject a legitimate late correction.
+- Fixed the order of delivery: `sum` and `avg`, then `min` and `max`, then `last_k`, then `approx_distinct`, each with a hand-calculated fixture, parity at every window boundary and a store contract test.
+- Merged it as Proposed (#136) and answered the first two open questions with the code (#138). `PlaySeconds` is a strict integer with `ge=0`, so a sum over it is a non-negative integer. A derived expression may return a missing value: `validate-spec` accepted `play_seconds_sum / play_count if play_count > 0 else None`, and the reference returned `None` for an empty window and 90.0 for the fixture. Then I set the status to Accepted.
+- Two questions stay open: whether the record parser and the store accept a missing derived value, and the order of `last_k`.
+
+**Testing | Hand-Calculated Targets (#137)**
+
+- Wrote the target before the engine. A fixture of 8 events and a spec in `fixtures/specs`, not in `feature_repo/specs`: the service builder loads every real spec, and the store refuses `window_replace`, which the spec names because the model allows monotone policies for count only.
+- Chose the events to hit every edge: the lower window bound (excluded), the upper bound (included), a duplicate delivery with another `ingested_at`, a `skip` event that the filter drops, a user without events and an empty average.
+- Pinned five cases by hand. At 11:00, user 1 has 3 plays, 270 seconds and an average of 90, user 2 has 1 play, 200 seconds and 200, and a user without events has 0, 0 and a missing average. At 11:30, user 1 has 2 plays, 590 seconds and 295, and user 2 has 0, 0 and missing.
+- Made sure the test can fail. Moving the lower bound of the window to inclusive (`window_start <= event_time`) and the upper bound to exclusive both made it fail, and `reference.py` was restored afterwards.
+
+**Debugging | A Cassandra Flake in CI (#139)**
+
+- The first CI run of #137 failed in a test I had not touched: `test_unchanged_and_stale_deliveries_do_not_extend_the_expiry[cassandra]`. The stale write returned `written`, which means the value had expired. I re-ran the job and handled the test in its own PR.
+- My first guess was only the latency of two lightweight transactions. The real cause is the resolution: Cassandra counts a TTL in whole seconds, so a TTL of 3 s lives between 2 and 3 s. The test waited 2 s and then wrote twice, which left no margin in the worst case. Two neighbours had the same weakness: an expiry test with a TTL of 1 s and a restart test with a margin of one second.
+- Changed the three tests to a TTL of 6 s (3 s for the plain expiry test) and replaced the fixed sleep by a poll (`wait_until_expired`). The expiry check now compares against the clock: without an extension the value is gone by `started + ttl`, an extension by the write at `started + 2` would keep it past `started + ttl + 1`. The restart test waits 3 s, writes, waits 3.2 s and reads, so the first write alone would have expired.
+- Ran the three tests five times against Redis and five times against Cassandra locally, 3 passed in about 15 s each. The tests take about 8 s longer per backend.
+- The first local run failed with `BusyLoadingError`. Redis was still loading its AOF file after `docker compose up`. The note from November 24 already says to wait for `PONG`.
+- The merge commit of #139 shows 6 of 7 checks on `main`, with one red. I have not read yet which check it was. The next commit is green, and a Cassandra job that is green on `main` over several runs is the real proof that the flake is gone.
+
+**Feature | sum and avg in the Spark Backfill (#140)**
+
+- `backfill_spec` computes `sum` as the sum of the column over the events of a window, filled to 0 for an empty window, and `avg` as the average, which Spark leaves null for an empty window. That matches ADR-008. `min`, `max`, `last_k` and `approx_distinct` still fail with `NotImplementedError`, now with a message that names the supported operators.
+- Two existing tests used `sum` as the example of an unsupported operator, so they use `min` now. The CLI test checked `"sum" in output`, which would have passed for the wrong reason, because the new message always contains the words "count, sum and avg". It checks `unsupported: ['min']` now.
+- Added a test file with ten cases: the five hand-calculated values and parity with the spec reference. Three changes of the code made it fail: dropping the zero fill for an empty sum, moving the lower window bound to inclusive and moving the upper bound to exclusive.
+- Found a side effect by following the callers. `training_dataset.py` calls `backfill_spec`, and its column list is generic, so the event-time dataset builder accepted `sum` and `avg` specs without any test. Added a test that builds a dataset with both features at two observation times (3 plays, 210 seconds, average 70, and an empty window with 0, 0 and a missing average) and compares every column with the reference. The `published_as_of` mode is unchanged, because its history comes from the Flink job, which supports count only.
+- Updated the documents: README, STATUS, ARCHITECTURE, DESIGN, the demo guide and the streaming migration say what the Spark backfill, the Flink job and the dataset builder cover. Sentences that named both engines together were split.
+- Cleaned up my own new test: it rebuilt the event schema by hand, and now it uses `events_to_frame`.
+- Ran the unit suite (1,076 tests passed), `ruff` and `mypy`, and the two integration modules for the training dataset locally (13 tests passed in 31 s).
+
+**Debugging | What Went Wrong on the Way**
+
+- I chased "glued words" in the documents ("about0.92", "for20 ms"). `git diff --stat` stayed empty after the replacement, so they were never in the files. They were line breaks of the terminal when I copied the output.
+- A documentation script did not run, and I noticed it only because `docs/DESIGN.md` was missing in `git diff --stat`. The diff list is worth reading before every commit.
+- `match="sum"` and `"sum" in output` look like checks of an error, and they stop being one when the message changes. Assert on the specific rejected operator.
+- A failing job on an unrelated PR cost time. The first guess at the cause (latency) was incomplete, and the number that explained it (one-second TTL resolution) came from the documentation, not from the log.
+
+**Takeaway**
+
+The Spark backfill and the event-time training datasets now compute `sum` and `avg`, pinned to values calculated by hand and to the spec reference, and ADR-017 is accepted. The Flink job still supports count only, so `sum` features cannot yet be computed in a stream or served online. Open limits: the Flink plan, the store policy for non-count values, and a check on `main` that I still have to read.
+
+---
+
 ## November 25, 2026
 
 **FeatureForge | Baselines after the Event-Loop Read, a Lag Metric, a Tour Notebook and a Documentation Refresh**

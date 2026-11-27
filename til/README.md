@@ -7,6 +7,108 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 27, 2026
+
+**FeatureForge | ADR-017 Delivered through min and max: sum, avg, min and max in Spark, Flink and the Online Path**
+
+Yesterday ended with the Spark backfill computing `sum` and `avg`. Today I finished the next two steps of the delivery order in ADR-017. `sum` and `avg` now run in the Flink job and are served online from Redis and Cassandra. `min` and `max` went through the same three layers, one pull request each: the Spark backfill, the Flink job and the online path. Five PRs merged, each one green on its own.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #141 | `f98ceb0` | feat(flink): support sum and avg in the generic spec job |
+| #142 | `f2a5171` | feat(streaming): serve sum and a derived avg online (ADR-017) |
+| #143 | `b41332f` | feat(spark): compute min and max in the spec backfill (ADR-017) |
+| #144 | `c7cabc8` | feat(flink): compute min and max in the generic job (ADR-017) |
+| #145 | `80e435d` | feat(streaming): serve min and max online (ADR-017) |
+
+**Feature | sum and avg in the Flink Job (#141)**
+
+- Ran the three existing Flink integration modules first as a baseline: 11 tests passed in 4 min 49 s.
+- The plan held one counter per aggregation. Now it holds a list of aggregations with a slot each. `count` and `sum` take one slot, `avg` takes two (the sum and the number of matching events). `accumulate`, `merge`, `aggregate_values` and `feature_record` work per operator, and a derived value with a missing input is missing. The job only changed its state type: a tuple of `LONG`, one per slot.
+- The integration test got a third case on the generic job: the golden events of `user_play_seconds_1h` through Kafka and Flink, with a ninth event (a `skip` of a user without plays). Every emitted window is compared with the spec reference and with an independent calculation, and the last window and the empty average are pinned by hand.
+- The spec lives in `fixtures/specs`, so the JobManager got a second mount in Compose and the test a host and a container directory per case.
+- Made sure the case can fail: changing the empty average from missing to `0` made it fail after 26 s, and after restoring the code all 3 cases passed in 95 s. The rebuilt image had the manifest hash of the first build, so the restore was exact.
+
+**Feature | sum and avg Online (#142)**
+
+- Read ADR-017 first. It decides that `sum` and `max` may use `componentwise_monotonic` and that `avg` is a derived value over a `sum` and a `count`. So the online path needs no new store policy. What was missing: the model rule, the record parser and typed values.
+- The model accepts `count` and `sum` under `componentwise_monotonic` (`append_only` stays count-only). The loader requires the summed field to be a non-negative integer in the event contract, because a sum is only monotone if it can only grow.
+- The record parser takes a sum as a component. A derived value may be `null`, but only where the spec expression gives none for the components of the record. A `null` with events in the window, or a `0.0` for an empty window, is an error.
+- Neither store needed code. Both call `decide_count_vector_update` with the vector of the record, and the Cassandra store keeps the record as a text payload. The history table already had optional columns for derived values. `FeatureEntry.values` became nullable, and the HTTP answer carries the `null`.
+- The fixture spec `user_play_seconds_1h` has `avg` as an aggregation and a placeholder policy, so a second spec, `user_play_seconds_derived_1h`, carries the online shape: count and sum as components, the average as a derived value.
+- Tested on every layer: unit tests for model, loader, parser, store with a mocked client, serving entry and HTTP answer; a real Redis (TTL, `null` round trip, a correction that lowers the average, replay, four concurrent writers); the store contract on both backends (12 cases); Kafka to Redis through the materializer; and events to Redis through the whole chain.
+- Found a CI trap while registering the new test modules: a test with the `integration` marker that is in no list never runs. The Flink script and `ci.yml` (with `required_suites`) are those lists.
+
+**Feature | min and max in the Spark Backfill (#143)**
+
+- Wrote the target first: a table of 12 hand-calculated windows on the existing events. It has an event exactly on the lower bound, a duplicate delivery, a `skip` with a smaller value that the filter must exclude, a minimum that rises when an event leaves the window, and empty windows. The spec reference reproduced the table before any engine code existed.
+- The change in Spark is small: `F.min` and `F.max` over the filtered values, and both are `null` over no events, like in the reference.
+- Three tests used `min` as their example of an unsupported operator (Spark, CLI, Flink plan), and every delivery step breaks them. They use `last_k` now, the operator that is furthest away.
+- The documents say that the Spark backfill supports `min` and `max` and the Flink job does not yet. Sentences that named both engines together were split.
+
+**Feature | min and max in the Flink Job (#144)**
+
+- I expected a sliding window to need a recompute when an event leaves it. The code settled it: every window has its own accumulator and only gets events added, so `min` and `max` need an add step and a merge step.
+- `min` and `max` take two slots: the extreme so far and the number of matching events. The count separates a missing extreme (`null`) from a real `0`.
+- `merge` was a sum of slots, which is wrong for an extreme. It takes the plan now: counts and sums add up, an extreme takes the smaller or larger value, and a side without matching events is ignored. The job passes its plan to it.
+- The golden case on the real job has 12 windows on minute boundaries, on the same events as Spark.
+- Two mutations. `min` to `max` in `merge` failed the unit test, because the integration test never reaches `merge`. `min` to `max` in `accumulate` failed the case on the real job after 23 s. After restoring, all 5 cases passed in 140 s and `git status` was clean.
+
+**Feature | min and max Online (#145)**
+
+- The biggest of the three, because three assumptions from `sum` stop holding: a component can fall (`min`), a component can be missing, and the ranking of versions used `desc()` on every component.
+- The decision function maps each component to a progress value: the value for a growing component, the negated value for a minimum, and a missing extreme is behind every value. After that the old rule applies: all components at least as advanced is a correction, all at most as advanced is stale, anything else is a conflict. Counters behave as before, which the existing tests show.
+- Checked against an independent oracle on all 729 pairs of vectors.
+- The parser takes `min` and `max` as integer or `null` with any sign, and the record carries the directions of its spec (outside of equality). The loader requires an integer field for a monotone `min` or `max`. Float components stay an open question.
+- History columns of `min` and `max` can be `null`. The ranking of published-as-of, in Python and in Spark, uses the directions: Python would have raised a `TypeError` on `None`, and Spark would have ordered a minimum the wrong way.
+- Integration: a real Redis (5 tests, including four concurrent writers), the store contract on both backends (12 cases), the Spark join of the history (a missing extreme as `null` with status `present`, ties at equal publication time in both append orders, random histories against the Python oracle), Kafka to Redis, and events to Redis through the whole chain.
+- Registered the new modules: three in the Flink script, and the Spark file in the Iceberg call and in `required_suites` of `ci.yml`. Updated ADR-017 (the delivery, the order of a missing extreme, the float question) and the documents.
+
+**Testing | What Moved Today**
+
+- Unit suite: 1,099 tests when #141 was verified and 1,228 at the last run of #145. The deselected integration tests went from 114 to 151.
+- All PR checks green. The merge commits of #140 to #144 show 7 of 7 checks on `main`.
+- The mutations were the most useful tests of the day. Each layer got one that the next layer would not have caught: `merge` can only be reached by a unit test.
+
+**Debugging | What Went Wrong on the Way**
+
+- The Compose file got the new mount twice, and the fixture got the ninth event twice. `wc -l` showed 10 lines instead of 9, and `git diff` showed the second mount. The unit tests stayed green because a repeated event with the same `event_id` is deduplicated. Duplicates like this are invisible to the tests, only the diff shows them.
+- I planned a new ADR for the `window_replace` store policy. A `grep` for `window_replace` in the ADR directory showed that ADR-017 already decides it, so there is no new ADR. Read the existing ADRs before writing a decision.
+- I forgot one `git commit` and noticed it only because the log did not show the commit. `git status` after every step would have shown it.
+- The glob `--include=*.py` failed in zsh with "no matches found". It needs quotes.
+- The documents have hard-wrapped lines, so a search for a sentence has to span the line break. A replacement that does not find its text exactly once should stop and not write anything.
+- `docker compose up --build` is needed after every change in `src`: the Flink image copies the package, and the old model rejected the new spec before the job started.
+
+**What I Deliberately Skipped**
+
+- `last_k`, `approx_distinct` and the `window_replace` store policy (ADR-017, steps 4 and 5). These values are not monotone and need the events-seen count as a version.
+- Float components, composite keys, and a serving test for `min` and `max` entries (the null entry is tested for the derived average).
+- Running the whole Flink integration script locally. CI ran it.
+- Reading the red check on the merge commit of #139 from yesterday. It still shows 6 of 7 in the commit list, while the next five commits show 7 of 7.
+- The merge commit of #145 was still running its four checks when I looked.
+- The "Online write policies" section of `ARCHITECTURE.md` describes the decision for counters only. The direction is in the ADR and the docstring.
+- The video. It comes when FeatureForge is finished.
+
+**What I Understood**
+
+- Deliver an operator in layers, each as its own green PR: Spark, then Flink, then the online path.
+- Read the existing ADRs before writing a decision.
+- A test that names one operator as the unsupported example breaks with every delivery step. Name the operator that is furthest away.
+- Order with a score and check it against an oracle over every pair. A direction per component is a mapping, not a new rule.
+- Missing is not zero. An extreme needs a second piece of state (the count) to tell them apart.
+- A ranking is part of the contract. Its tiebreakers must handle `None` and respect the direction.
+- A test module that is in no list never runs. Register it where the others are.
+- Test the layer that the end-to-end test cannot reach with its own mutation.
+- Read the diff and `git status` after every step. Duplicates and missing commits show up there and nowhere else.
+
+**Takeaway**
+
+`sum`, `avg`, `min` and `max` now run in the Spark backfill, in the generic Flink job and online on Redis and Cassandra, with a missing value stored as `null` and a version ranking that respects the direction. Each operator is pinned to values calculated by hand and to the spec reference. ADR-017 steps 1 to 3 are delivered. Open limits: `last_k`, `approx_distinct` and the `window_replace` store, float components, composite keys.
+
+---
+
 ## November 26, 2026
 
 **FeatureForge | Phase 3 Starts: ADR-017, sum and avg in the Spark Backfill and a Cassandra TTL Flake**

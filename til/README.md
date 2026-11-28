@@ -7,6 +7,129 @@ TIL Started: April 13, 2026
 
 ---
 
+## November 28, 2026
+
+**FeatureForge | ADR-017 Step 4: last_k in Spark, Flink, the Online Stores and the History**
+
+Yesterday ended with `sum`, `avg`, `min` and `max` in all three layers. Today was `last_k`, and it differs from all of them: its value is a list, and a list has no direction, so the store cannot order two values of one window componentwise. ADR-017 answers this with the `window_replace` policy and a version, the events seen. I wrote the decision first (#146) and then delivered `last_k` layer by layer: the Spark backfill, the Flink job, the contract, the two online stores and the history. Six PRs merged, each one green on its own.
+
+**Commits Merged**
+
+| PR | Commit | Message |
+|---|---|---|
+| #146 | `67285b7` | docs(adr): decide the shape of last_k and the window_replace store (ADR-017) |
+| #147 | `8b641bd` | feat(spark): compute last_k in the spec backfill (ADR-017) |
+| #148 | `eabdcd4` | feat(flink): compute last_k and the events seen in the generic job (ADR-017) |
+| #149 | `a47cc1c` | feat(streaming): add the window_replace contract for last_k records (ADR-017) |
+| #150 | `83dbff9` | feat(streaming): store window_replace records in Redis and Cassandra (ADR-017) |
+| #151 | `f951c79` | feat(streaming): hold last_k in the history and rank it by events seen (ADR-017) |
+
+**Design | The Shape of last_k and window_replace (#146)**
+
+- Started the day on `main` at `80e435d`. The red check on the merge commit of #139 from Nov 26 was no longer red.
+- ADR-017 had one open question on `last_k` (the order and the largest `k`) and a decision that it needs `window_replace` with an events-seen count. I fixed the details in an addendum before writing code.
+- The value is an array of integers, oldest first, ordered by `(event_time, event_id)` like the reference, at most `k` long. A window without matching events gives an empty array, and an empty array is a value, not a missing value. Like `min` and `max`, it takes an integer field only.
+- `k` is at most 100. An event enters every window it falls into (1,440 windows for a 24 h window with a 1 min slide), and each window holds up to `k` values per key, so `k` bounds the state.
+- `events_seen` is the number of events in the window after deduplication, counted whatever the filters say. Events are only added to a window, so it only grows, and that is what makes it a version. The name is reserved.
+- The store decision: a newer window replaces an older one. In the same window more events seen are written, the same events seen with the same values are unchanged, the same events seen with other values are a conflict, and fewer are stale.
+- Fixed the order of the pull requests: Spark, then Flink, then the online path (contract, stores, history, serving).
+
+**Feature | last_k in the Spark Backfill (#147)**
+
+- Read the reference before writing a target. It already supports `last_k` (sort by `(event_time, str(event_id))`, the last `k`, an empty list for an empty window), so "reference first" was only a test that pins its behaviour.
+- My first target used `k = 3`, and the golden events never cut anything: the largest window holds three plays. A test with a `k` that never truncates cannot tell the last `k` from the first `k`. I changed it to `k = 2` (`user_play_seconds_last2_1h`), and three windows cut now. The values also stay in time order (`[120, 60]`, not `[60, 120]`).
+- Pinned 12 windows by hand: fewer than `k` values, exactly `k`, more than `k`, both window bounds, a duplicate delivery, a filtered `skip` and empty windows.
+- Spark collects a struct of `(event time in microseconds, event id as text, value)` for the matching events, sorts it (the struct compares in that order, so the event id decides a tie), takes the value and slices the last `k`. I did not use a negative slice start, because I expected it to return an empty array for a list shorter than `k`. I did not test that. A group without a match collects nothing, which gives `[]` and needs no fill.
+- A separate test with three events at the same time, arriving out of order, pins the tie-break by event id. By event id the values are 20, 10, 30, by arrival 30, 20, 10, and by value 10, 20, 30, so each wrong order gives a different answer.
+- The spec model bounds `k` at 100, with tests for 100 and 101.
+- Four mutations made the new tests fail: no event id tie-break, the first `k` instead of the last `k`, the lower window bound inclusive, and the upper bound exclusive.
+- Three tests used `last_k` as the example of an unsupported operator and moved to `approx_distinct`. The Spark test asserts on the rejected operator, because the new message always contains the word `last_k`, and `match="last_k"` would have passed for the wrong reason.
+- Unit suite: 1,267 tests (1,228 before).
+
+**Feature | last_k and the Events Seen in the Flink Job (#148)**
+
+- A Flink tuple of integers cannot hold a list with times and event ids. A plan with a `last_k` keeps a buffer of `(event time, event id, value)` entries, sorted and at most `k` long, and the job gives it a pickled accumulator. Every other plan keeps the tuple of longs, so the existing jobs did not change.
+- `merge` keeps the last `k` entries of both sides. The integration test never reaches `merge` on sliding windows, so a unit test covers it.
+- A spec with the policy `window_replace` gets one more slot at the end, the events seen, and the record carries it as `events_seen`. It counts every event, so the `skip` at 10:45 counts as seen. The name is reserved.
+- The existing spec `user_play_seconds_1h` names `window_replace` as a placeholder (it needs an `avg`), so it emits `events_seen` too. Three unit tests and the golden case of that spec needed one more slot. That is a free test of `events_seen` on a plan without a buffer.
+- Wrote the table of `events_seen` by hand next to the lists. On the new case, Flink emits 241 windows (121 for user 1, 60 each for users 2 and 3), and a window without an event is never emitted, so the empty window of the Spark table does not exist in the job.
+- The part I was unsure of worked: `Types.PICKLED_BYTE_ARRAY()` as the accumulator type of a window. The new case passed on the real job, with every emitted window compared with the reference and with an independent function.
+- Four mutations failed the unit tests. The first `k` instead of the last `k` also failed the case on the real job (29 s), and the checksum of the file was the same after the restore. All six cases of the module passed on a rebuilt image (162 s), so the jobs without a buffer are unchanged.
+- Unit suite: 1,287 tests.
+
+**Feature | The window_replace Contract (#149)**
+
+- `decide_window_replace_update` orders two records of one entity by the rule of the ADR, and `WindowState` carries the values and the events seen. A check over all 144 pairs of 12 states compares it with the same rule written as a key comparison.
+- My first version of that test failed on a number I had worked out in my head. The real count is 12, and the filter I had added (`len(recent) <= seen`) never filtered anything. I removed the filter and wrote `12`.
+- The record gets `sequences` (the lists) and `events_seen`. `counts` stays `int | None`, so history and serving keep their types for the next steps. The parser requires `events_seen` of at least 1, a count that does not exceed it, and a list of integers that is at most `k` and not longer than `events_seen`. A sum may be negative under `window_replace`, because nothing requires a monotone sum there. A derived value over a `last_k` is rejected.
+- The spec model reserves `events_seen`, and the loader requires an integer field for a `last_k` under `window_replace`.
+- Three existing tests asserted the list of supported operators in a message. They name the rejected operator now ("got avg for avg_play_seconds").
+- Eight mutations made the new tests fail, among them a count above the events seen, a list above `k` and a `last_k` over a text field.
+- Unit suite: 1,332 tests (45 more).
+
+**Feature | window_replace in Redis and Cassandra (#150)**
+
+- Both stores call `decide_count_vector_update` in exactly one place. `decide_record_update` picks the rule from the record: with events seen it orders by them, otherwise it is a count vector as before. Both stores store the record as text, so no schema or format changed. `window_replace` joined `SUPPORTED_POLICIES`.
+- One test pins why the version matters: a late `skip` can change the list and leave the count as it was. A count vector would call that record unchanged and the corrected list would be lost. With the events seen it is written.
+- Seven new contract tests run on both backends: the round trip of a list, the corrected list, fewer events seen, a replay, a conflict, a newer window with fewer events seen, and eight concurrent writers. They passed on Redis and on Cassandra.
+- Found a silent loss by following the readers of `record.counts`. `feature_service` builds a served value from `counts` and `derived`, so a list would disappear without an error. A record with a list is a `backend_error` with the type `SequenceValuesNotServed` until the entry can hold lists. The next pull request removes the guard.
+- The constructor test that expected the store to refuse `window_replace` now checks that it accepts it. A second test narrows `SUPPORTED_POLICIES` with `monkeypatch`, so the refusal of an unlisted policy stays covered.
+- One line in my first draft of a decision test checked nothing (`assert incoming.vector if False else True`). Replaced with the real assertion.
+- Three mutations: every record decided as a count vector (unit and contract), the serving entry dropping the list again (unit only) and the stores refusing the policy again (unit and contract).
+- Unit suite: 1,340 tests, and 159 integration tests deselected (152 before).
+
+**Feature | last_k in the History and the Ranking (#151)**
+
+- The history made a `long` column of every counter, and writing the first `last_k` record would have raised a `KeyError`. A `last_k` is a `list<long>` column now, and `events_seen` a required long before `published_at`. The elements of a list are optional in the schema, because PyIceberg does not write an optional Arrow element into a required one, and the parser guarantees integers.
+- The update identity contains the list and the events seen, and it gets the events seen only for a record that has them. A test pins the hash of a count-vector record by hand, because a changed identity would make every old row look new to the idempotent append.
+- The reopening check of a table counted the columns to find `published_at`. A list column's element takes a field id of its own, so it reads the id from the table now. A unit test opens the table twice.
+- `published_as_of` and the Spark join rank by `published_at`, the window, the events seen, the numeric components and the update id, in this order in both engines. A list is never compared.
+- 9 unit tests and 11 Spark/Iceberg tests against the Python oracle: an empty list stays a list, four ties in both append orders, a later publication over more events seen, and random histories. The new module is registered in `ci.yml` and in `required_suites`.
+- The mutation check found a hole in my own test. With the events seen removed from the ranking, in Python or in Spark, the Spark test still passed: the numeric components pointed to the newer record anyway, or the hash of the update id fell the right way. I added a case where the older record has the larger count and only the events seen choose the newer one, and then both mutations failed.
+- Unit suite: 1,349 tests, and 168 integration tests deselected at the last `make check`. The extra Spark case adds two more.
+
+**Testing | What Moved Today**
+
+- Unit suite: 1,228 tests after #145 and 1,349 after #151. Integration tests deselected: 151 to 168, and two more with the last Spark case.
+- Every new layer got mutations that make its tests fail, and the files were restored each time. The most useful one was the one that did not fail.
+- All PR checks green. The merge commit of #146 showed 6 of 7, a failure of the runner. I ran it again and all checks were green. The merge commit of #151 was still running its checks when I looked.
+
+**Debugging | What Went Wrong on the Way**
+
+- The first target of `last_k` never truncated. A test for the last `k` needs a window with more than `k` values.
+- A number in a test that I had worked out in my head was wrong, and a filter that I added to make it look careful did nothing.
+- `pytest -x` stopped at the first red test. A run of the whole suite showed the second one.
+- Three tests failed because they asserted the list of supported operators in a message. A message that lists what is supported changes with every step. Assert on the rejected name.
+- A search-and-replace over the documents also changed two lines about the Flink job alone. `git diff --word-diff` showed them, and I reverted them.
+- Two survivors of the mutation check pointed to a tie test that a fallback (a hash) could win by luck.
+- `uv` and `gh` are not installed here. The `.venv` tools and the commits page on GitHub do the same.
+
+**What I Deliberately Skipped**
+
+- The serving entry and the HTTP answer for a list, and the removal of the guard from #150.
+- `approx_distinct` and its own ADR entry on the error bound.
+- Float components and composite keys.
+- A rule that a count cannot fall when the events seen rise. The stores accept it, because the ADR does not say it.
+- A test from events through Kafka and the materializer to Redis for a `last_k`. The contract tests and the history tests cover the parts.
+- Reading the checks of the merge commit of #151, which were still running.
+- The video. It comes when FeatureForge is finished.
+
+**What I Understood**
+
+- Pick the data of a test so that the rule can fail. A `k` that never cuts, a tie that a hash decides and a count that points the right way all hide a wrong rule.
+- A value without a direction needs a version. The events seen turn "the list changed, the count did not" into an ordered update.
+- Follow the readers of the type you widen. A new field that the serving does not read disappears without an error, so close it with a guard before it goes live.
+- Keep identities stable. Add a field to an identity only for the records that have it, and pin an old hash by hand.
+- A state that a type cannot hold (a list in a tuple of longs) gets its own type for that plan, and the other plans stay as they were.
+- Assert on the rejected name, not on the list of supported ones.
+- A mutation that survives is a finding about the test.
+
+**Takeaway**
+
+`last_k` now runs in the Spark backfill, in the generic Flink job, in both online stores and in the history, with the events seen as its version and a ranking that agrees in Python and Spark. ADR-017 step 4 is delivered up to the serving. Open limits: the serving entry and the HTTP answer cannot hold a list (a `backend_error` guards them), `approx_distinct` (step 5), float components and composite keys.
+
+---
+
 ## November 27, 2026
 
 **FeatureForge | ADR-017 Delivered through min and max: sum, avg, min and max in Spark, Flink and the Online Path**
